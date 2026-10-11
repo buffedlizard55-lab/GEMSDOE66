@@ -1,93 +1,115 @@
 {
-  "schema": 2,
-  "run_id": "gemsdoe66-h66-1-scarplet-veto-2026-10-11",
-  "date_utc": "2026-10-11",
-  "lane": "native-resolution lidar scarp channels + cultural-feature veto",
-  "top_candidate": "H66-1: physical-unit scarplet channels (amplitude, fill fraction, SNR, orientation coherence, relative age) with a conjunctive cultural veto",
-  "hypothesis": "Scarplet-template and Hessian-line evidence decoded from the pinned 2 m LiDAR stack (amplitude in m/m, implied height in m, scarp fill fraction, structure-tensor coherence, relative age) concentrates unmapped fault trace better than mass-matched random inside the LiDAR-covered footprint, and masking roads/canals/field edges raises that concentration further because the prior LiDAR arms' poor live scores are attributed to cultural contamination.",
-  "mechanism": "A fault the compilation omits still leaves a ~0.3-1.5 m step in the bare-earth surface. The 2 m stack aggregates the max and the mean of the slope-excess over each 100 m cell; their ratio is the fraction of the cell actually scarped, and dividing the amplitude by the 20 km-block robust background turns it into a per-cell SNR. Combining the SNR-weighted amplitude with the coherence of the scarp strike and the crest/toe sharpness selects cells where a real, fresh, near-straight step exists off the mapped network.",
-  "non_fault_mimic": "Irrigation canals, stock-pond berms, section-line roads, farm field edges and mine benches on basin floors -- plus the mimics named in the stack's own sidecar caveat ('roads, channels, terrace risers, paleo-shorelines, landslides and mines also create steps'). Pluvial Lake Lahontan/Bonneville shorelines are the non-anthropogenic twin.",
-  "protocol": {
-    "holdout": "Whole fault segments assigned within lidar-covered spatial blocks, with a buffer; catalogue-derived features from visible faults only; visible fault pixels masked exactly.",
-    "alpha": 0.2,
-    "beta": 0.8,
-    "kernel": "300 m triangular distance kernel",
-    "feature_scales_m": [
-      2,
-      20
-    ],
-    "aggregation_m": 100,
-    "range_front_gate": "Gain must not be confined to range-front blocks.",
-    "leakage_auc_stop_threshold": 0.9
-  },
+  "schema": "gems-run-card/2",
+  "run_id": "gemsdoe66-native-lidar-review-2026-10-11",
+  "generated_utc": "2026-10-11",
+  "repo": "buffedlizard55-lab/GEMSDOE66",
+  "lane": "native-resolution LiDAR scarp channels",
+  "top_candidate": "LIDAR-01 — slope-aware scarp templates plus scale-persistent Steger/Frangi line evidence; ranked, not implemented",
+  "hypothesis": "Method-faithful scarp-template fits and signed, scale-persistent ridge/valley evidence from native-resolution bare-earth LiDAR will preserve geomorphic scarp signatures omitted from the public catalogue and diluted by 100 m aggregation. This is an untested geological hypothesis, not a measured improvement.",
+  "mechanism": "A fault scarp can retain a cross-profile step/curvature shape, amplitude, orientation, and diffusion-related morphologic age, while coherent ridge/valley evidence persists along strike across nearby physical scales. Combining independent measurements may distinguish scarps from isolated edges, but terrace risers, natural channel banks, landslide headscarps, shorelines, roads/canals, and DEM seams can mimic the same signals.",
+  "named_non_fault_mimic": "Fluvial terrace riser; natural channel-bank lines and landslide headscarps are mandatory additional controls.",
   "holdout_dti": {
     "label": "HOLDOUT-DTI",
-    "value": 0.04800722761599403,
-    "status": "MEASURED \u2014 detector arm of the registered pooled hide-and-recover; +46% over mass-matched random, and the gain survives restriction to non-range-front cells",
-    "evaluator_version": "gems57.holdout.evaluate (pooled), vendored byte-identical from 60GEMSDOE (registry/template_provenance.json, 23/23 sha256)",
-    "withheld_positives": 45260,
-    "ci95": "not claimed for the level (one pooled run per arm, no replicate arms); the contrast is 5 mass-matched uniform-random dot sets, mean 0.032862. The paired 20 km block bootstrap CI is quoted where it was designed: the veto delta on the off-catalogue instrument, -1.0e-5 [-1.5e-5, +6.5e-6].",
-    "reason": "Off-catalogue eligibility (>=300 m from the catalogue) makes the registered policy arm structurally 0.0 \u2014 recorded as IR-23 \u2014 so the gate is read on the detector arm (0.048007 vs 0.032862 random; off-range-front 0.040739 vs 0.031743) and on a population-matched off-catalogue instrument (0.18796 vs 0.09028 random, 2.08x)."
+    "value": null,
+    "status": "NO QUALIFIED RESULT — no new holdout was run; the legacy H66 holdout claim is disqualified by the audit.",
+    "evaluator_version": null,
+    "withheld_positive_count": null,
+    "ci95": null,
+    "reason": "No authorized training/reference rasters or cached stack are present. The legacy runner uses full-catalogue distance during emission eligibility, scores outside a lidar-only valid mask, does not satisfy the required buffered whole-geologic-segment protocol, and lacks a valid level 95% CI. Its recorded scalar is retained only as unqualified historical evidence in evidence/ and must not be reported as HOLDOUT-DTI."
   },
   "leakage_canary": {
-    "status": "PASS",
+    "status": "NOT VALIDATED",
     "threshold_auc": 0.9,
-    "feature_results": "worst single feature sharp AUC 0.5762; deliberate positive control {'name': 'distance-to-catalogue itself', 'auc': 1.0, 'note': 'deliberate positive control, not a lane input'} (so the canary can detect leakage); verdict PASS - no lane channel exceeds 0.58; the positive control (distance to the catalogue itself) scores 1.00, so the audit can detect leakage when it exists",
-    "reason": "No feature restates the catalogue; the lane's inputs are not catalogue-derived at 100 m (registry/preregistration-h66.json)."
+    "feature_results": null,
+    "reason": "No new feature was tested. The legacy canary was not a substitute for feature-alone AUC on the required buffered spatial holdout and cannot clear the present gate."
   },
   "registry_checks": {
     "pre_placement_surface": {
-      "status": "PASS (incomplete corpus)",
-      "correlation_limit": 0.9,
-      "registry_count": 62,
-      "candidate_sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-      "comparisons": "max |Spearman rho| 0.0196 over the 100 m scored plane",
-      "reason": "61 rasters are physically present here; the family's full pinned corpus (655 grid rasters across 56 sibling repos) is not in this checkout and is not reachable from this sandbox (egress allow-list)."
-    },
-    "post_placement_final_dots": {
-      "status": "PASS (incomplete corpus)",
+      "status": "BLOCKED — no new candidate surface; complete registry unavailable",
       "correlation_limit": 0.9,
       "overlap_limit": 0.7,
       "radius_px": 3,
-      "registry_count": 62,
-      "candidate_sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-      "comparisons": "worst 3-px dot overlap 0.5099; worst excess over mass-matched random 0.319; byte-unique True; pixel-unique True",
-      "reason": "Both readings of the literal clause are reported (the shared template measured it unsatisfiable against space-filling comparators, 99.87%). docs/downloads is excluded as a self-comparison and the candidate's own NaN twin is excluded explicitly."
-    }
+      "complete_registry": false,
+      "result": null
+    },
+    "post_placement_final_dots": {
+      "status": "BLOCKED — no new candidate raster; complete registry unavailable",
+      "correlation_limit": 0.9,
+      "overlap_limit": 0.7,
+      "radius_px": 3,
+      "complete_registry": false,
+      "result": null
+    },
+    "reason": "The prior repository scan covered only a partial raster corpus. Full uniqueness and all byte/pixel checks remain unverified; a partial registry is not a pass."
   },
   "raster": {
-    "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
-    "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-    "pixel_agreement": "0 positive pixels on the mapped catalogue; nearest dot sits exactly 3.00 px (300 m) from it; 37,654 dots, value 1.0 at dots and 0.0 elsewhere"
+    "status": "NOT GENERATED IN THIS REVIEW; NO CURRENT FILE CLEARED",
+    "file": null,
+    "sha256": null,
+    "required_contract": "Normalized float32 GeoTIFF, EPSG:32611, exact official shape/transform/footprint, [0,1] inside and NaN outside, single band.",
+    "historical_artifacts": [
+      {
+        "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+        "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
+        "status": "WITHDRAWN FROM docs/downloads; not submission-cleared",
+        "properties_recorded_before_withdrawal": "3730×3292, one band, float32, EPSG:32611, 100 m, all finite in [0,1], 37,654 positive cells. Exact reference transform/footprint was not validated in this review."
+      },
+      {
+        "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
+        "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
+        "status": "WITHDRAWN FROM docs/downloads; footprint alignment unverified"
+      },
+      {
+        "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
+        "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
+        "status": "WITHDRAWN FROM docs/downloads; not submission-cleared"
+      }
+    ]
   },
   "validator": {
-    "status": "PASS (all checks)",
-    "checks": "all_checks_passed=true, format_report.ok=true, problems=[]",
-    "reason": "float32, EPSG:32611, 3730x3292, transform and bounds identical to sample_submission.tif, values finite in [0,1], no NaN inside the footprint, 0 positive pixels on the mapped catalogue"
+    "status": "NOT PASSED — official reference/footprint validation remains incomplete",
+    "attempted_command": "python -m gems.validate_submission <historical all-finite TIFF>",
+    "result": "passed=false; basic metadata/range checks ran, but reference-grid and footprint checks were skipped because official reference/features rasters were not supplied. Skipped means unverified, not pass.",
+    "current_candidate_result": null
   },
   "submission": {
-    "name": "GEMSDOE66-H66-1-LIDAR-SCARPLET-VETO-37654",
-    "note": "H66-1 LiDAR scarplet channels + cultural veto, 37654 dots >=300m off catalogue; HOLDOUT-DTI 0.048 vs 0.033 random; veto NEGATIVE",
-    "note_chars": 128,
+    "name": null,
+    "note": null,
+    "note_chars": null,
     "note_limit_chars": 140,
-    "clearance": "PARTIAL \u2014 download YES for audit; weekly slot NO: the veto gate is negative and promotion is the selector's step"
+    "file": null,
+    "download_status": "NO DOWNLOAD — no file is cleared or offered",
+    "clearance": "NOT CLEARED. No competition submission slot used in this review.",
+    "organizer_confirmed_receipt": null
   },
-  "verdict": "negative \u2014 channel gate PASS; cultural-veto gate NEGATIVE (28 of 37,654 dots removed, paired CI crosses 0); not promoted for a slot",
+  "data_access": {
+    "competition_data": "BLOCKED — official data tab redirected to login; no credentials used",
+    "local_data_directory": "Absent",
+    "official_1m_dem_source": "USGS 3DEP 1 m bare-earth DEM collection is public domain in principle; exact competition tile coverage/alignment not verified",
+    "shared_cache": "Absent"
+  },
   "budget": {
-    "holdout_experiments_used": 3,
-    "max_holdout_experiments": 3,
+    "new_experiments_used": 0,
+    "max_experiments": 3,
     "time_budget_hours": 2,
-    "wall_time_hours": 3.4,
+    "time_spent_hours": null,
     "submission_slots_used": 0
   },
+  "independent_reviews": {
+    "scientific_lead_reviews_required": 2,
+    "completed": 0,
+    "status": "OUTSTANDING — this repository audit is not an independent scientific-lead review"
+  },
+  "verdict": "BLOCKED / NEGATIVE — no candidate passed the required holdout, complete-registry, provenance, or exact-footprint validator gates. No new TIFF, no download, and no submission slot. Resume only after authorized inputs and corrected shared tooling are available.",
   "open_irregularities": [
-    "IR-23",
-    "IR-24",
-    "IR-25",
-    "IR-26",
-    "IR-27",
-    "IR-28",
-    "IR-29"
+    "IR-01-H33-ATTRIBUTION",
+    "IR-03-HOLDOUT-DESIGN",
+    "IR-05-SHARED-WRITER",
+    "IR-06-REGISTRY-COVERAGE",
+    "IR-07-DATA-ACCESS",
+    "IR-09-AI-DISCLOSURE",
+    "IR-10-INDEPENDENT-REVIEWS"
   ],
+  "audit_document": "docs/review/2026-10-11-audit.md",
   "artifact_page": "h66-session.html"
 }

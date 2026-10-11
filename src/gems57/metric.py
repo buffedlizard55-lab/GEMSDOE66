@@ -50,10 +50,10 @@ For a non-redundant dot (``dT == k``) this reduces to the simple bar
 
 .. warning:: an earlier revision of this module tested ``dT * D > DTI * alpha *
    (dT + 1 - k)``, which is the same inequality multiplied through by ``D`` on
-   the wrong side only.  Because ``D`` is of order ``beta*K`` (tens of
-   thousands), that form makes the bar smaller by a factor of ``D`` and the
-   greedy allocation never terminates -- it ran to its hard cap and emitted
-   960,000 dots for a HOLDOUT-DTI of 0.0797.  Caught by the DTI-vs-brute-force
+   the wrong side only. Because ``D`` is of order ``beta*K`` (tens of thousands),
+   that form makes the bar smaller by a factor of ``D`` and the greedy allocation
+   never terminates. A historical run hit its hard cap; its scalar is not a
+   qualified HOLDOUT-DTI result. The defect was caught by the DTI-vs-brute-force
    test suite; see irregularity ``IR-57-BAR-01``.
 :func:`gems57.emit.greedy_allocate` uses the **exact** two-sided test above,
 tracking both ``T`` and ``M``.  All of it is verified against

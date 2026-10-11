@@ -1,50 +1,34 @@
 {
-  "schema": 2,
-  "scope": "H33 attribution claims only; no leaderboard snapshot or copied standings.",
+  "schema": 3,
+  "scope": "Attribution and mechanism claims relevant to the native-resolution LiDAR lane. Owner statements and leaderboard rows are not treated as receipts.",
   "claims": [
     {
-      "claim": "The prompt associates 0.2778 with GEMSDOE32 artifact h33-h33-2-b2.",
-      "attributed_value": "0.2778",
-      "claim_type": "USER-SUPPLIED / OWNER-REPORTED ATTRIBUTION; NOT A VERIFIED SCORE",
-      "evidence_for": "The attribution appears in the user-supplied project brief and owner-maintained project-family material.",
-      "evidence_against_or_missing": "GEMSDOE32's own page describes the artifact as unscored and says no organizer score exists for its artifacts. No organizer receipt tied to the exact artifact bytes or SHA-256 is present here.",
-      "verdict": "UNATTRIBUTED; NOT ORGANIZER-CONFIRMED",
-      "source_ids": [
-        "S17",
-        "S18",
-        "S28"
-      ]
+      "id": "C-H33-ATTRIBUTION",
+      "claim": "The H33-2-B2 artifact earned the score value supplied in the prior brief.",
+      "claim_type": "USER-SUPPLIED / OWNER-REPORTED ATTRIBUTION; NOT ORGANIZER-CONFIRMED",
+      "evidence_for": "The attribution appears in user/owner-maintained material.",
+      "evidence_against_or_missing": "The GEMSDOE32 owner page describes the artifact as unscored and says no organizer score exists for its artifacts. No organizer submission-page receipt tied to the exact TIFF bytes or SHA-256 is present in this checkout. A public leaderboard row, even if displayed, is not an artifact/hash receipt.",
+      "verdict": "UNATTRIBUTED. Do not report it as a verified score or infer why it occurred.",
+      "source_ids": ["S14", "S15"]
     },
     {
-      "claim": "H33-2-B2's described catalogue-adjacent pruning may explain a change in a metric result.",
-      "attributed_value": null,
-      "claim_type": "CONDITIONAL MECHANISM; INFERENCE ONLY",
-      "evidence_for": "Owner-maintained method descriptions characterize H33-2-B2 as a post-processing/pruning variant near mapped catalogue faults.",
-      "evidence_against_or_missing": "No controlled same-fold comparison, exact candidate raster, organizer receipt, or artifact-hash mapping is present. Pruning could remove unsupported predictions or useful predictions near new labels.",
-      "verdict": "NOT TESTED; NO CAUSAL ATTRIBUTION",
-      "source_ids": [
-        "S17",
-        "S18"
-      ]
+      "id": "C-H33-MECHANISM",
+      "claim": "Catalogue-adjacent pruning or sparse mass explains the H33-2-B2 attribution.",
+      "claim_type": "CONDITIONAL MECHANISM; NOT TESTED",
+      "evidence_for": "The owner-maintained method notes discuss catalogue-aware pruning as a possible processing choice.",
+      "evidence_against_or_missing": "No receipt/hash establishes the score-to-file mapping; no exact bytes, controlled same-fold ablation, or organizer-labeled test set is available. Pruning can remove false-positive mass or remove useful prediction mass, depending on unknown truth.",
+      "verdict": "NO CAUSAL EXPLANATION SUPPORTED. The official metric's trade-off can be described, but it cannot explain this artifact's alleged result.",
+      "source_ids": ["S02", "S14", "S15"]
     },
     {
-      "id": "C-H66-1",
-      "claim": "The 0.2778 file's advantage is near-minimal mass on a well-ranked field, not a better probability surface.",
-      "attributed_value": "37,654 dots; 0 on the catalogue; nearest dot exactly 3.00 px from it",
-      "claim_type": "MEASURED HERE on the artifact's bytes + OWNER-REPORTED for the live score itself",
-      "evidence_for": "Five-rung pruning ladder 121,131 \u2192 60,069 \u2192 44,090 \u2192 40,199 \u2192 37,654 dots with monotonically rising score (0.1922 \u2192 0.2778), read from S31; the metric algebra (DTI = TP_w/(TP_w+0.2\u00b7FP_w+0.8\u00b7FN_w), 300 m triangular kernel, S02) makes each dot cost 0.2\u00b7p(x)\u00b7(1\u2212k) and pay only above \u22480.056 credit; the champion's own bytes re-read here show 0 catalogue pixels.",
-      "evidence_against_or_missing": "The live scores in that ladder are owner-reported, not organizer receipts tied to hashes; no counterfactual re-submission of a denser variant exists.",
-      "verdict": "SUPPORTED as the mechanism explanation; NOT organizer-confirmed"
-    },
-    {
-      "id": "C-H66-2",
-      "claim": "A cultural-feature veto on LiDAR scarplet channels raises credit per emitted dot.",
-      "attributed_value": "\u22121.0e-5 DTI (28 of 37,654 dots removed)",
-      "claim_type": "MEASURED HERE \u2014 REFUTED",
-      "evidence_for": "none; this is a negative result",
-      "evidence_against_or_missing": "Paired 20 km block bootstrap on the off-catalogue instrument: \u0394 \u22121.0e-5 [\u22121.5e-5, +6.5e-6], P(\u0394>0)=0.129; spatial-CV \u0394AUC from adding the cultural index = +0.00000 with a POSITIVE logistic coefficient (1.39, 1.59), i.e. cultural-looking cells are not fault-depleted because valley-floor development co-locates with range-front faults.",
-      "verdict": "REFUTED for this emission policy at this resolution (evidence/h66_e1_offcat.json, evidence/h66_spatial_cv.json)"
+      "id": "C-H66-HOLDOUT",
+      "claim": "The prior H66 detector-arm scalar is a valid HOLDOUT-DTI result.",
+      "claim_type": "LEGACY REPOSITORY CLAIM; DISQUALIFIED BY AUDIT",
+      "evidence_for": "The raw legacy JSON remains in evidence for traceability.",
+      "evidence_against_or_missing": "The H66 runner uses distance to the full catalogue to select emitted cells before holdout scoring, so withheld positives affect candidate eligibility. It also scores beyond the LiDAR-covered validation mask, does not implement the required full-segment buffered protocol, and records no valid 95% CI for the level. The value therefore fails the user's reporting and leakage gates.",
+      "verdict": "RETRACTED AS A QUALIFIED HOLDOUT-DTI CLAIM. Raw evidence is retained but must not be quoted as a score.",
+      "source_ids": ["S02"]
     }
   ],
-  "policy": "Only HOLDOUT-DTI with evaluator version, withheld-positive count and 95% CI, or ORGANIZER-CONFIRMED from an exact receipt/hash may be reported as a score. Projections and unreceipted associations are not scores."
+  "policy": "Report a research score only as HOLDOUT-DTI with evaluator version, withheld-positive count, and a 95% CI. Report an organizer value only as ORGANIZER-CONFIRMED copied from a receipt tied to the exact artifact/hash. Projections, owner claims, and unreceipted leaderboard associations are not scores."
 }

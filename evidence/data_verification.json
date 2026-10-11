@@ -145,5 +145,22 @@
     "catalogue_pixels_in_gap": 12523,
     "catalogue_fraction_in_gap": 0.205335
   },
-  "elapsed_seconds": 1.19
+  "elapsed_seconds": 1.19,
+  "evidence_disposition": {
+    "status": "HISTORICAL OWNER-MIRROR INTEGRITY RECORD — NOT ORGANIZER AUTHENTICATION OR CURRENT INPUT PROVENANCE",
+    "scope": "Metadata/hash measurements recorded from owner-supplied mirror/cache files in a prior checkout state; those bytes are not present in the current workspace.",
+    "not_verified": [
+      "organizer origin",
+      "exact competition DEM-tile inventory",
+      "current input availability",
+      "end-to-end candidate alignment or submission clearance"
+    ],
+    "do_not_use_as": [
+      "official source receipt",
+      "current LiDAR coverage certification",
+      "HOLDOUT-DTI",
+      "submission or uniqueness clearance"
+    ],
+    "canonical_review": "docs/review/2026-10-11-audit.md"
+  }
 }

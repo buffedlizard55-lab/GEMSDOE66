@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-"""H66-1 runner: native-resolution LiDAR scarplet channels, cultural veto, and the gate.
+"""Historical H66 experiment code — execution disabled after the 2026-10-11 audit.
 
-Stages (each writes its own evidence JSON, so a partial run is still auditable):
+The former runner could use full-catalogue distance during holdout placement, used a
+holdout that did not meet the buffered whole-geologic-segment/LiDAR-only protocol, and
+wrote artifacts directly to docs/downloads instead of passing through a cleared shared
+writer path. Its old score claims are not qualified HOLDOUT-DTI. No stage is runnable
+from this entry point; preserve the code and evidence for audit, not candidate generation.
 
-  s0  verify every input byte against the pinned sha256 in ``registry/data_manifest.json``
-  s1  build the physical channels + the cultural index, and run the leakage canary
-  s2  E1: population-matched off-catalogue instrument -- credit/dot and pooled DTI for
-      {scarplet field}, {scarplet field - cultural veto}, {mass-matched random}, {distance-only}
-  s3  retrain under spatial CV (logistic, 4 spatial blocks) with / without the cultural feature
-  s4  E2: the registered pooled hide-and-recover holdout (gems57), plus the
-      "not confined to range fronts" stratification
-  s5  E3: the emission (2.8-px NMS, budget sweep) -> normalized float32 GeoTIFF + zip + receipts
-
-Usage:  python scripts/run_h66.py s0 s1 s2 ...      (default: all)
+Use ``bash scripts/fetch_inputs.sh`` for a local presence check. Future experiments must
+use authorized inputs and corrected shared-template evaluator/writer tools. Do not fork
+those shared tools in this repository.
 """
 from __future__ import annotations
 
@@ -47,6 +44,14 @@ BUDGETS = (12_000, 24_000, 37_654, 60_000)   # 37,654 = mass-matched to the live
 N_RANDOM = 5
 
 
+def _legacy_stage_disabled(stage: str) -> None:
+    raise RuntimeError(
+        f"legacy H66 stage {stage!r} is disabled after the 2026-10-11 audit; "
+        "do not generate or report a candidate from this pipeline. See "
+        "docs/review/2026-10-11-audit.md and fix shared template tools upstream."
+    )
+
+
 def sha256(p: Path) -> str:
     h = hashlib.sha256()
     with p.open("rb") as fh:
@@ -61,6 +66,7 @@ def now() -> str:
 
 # ----------------------------------------------------------------------------- s0
 def s0_verify(st=None) -> dict:
+    _legacy_stage_disabled("s0")
     pins = json.loads((ROOT / "registry" / "data_manifest.json").read_text())
     # keyed by BOTH the manifest dest and the basename, because the bridge re-files the
     # core rasters under data/bridge/ while the manifest records their original dest.
@@ -120,6 +126,7 @@ def lidar_domain(st) -> np.ndarray:
 
 # ----------------------------------------------------------------------------- s1
 def s1_channels(st) -> dict:
+    _legacy_stage_disabled("s1")
     dom = lidar_domain(st)
     ch = C66.build_channels(EXT, dom, lid_min=LID_MIN)
     cul = C66.cultural_mask(ch, dom, EXT)
@@ -155,7 +162,7 @@ def s1_channels(st) -> dict:
         a = float(roc_auc_score(lab, v))
         canary[name] = dict(auc=round(a, 4), auc_reflected=round(max(a, 1 - a), 4),
                             verdict="LEAKAGE-SUSPECT" if max(a, 1 - a) > 0.90 else "ok")
-    rep = dict(generated_utc=now(), evidence_class="HOLDOUT-DTI-instrument-audit",
+    rep = dict(generated_utc=now(), evidence_class="UNQUALIFIED_LEGACY_INSTRUMENT_NOT_HOLDOUT_DTI",
                lidar_covered_cells=int(dom.sum()), lidar_fraction_of_footprint=round(float(dom.sum() / st['dom'].sum()), 4),
                positive_control=dict(name="distance-to-catalogue itself",
                                      auc=round(float(roc_auc_score(lab, -st["dcat"][ys, xs])), 4),
@@ -251,12 +258,13 @@ def _random_dots(dom: np.ndarray, elig: np.ndarray, n: int, seed: int) -> np.nda
 
 # ----------------------------------------------------------------------------- s2
 def s2_e1(st) -> dict:
-    """E1 -- the population-matched, off-catalogue first test of the veto."""
+    """E1 -- historical population-matched proxy; disabled after audit."""
+    _legacy_stage_disabled("s2")
     f = np.load(EV / "h66_fields.npz")
     score, unvet, veto, dom = f["score"], f["score_unvetoed"], f["veto"], f["dom"]
     elig = dom & (st["dcat"] > CAT_SEP_PX)
     truth = _offcat_truth(st, dom)
-    rep = {"generated_utc": now(), "evidence_class": "HOLDOUT-DTI (population-matched instrument)",
+    rep = {"generated_utc": now(), "evidence_class": "UNQUALIFIED_LEGACY_PROXY_NOT_HOLDOUT_DTI",
            "instrument": "pooled DTI + credit/dot of a binary emission against USGS SGMC mapped "
                          "faults that lie >300 m from the competition catalogue, inside the "
                          "lidar-covered footprint, catalogue cells excluded from scoring (gems57)",
@@ -282,7 +290,8 @@ def s2_e1(st) -> dict:
 
 # ----------------------------------------------------------------------------- s3
 def s3_retrain(st) -> dict:
-    """Retrain under spatial CV: does the cultural index carry independent information?"""
+    """Historical spatial-CV code; disabled after the 2026-10-11 audit."""
+    _legacy_stage_disabled("s3")
     from sklearn.linear_model import LogisticRegression
     from sklearn.metrics import roc_auc_score
     f = np.load(EV / "h66_fields.npz")
@@ -351,6 +360,7 @@ def s3_retrain(st) -> dict:
 
 # ----------------------------------------------------------------------------- s4
 def s4_e2_holdout(st) -> dict:
+    _legacy_stage_disabled("s4")
     f = np.load(EV / "h66_fields.npz")
     score, unvet, veto, dom = f["score"], f["score_unvetoed"], f["veto"], f["dom"]
     N = 37_654
@@ -385,7 +395,7 @@ def s4_e2_holdout(st) -> dict:
                                                   - strat["h66_unvetoed"]["off_front"]["pooled_dti"], 6),
                 near_front_veto_minus_unveto=round(strat["h66_vetoed"]["near_front"]["pooled_dti"]
                                                     - strat["h66_unvetoed"]["near_front"]["pooled_dti"], 6))
-    out = dict(generated_utc=now(), evidence_class="HOLDOUT-DTI",
+    out = dict(generated_utc=now(), evidence_class="UNQUALIFIED_LEGACY_HOLDOUT_PROXY_NOT_HOLDOUT_DTI",
                evaluator="gems57-pooled-hide-v2 (4 spatial quadrants x 2 seeds x {all,detached}, whole-segment "
                          "withholding, visible faults masked pixel-exactly, alpha=0.2 beta=0.8, 300 m triangular)",
                withheld_positive_pixels=res["h66_vetoed"]["pooled_n_truth"],
@@ -399,7 +409,8 @@ def s4_e2_holdout(st) -> dict:
 
 # ----------------------------------------------------------------------------- s5
 def s5_emit(st) -> dict:
-    """Build the artifact: normalized float32 EPSG:32611 100 m GeoTIFF, NaN only outside."""
+    """Historical un-gated writer path; disabled after the 2026-10-11 audit."""
+    _legacy_stage_disabled("s5")
     from gems57 import grid as G
     f = np.load(EV / "h66_fields.npz")
     score, veto, dom = f["score"], f["veto"], f["dom"]
@@ -461,6 +472,7 @@ def s4b_detector_holdout(st) -> dict:
     the evaluator itself masks, so the arm measures detector quality rather than emission policy.
     Both readings are reported; neither is a leaderboard score.
     """
+    _legacy_stage_disabled("s4b")
     f = np.load(EV / "h66_fields.npz")
     score, unvet, veto, dom = f["score"], f["score_unvetoed"], f["veto"], f["dom"]
     N = 37_654
@@ -477,7 +489,7 @@ def s4b_detector_holdout(st) -> dict:
         with rasterio.open(cp) as ds:
             arms["champion_h33_2_b2"] = ds.read(1) > 0
     ctx = H57.build_holdout(st["grid"])
-    out = {"generated_utc": now(), "evidence_class": "HOLDOUT-DTI", "N": N,
+    out = {"generated_utc": now(), "evidence_class": "UNQUALIFIED_LEGACY_HOLDOUT_PROXY_NOT_HOLDOUT_DTI", "N": N,
            "evaluator": "gems57 pooled hide-and-recover (identical to s4; only the eligibility rule differs)",
            "eligibility": "lidar-covered footprint cells, >=50 m off a visible catalogue pixel",
            "arms": {}}
@@ -500,20 +512,30 @@ def s4b_detector_holdout(st) -> dict:
     return out
 
 
-STAGES = {"s0": s0_verify, "s1": s1_channels, "s2": s2_e1, "s3": s3_retrain,
-          "s4": s4_e2_holdout, "s4b": s4b_detector_holdout, "s5": s5_emit}
+LEGACY_STAGES = ("s0", "s1", "s2", "s3", "s4", "s4b", "s5")
 
 
-def main(argv: list[str]) -> int:
-    want = argv[1:] or list(STAGES)
-    st = load_state()
-    for k in want:
-        t0 = time.time()
-        out = STAGES[k](st)
-        print(f"[{k}] {time.time() - t0:6.1f}s  {json.dumps({kk: vv for kk, vv in list(out.items())[:3]}, default=str)[:300]}")
-        sys.stdout.flush()
-    return 0
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Historical H66 experiment runner (disabled; audit-only code retained)."
+    )
+    parser.add_argument(
+        "stages", nargs="*", choices=LEGACY_STAGES,
+        help="historical stages are listed for reference but cannot be executed",
+    )
+    args = parser.parse_args(argv)
+    if not args.stages:
+        parser.print_help()
+        print("\nExecution is disabled. See docs/review/2026-10-11-audit.md.", file=sys.stderr)
+        return 2
+    parser.error(
+        "all historical H66 stages are disabled; do not use this pipeline to score or "
+        "generate candidates. See docs/review/2026-10-11-audit.md"
+    )
+    return 2  # argparse.error exits; keeps the return type explicit for static tools.
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv))
+    raise SystemExit(main())

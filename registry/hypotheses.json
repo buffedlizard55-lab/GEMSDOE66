@@ -1,80 +1,109 @@
 {
-  "generated_utc": "2026-10-11T20:45:00Z",
-  "brief": "3-5 candidate geological hypotheses not yet tried, each naming layers / physical signature / why it catches an uncatalogued fault / how it differs from anything implemented, ranked by expected DTI improvement x implementation cost",
-  "candidates": [
+  "schema": 3,
+  "lane": "native-resolution LiDAR scarp channels",
+  "ranking_basis": "Pre-implementation qualitative ranking by physical specificity, likely separation from named mimics, and cost. Sign and magnitude of DTI change are unmeasured; no score projection is made. Novelty against the full family registry is not established.",
+  "protocol": {
+    "feature_scales_m": [
+      2,
+      20
+    ],
+    "aggregation_m": 100,
+    "input_availability": "The competition data page requires login in this session and the checkout has no official rasters or shared cached stack. USGS 3DEP provides public-domain 1 m bare-earth DEMs in principle, but exact competition-area tile coverage/alignment is not verified.",
+    "holdout": "Withhold whole vector-defined fault segments, not artificial raster chunks, from lidar-covered spatial blocks. Use a preregistered spatial buffer around held segments; recommend matching the 300 m scoring support, subject to review by the two independent scientific leads. Catalogue-derived features use visible faults only; visible fault pixels are masked exactly. Restrict truth and scoring to lidar-covered held-out blocks.",
+    "metric": "Pooled distance-weighted Tversky, alpha=0.2, beta=0.8, 300 m triangular kernel. Report evaluator version, withheld-positive count, and a 95% spatial-block CI for every HOLDOUT-DTI result.",
+    "leakage": "Test every feature alone on the spatially blocked holdout. AUC >0.90 is leakage until disproven. No hidden/withheld catalogue data may affect features, masks, candidate eligibility, or thresholds.",
+    "range_front_gate": "Compare gains in lidar-covered held-out blocks both overall and off a prespecified range-front stratum; reject a gain confined to range fronts.",
+    "uniqueness": "Compare continuous pre-placement surfaces and final dots against the complete registry. Correlation >0.90 or >70% of candidate dots within 3 px is a duplicate/lane-drift stop. Incomplete registry means BLOCKED, not PASS.",
+    "budget": "Maximum three experiments or two hours. No competition slot before the candidate strictly beats the current valid holdout best under the same protocol."
+  },
+  "items": [
     {
-      "id": "H66-1",
+      "id": "LIDAR-01",
       "rank": 1,
-      "title": "Cultural-lineament veto on the LiDAR scarplet channel (canals, roads, field edges, mine benches)",
-      "layers": [
-        "data/external/lidar_scarp_features_u8.tif (12 bands, metres-decoded)",
-        "data/external/topo_10m_derived_100m_u8.tif (slope_p90, relief_local)",
-        "data/external/geodawn_extensions_u8.tif (TMI_up150)"
-      ],
-      "signature": "near-1.0 doubled-angle orientation coherence over a 1.5 km corridor x near-constant amplitude along strike x flat setting x no upward-continued magnetic gradient",
-      "why_off_catalogue": "a canal or a section-line road cuts a real 0.3-1.5 m step that no photogeologist mapped as a fault; removing them raises credit per emitted dot, which is the only currency the metric pays",
-      "differs": "no lane in the family ever built a cultural mask (verified: exactly one prose mention across the corpus), and all prior LiDAR arms consumed u8/255 weights without decoding units",
-      "expected_gain": "+0.01 to +0.05 credit/dot",
-      "cost": "low (all inputs committed)",
-      "status": "MEASURED NEGATIVE - see IR-66-NEG-01"
+      "lane": "native-resolution LiDAR scarp channels",
+      "title": "Slope-aware scarp templates plus scale-persistent Steger/Frangi line evidence",
+      "layers": "Authorized 1 m bare-earth DEM tiles and the shared cached stack; Scarplet-style template outputs (best-fit amplitude, morphologic age, orientation, and template SNR); signed Steger sub-pixel ridge/valley responses and Frangi Hessian-line measures over 2–20 m scales; the existing cultural-feature mask only after its provenance, alignment, and availability are verified. Aggregate physical channel summaries to the competition's 100 m cells.",
+      "signature": "A coherent scarp cross-profile fit that allows finite initial and far-field slopes, co-located with ridge/valley responses persisting across neighboring physical scales and aligned along a trace. Template amplitude, morphologic age, orientation, and SNR must be computed by the cited template method rather than approximated by ratios or robust z-scores.",
+      "why_off_catalogue": "An expert-labelled new fault may preserve a subtle surface scarp omitted from the public compilation. Native DEM evidence can preserve profile shape and continuity that are diluted by coarser aggregation. This is a geological rationale to test, not an observed gain.",
+      "named_mimic": "Fluvial terrace riser. Also test natural channel banks, road/canal embankments, landslide headscarps, shoreline risers, and DEM seams.",
+      "differs_from_repo": "The present H66 code decodes owner-described 100 m stack proxies; it does not implement the actual Scarplet template fit or footprint-wide native Steger/Frangi scale sweep. Sibling owner reports describe LiDAR scarp channels and thinning, so the joined slope-aware template plus signed cross-scale line persistence is a candidate distinction, not a verified novelty claim. The full raster registry is unavailable.",
+      "cost": "Very high: tiled DEM/projection and edge handling, multi-orientation and multiscale operators, mask validation, aggregation, per-feature leakage tests, segment-blocked holdout/CI, full-registry scans, and shared-tool corrections. Runtime and storage are unknown until exact tiles are inventoried.",
+      "expected_gain": "Highest qualitative prior in this ranking because it combines two complementary physical measurements; sign and size are unknown. Not a DTI projection.",
+      "data_status": "Blocked. Official competition rasters, tile list, shared cache, and existing cultural mask are absent. USGS 3DEP 1 m project DEMs are public domain in principle, but exact study-area coverage and compatibility are unverified (S04, S05, S07).",
+      "validation": "NOT RUN. This is the lead to review before implementation. Do not emit a candidate until authorized data, corrected shared holdout/writer, complete registry, independent scientific sign-offs, and budget are available.",
+      "source_ids": [
+        "S02",
+        "S04",
+        "S07",
+        "S09",
+        "S10",
+        "S11",
+        "S12"
+      ]
     },
     {
-      "id": "H66-2",
+      "id": "LIDAR-02",
       "rank": 2,
-      "title": "Physical scarplet SNR + relative age from the pinned 2 m stack",
-      "layers": [
-        "lidar_scarp_features_u8 (ex_max, ex_mean, step_max, lapneg_max, lappos_max, downface_max, upface_max, cross_max, relief, coh100, strike, valid)"
-      ],
-      "signature": "amplitude(m/m) / 20 km-block robust background = SNR; scarp fill fraction = mean/max; relative age = cross-face gradient / mean adjacent surface gradient; crest x toe LoG sharpness",
-      "why_off_catalogue": "a fresh, through-cutting scarplet on a Holocene fan is young displacement that a regional compilation below its inclusion threshold never carried",
-      "differs": "fill-fraction and block-robust SNR constructions exist nowhere else in the family; prior arms used the max bands only",
-      "expected_gain": "measured: 2.08x over mass-matched random off-catalogue; 1.46x on the holdout",
-      "cost": "low",
-      "status": "POSITIVE BUT WEAK"
+      "lane": "native-resolution LiDAR scarp channels",
+      "title": "Slope-aware scarp-template channels alone",
+      "layers": "The same authorized native DEM and shared cache; a template search over scarp orientation and morphologic age that estimates amplitude and template SNR while allowing nonzero regional slopes; aggregate amplitude, age, orientation, and SNR summaries to 100 m.",
+      "signature": "Consistent cross-profile curvature/step fit with a stable orientation and plausible along-trace amplitude despite a dipping surface and unequal adjacent slopes.",
+      "why_off_catalogue": "Small or gently dipping scarps may be missed by regional mapping and weakened by coarse summaries while remaining present in bare-earth topography.",
+      "named_mimic": "Road-cut or irrigation-canal bank; terrace risers and landslide scarps are additional controls.",
+      "differs_from_repo": "No actual template search is implemented in this checkout. The legacy fields named amplitude/SNR/relative age are proxies, not Scarplet outputs. Sare and Hilley establish a relevant published method, not novelty or competition benefit for this implementation. Registry-wide uniqueness remains unknown.",
+      "cost": "High: method-faithful template implementation, orientation/age calibration, tile boundaries, visible-fault-only feature construction, feature-alone canaries, blocked validation, and registry checks.",
+      "expected_gain": "High qualitative prior for slope-tolerant scarp signatures; size and direction are unmeasured. No score projection.",
+      "data_status": "Blocked by the same missing authorized DEM tiles, cache, mask, and exact grid/reference files as LIDAR-01 (S04, S05, S07).",
+      "validation": "NOT RUN. Evaluate this as an ablation against a mass-matched baseline on the frozen spatial holdout before combining it with line channels.",
+      "source_ids": [
+        "S02",
+        "S04",
+        "S07",
+        "S09"
+      ]
     },
     {
-      "id": "H66-3",
+      "id": "LIDAR-03",
       "rank": 3,
-      "title": "Steger sub-pixel ridges + Frangi 2-20 m Hessian lines on the slope-detrended 1 m surface",
-      "layers": [
-        "USGS 3DEP 1 m tiles (706 of 716 pinned by the competition DEM-links inventory) - NOT in this checkout"
-      ],
-      "signature": "sub-pixel parabolic ridge offset normal to the lineament + multiscale lineness at 2/5/10/20 m on the detrended surface",
-      "why_off_catalogue": "the scarps the 100 m stack averages away are exactly the meter-scale breaks a mapper walks and adds",
-      "differs": "never attempted footprint-wide here; the two committed 3 m pilot tiles make a scaled-down version possible",
-      "expected_gain": "unknown; the ceiling case for this lane",
-      "cost": "BLOCKED: needs one Actions bridge run, no data egress in this sandbox",
-      "status": "NOT RUN (data)"
+      "lane": "native-resolution LiDAR scarp channels",
+      "title": "Signed, scale-persistent Steger ridge/valley and Frangi Hessian channels alone",
+      "layers": "The same native DEM and shared cache; scale-normalized Hessian structure, signed Steger ridge/valley responses, sub-pixel line locations, and orientation at 2–20 m; summarize response strength, sign, scale persistence, and orientation coherence at 100 m.",
+      "signature": "A paired, sign-consistent linear relief break persists at adjacent scales and traces a coherent line rather than appearing as an isolated edge at one scale.",
+      "why_off_catalogue": "Native-resolution ridge/valley localization may preserve short or low-relief scarps that a single-scale or 100 m response misses.",
+      "named_mimic": "Natural stream-bank line. Roads, field edges, terrace breaks, and DEM seams are additional controls.",
+      "differs_from_repo": "No footprint-wide Steger sub-pixel or Frangi scale sweep is present. These established line operators are not novel by themselves; owner-maintained sibling reports describe LiDAR thinning and scarp consensus. A complete registry is needed to test the exact signed/persistence surface for duplication or lane drift.",
+      "cost": "High: scale normalization, polarity/sign rules, edge suppression, tile seams, response calibration, feature-alone leakage tests, and full uniqueness/holdout gates.",
+      "expected_gain": "Moderate qualitative prior with substantial non-fault mimic risk; sign and size are unknown. No DTI projection.",
+      "data_status": "Blocked by missing authorized DEM/cache; public availability of USGS 3DEP does not prove exact tile coverage or compatibility (S05, S07, S08).",
+      "validation": "NOT RUN. Test each signed response alone before any combination; apply the AUC leakage stop and same-fold mass-matched comparison.",
+      "source_ids": [
+        "S02",
+        "S04",
+        "S07",
+        "S10",
+        "S11",
+        "S12"
+      ]
     },
     {
-      "id": "H66-4",
+      "id": "LIDAR-04",
       "rank": 4,
-      "title": "Pluvial shoreline veto (Lahontan / Bonneville) by contour-parallelism and elevation banding",
-      "layers": [
-        "lidar_scarp_features_u8 (relief, strike, height implied by step_max)",
-        "geodawn_dem_a2_100m.tif band 9 detrended elevation"
-      ],
-      "signature": "long scarp whose strike tracks the local contour and whose elevation falls in a discrete shoreline band",
-      "why_off_catalogue": "shorelines are the second mimic named in the stack's own caveats and they are abundant on the basin floors where faults are absent",
-      "differs": "the chi lane masked playas by raised_n counts; nobody masked shorelines geometrically",
-      "expected_gain": "+0.00 to +0.03 precision",
-      "cost": "low-medium",
-      "status": "NOT RUN (3-experiment budget spent)"
-    },
-    {
-      "id": "H66-5",
-      "rank": 5,
-      "title": "Geo-energy convergence: geodetic strain x thermal x conductivity x seismicity",
-      "layers": [
-        "official training_features bands geod_shearrate, geod_dilaterate, geod_2ndinv, cond_surf, depth_to_base_surf, deq_n100a15 (418 MB, not in checkout; mirrored+parted upstream)",
-        "GDR 1391 2 m temperature probes and palaeogeothermal grids (zips ARE committed)"
-      ],
-      "signature": "an active extensional fault co-fires four independent anomalies",
-      "why_off_catalogue": "this is the only evidence family that does not depend on the existing compilation at all",
-      "differs": "no artifact in 60+ sibling repos has used the geo-energy layers end to end",
-      "expected_gain": "largest ceiling (board top 0.4133 is 0.14 above the family best)",
-      "cost": "high; needs the training_features mirror restored and one bridge run",
-      "status": "PROPOSED"
+      "lane": "native-resolution LiDAR scarp channels",
+      "title": "Ordered cross-profile polarity and along-strike continuity",
+      "layers": "The same native DEM and verified existing mask; sampled cross-profiles recording paired slope breaks, polarity, width, local relief, orientation, and along-strike persistence over 2–20 m; aggregate profile fractions and continuity to 100 m.",
+      "signature": "Repeated profiles with consistent step polarity and crest/toe ordering along a trace, rather than one isolated edge or a chain of unrelated line responses.",
+      "why_off_catalogue": "A real fault scarp may be below regional-map inclusion criteria but retain repeated, similarly oriented cross-profile geometry along a trace.",
+      "named_mimic": "Fluvial terrace edge; road/canal banks and landslide headscarps can also create ordered breaks.",
+      "differs_from_repo": "This is a proposed profile-order/continuity ablation inside the same LiDAR lane, not evidence of a separate lane. Existing owner reports describe scarp channels/consensus, and complete registry surfaces are not available; uniqueness is unverified.",
+      "cost": "Medium-high: profile extraction is tractable, but polarity handling, continuity thresholds, mimic controls, aggregation, ablation, holdout, and registry checks remain necessary.",
+      "expected_gain": "Lower qualitative prior than the first three; may improve precision if ordered profiles separate faults from mimics, but may discard discontinuous real scarps. Unquantified.",
+      "data_status": "Blocked by missing authorized DEM/cache and existing mask; exact coverage/alignment is not established (S05, S07, S08).",
+      "validation": "NOT RUN. Prespecify profile/persistence thresholds, test each feature alone, then use the same segment-blocked holdout and uniqueness gates.",
+      "source_ids": [
+        "S02",
+        "S04",
+        "S07"
+      ]
     }
   ]
 }

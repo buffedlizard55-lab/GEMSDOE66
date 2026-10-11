@@ -70,9 +70,8 @@ FEATURES = (
     # parent trace's strike" without any hard-coded angle: the fitted
     # coefficients define the preferred orientations.  Both are computable
     # from the visible catalogue alone, so the holdout protocol is unchanged.
-    # Measured in scripts/run_cv_r2.py: +0.0018 HOLDOUT-DTI vs the 8-feature
-    # shipped set (inside the noise) -- a negative result, kept addressable
-    # so the ablation stays reproducible.
+    # A historical local-CV note is retained in its run log, but it predates
+    # the current holdout protocol and is not a qualified score. Do not report it.
     "sin2d",        # sin(2*strike) * d  -- orientation-modulated distance decay
     "cos2d",        # cos(2*strike) * d  -- orientation-modulated distance decay
 )
