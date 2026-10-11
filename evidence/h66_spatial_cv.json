@@ -1,6 +1,6 @@
 {
   "n_folds_used": 2,
-  "generated_utc": "2026-10-11T20:36:52Z",
+  "generated_utc": "2026-10-11T21:15:31Z",
   "label": "cell within 100 m of a mapped catalogue fault, lidar-covered footprint",
   "cv": "4 disjoint 20 km spatial blocks (train off-block, score on-block)",
   "auc": {

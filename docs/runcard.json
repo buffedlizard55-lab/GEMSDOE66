@@ -1,6 +1,6 @@
 {
   "schema": "gems-run-card/1",
-  "generated_utc": "2026-10-11T20:38:29Z",
+  "generated_utc": "2026-10-11T21:22:43Z",
   "repo": "buffedlizard55-lab/GEMSDOE66",
   "lane": "native-resolution LiDAR scarplet channels + cultural-feature veto",
   "hypothesis": "Scarplet-template and Hessian-line evidence decoded from the pinned 2 m LiDAR stack (amplitude in m/m, implied height in m, scarp fill fraction, structure-tensor coherence, relative age) concentrates unmapped fault trace better than mass-matched random inside the LiDAR-covered footprint, and masking roads/canals/field edges raises that concentration further because the prior LiDAR arms' poor live scores are attributed to cultural contamination.",
@@ -141,12 +141,12 @@
     "verdict": "PASS - no lane channel exceeds 0.58; the positive control (distance to the catalogue itself) scores 1.00, so the audit can detect leakage when it exists"
   },
   "uniqueness_vs_registry": {
-    "comparators_scanned": 62,
+    "comparators_scanned": 1,
     "complete_family_corpus": false,
     "corpus_note": "61 rasters are physically present here; the family's full pinned corpus (655 grid rasters across 56 sibling repos) is not in this checkout and is not reachable from this sandbox (egress allow-list).",
-    "max_abs_spearman_rho": 0.0196,
-    "max_frac_dots_within_3px": 0.5099,
-    "max_excess_over_mass_matched_random": 0.319,
+    "max_abs_spearman_rho": 0.0001,
+    "max_frac_dots_within_3px": 0.2669,
+    "max_excess_over_mass_matched_random": 0.0759,
     "gates": {
       "rho_le_0p90": true,
       "overlap_le_0p70_LITERAL_INLANE": true,
@@ -160,7 +160,7 @@
   "validator_output": {
     "sha256_allfinite": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
     "sha256_nan": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
-    "sha256_zip": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
+    "sha256_zip": "d1c9d78af61a00d0f09ee96552631d7bd697fec9927ca6ed72a5a736579c3b29",
     "reread": {
       "dtype": "float32",
       "crs": "EPSG:32611",
@@ -182,8 +182,8 @@
     "interpretation": "float32, EPSG:32611, 3730x3292, transform and bounds identical to sample_submission.tif, values finite in [0,1], no NaN inside the footprint, 0 positive pixels on the mapped catalogue"
   },
   "inputs_verified": {
-    "pinned_files_matched": 9,
-    "files_checked": 13,
+    "pinned_files_matched": 7,
+    "files_checked": 10,
     "mismatches": [],
     "lidar_covered_cells": 3892984,
     "lidar_fraction_of_footprint": 0.7534
