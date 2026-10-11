@@ -1,0 +1,22 @@
+# Competition data and derived artifacts must not be committed by accident.
+/data/
+/cache/
+/.cache/
+/outputs/
+/runs/
+/checkpoints/
+
+# Local environments and credentials
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Model and large array artifacts
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.npy
+*.npz

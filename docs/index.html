@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Auditable native-resolution lidar scarp research for the DOE GEMS Prize. Current run status: negative; no submission TIFF is available.">
+  <title>GEMSDOE66 — lidar scarp research</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">GEMSDOE66 <small>DOE GEMS · Lidar scarp lane</small></a>
+      <nav aria-label="Primary navigation">
+        <a href="index.html" aria-current="page">Overview</a>
+        <a href="executive-summary.html">How to submit</a>
+        <a href="hypotheses.html">Hypotheses</a>
+        <a href="evidence.html">Evidence</a>
+        <a href="sources.html">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Research status · reviewed 2026-10-11 UTC</p>
+      <h1 id="page-title">Native-resolution lidar scarp channels</h1>
+      <p>A focused, evidence-first study of subtle fault scarps that may disappear in the competition’s 100 m feature stack. The contest target is geological faults that can indicate geothermal resources—not direct detection of geothermal vents.</p>
+    </section>
+
+    <section class="status" aria-labelledby="submission-status">
+      <p class="status-label">Submission status — read this first</p>
+      <strong id="submission-status">⛔ NO TIFF AVAILABLE · DO NOT DOWNLOAD OR SUBMIT A FILE</strong>
+      <p>No candidate raster exists in this checkout. The required shared feature stack, spatial holdout tools, cultural-feature mask, prior-raster registry, and submission validator were not present. The data tab requires sign-in here. The holdout and uniqueness gates could not run, so no file is cleared.</p>
+      <div class="button-row" aria-label="Current download status">
+        <span class="button disabled" aria-disabled="true">No submission download</span>
+        <a class="button secondary" href="executive-summary.html">Read exact upload requirements</a>
+      </div>
+      <p class="small"><b>Unique filename:</b> not assigned. <b>Submission note:</b> not assigned. Creating either before a candidate passes the gates would imply a submission exists when it does not.</p>
+    </section>
+
+    <section class="grid" aria-label="Project status">
+      <article class="card">
+        <span class="kicker">Negative result · no experiments run</span>
+        <h2>Why work stopped</h2>
+        <p>This repository began as a README-only checkout. The shared cached lidar features, `evaluate_holdout.py`, `submission_writer.py`, `validate_submission.py`, official raster inputs, existing cultural mask, and complete comparison registry are absent.</p>
+        <p>Per the reuse protocol, these tools were not privately recreated. A synthetic or copied raster would not answer the scientific question and would not be safe to upload.</p>
+        <a href="evidence/run-card.json">Open the machine-readable run card →</a>
+      </article>
+
+      <article class="card">
+        <span class="kicker">Source reconciliation</span>
+        <h2>What the H33 result does—and does not—show</h2>
+        <p><b>OWNER-REPORTED attribution, not receipt-verified:</b> the prompt associates <code>0.2778</code> with GEMSDOE32’s H33-2-B2 raster. GEMSDOE32’s own page calls that artifact unscored and distinguishes its projection from an organizer score. A separate sibling page labels its attribution of a public-board row to H33 as owner-reported.</p>
+        <p>The H33 page describes a pruning change to an earlier field. That is a possible mechanism, not a proven cause of an organizer score. See the <a href="decision-log.html">evidence reconciliation</a>.</p>
+      </article>
+
+      <article class="card third">
+        <span class="kicker">Hypothesis</span>
+        <h2>Use the full scarp profile</h2>
+        <p>Test slope-aware scarp templates alongside Steger ridge/valley and Frangi multiscale line evidence, then aggregate amplitude, SNR, and orientation coherence at the competition grid.</p>
+        <a href="hypotheses.md">Review four ranked hypotheses →</a>
+      </article>
+
+      <article class="card third">
+        <span class="kicker">Gate</span>
+        <h2>Holdout before a slot</h2>
+        <p>Withhold whole fault segments, derive catalogue features from visible faults only, mask visible labels pixel-exactly, and test feature leakage before trusting any score.</p>
+        <a href="evidence.html">Review the requirement audit →</a>
+      </article>
+
+      <article class="card third">
+        <span class="kicker">Current official source</span>
+        <h2>Live standings</h2>
+        <p>Leaderboard snapshots in old notes can be stale or inconsistent. DrivenData’s Terms restrict automated monitoring/copying and manual monitoring/copying without prior written consent; this site does not scrape or mirror scores.</p>
+        <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" rel="noopener noreferrer">Open the official leaderboard ↗</a>
+      </article>
+    </section>
+
+    <section class="section" aria-labelledby="gate-heading">
+      <h2 id="gate-heading">What must pass before a download can appear</h2>
+      <p class="section-intro">A format-valid file is not automatically scientifically promoted. This project uses fail-closed, auditable gates; until they pass, the page will show no TIF link.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Gate</th><th>Required evidence</th><th>Current state</th></tr></thead>
+          <tbody>
+            <tr><td>Data and shared tools</td><td>Official inputs, cached lidar features, cultural mask, shared evaluator, writer, and validator.</td><td><b>BLOCKED</b> — absent from this checkout.</td></tr>
+            <tr><td>Scientific holdout</td><td>Spatially blocked hide-and-recover result with evaluator version, withheld-positive count, and 95% CI; feature-alone leakage checks.</td><td><b>NOT RUN</b> — no DTI value is claimed.</td></tr>
+            <tr><td>Range-front gate</td><td>Gain on lidar-covered holdout blocks that is not confined to range fronts.</td><td><b>NOT RUN</b> — masks/data absent.</td></tr>
+            <tr><td>Uniqueness</td><td>Continuous surface before placement and final dots compared with the full prior-raster registry.</td><td><b>NOT RUN</b> — no candidate or registry.</td></tr>
+            <tr><td>Format</td><td>Single-band float32, EPSG:32611, exact template grid, in-footprint values in [0,1], NaN only outside.</td><td><b>NOT RUN</b> — no candidate TIFF or template.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section callout warning" aria-labelledby="feed-heading">
+      <h2 id="feed-heading">Current-feed limitation</h2>
+      <p>The requested automatic leaderboard feed is intentionally not implemented. The platform Terms prohibit automated access for monitoring or copying and restrict manual monitoring/copying without prior written consent. The compliant path here is a direct link to the official live board, not a locally cached or scheduled mirror.</p>
+      <p>Research sources and the exact wording checked are in <a href="sources.html">the source register</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>GEMSDOE66 · evidence before emission</span>
+      <span><a href="https://github.com/buffedlizard55-lab/GEMSDOE66/blob/main/README.md" rel="noopener noreferrer">Standing project brief</a> · <a href="sources.md">Verified sources</a> · No organizer score is claimed</span>
+    </div>
+  </footer>
+</body>
+</html>

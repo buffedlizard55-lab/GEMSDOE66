@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Step-by-step GEMS Prize submission instructions and current download clearance for GEMSDOE66.">
+  <title>Executive summary &amp; submission guide — GEMSDOE66</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">GEMSDOE66 <small>DOE GEMS · Lidar scarp lane</small></a>
+      <nav aria-label="Primary navigation">
+        <a href="index.html">Overview</a>
+        <a href="executive-summary.html" aria-current="page">How to submit</a>
+        <a href="hypotheses.html">Hypotheses</a>
+        <a href="evidence.html">Evidence</a>
+        <a href="sources.html">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Executive summary · upload guide</p>
+      <h1 id="page-title">How to make a GEMS Prize submission</h1>
+      <p>This page explains the file and form workflow. It does not imply that a current candidate is ready.</p>
+    </section>
+
+    <section class="status" aria-label="Current submit clearance">
+      <p class="status-label">Current clearance</p>
+      <strong>⛔ NO DOWNLOAD · DO NOT SUBMIT</strong>
+      <p>There is no candidate TIF, submission name, or note in this repository. The scientific holdout, uniqueness comparison, and byte-level format validation are all unrun. The download button will only be enabled after those gates pass and the run card is updated.</p>
+    </section>
+
+    <section class="section" aria-labelledby="requirements-heading">
+      <h2 id="requirements-heading">File requirements</h2>
+      <div class="callout">
+        <p>The official competition problem page requires a single-layer, single-band float32 GeoTIFF in the training data's projected CRS (EPSG:32611), at 100 m resolution, with the same bounds/grid and null or NaN outside the study bounds. Prediction values must be in [0,1], with higher values indicating greater confidence.</p>
+        <p>The run protocol for this project is stricter about verification: values must be in range within the footprint, NaN may occur only outside the footprint, and CRS, shape, transform, and bounds must match the template exactly. The file must be re-opened from disk and checked by the shared validator; none of those checks has run because the file and template are absent.</p>
+        <p class="small">The form text quoted in the project brief accepts a single .tif or a .zip containing one GeoTIFF. The public format page explicitly documents a GeoTIFF. Use a ZIP only if the currently displayed competition form still accepts it; this project currently provides neither format. The quoted form shows a file selector and an optional Note, but does not establish a separate Name field. A unique filename is the project's artifact identifier; do not assume a portal field that is not shown.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="steps-heading">
+      <h2 id="steps-heading">Submission steps after a candidate is promoted</h2>
+      <ol>
+        <li><b>Read the clearance first.</b> On the project home page, verify that the specific file says both “download allowed” and “submit allowed.” A local format pass alone is not promotion. Current state: <b>neither is allowed</b>.</li>
+        <li><b>Download only the promoted artifact.</b> The site will show its unique filename, SHA-256, pixel-agreement/registry result, holdout evidence class, and validator receipt. Never upload a sibling project's raster or a file marked audit-only.</li>
+        <li><b>Open the official competition page and submission form.</b> Sign in to the account that is registered for the competition. This repository cannot access that account and will not store account credentials.</li>
+        <li><b>Select the file.</b> Use the promoted single-band GeoTIFF (or a single-TIFF ZIP only if the current form accepts it). Confirm the portal is selecting the same filename and byte hash that the project run card records.</li>
+        <li><b>Enter the submission note.</b> Paste only the short, artifact-specific note displayed next to that promoted file. Keep it within the project's 140-character note limit. Do not use an example or template note as a claim that a gate passed.</li>
+        <li><b>Submit and retain the receipt.</b> After the form returns a result, record the organizer's receipt and score against the exact filename and SHA-256. Label that result <code>ORGANIZER-CONFIRMED</code> only when copied from the official submission receipt.</li>
+        <li><b>Leave final selection separate.</b> Feedback submissions and weekly limits are controlled by the official competition rules. Do not upload automatically; choosing the one final entry is a separate, accountable decision.</li>
+      </ol>
+    </section>
+
+    <section class="section grid" aria-label="No candidate metadata exists yet">
+      <article class="card">
+        <span class="kicker">No file generated</span>
+        <h3>Filename</h3>
+        <p><b>Not assigned.</b> Assign a unique filename only after the candidate has passed the holdout and the full registry comparison. There is no download link on this site today.</p>
+      </article>
+      <article class="card">
+        <span class="kicker">No receipt</span>
+        <h3>Optional form note</h3>
+        <p><b>Not assigned.</b> A note must describe measured properties of the promoted artifact; a blank or hypothetical note is safer than a claim that is not yet true.</p>
+      </article>
+    </section>
+
+    <section class="section callout warning" aria-labelledby="access-heading">
+      <h2 id="access-heading">Access and terms</h2>
+      <p>The official training-data page requires account access. Do not put passwords, tokens, or private competition data in this repository. The public DrivenData Terms also restrict automatic and manual monitoring/copying of platform material without prior written consent, so this site links to the official board rather than publishing an automated feed.</p>
+      <div class="button-row">
+        <a class="button" href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/" rel="noopener noreferrer">Open official problem page ↗</a>
+        <a class="button secondary" href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" rel="noopener noreferrer">Open official leaderboard ↗</a>
+      </div>
+      <p>Full data-source, rules, and Terms references are in <a href="sources.html">Sources</a>. See the <a href="evidence/run-card.json">machine-readable run card</a> for this branch's current gate status.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>GEMSDOE66 · evidence before emission</span>
+      <span><a href="index.html">Project overview</a> · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66/blob/main/README.md" rel="noopener noreferrer">Standing brief</a></span>
+    </div>
+  </footer>
+</body>
+</html>
