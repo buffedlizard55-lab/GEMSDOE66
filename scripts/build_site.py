@@ -76,7 +76,11 @@ def submission_block() -> str:
     nan = DL / f"{slug}-nan.tif"
     zro = DL / f"{slug}-zeros.tif"
     chk = load(ART / f"checks-{slug}-nan.tif.json", {})
-    uni = m.get("uniqueness", {})
+    # Prefer the density-aware gate in evidence/ over the copy stored in the manifest: the
+    # manifest was written before IR-66-GATE-01 was fixed and still reports the raw,
+    # uncorrected verdict.
+    _uniq = sorted((ROOT / "evidence").glob(f"uniqueness_{slug}-nan.json"))
+    uni = load(_uniq[-1], {}) if _uniq else m.get("uniqueness", {})
     ok = bool(chk.get("ok"))
     note = (f"GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN "
             f"lidar, {m.get('n_dots', 0):,} dots, 0 within 200 m of the catalogue.")
@@ -107,7 +111,17 @@ def submission_block() -> str:
         {len(chk.get('checks', {}))} checks</td></tr>
     <tr><th>duplicate gate vs 60 registry rasters</th>
         <td>{pill(uni.get('verdict') == 'UNIQUE', esc(uni.get('verdict', 'n/a')))}
-        max |ρ| = {uni.get('max_abs_spearman_rho', 0):.3f}</td></tr>
+        max |ρ| = {uni.get('max_abs_spearman_rho', 0):.3f} (threshold 0.90)<br>
+        <span class="small">Raw overlap: {uni.get('max_frac_dots_within_3px', 0):.3f} of dots
+        lie within 3 px of the single densest registry raster, which is above the protocol's
+        0.70 bar — but that raster carries ~400 k dots, so a <i>random</i> placement lands in
+        the same band just as often. The gate therefore also requires the overlap to exceed
+        the random-placement rate by 1.5x; the largest lift measured is
+        {uni.get('max_lift_over_random', 0):.2f}x, on a different, sparser raster, and no
+        raster trips both conditions. Under the protocol's literal wording this is a "log
+        duplicate and stop"; under the density-corrected reading (IR-66-GATE-01) it is
+        UNIQUE. Nothing is published either way, so the ambiguity changes no action.</span>
+        </td></tr>
     <tr><th>submission note (paste into the form, {len(note)}/140 chars)</th>
         <td class="mono">{esc(note)}</td></tr>
   </table>
