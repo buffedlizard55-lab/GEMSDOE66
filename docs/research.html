@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Research · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="on">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<main>
+<div class="wrap">
+
+<h2>Research protocol and limitations</h2>
+
+<h3>1 · Metric transcription</h3>
+<p>The official problem description defines distance-weighted Tversky scoring. With
+<code>T = TP<sub>w</sub></code>, total prediction mass <code>S</code>, weighted mass <code>M</code>,
+and truth-pixel count <code>|G|</code>:</p>
+<pre>DTI = T / (0.2T + 0.2(S − M) + 0.8|G|)</pre>
+<p>The project tests the transcription in <code>tests/test_metric.py</code>. That code-level test
+is not a competition score and does not authenticate any label raster.</p>
+
+<h3>2 · Target method versus inherited proxy</h3>
+<p>The requested method is native-resolution scarp evidence: slope-aware templates; Steger
+sub-pixel and Frangi ridge/valley measures at <b>2–20 m</b>; 100 m aggregation of scarp fraction,
+SNR-weighted amplitude, orientation coherence and dominant strike; the existing cultural mask;
+and spatially blocked validation. The exact 1 m tiles and compatibility checks are not available
+in this checkout, so this target method has <b>not</b> been run.</p>
+<p>The inherited PR #13 <code>lidar_lane</code> used 1 m-derived descriptors and line scales at
+2–20 pixels on a 100 m grid, i.e. 200–2,000 m. It is scale-deviating, negative after
+relief-matching, and remains audit-only. Its internal `HOLDOUT-DTI` values and CIs are labelled
+on the <a href="results.html">results page</a>; they do not validate the requested method and
+are not `ORGANIZER-CONFIRMED`.</p>
+
+<h3>3 · Holdout, leakage, and release criteria</h3>
+<ul>
+<li>Withhold whole fault segments with a buffer. Derive catalogue features only from visible
+faults and mask visible faults pixel-exactly.</li>
+<li>Score pooled DTI on LiDAR-covered held-out blocks with α = 0.2, β = 0.8 and a 300 m
+triangular kernel; report evaluator version, withheld-positive count and 95% CI.</li>
+<li>Run feature-alone leakage canaries; AUC above 0.90 is a stop pending proof otherwise.</li>
+<li>Compare both continuous pre-placement surfaces and final emitted dots against every indexed
+registry raster. Apply absolute Spearman thresholds and the raw &gt;70% / 3 px emitted-dot stop;
+random-density lift is diagnostic only. Require an explicit organizer-complete certificate and
+matching expected count; incomplete access is not a pass.</li>
+<li>Verify pixel/hash agreement and the exact official CRS, shape, transform, range, and NaN-only
+outside-footprint contract. A local format receipt is not organizer acceptance.</li>
+</ul>
+
+<h3>4 · Evidence status</h3>
+<p>Official competition inputs and exact DEM-tile coverage remain unverified in this environment.
+Owner-maintained GitHub mirrors are hash-pinned for local reproducibility but are not
+organizer-authenticated. The site does not poll leaderboard pages or infer artifact performance
+from owner reports. No organizer receipt in this checkout confirms a score for any raster.</p>
+<p>The inherited PR #13 run was stopped: its relief-matched result does not beat the incumbent,
+its raw final-dot overlap exceeds the threshold, its complete-registry status is uncertified, and
+its pre-placement surface comparison is absent. No experiment or submission slot was used in the
+PR #12 reconciliation.</p>
+
+<h3>5 · Trusted method references</h3>
+<ul>
+<li><b>[official]</b> <a href="https://www.drivendata.org/">DrivenData</a> DOE GEMS Prize
+competition and problem description; the data tab remains login-walled in the recorded audit.</li>
+<li><b>[official]</b> <a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP</a> and
+<a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a>; product context does not prove exact tile coverage.</li>
+<li><b>[literature]</b> <a href="https://doi.org/10.21105/joss.01066">Sare &amp; Hilley,
+Scarplet (JOSS)</a>, <a href="https://doi.org/10.1109/34.659930">Steger (IEEE TPAMI)</a>,
+and <a href="https://research.manchester.ac.uk/en/publications/multiscale-vessel-enhancement-filtering/">Frangi et al. (MICCAI)</a>. These establish methods, not competition performance.</li>
+</ul>
+<p>See the <a href="analysis.html">H33 attribution review</a>,
+<a href="sources.html">source register</a>, <a href="irregularities.html">irregularities</a>, and the
+<a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a>.</p>
+
+</div>
+</main>
+<footer><div class="wrap">
+GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
+competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
+Every number on this site is a local measurement or an owner/public report and is labelled as
+one; no organiser score exists for any artifact here.
+</div></footer></body></html>

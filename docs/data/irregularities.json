@@ -188,6 +188,30 @@
       "title": "The prior shared-package provenance record overstated byte identity and referenced a missing pin",
       "detail": "The earlier record claimed 23/23 package files were identical and referred to registry/template_pin.json, but that pin file is absent from origin/main. After merging newer main and applying this PR, comparison to the stored per-file template_sha256 values finds 19/23 files identical; anatomy.py and metric.py differ in newer main, and uniqueness.py and gates.py are changed in this PR. No live upstream revision or tarball was fetched/verified, and no external template PR/merge is claimed. Keep the runner disabled and disclose the provenance limit.",
       "source_ids": []
+    },
+    {
+      "id": "IR-71-LIDAR-RAW-OVERLAP",
+      "severity": "high",
+      "status": "OPEN — raw final-dot threshold trips; registry completeness is not certified",
+      "title": "A density-adjusted uniqueness label cannot override the raw overlap stop or incomplete registry evidence",
+      "detail": "The inherited lidar_lane final-dot comparison reports 0.990386 of candidate dots within 3 px of one accessible registry raster, above the stated >0.70 stop threshold; max absolute Spearman rho is 0.277125. A separate density-adjusted diagnostic labels the same scan UNIQUE, but the 1.5x random-placement lift is not an authorized exemption. Only 60 rasters were compared, no organizer-complete registry certificate or matching expected count is recorded, and pre-placement continuous-surface correlation is null/not reported. Pixel identity was not found in the accessible scan; a full registry file-hash/pixel agreement pass is not established. The candidate remains negative and not submission-cleared.",
+      "source_ids": [],
+      "internal_evidence": [
+        "docs/data/run_card.json",
+        "evidence/uniqueness_gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.json",
+        "evidence/uniqueness_gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba.json"
+      ]
+    },
+    {
+      "id": "IR-72-MAIN-MERGE-CONFLICTS",
+      "severity": "medium",
+      "status": "RESOLVED — site regenerated; 113 passed, 5 skipped; GitHub checks pending",
+      "title": "Incoming main conflicts overlapped PR #12's no-download site and audit changes",
+      "detail": "Merging origin/main commit 8f522351 from merge-base 5970770b produced content conflicts in docs/downloads/README.md, docs/index.html, docs/irregularities.html, and scripts/build_site.py. The resolution preserves the no-download/audit-only state, combines the PR #12 provenance and raw-overlap disclosures with the current site generator, and regenerates affected HTML from repository data. This is a merge-process irregularity, not evidence that any scientific release gate passed.",
+      "source_ids": [],
+      "internal_evidence": [
+        "docs/review/2026-10-11-pr12-reconciliation.md"
+      ]
     }
   ]
 }

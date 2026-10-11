@@ -95,8 +95,8 @@
     {
       "date": "2026-10-11",
       "kind": "pr12-main-reconciliation",
-      "status": "NEGATIVE / NOT CLEARED — no new experiment or candidate",
-      "summary": "Reconciled PR #12 against newer main without overwriting its historical H66-2 negative record or disabled-runner safeguards. Added phase-aware shared uniqueness checks and explicit full-registry certification; archived H66-1 bytes outside the Pages root. This turn ran 0 experiments, 0 holdouts, 0 emissions, and used 0 slots. Offline suite: 88 passed; no scientific, official-grid, or organizer result is established.",
+      "status": "NEGATIVE / NOT CLEARED — merge and registry gates under review",
+      "summary": "Merged the latest origin/main snapshot (8f52235, including PR #13) into the PR #12 branch while preserving both inherited negative experiment records. Corrected the density-adjusted lidar-lane uniqueness claim: raw final-dot overlap is 0.990386 (>0.70 stop), only 60 accessible rasters were compared, registry completeness is uncertified, and pre-placement surface comparison is not reported (IR-71). Updated the shared release wrapper and run-card generator to fail closed. This reconciliation ran 0 experiments, 0 holdouts, 0 emissions, and used 0 submission slots. Offline suite: 113 passed, 5 skipped because the authorized official sample raster is absent; no candidate is cleared and no organizer score is established.",
       "links": [
         "review/2026-10-11-pr12-reconciliation.md",
         "run-card.html",
