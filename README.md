@@ -12,6 +12,13 @@ and transparent stops are valid outcomes.
 [`docs/review/`](docs/review/), including the PR #12 reconciliation. Do not treat inherited
 artifacts as candidates cleared for release.
 
+**Latest session (`arena/50d197c5`, 2026-10-11):** blocked; no TIF offered. Native USGS 3DEP and
+DrivenData hosts are unreachable from the sandbox (HTTP 000). Verified in-session: the closed-form
+DTI matches brute force; H33-2-B2 has 0 dots within 200 m of the catalogue (min 223.6 m). Flagged
+irregularities (`IR-S-01`–`IR-S-06`), including `existing_faults.tif` being byte-identical to
+`labels.tif`. See
+[`docs/review/2026-10-11-session-arena50d197c5-blocker-and-h33-audit.md`](docs/review/2026-10-11-session-arena50d197c5-blocker-and-h33-audit.md).
+
 ---
 
 ## Historical context — inherited `lidar_lane` session (`arena/7d2c4a3b`)
