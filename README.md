@@ -2,7 +2,63 @@
 
 **One lane:** native-resolution LiDAR scarp channels. **One standard:** a scientific, reproducible result that survives the holdout, registry, format, provenance, and rules gates. **One current status:** blocked; no candidate is cleared for download or submission.
 
-> **Current as of 2026-10-11:** the official competition data tab redirected this unauthenticated session to the DrivenData login page. No competition credentials were used. The checkout has no authorized training rasters, sample submission, native-resolution DEM tiles, or cached feature stack. No new model experiment or GeoTIFF was produced. Historical H66 files have been withdrawn from `docs/downloads`; their hashes and audit disposition remain recorded. Do not upload a historical artifact.
+> **Current as of 2026-10-11:** the audit session could not reach the official data tab (login redirect, no credentials used) and withdrew the three legacy H66 binaries from `docs/downloads`; their hashes and disposition remain recorded. **Do not upload a historical artifact.** A later session in this branch did run one preregistered experiment, H66-2 (see the section below and `docs/review/2026-10-11-h66-2-verdict.md`): it emitted and validated a new GeoTIFF, measured a **negative** verdict, and kept the bytes in `artifacts/h66-2/` rather than publish them. Nothing in this repository is cleared for submission, and no competition score is claimed anywhere.
+
+> **Read this file first**, then `docs/data/run-card.json` and the newest file under `docs/review/`,
+> before doing anything in a session. The brief below is the standing requirement list distilled from the
+> session brief, kept here so every session starts from the same instructions. Where a later audit tightened
+> a rule (see `docs/review/2026-10-11-audit.md`), the stricter rule wins.
+
+## Standing brief (binding)
+
+**Deliverable.** Produce a **unique** GeoTIFF submission for the DOE GEMS Prize (DrivenData #306) that is not a
+copy of any prior submission. Make it obvious — at the top of the site and in this file — whether the generated
+file is safe to download and whether it is cleared to submit. Provide an easy download path, a unique submission
+name, and a note of at most 140 characters. Never publish a file that has not passed the release gates recorded
+in `docs/review/2026-10-11-audit.md`.
+
+**Lane.** Native-resolution LiDAR scarp channels only: scarplet template matching (Sare & Hilley, JOSS 2018,
+doi:10.21105/joss.01066) extended with slope-aware templates (AGU 2015 poster T31A-2838, Surprise Valley);
+Steger sub-pixel ridge/valley lines (IEEE TPAMI 20(2):113-125, 1998) and Frangi multiscale Hessian evidence
+(MICCAI 1998, LNCS 1496:130-137) at 2-20 m on a slope-detrended surface; aggregate to 100 m cells as
+scarp-pixel fraction, SNR-weighted amplitude, structure-tensor orientation coherence and dominant strike. Mask
+roads, canals and field edges with the existing cultural-feature mask; retrain under spatial cross-validation.
+Gate: DTI gain on LiDAR-covered holdout blocks that is **not confined to range fronts**. Normalise to [0,1] as
+float32 EPSG:32611 on the exact grid; pass `validate_submission.py`; hash- and pixel-agreement check against
+every prior raster; offer a download only if the gate is met, otherwise log the negative.
+
+**Protocol.** Stay in the lane; log drift and stop if correlation exceeds 0.90 against any registry raster or if
+more than 70 % of dots fall within 3 px of one. Reuse the template's cached feature stack, `evaluate_holdout.py`
+and `submission_writer.py`; fix a shared tool once, in place, never in a private fork. Holdout: hide-and-recover
+whole fault segments with a buffer; catalogue features only from visible faults; visible faults masked
+pixel-exactly; pooled DTI with alpha=0.2, beta=0.8 and a 300 m triangular kernel. Label every number either
+`HOLDOUT-DTI` (evaluator version, withheld positives, 95 % CI) or `ORGANIZER-CONFIRMED`; never present a
+projection as a score. Leakage canary: any feature alone with AUC above 0.90 is leakage until disproven. Finish
+with one JSON run card carrying hypothesis, mechanism, named non-fault mimic, holdout numbers,
+correlation/overlap versus the registry, raster sha256, validator output, submission name and note, and a
+promote/negative verdict. Negative results are deliverables. Budget: three experiments or two hours, whichever
+comes first. Do not spend a submission slot; slot selection is a separate manual step.
+
+**Before implementing.** Rank three to five candidate hypotheses not yet tried, each naming the specific layers,
+the physical signature targeted, why it could catch a fault the USGS/INGENIOUS catalogue misses, and how it
+differs from everything already in the repository; rank by expected DTI gain and implementation cost; validate
+the top candidate on the spatially blocked holdout before touching a submission slot. Name any new external data
+source exactly and verify it is free and obtainable first.
+
+**Reporting.** Work line by line from official, verifiable sources and link them for manual review; flag every
+irregularity; no manual input required from the user; no hallucinations; run each task through three passes;
+finish with a pull request merged to `main` plus the remaining work and limitations.
+
+**Question owed.** Explain, with PhD-level reasoning, why the owner-reported family-best 0.2778 belongs to
+`h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros` (GEMSDOE32), and whether it can be beaten. Fetched evidence:
+2026-10-11 live leaderboard top 0.4133, with 0.3195 at rank 9. Best current answer:
+`docs/review/2026-10-11-h66-2-verdict.md` plus the transfer analysis in `evidence/h66b_instrument_vs_live.json`.
+
+**Site.** Clean and user-friendly; it must generate the submit-ready GeoTIFF and make download-and-submit
+obvious at the very top, with an executive-summary subpage explaining exactly how to submit, and it must never
+recur the prior rejection `Predicted values must be in range [0, 1]`.
+
+**Core values.** Maximize P(Win); Own the Outcome.
 
 ## H66-2 session (2026-10-11) — measured, negative, not published
 
