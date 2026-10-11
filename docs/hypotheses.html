@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hypotheses · GEMS Prize workbench</title>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site">
+  <div class="brand">GEMS Prize (DrivenData #306) · workbench</div>
+  <nav><a href="index.html" class="">Summary</a><a href="submission-guide.html" class="">How to submit</a><a href="analysis.html" class="">Why 0.2778?</a><a href="hypotheses.html" class="active">Hypotheses</a><a href="leaderboard.html" class="">Leaderboard &amp; claims</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
+</header>
+<main>
+<h1>Hypotheses, ranked</h1>
+<p class="sub">Ranked by an ordinal prior: novelty against the owner registry, mimic risk, and cost. <strong>No expected DTI gain is a number.</strong> Each one must be measured on a lidar-covered, spatially blocked holdout before any slot is spent. Leakage canary: any single feature with holdout AUC above 0.90 counts as leakage until proven otherwise.</p>
+<div class="card">
+<h3>Rank 1 · H-A · Thermal-infrared surface-temperature lineaments aligned to fault-trend families</h3>
+<div class="kv">
+<div>Lane</div><div>new (not in owner registry)</div>
+<div>Data layers</div><div>Landsat 8/9 Collection 2 Level-2 surface temperature (public domain, S09); 100 m detrended elevation (feature band 12) for context; a water/irrigated-land mask</div>
+<div>Signature</div><div>Persistent linear warm or cool residuals above a local high-pass threshold, trend within +/-20 deg of a catalogue-derived strike mode (proposed parameters; not tuned)</div>
+<div>Why off-catalogue</div><div>Buried or scarp-less faults can carry shallow fluid flow, giving a thermal contrast along the trace with no surface offset. A surface fault map misses these by design.</div>
+<div>Named mimic</div><div>Solar aspect and albedo contrasts; irrigation and cultivation; roads and canals; lithological thermal-inertia contrasts; cloud-mask residue</div>
+<div>Versus owner registry</div><div>Owner registry has no satellite thermal data (search terms &#x27;thermal infrared&#x27;, &#x27;TIRS&#x27;, &#x27;Landsat&#x27; return 0 hits in GEMSDOE32). H33-3 uses temperature probes, a different instrument and scale.</div>
+<div>Cost</div><div>Medium: scene selection, compositing, resampling 30 m to 100 m</div>
+<div>Expected DTI gain</div><div><span class="tag red">NOT MEASURED</span> UNKNOWN - high variance, sign not known. No projection is written.</div>
+<div>Data status</div><div>Obtainable: USGS states no restrictions (S09). Download not tested from this sandbox.</div>
+<div>Validation</div><div>Not run. Needs the holdout and the leakage canary (AUC &gt; 0.90 alone = leakage).</div>
+</div></div><div class="card">
+<h3>Rank 2 · H-B · Shoreline and terrace rejection: remove contour-parallel benches from any emission set</h3>
+<div class="kv">
+<div>Lane</div><div>new (not in owner registry)</div>
+<div>Data layers</div><div>100 m detrended elevation (band 12) and its slope (band 19); any candidate emission raster</div>
+<div>Signature</div><div>A candidate whose local trend is within 15 deg of the contour direction AND sits on a locally flat bench (low slope, elevation plateau) is removed</div>
+<div>Why off-catalogue</div><div>Not a fault detector. It protects precision: emitted mass that sits on a mimic earns only the 0.2 penalty, so removing mimics raises DTI wherever they are being emitted.</div>
+<div>Named mimic</div><div>Pluvial-lake shorelines and fluvial terrace treads (these are the mimic being removed; their local extent is not verified here)</div>
+<div>Versus owner registry</div><div>Owner registry uses &#x27;contour&#x27; in tilt-angle zero-contour and display contexts only (6 hits). The catalogue-flank removal of H33-2 is a different rule.</div>
+<div>Cost</div><div>Low: uses existing feature bands</div>
+<div>Expected DTI gain</div><div><span class="tag red">NOT MEASURED</span> SMALL, likely non-negative. Sign and size unknown until measured.</div>
+<div>Data status</div><div>No new data required.</div>
+<div>Validation</div><div>Not run. Cheapest to test once data is present.</div>
+</div></div><div class="card">
+<h3>Rank 3 · H-C · Vegetation and soil-moisture linear anomalies (Landsat NDVI/NDMI) as fault-controlled spring lines</h3>
+<div class="kv">
+<div>Lane</div><div>new (not in owner registry)</div>
+<div>Data layers</div><div>Landsat 8/9 Collection 2 Level-2 surface reflectance (red, NIR, SWIR); late-summer composite; cultural-feature mask (source still to be named)</div>
+<div>Signature</div><div>Linear greenness or moisture anomalies persistent across years, aligned with the regional trend family, not along roads, canals or field edges</div>
+<div>Why off-catalogue</div><div>Fault-controlled springs and shallow groundwater create linear phreatophyte belts where no scarp exists</div>
+<div>Named mimic</div><div>Irrigation canals and field boundaries; riparian corridors along drainages; grazing fences; soil and lithology contrasts (for example playa against alluvium)</div>
+<div>Versus owner registry</div><div>Owner registry has no vegetation index (NDVI: 0 hits).</div>
+<div>Cost</div><div>Medium-high: needs a cultural mask whose source is not yet named or verified</div>
+<div>Expected DTI gain</div><div><span class="tag red">NOT MEASURED</span> UNKNOWN - mimic risk is high</div>
+<div>Data status</div><div>Landsat obtainable (S09). Cultural mask source not yet verified.</div>
+<div>Validation</div><div>Not run.</div>
+</div></div><div class="card">
+<h3>Rank 4 · H-D · Metre-scale scarp channels from the 1 m DEM (scarplet template matching + Steger ridge + Frangi Hessian)</h3>
+<div class="kv">
+<div>Lane</div><div>lane method (already registered by owner as H33-C and H61-5)</div>
+<div>Data layers</div><div>USGS 3DEP 1 m DEM tiles listed in 1m_DEM_links.csv (S05, login-gated; 3DEP free per S08)</div>
+<div>Signature</div><div>Sub-metre to metre-high scarplet chains, collinear, with contrast against the local minimum</div>
+<div>Why off-catalogue</div><div>Sub-metre scarps may be below the resolution of the 100 m stack and absent from the catalogue (reasoning, not tested)</div>
+<div>Named mimic</div><div>Fluvial terrace risers, road and canal embankments, field edges, animal trails, landslide headscarps</div>
+<div>Versus owner registry</div><div>Owner registry has the same idea (H33-C, H61-5) but no implementation of the method in this repo</div>
+<div>Cost</div><div>Very high: GeoDAWN covers 51,857 km2 (S07). At 1 m that is about 5.2 x 10^10 cells, roughly 200 GB as float32. Must run on high-prior tiles only</div>
+<div>Expected DTI gain</div><div><span class="tag red">NOT MEASURED</span> UNKNOWN</div>
+<div>Data status</div><div>Obtainable (3DEP free), but the 1 m tile list is behind the login wall (S05)</div>
+<div>Validation</div><div>Not run. Blocked on data and compute.</div>
+</div></div>
+<p class="note">Machine-readable: <a href="data/hypotheses.json">data/hypotheses.json</a>. Lane overlap with the owner's registry is recorded in IR-18.</p>
+</main>
+<footer>Generated by scripts/build_site.py from docs/data/*.json · last updated 2026-10-11 (UTC) · not affiliated with DrivenData or DOE.</footer>
+</body>
+</html>

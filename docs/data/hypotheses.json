@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "items": [
+    {
+      "id": "H-A",
+      "rank": 1,
+      "lane": "new (not in owner registry)",
+      "title": "Thermal-infrared surface-temperature lineaments aligned to fault-trend families",
+      "layers": "Landsat 8/9 Collection 2 Level-2 surface temperature (public domain, S09); 100 m detrended elevation (feature band 12) for context; a water/irrigated-land mask",
+      "signature": "Persistent linear warm or cool residuals above a local high-pass threshold, trend within +/-20 deg of a catalogue-derived strike mode (proposed parameters; not tuned)",
+      "why_off_catalogue": "Buried or scarp-less faults can carry shallow fluid flow, giving a thermal contrast along the trace with no surface offset. A surface fault map misses these by design.",
+      "named_mimic": "Solar aspect and albedo contrasts; irrigation and cultivation; roads and canals; lithological thermal-inertia contrasts; cloud-mask residue",
+      "differs_from_repo": "Owner registry has no satellite thermal data (search terms 'thermal infrared', 'TIRS', 'Landsat' return 0 hits in GEMSDOE32). H33-3 uses temperature probes, a different instrument and scale.",
+      "cost": "Medium: scene selection, compositing, resampling 30 m to 100 m",
+      "expected_gain": "UNKNOWN - high variance, sign not known. No projection is written.",
+      "data_status": "Obtainable: USGS states no restrictions (S09). Download not tested from this sandbox.",
+      "validation": "Not run. Needs the holdout and the leakage canary (AUC > 0.90 alone = leakage)."
+    },
+    {
+      "id": "H-B",
+      "rank": 2,
+      "lane": "new (not in owner registry)",
+      "title": "Shoreline and terrace rejection: remove contour-parallel benches from any emission set",
+      "layers": "100 m detrended elevation (band 12) and its slope (band 19); any candidate emission raster",
+      "signature": "A candidate whose local trend is within 15 deg of the contour direction AND sits on a locally flat bench (low slope, elevation plateau) is removed",
+      "why_off_catalogue": "Not a fault detector. It protects precision: emitted mass that sits on a mimic earns only the 0.2 penalty, so removing mimics raises DTI wherever they are being emitted.",
+      "named_mimic": "Pluvial-lake shorelines and fluvial terrace treads (these are the mimic being removed; their local extent is not verified here)",
+      "differs_from_repo": "Owner registry uses 'contour' in tilt-angle zero-contour and display contexts only (6 hits). The catalogue-flank removal of H33-2 is a different rule.",
+      "cost": "Low: uses existing feature bands",
+      "expected_gain": "SMALL, likely non-negative. Sign and size unknown until measured.",
+      "data_status": "No new data required.",
+      "validation": "Not run. Cheapest to test once data is present."
+    },
+    {
+      "id": "H-C",
+      "rank": 3,
+      "lane": "new (not in owner registry)",
+      "title": "Vegetation and soil-moisture linear anomalies (Landsat NDVI/NDMI) as fault-controlled spring lines",
+      "layers": "Landsat 8/9 Collection 2 Level-2 surface reflectance (red, NIR, SWIR); late-summer composite; cultural-feature mask (source still to be named)",
+      "signature": "Linear greenness or moisture anomalies persistent across years, aligned with the regional trend family, not along roads, canals or field edges",
+      "why_off_catalogue": "Fault-controlled springs and shallow groundwater create linear phreatophyte belts where no scarp exists",
+      "named_mimic": "Irrigation canals and field boundaries; riparian corridors along drainages; grazing fences; soil and lithology contrasts (for example playa against alluvium)",
+      "differs_from_repo": "Owner registry has no vegetation index (NDVI: 0 hits).",
+      "cost": "Medium-high: needs a cultural mask whose source is not yet named or verified",
+      "expected_gain": "UNKNOWN - mimic risk is high",
+      "data_status": "Landsat obtainable (S09). Cultural mask source not yet verified.",
+      "validation": "Not run."
+    },
+    {
+      "id": "H-D",
+      "rank": 4,
+      "lane": "lane method (already registered by owner as H33-C and H61-5)",
+      "title": "Metre-scale scarp channels from the 1 m DEM (scarplet template matching + Steger ridge + Frangi Hessian)",
+      "layers": "USGS 3DEP 1 m DEM tiles listed in 1m_DEM_links.csv (S05, login-gated; 3DEP free per S08)",
+      "signature": "Sub-metre to metre-high scarplet chains, collinear, with contrast against the local minimum",
+      "why_off_catalogue": "Sub-metre scarps may be below the resolution of the 100 m stack and absent from the catalogue (reasoning, not tested)",
+      "named_mimic": "Fluvial terrace risers, road and canal embankments, field edges, animal trails, landslide headscarps",
+      "differs_from_repo": "Owner registry has the same idea (H33-C, H61-5) but no implementation of the method in this repo",
+      "cost": "Very high: GeoDAWN covers 51,857 km2 (S07). At 1 m that is about 5.2 x 10^10 cells, roughly 200 GB as float32. Must run on high-prior tiles only",
+      "expected_gain": "UNKNOWN",
+      "data_status": "Obtainable (3DEP free), but the 1 m tile list is behind the login wall (S05)",
+      "validation": "Not run. Blocked on data and compute."
+    }
+  ],
+  "ranking_basis": "ordinal prior: novelty vs registry, mimic risk, cost. No numeric DTI projections."
+}
