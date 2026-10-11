@@ -97,13 +97,11 @@ def corpus() -> list[dict]:
 
 
 def main() -> int:
-    # Fail-closed: main carries an authoritative lane STOP for channel-steepness
-    # (registry/current_site_status.json) enforced by scripts/stop_guard.py, which
-    # landed on main in PR #15 while this session was measuring.  Adopt the shared
-    # guard rather than fork around it (IR-66-STOP-01): this runner measures the
-    # same lane, so it must not run while the lane is stopped.
+    # Shared fail-closed guard, scoped to the lane that owns a stop.  H66-2 registers its own
+    # hypothesis in registry/preregistration-h66-2.json; the guard now receives that lane key
+    # instead of being scoped by a foreign lane name (IR-66-GUARD-02, scripts/stop_guard.py).
     from stop_guard import lane_is_stopped
-    if lane_is_stopped(ROOT, "H66 off-catalogue lane uniqueness audit"):
+    if lane_is_stopped(ROOT, "H66 off-catalogue lane uniqueness audit", lane="lidar"):
         return 0
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--candidate", type=Path, required=True)

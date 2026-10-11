@@ -1,0 +1,444 @@
+{
+  "hypothesis_id": "H66-2",
+  "generated_utc": "2026-10-11T21:42:17Z",
+  "seconds": 83.1,
+  "instrument": "pooled DTI (alpha .2, beta .8, 300 m triangular) vs USGS SGMC state-map faults >300 m off catalogue inside the LiDAR-covered footprint; PROXY truth",
+  "corrections": [
+    "IR-66-BASE-01 fixed: per-stratum random baselines are uniform in-stratum draws; the earlier corner-sample baselines and every x-ratio derived from them are superseded."
+  ],
+  "decision_rule": {
+    "primary": "candidate >= +5 % relative credit-per-dot over the H66-1 blend at equal mass",
+    "primary_result": "PASSED (0.2253 vs 0.2019 pooled, +11.6 %; off-range-front +22.7 %)",
+    "secondary": "leakage canary max(auc, 1-auc) <= 0.90",
+    "secondary_result": "PASSED (0.5701)",
+    "tertiary": "not a duplicate of any registry raster",
+    "tertiary_result": "PASSED vs the 14 sparse submission-like rows; the only tripping row is a DENSE prior whose 3 px dilation covers 0.676 of five random dot sets and whose rank correlation with the candidate is -0.0007 (co-location without rank similarity, IR-60-GATE-01)",
+    "promotion_rule": "promotion additionally requires (a) the candidate to beat the mass-matched terrain-only control, (b) the union to beat its own mass-matched terrain control, and (c) no live counter-precedent among mass-comparable family submissions",
+    "promotion_result": "NEGATIVE"
+  },
+  "strata": {
+    "basin": {
+      "cells": 2361145,
+      "truth_pixels": 5434,
+      "champion": {
+        "n_dots": 2596,
+        "tp": 129.92653769881247,
+        "fp": 2523.7516147313986,
+        "fn": 5304.073462301188,
+        "n_truth": 5434,
+        "dti": 0.02663555806001204,
+        "coverage": 0.023909925965920585,
+        "credit_per_dot": 0.050048743335443936
+      },
+      "h66_2": {
+        "n_dots": 19,
+        "tp": 0.0,
+        "fp": 19.0,
+        "fn": 5434.0,
+        "n_truth": 5434,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "complement": {
+        "n_dots": 10,
+        "tp": 0.0,
+        "fp": 10.0,
+        "fn": 5434.0,
+        "n_truth": 5434,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "union": {
+        "n_dots": 2615,
+        "tp": 129.92653769881247,
+        "fp": 2542.7516147313986,
+        "fn": 5304.073462301188,
+        "n_truth": 5434,
+        "dti": 0.026614824630697278,
+        "coverage": 0.023909925965920585,
+        "credit_per_dot": 0.04968510045843689
+      },
+      "terrain_control_at_h66_2_mass": {
+        "n_dots": 19,
+        "tp": 0.0,
+        "fp": 19.0,
+        "fn": 5434.0,
+        "n_truth": 5434,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "terrain_control_at_union_mass": {
+        "n_dots": 2615,
+        "tp": 78.53538546562001,
+        "fp": 2566.781462647571,
+        "fn": 5355.46461453438,
+        "n_truth": 5434,
+        "dti": 0.016105648836538877,
+        "coverage": 0.014452592098936328,
+        "credit_per_dot": 0.030032652185705548
+      },
+      "random_at_champion_mass": {
+        "n_per_draw": 2596,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.014463690052404332,
+        "credit_per_dot_sd": 0.004461582452536961,
+        "dti_mean": 0.007708485646538756
+      },
+      "random_at_h66_2_mass": {
+        "n_per_draw": 19,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.0,
+        "credit_per_dot_sd": 0.0,
+        "dti_mean": 0.0
+      },
+      "random_at_union_mass": {
+        "n_per_draw": 2615,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.014618489177208274,
+        "credit_per_dot_sd": 0.0009134603244390507,
+        "dti_mean": 0.00784245516611724
+      },
+      "ratio_vs_own_mass_random": {
+        "champion": 3.4603025337316473,
+        "h66_2": null,
+        "complement": null,
+        "union": 3.398784912458742,
+        "terrain_control": null
+      }
+    },
+    "upland": {
+      "cells": 2361434,
+      "truth_pixels": 56230,
+      "champion": {
+        "n_dots": 32887,
+        "tp": 4769.6232544132035,
+        "fp": 30773.00786486308,
+        "fn": 51460.37674558679,
+        "n_truth": 56230,
+        "dti": 0.09156060571754344,
+        "coverage": 0.08482346175374718,
+        "credit_per_dot": 0.14503065814495708
+      },
+      "h66_2": {
+        "n_dots": 37635,
+        "tp": 8429.361058166945,
+        "fp": 34427.25322883912,
+        "fn": 47800.63894183305,
+        "n_truth": 56230,
+        "dti": 0.15739539243580583,
+        "coverage": 0.14990860853933746,
+        "credit_per_dot": 0.22397664562686184
+      },
+      "complement": {
+        "n_dots": 29727,
+        "tp": 6949.186422741095,
+        "fp": 27108.40439652975,
+        "fn": 49280.8135772589,
+        "n_truth": 56230,
+        "dti": 0.13416578632841306,
+        "coverage": 0.12358503330501681,
+        "credit_per_dot": 0.2337668255370907
+      },
+      "union": {
+        "n_dots": 70068,
+        "tp": 12143.502383016465,
+        "fp": 64777.30805817938,
+        "fn": 44086.497616983535,
+        "n_truth": 56230,
+        "dti": 0.20115739759091064,
+        "coverage": 0.21596127303959567,
+        "credit_per_dot": 0.17331024694605904
+      },
+      "terrain_control_at_h66_2_mass": {
+        "n_dots": 37635,
+        "tp": 4543.187415867913,
+        "fp": 33438.838481768005,
+        "fn": 51686.81258413209,
+        "n_truth": 56230,
+        "dti": 0.08640457220434006,
+        "coverage": 0.08079650392793727,
+        "credit_per_dot": 0.12071708292461573
+      },
+      "terrain_control_at_union_mass": {
+        "n_dots": 70068,
+        "tp": 7229.763864375781,
+        "fp": 62494.44569708964,
+        "fn": 49000.23613562422,
+        "n_truth": 56230,
+        "dti": 0.12268633880734023,
+        "coverage": 0.12857485086921183,
+        "credit_per_dot": 0.10318210687297741
+      },
+      "random_at_champion_mass": {
+        "n_per_draw": 32887,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.19255158124113814,
+        "credit_per_dot_sd": 0.0026114626402609577,
+        "dti_mean": 0.12099807989612651
+      },
+      "random_at_h66_2_mass": {
+        "n_per_draw": 37635,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.18702933988081244,
+        "credit_per_dot_sd": 0.0031454200383158972,
+        "dti_mean": 0.13190792761761308
+      },
+      "random_at_union_mass": {
+        "n_per_draw": 70068,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.17266781276303655,
+        "credit_per_dot_sd": 0.001300410678236925,
+        "dti_mean": 0.20041183646975042
+      },
+      "ratio_vs_own_mass_random": {
+        "champion": 0.7532041918852426,
+        "h66_2": 1.1975481802459158,
+        "complement": 1.2498938705876976,
+        "union": 1.00372063659545,
+        "terrain_control": 0.6454446291771372
+      }
+    },
+    "pooled": {
+      "cells": 4722579,
+      "truth_pixels": 61664,
+      "champion": {
+        "n_dots": 35483,
+        "tp": 5266.030956827501,
+        "fp": 33206.387089980315,
+        "fn": 56397.9690431725,
+        "n_truth": 61664,
+        "dti": 0.09234489836020146,
+        "coverage": 0.08539878951783052,
+        "credit_per_dot": 0.14840996975530538
+      },
+      "h66_2": {
+        "n_dots": 37654,
+        "tp": 8484.774243414484,
+        "fp": 34440.628827473076,
+        "fn": 53179.22575658552,
+        "n_truth": 61664,
+        "dti": 0.14650067568975533,
+        "coverage": 0.13759688381250784,
+        "credit_per_dot": 0.22533526965035544
+      },
+      "complement": {
+        "n_dots": 29737,
+        "tp": 6985.400064129694,
+        "fp": 27115.72280420529,
+        "fn": 54678.599935870305,
+        "n_truth": 61664,
+        "dti": 0.12440290014308196,
+        "coverage": 0.11328165646292317,
+        "credit_per_dot": 0.23490601150518528
+      },
+      "union": {
+        "n_dots": 72683,
+        "tp": 12680.111723498978,
+        "fp": 67224.06288193056,
+        "fn": 48983.88827650102,
+        "n_truth": 61664,
+        "dti": 0.19414663375318014,
+        "coverage": 0.20563232556271047,
+        "credit_per_dot": 0.17445773734572015
+      },
+      "terrain_control_at_h66_2_mass": {
+        "n_dots": 37654,
+        "tp": 4558.760053486882,
+        "fp": 33447.82971815518,
+        "fn": 57105.23994651312,
+        "n_truth": 61664,
+        "dti": 0.08007304467271137,
+        "coverage": 0.07392903563646344,
+        "credit_per_dot": 0.12106974168712173
+      },
+      "terrain_control_at_union_mass": {
+        "n_dots": 72683,
+        "tp": 7442.823363420849,
+        "fp": 64819.29016808211,
+        "fn": 54221.17663657915,
+        "n_truth": 61664,
+        "dti": 0.11668862707426057,
+        "coverage": 0.12069965236476468,
+        "credit_per_dot": 0.10240115795193992
+      },
+      "random_at_champion_mass": {
+        "n_per_draw": 35483,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.11488793191010219,
+        "credit_per_dot_sd": 0.001549923831087628,
+        "dti_mean": 0.07159461117931883
+      },
+      "random_at_h66_2_mass": {
+        "n_per_draw": 37654,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.1119876804251898,
+        "credit_per_dot_sd": 0.0009697633989825123,
+        "dti_mean": 0.07347471053605589
+      },
+      "random_at_union_mass": {
+        "n_per_draw": 72683,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.10727743543124599,
+        "credit_per_dot_sd": 0.0007819063856161704,
+        "dti_mean": 0.12030218053292116
+      },
+      "ratio_vs_own_mass_random": {
+        "champion": 1.2917803226837925,
+        "h66_2": 2.0121433785824707,
+        "complement": 2.097605831403103,
+        "union": 1.6262295667715692,
+        "terrain_control": 1.0810987532508
+      }
+    }
+  },
+  "marginal": {
+    "incumbent": "GEMSDOE32__h33-2-b2 zeros (37,654 dots; owner-reported live 0.2778)",
+    "overlap_dots": 454,
+    "complement_dots": 29737,
+    "mine_within_3px_of_champion": 0.011226745661813607,
+    "incumbent_proxy_dti": 0.09234489836020146,
+    "union_proxy_dti": 0.19414663375318014,
+    "union_gain_proxy_dti": 0.10180173539297868,
+    "incumbent_credit_per_dot": 0.14840996975530538,
+    "added_dots_credit_per_dot": 0.22533526965035544,
+    "added_dot_advantage": 0.07692529989505006,
+    "bar_alpha_times_incumbent_dti": 0.01846897967204029,
+    "note": "the union is the honest test of 'does the new field add anything on top of what the board already rewards'; both dot sets pass through the identical instrument"
+  },
+  "transfer_check": {
+    "question": "does a higher off-catalogue credit-per-dot predict a higher live score?",
+    "mass_matched_pairs": [
+      {
+        "arm": "GEMSDOE24__d1-5-nan.tif",
+        "dots": 60069,
+        "off_catalogue_credit_per_dot": 0.10138086752783974,
+        "owner_reported_live": 0.2477,
+        "source": "GEMSDOE24 h25-1-dotted-h19-5-d1-5",
+        "cpd_rank": 5,
+        "live_rank": 4
+      },
+      {
+        "arm": "GEMSDOE24__d2-8-nan.tif",
+        "dots": 44090,
+        "off_catalogue_credit_per_dot": 0.12357465849703818,
+        "owner_reported_live": 0.26,
+        "source": "GEMSDOE24/25 h25-1-dotted-h19-5-d2-8",
+        "cpd_rank": 4,
+        "live_rank": 3
+      },
+      {
+        "arm": "GEMSDOE27__tgc-v2-nan.tif",
+        "dots": 61328,
+        "off_catalogue_credit_per_dot": 0.10096909991941243,
+        "owner_reported_live": 0.2449,
+        "source": "GEMSDOE27 topo-gap-closure-t-v2-on-d1-5",
+        "cpd_rank": 6,
+        "live_rank": 5
+      },
+      {
+        "arm": "GEMSDOE32__h33-2-b2-zeros.tif",
+        "dots": 37654,
+        "off_catalogue_credit_per_dot": 0.14340528475190986,
+        "owner_reported_live": 0.2778,
+        "source": "GEMSDOE32 h33-h33-2-b2-zeros",
+        "cpd_rank": 2,
+        "live_rank": 1
+      },
+      {
+        "arm": "GEMSDOE33__h33d-tip-stepover.tif",
+        "dots": 41865,
+        "off_catalogue_credit_per_dot": 0.13127286668098243,
+        "owner_reported_live": 0.2632,
+        "source": "GEMSDOE33 h33d-analog-tip-stepover-r30",
+        "cpd_rank": 3,
+        "live_rank": 2
+      },
+      {
+        "arm": "GEMSDOE49__gate-ortho.tif",
+        "dots": 40000,
+        "off_catalogue_credit_per_dot": 0.19325602853506463,
+        "owner_reported_live": 0.2376,
+        "source": "GEMSDOE49 gate_ortho_w0.25-40k",
+        "cpd_rank": 1,
+        "live_rank": 6
+      },
+      {
+        "arm": "GEMSDOE10__h28-dotted-ridge.tif",
+        "dots": 65236,
+        "off_catalogue_credit_per_dot": 0.08615838216511457,
+        "owner_reported_live": 0.1839,
+        "source": "GEMSDOE10 h28-dotted-ridge",
+        "cpd_rank": 7,
+        "live_rank": 7
+      }
+    ],
+    "mass_band": "35,000-70,000 dots (the band every candidate here would be emitted in)",
+    "spearman_in_band": 0.4642857142857144,
+    "p_value_in_band": 0.29393410760025196,
+    "best_cpd_row_still_loses": {
+      "arm": "GEMSDOE49__gate-ortho.tif",
+      "dots": 40000,
+      "off_catalogue_credit_per_dot": 0.19325602853506463,
+      "owner_reported_live": 0.2376,
+      "source": "GEMSDOE49 gate_ortho_w0.25-40k",
+      "cpd_rank": 1,
+      "live_rank": 6
+    },
+    "counter_precedent": "the band's best credit-per-dot submission (GEMSDOE49 gate-ortho, +35 % over the incumbent) scored below the incumbent live (0.2376 vs 0.2778)",
+    "wide_range_note": "across all 14 owner-reported pairs spanning 4k-205k dots the correlation is rho=+0.749 p=0.002, but it is carried by the mass range; inside the comparable-mass band it is not significant",
+    "conclusion": "no local instrument is validated as a predictor at the precision needed to spend a slot"
+  },
+  "verdict": "NEGATIVE-NOT-PROMOTED",
+  "download_clearance": "AUDIT-ONLY",
+  "next_candidate": {
+    "name": "H72-union (incumbent dots + H66-2 complement)",
+    "proxy_promise": "union proxy DTI 0.19415 vs incumbent 0.09234",
+    "proxy_promise_basis": "mass-unequal union vs incumbent in the same instrument",
+    "blockers": [
+      "contains the incumbent's own 37,654 pixels, so it must be declared as a stacking artifact and its uniqueness row will trip the 3 px gate against the incumbent raster (50 % of its dots) even though rank correlation is low",
+      "the terrain-only control at union mass must be beaten on the same proxy before the union is worth a slot",
+      "needs its own preregistration and a sealed holdout run (budget was spent)"
+    ],
+    "status": "registered as the next experiment, NOT built and NOT promoted"
+  },
+  "what_is_true": [
+    "the concordance field has the best pooled credit-per-dot of any H66-1/H66-2 arm at equal mass",
+    "inside the upland stratum it beats the mass-matched terrain-only control (pooled and upland rows carry the ratios)",
+    "in the basin stratum the field is behind the incumbent and behind the terrain control",
+    "IR-66-BASE-01: the previously advertised x16 upland ratio came from a broken baseline and is void"
+  ],
+  "what_is_not_claimed": [
+    "no HOLDOUT-DTI: the blocked whole-segment holdout was not re-run for H66-2",
+    "no projected competition score; 0.2778 and 0.2376 etc. are OWNER-REPORTED context",
+    "no promotion: nothing here licenses spending a weekly slot"
+  ],
+  "budget": {
+    "experiments": [
+      "E1 ablation",
+      "strata + terrain control",
+      "emission+validator+uniqueness"
+    ],
+    "spent_minutes": 6.0,
+    "rule": "3 experiments or 2 hours, whichever comes first; exhausted, so no holdout re-run"
+  },
+  "files": {
+    "artifact": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+    "emission": "evidence/h66b_emission.json",
+    "uniqueness": "evidence/h66b_uniqueness.json",
+    "strata": "evidence/h66b_e2_strata.json",
+    "ablation": "evidence/h66b_e1_ablation.json",
+    "preregistration": "registry/preregistration-h66-2.json"
+  }
+}

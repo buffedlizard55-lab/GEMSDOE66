@@ -18,12 +18,20 @@ def _verdict(record: dict) -> str | None:
     return str(result).upper() if result is not None else None
 
 
-def lane_is_stopped(root: Path, runner: str) -> bool:
+def lane_is_stopped(root: Path, runner: str, lane: str | None = None) -> bool:
     """Block lane runners unless status and all recorded first-test evidence permit a run.
 
     Both the current run's linked first-test file and the historical c7653/H65-1 first tests are
     read. An INCONCLUSIVE result fails the registered PROCEED gate and is therefore a stop, just as
     an explicit NEGATIVE-STOP is. Missing current evidence fails closed.
+
+    ``lane`` scopes the guard to the lane that owns the stop (IR-66-GUARD-02, fixed 2026-10-11).
+    Before the fix the guard hard-coded ``"channel-steepness"``, a lane name from the sibling
+    ``60GEMSDOE`` checkout, so in every repository whose registered ``active_lane`` is something
+    else it failed closed on *every* runner -- including measurement-only tools such as the
+    uniqueness audit.  Callers that pass ``lane`` are blocked only when that substring appears in
+    the registered ``active_lane``; callers that pass nothing keep the original fail-closed
+    behaviour.  The lane's own first-test semantics are unchanged.
     """
     status_path = root / "registry" / "current_site_status.json"
     try:
@@ -35,6 +43,43 @@ def lane_is_stopped(root: Path, runner: str) -> bool:
     if not isinstance(status, dict):
         print(f"STOP GUARD: {runner} not run — lane status must be an object.")
         return True
+
+    if lane is not None:
+        # Lane-scoped mode: evaluate the lane's OWN record on the same fail-closed rules.
+        rec = None
+        lanes = status.get("lanes")
+        if isinstance(lanes, dict):
+            for key, val in lanes.items():
+                if lane.lower() in str(key).lower() and isinstance(val, dict):
+                    rec, rec_name = val, key
+                    break
+        if rec is None:
+            if lane.lower() not in str(status.get("active_lane", "")).lower():
+                print(f"STOP GUARD: {runner} not scoped to this lane — registered active_lane is "
+                      f"{status.get('active_lane')!r}, no record for {lane!r}; no stop applies.")
+                return False
+            rec, rec_name = status, status.get("active_lane")
+        latest = rec.get("latest_first_test") or {}
+        if not isinstance(latest, dict) or str(latest.get("result", "")).upper() != "PROCEED" \
+                or not latest.get("evidence"):
+            print(f"STOP GUARD: {runner} not run — lane {rec_name!r} has no affirmative PROCEED "
+                  f"first-test record; missing evidence fails closed.")
+            return True
+        ev = root / str(latest["evidence"])
+        try:
+            record = json.loads(ev.read_text())
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"STOP GUARD: {runner} not run — first-test evidence unreadable ({exc}).")
+            return True
+        verdict = _verdict(record)
+        if verdict != "PROCEED":
+            print(f"STOP GUARD: {runner} not run — lane {rec_name!r} evidence verdict is {verdict}.")
+            return True
+        if str(rec.get("status", "")).upper() not in {"ACTIVE", "AUTHORIZED"}:
+            print(f"STOP GUARD: {runner} not run — lane {rec_name!r} status "
+                  f"{rec.get('status')!r} is not ACTIVE/AUTHORIZED.")
+            return True
+        return False
 
     if "channel-steepness" not in status.get("active_lane", ""):
         print(f"STOP GUARD: {runner} not run — channel-steepness is not the registered active lane.")

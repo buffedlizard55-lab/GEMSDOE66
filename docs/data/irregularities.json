@@ -132,6 +132,30 @@
         "registry/data_manifest.json",
         "evidence/h66_e1_offcat.json"
       ]
+    },
+    {
+      "id": "IR-66-BASE-01",
+      "severity": "high",
+      "status": "FIXED 2026-10-11 — superseded numbers recorded",
+      "title": "The H66-2 stratum audit's first run used an index-ordered 'random' control",
+      "detail": "scripts/h66b_strata.py drew its per-stratum random baseline with pick(np.ones(...)); argsort on a constant field returns cells in raster order, i.e. the top-left corner of the stratum, not a random sample. Every x-N-random ratio from that run was inflated roughly tenfold: the advertised x16 upland advantage of the H66-2 field is x1.20 against a uniform in-stratum baseline, and the incumbent's upland dots are x0.75, not x10. The corrected run replaces evidence/h66b_e2_strata.json; evidence/h66b_verdict.json carries the corrected ratios with the seed and the draw count.",
+      "source_ids": []
+    },
+    {
+      "id": "IR-66-GUARD-02",
+      "severity": "medium",
+      "status": "FIXED 2026-10-11 — guard is lane-scoped",
+      "title": "scripts/stop_guard.py hard-coded a foreign lane name and failed closed on every runner here",
+      "detail": "The guard tested for the lane name 'channel-steepness' from a sibling checkout before it would run anything, so in this repository (registered active_lane: native-resolution LiDAR scarp channels) it returned stop for every caller, including the measurement-only uniqueness audit, and it had no way to register a new hypothesis lane. It now takes an optional lane argument: callers scoped to a lane are blocked only by their own lane record, and legacy callers keep the original fail-closed default.",
+      "source_ids": []
+    },
+    {
+      "id": "IR-66-RELEASE-01",
+      "severity": "medium",
+      "status": "OPEN — policy conflict, resolved conservatively",
+      "title": "The portal's value check and the audit's NaN-outside contract disagree",
+      "detail": "The audit's release gate requires NaN only outside the official footprint; the user-reported portal rejection 'Predicted values must be in range [0, 1]' indicates the form rejects NaN-valued cells. The H66-2 artifact is therefore all-finite (0.0 outside the emitting cells, no nodata tag) and is reported as an all-finite variant. A NaN-outside twin can be produced only after the writer is rewired to the canonical shared writer, which the audit requires anyway. No artifact is published from either reading until the conflict is settled by an organizer receipt.",
+      "source_ids": []
     }
   ]
 }

@@ -4,6 +4,26 @@
 
 > **Current as of 2026-10-11:** the official competition data tab redirected this unauthenticated session to the DrivenData login page. No competition credentials were used. The checkout has no authorized training rasters, sample submission, native-resolution DEM tiles, or cached feature stack. No new model experiment or GeoTIFF was produced. Historical H66 files have been withdrawn from `docs/downloads`; their hashes and audit disposition remain recorded. Do not upload a historical artifact.
 
+## H66-2 session (2026-10-11) — measured, negative, not published
+
+A second, preregistered experiment ran in this lane (`registry/preregistration-h66-2.json`): a
+**conjunction** field, the geometric mean of rank(10-vs-50 m slope break), rank(1 − dip-sense) and
+rank(crest-toe sharpness) on the pinned 2 m LiDAR stack. It beats the H66-1 blend at equal mass
+(credit/dot 0.2253 vs 0.2019) and beats the live-best incumbent's own dots on the upland stratum, but
+it is **NEGATIVE-NOT-PROMOTED**: the mass-matched terrain-only control is within 1.9x pooled, the
+field's mass is 99.95 % upland while the incumbent's edge lives in the basin (x3.46 over same-mass
+in-stratum random there, versus 19 of 37,654 H66-2 dots), and the off-catalogue proxy does not order
+the live board at comparable mass (rho=+0.46, p=0.29 over the 35k–70k band; the band's best
+credit-per-dot submission still scored below the incumbent live).
+
+The emitted bytes (37,654 dots, float32, EPSG:32611, 0 NaN, values in [0,1], writer validator all
+checks true, sha256 `66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c`) are kept in
+`artifacts/h66-2/` for audit and are deliberately **not** linked from the site: the release gate in
+`docs/review/2026-10-11-audit.md` requires a valid buffered whole-segment `HOLDOUT-DTI` with a 95 %
+interval, a complete registry and two independent reviews before any download is published, and this
+candidate has none of those. See `docs/review/2026-10-11-h66-2-verdict.md` for the full measurement
+table and the two corrections this session recorded (IR-66-BASE-01, IR-66-GUARD-02).
+
 ## Project charter
 
 “Maximize P(Win)” means optimize for discoveries likely to generalize to newly mapped faults, not for a leaderboard anecdote or a proxy that reuses the public catalogue as test truth. “Own the Outcome” means preserve provenance, code, negative results, uncertainty, and clear stop conditions. Neither phrase licenses skipping validation.

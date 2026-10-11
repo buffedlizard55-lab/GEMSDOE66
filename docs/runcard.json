@@ -108,8 +108,51 @@
     "IR-06-REGISTRY-COVERAGE",
     "IR-07-DATA-ACCESS",
     "IR-09-AI-DISCLOSURE",
-    "IR-10-INDEPENDENT-REVIEWS"
+    "IR-10-INDEPENDENT-REVIEWS",
+    "IR-66-BASE-01",
+    "IR-66-GUARD-02",
+    "IR-66-RELEASE-01"
   ],
   "audit_document": "docs/review/2026-10-11-audit.md",
-  "artifact_page": "h66-session.html"
+  "artifact_page": "h66-session.html",
+  "h66_2_experiment": {
+    "hypothesis_id": "H66-2",
+    "question": "Does a concordance (conjunction) of independent 2 m LiDAR scarp attributes -- the 10-vs-50 m slope break (step_max), the dip-sense of the band-passed step (facing = (downface-upface)/(downface+upface)), and crest/toe sharpness (sqrt(lapneg*lappos)) -- rank the off-catalogue fault population better than H66-1's weighted rank-average of the four named aggregates, at equal emitted mass?",
+    "verdict": "NEGATIVE-NOT-PROMOTED",
+    "experiments": [
+      "E1 ablation",
+      "strata + terrain control",
+      "emission+validator+uniqueness"
+    ],
+    "artifact": {
+      "file": "gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+      "path": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+      "sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
+      "dots": 37654,
+      "published_on_site": false,
+      "why_not_published": "the release gate requires a valid buffered whole-segment HOLDOUT-DTI with CI, a complete registry and two independent reviews before any download is published; H66-2 has none of those and its own verdict is negative"
+    },
+    "measurements": {
+      "e1_ablation": "evidence/h66b_e1_ablation.json",
+      "strata_and_terrain": "evidence/h66b_e2_strata.json + evidence/h66b_verdict.json",
+      "emission_and_validator": "evidence/h66b_emission.json",
+      "uniqueness": "evidence/h66b_uniqueness.json",
+      "instrument_vs_live": "evidence/h66b_instrument_vs_live.json"
+    },
+    "headline": {
+      "credit_per_dot_at_37654_dots": 0.22534,
+      "same_mass_h66_1_blend": 0.2019,
+      "mass_matched_random": 0.11213,
+      "upland_ratio_vs_in_stratum_random": 1.1975,
+      "terrain_only_control_pooled": 0.12107,
+      "transfer_rho_35k_70k": 0.4643,
+      "transfer_p": 0.2939
+    },
+    "corrections": [
+      "IR-66-BASE-01",
+      "IR-66-GUARD-02",
+      "IR-66-RELEASE-01"
+    ],
+    "review": "docs/review/2026-10-11-h66-2-verdict.md"
+  }
 }
