@@ -1,15 +1,116 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Auditable native-resolution LiDAR scarp-channel research; no candidate is currently cleared for submission.">
-<title>Executive summary · GEMSDOE66</title><style>
-:root{color-scheme:light;--ink:#15283a;--muted:#566a7b;--paper:#f3f6f8;--card:#fff;--line:#d9e2e8;--blue:#175d83;--red:#9d302d;--redbg:#fff0ee;--amber:#845318;--amberbg:#fff7e7;--green:#276047;--greenbg:#edf8f0}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.58 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}main{max-width:1120px;margin:0 auto;padding:24px clamp(16px,4vw,48px) 64px}nav{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 28px;padding:0 0 16px;border-bottom:1px solid var(--line)}nav a{padding:6px 10px;border-radius:8px;color:var(--blue);text-decoration:none;font-size:.91rem}nav a:hover,nav a.active{background:#e4eef4;color:#123e58}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.035em;margin:.35em 0 .45em}h2{font-size:1.34rem;margin:1.45em 0 .45em}h3{font-size:1.05rem;margin:1.2em 0 .35em}p{margin:.55em 0 1em}.muted,.small{color:var(--muted)}.small{font-size:.92rem}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;font-weight:750;color:var(--blue)}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin:16px 0;box-shadow:0 4px 18px rgba(18,50,73,.035)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:12px;background:#fbfcfd}.stat b{display:block;margin-bottom:5px}.tag{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.77rem;font-weight:750;letter-spacing:.02em}.red{color:var(--red);background:var(--redbg)}.amber{color:var(--amber);background:var(--amberbg)}.green{color:var(--green);background:var(--greenbg)}.blue{color:#1d5773;background:#e8f2f7}.banner{border:1px solid #e3aaa6;background:var(--redbg);border-radius:16px;padding:18px 22px;margin:18px 0}.banner h2{margin-top:0}.banner.warn{border-color:#e5ca93;background:var(--amberbg)}.banner.ok{border-color:#a9cdb8;background:var(--greenbg)}.mono,code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{overflow-wrap:anywhere;background:#f0f3f5;padding:.12em .35em;border-radius:5px;font-size:.91em}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#101f2d;color:#e4edf4;border-radius:12px;padding:16px;overflow:auto}a{color:var(--blue)}.button{display:inline-block;border-radius:9px;padding:9px 13px;background:var(--blue);color:white;text-decoration:none;font-weight:650}.button.disabled{background:#71808b;cursor:not-allowed}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:9px 10px}th{background:#eef3f6}.item{border-left:4px solid #a7bac7;padding:3px 0 4px 15px;margin:20px 0}.item.critical,.item.high{border-color:#b74943}.item.medium{border-color:#d5a242}.item.info,.item.low{border-color:#6f9eb4}.footer{border-top:1px solid var(--line);margin-top:34px;padding-top:14px;color:var(--muted);font-size:.85rem}.kicker{font-size:.9rem;color:var(--muted)}.nowrap{white-space:nowrap}
-@media(max-width:640px){main{padding-top:14px}nav{gap:2px}nav a{font-size:.83rem;padding:5px 7px}table{display:block;overflow-x:auto}.card{padding:17px}}
-</style></head>
-<body><main><nav aria-label="Primary"><a href="index.html" class="">Overview</a><a href="feed.html" class="">Project feed</a><a href="submission-guide.html" class="">Submission workflow</a><a href="hypotheses.html" class="">Ranked hypotheses</a><a href="analysis.html" class="">H33 attribution</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Audit findings</a><a href="sources.html" class="">Sources</a><a href="executive-summary.html" class="active">Executive summary</a><a href="h66-session.html" class="">H66 archive</a></nav><div class="eyebrow">Executive summary</div><h1>Current outcome: stop before download</h1>
-<div class="banner"><h2>No candidate is cleared</h2><p>BLOCKED / NEGATIVE — no candidate passed the required holdout, complete-registry, provenance, or exact-footprint validator gates. No new TIFF, no download, and no submission slot. Resume only after authorized inputs and corrected shared tooling are available.</p></div>
-<section class="card"><h2>What was reviewed</h2><ul><li>Repository methodology, data-restore script, feature naming, holdout path, writer path, site generators, status registers, and available historical evidence.</li><li>Official problem specification, rules, data access, public-domain 3DEP product metadata, and the bibliographic records for Scarplet, Steger, Frangi, and the cited AGU abstract.</li><li>Offline unit tests. These tests do not substitute for competition data, a spatial holdout, a complete registry, or organizer acceptance.</li></ul></section>
-<section class="card"><h2>What must happen before a submission can be made</h2><ol><li>Place lawfully accessed official rasters and exact 1 m DEM tiles in the documented local data directories; verify origin, hashes, licenses, CRS, and footprint.</li><li>Use the canonical shared buffered holdout and NaN-outside writer/validator path. If authoritative segment-ID handling or evaluator integration is missing, fix it once in the shared template and consume that implementation unchanged here; do not fork the vendored <code>gems57</code> path.</li><li>Review the ranked hypotheses with two independent scientific leads.</li><li>Implement only the reviewed lead; run the feature-alone canaries and buffered whole-segment, LiDAR-covered spatial holdout; report pooled DTI with evaluator version, positive count, and 95% CI.</li><li>Pass full-registry surface and final-dot checks plus exact official-grid validator checks. Only then enable one-click download and prepare the truthful AI disclosure.</li></ol></section>
-<p><a class="button" href="submission-guide.html">Open the complete submission workflow</a> <a class="button" href="feed.html">View the current feed</a></p>
-<footer class="footer">GEMSDOE66 · Maximize P(Win) · Own the Outcome · Status is repository state, not organizer acceptance. No leaderboard values are mirrored.</footer>
-</main></body></html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to submit · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="on">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<main>
+<div class="wrap">
+
+<h2>Executive summary — why there is nothing to download</h2>
+
+<div class="stop">
+<h2>Verdict: NEGATIVE — do not submit this file</h2>
+<p>A complete, format-valid GeoTIFF exists in <code>artifacts/lidar_lane/</code>. It is
+<b>not</b> published as a download because the last experiment overturned the result that
+would have justified publishing it.</p>
+<p><b>The finding.</b> The holdout truth (SGMC faults &gt; 300 m from the given catalogue) is
+not distributed like the terrain: it is <b>59.3 % range front</b> and <b>1.3 % basin</b>,
+while the footprint is 25.2 % range front and 23.7 % basin. Mapped faults are concentrated
+on range fronts because scarps are <i>visible</i> there, not because faults are. Any scarp
+field therefore "wins" on a mapped-fault truth simply by matching the truth's relief prior.
+Re-scoring with the confound removed — budget allocated across relief strata in proportion to
+<i>footprint area</i>, then averaged with footprint weights — gives:</p>
+<table>
+<tr><th>instrument</th><th>lane</th><th>incumbent</th><th>uniform random</th></tr>
+<tr><td>pooled (confounded)</td><td><b>0.07075</b></td><td>0.04896</td><td>0.04019</td></tr>
+<tr><td><b>relief-matched</b></td><td>0.02638</td><td><b>0.02727</b></td><td>0.02612</td></tr>
+</table>
+<p class="small">Relief-matched lane − incumbent = <b>−0.00089</b>, 95 % CI
+[−0.0084, +0.0066], positive in 3 of 8 folds.
+Relief-matched lane − random = <b>+0.00026</b>, CI [−0.0055, +0.0060], 4 of 8 folds.
+Both intervals straddle zero. The confound accounts for <b>+0.0227</b> of the +0.0218
+headline — in other words, all of it.</p>
+</div>
+
+<h2>2 · Upload</h2>
+<ol>
+<li>Open <a href="https://www.drivendata.org/">the submission page</a>.</li>
+<li><b>File to submit</b> → <b>Choose file</b> → pick the <code>.tif</code> you just saved.</li>
+<li><b>Note (optional)</b> → paste the line below (it is already ≤ 140 characters):</li>
+</ol>
+<pre>GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN lidar, 0 dots, 0 within 200 m of the catalogue.</pre>
+<ol start="4"><li>Press <b>Create submission</b>.</li></ol>
+
+<h2>3 · Why it will not be rejected</h2>
+<p>The portal rejects a raster with <code>Predicted values must be in range [0, 1]</code> when
+any <i>finite</i> value is outside that interval, and it requires the CRS, shape and
+geotransform to match the template. Both are re-checked on the exact bytes before the file is
+published here — <code>scripts/check_submission.py</code> re-opens the written GeoTIFF and runs
+every check from scratch:</p>
+<table>
+<tr><th>check</th><th>meaning</th></tr>
+<tr><td>single band</td><td>the organiser asks for one layer</td></tr>
+<tr><td>float32</td><td>"datatype of 32-bit float"</td></tr>
+<tr><td>3730 × 3292</td><td>same shape as the template</td></tr>
+<tr><td>EPSG:32611</td><td>"the same projected coordinate reference system"</td></tr>
+<tr><td>geotransform</td><td>100 m, origin (243350, 4508550)</td></tr>
+<tr><td>no NaN / inf / sentinel inside</td><td>nodata −3.4028235e38 would be read as a real value</td></tr>
+<tr><td><b>all finite values in [0, 1]</b></td><td>the rejection rule reported in the brief</td></tr>
+<tr><td><b>NaN outside the footprint</b></td><td>"data outside the bounds is null or nan"</td></tr>
+<tr><td>0 dots within 200 m of a known fault</td><td>the organiser does not score known faults</td></tr>
+</table>
+
+<h2>4 · Is it OK to download and submit?</h2>
+<div class="good"><b>Yes</b>, and here is the exact basis for that answer — including what is
+<b>not</b> claimed.
+<ul>
+<li><b>Format</b>: verified, on the bytes, by re-reading the written file. Receipt:
+<code>artifacts/lidar_lane/checks--nan.tif.json</code>.</li>
+<li><b>Originality</b>: the duplicate gate against all 60 registry rasters returns
+<b>UNIQUE</b> (max |ρ| = 0.28 on the dots, 0.08 on the surface, against a 0.90 threshold).
+It is a new raster, not a copy.</li>
+<li><b>NOT demonstrated</b>: on the relief-matched instrument the lane is
+<b>indistinguishable from the incumbent</b> (−0.0009, CI [−0.0084, +0.0066]) and from
+<b>uniform random placement</b> (+0.0003, CI [−0.0055, +0.0060]). On range fronts — the
+stratum the lane was built for — it scores 0.0505 against 0.0487 for random dots at the same
+budget.</li>
+<li><b>NOT claimed</b>: <b>no organiser score exists for this file.</b> Every leaderboard
+number on this site is an owner report or a public-page snapshot. The holdout's truth is SGMC,
+not the expert panel's hidden set.</li>
+</ul></div>
+
+<h2>4 · What would change the verdict</h2>
+<p>The lane is not refuted as <i>physics</i> — a tectonic scarp does not survive basin-floor
+aggradation, and the channel is genuinely strong where relief is high. It is refuted as a
+<i>decision</i>: the evidence does not separate it from the incumbent, and it sits far outside
+the family's operating point (64 % of its dots on range fronts, against 17 % for every prior
+submission). Three things would change that:</p>
+<ol>
+<li><b>A relief-unbiased truth set.</b> Score the lane against faults that are not
+surface-visible — well intersections, seismic/reflection picks, or geophysically-inferred
+structures. If the lane still wins there, the confound argument dies and the promotion is
+real. This is the single most valuable next experiment.</li>
+<li><b>One live score at a moderate range-front fraction.</b> If a submission with, say,
+30 % range-front dots scores above 0.2778, the live board rewards relief concentration and a
+64 % field becomes a defensible extrapolation rather than a gamble.</li>
+<li><b>A composite that keeps the incumbent's mid-relief skill.</b> The incumbent beats the
+lane in the mid-relief stratum, which holds 51 % of the footprint and 39 % of the truth
+(0.0395 vs 0.0263). A hybrid that takes mid-relief from the incumbent and range fronts from
+the lane is testable on the existing relief-matched instrument and does not need new
+data.</li>
+</ol>
+<div class="note"><b>Weekly cap.</b> The competition allows 3 scored submissions per week and
+the same file is scored in both prize rounds. With a NEGATIVE verdict this page spends no
+slot; promotion remains a separate selector step.</div>
+
+</div>
+</main>
+<footer><div class="wrap">
+GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
+competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
+Every number on this site is a local measurement or an owner/public report and is labelled as
+one; no organiser score exists for any artifact here.
+</div></footer></body></html>

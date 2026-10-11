@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Results · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="on">Results</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<main>
+<div class="wrap">
+
+<h2>Results</h2>
+<div class="note">Every number below is <b>HOLDOUT-DTI</b> — evaluator version
+<code>gemsdoe66.metric.dti</code> (verified against a brute-force transcription of the
+organiser's equations to 1e-9), pooled distance-weighted Tversky with α = 0.2, β = 0.8 and a
+300 m triangular kernel, on 8 spatially blocked folds with
+<b>≈ 7,700 withheld positives per fold</b> (61,664 in total for the novelty instrument,
+60,988 for the catalogue instrument). 95 % intervals are percentile bootstraps over folds.
+<b>No ORGANIZER-CONFIRMED score exists for any artifact in this repository.</b></div>
+
+<h3>Primary instrument — novelty (SGMC off-catalogue truth)</h3>
+<table><tr><th>field</th><th>mean DTI</th><th>per-fold</th><th>vs incumbent</th></tr>
+<tr><td class='mono'>catalogue_habitat</td><td><b>0.03505</b></td><td class='small'>0.0077, 0.0226, 0.0253, 0.0465, 0.0357, 0.0599, 0.0319, 0.0508</td><td>-0.01391</td></tr><tr><td class='mono'>fusion</td><td><b>0.02343</b></td><td class='small'>0.0333, 0.0278, 0.0006, 0.0441, 0.0053, 0.0185, 0.0080, 0.0498</td><td>-0.02553</td></tr><tr><td class='mono'>incumbent</td><td><b>0.04896</b></td><td class='small'>0.0345, 0.0434, 0.0694, 0.0448, 0.0467, 0.0440, 0.0665, 0.0423</td><td>+0.00000</td></tr><tr><td class='mono'>lidar_lane</td><td><b>0.07075</b></td><td class='small'>0.0425, 0.0925, 0.0310, 0.1118, 0.0538, 0.0720, 0.0604, 0.1021</td><td>+0.02179</td></tr><tr><td class='mono'>sgmc_novel</td><td><b>0.01363</b></td><td class='small'>0.0349, 0.0015, 0.0001, 0.0166, 0.0002, 0.0189, 0.0289, 0.0079</td><td>-0.03533</td></tr></table>
+
+<h3>Chance control</h3>
+<table><tr><th>control</th><th>mean</th><th>95 % CI</th></tr>
+<tr><td class='mono'>random</td><td>0.03973</td><td>[+0.03803, +0.04123]</td></tr><tr><td class='mono'>lidar_lane</td><td>0.07075</td><td>[+0.05217, +0.08967]</td></tr><tr><td class='mono'>incumbent_prior</td><td>0.04476</td><td>[+0.03830, +0.05196]</td></tr><tr><td class='mono'>lane_minus_random</td><td>0.03102</td><td>[+0.01253, +0.04978]</td></tr></table>
+
+<h3>Range-front stratification</h3>
+<table><tr><th>terrain</th><th>lane</th><th>chance</th><th>gain</th><th>95 % CI</th>
+<th>folds+</th></tr>
+<tr><td>low_relief (basin floor / pediment)</td><td>0.01637</td><td>0.01949</td><td><b>-0.00312</b></td><td>[-0.00667, +0.00025]</td><td>4/8</td></tr><tr><td>mid_relief</td><td>0.03308</td><td>0.01854</td><td><b>+0.01454</b></td><td>[+0.00553, +0.02358]</td><td>7/8</td></tr><tr><td>high_relief (range front)</td><td>0.05200</td><td>0.01879</td><td><b>+0.03321</b></td><td>[+0.01829, +0.04855]</td><td>8/8</td></tr></table>
+
+<h3>Mass sweep (novelty instrument)</h3>
+<table><tr><th>emitted dots</th><th>lidar lane</th><th>incumbent prior surface</th></tr>
+<tr><td>20000</td><td>0.05693</td><td>0.03631</td></tr><tr><td>30000</td><td>0.06550</td><td>0.04172</td></tr><tr><td>37654</td><td>0.07075</td><td>0.04476</td></tr><tr><td>45000</td><td>0.07352</td><td>0.04834</td></tr><tr><td>60000</td><td>0.07611</td><td>0.04963</td></tr></table>
+<div class="note">The sweep says <i>more</i> mass is better on this instrument. It is
+<b>not</b> used to set the shipped budget: the instrument's truth (61,664 px) is about four
+times the size of the likely hidden set (≈ 15,200 px, §3 of the research page), and the
+live-board optimum for this family was measured at 37–46 k dots. Changing the mass on the
+strength of a proxy with the wrong truth size would be an unvalidated leap.</div>
+
+<h3>Relief gate (measured, not shipped)</h3>
+<table><tr><th>gate</th><th>mean DTI</th><th>95 % CI</th><th>pixels excluded</th></tr>
+<tr><td class='mono'>none</td><td>0.07075</td><td>[+0.05217, +0.08967]</td><td>305,335</td></tr><tr><td class='mono'>relief&gt;p10</td><td>0.07075</td><td>[+0.05217, +0.08967]</td><td>891,311</td></tr><tr><td class='mono'>relief&gt;p20</td><td>0.07092</td><td>[+0.05242, +0.08991]</td><td>1,392,303</td></tr><tr><td class='mono'>relief&gt;p33</td><td>0.07277</td><td>[+0.05427, +0.09203]</td><td>2,018,620</td></tr><tr><td class='mono'>relief&gt;p50</td><td>0.07592</td><td>[+0.05681, +0.09566]</td><td>2,788,251</td></tr></table>
+
+</div>
+</main>
+<footer><div class="wrap">
+GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
+competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
+Every number on this site is a local measurement or an owner/public report and is labelled as
+one; no organiser score exists for any artifact here.
+</div></footer></body></html>

@@ -28,3 +28,21 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+
+# --- from the lane session (arena/7d2c4a3b) ---
+# The registry rasters and audited artifacts are INTENTIONALLY tracked: they are the
+# duplicate-gate corpus and the audit trail. They are already in the index, so these
+# patterns only stop NEW stray rasters from being added by accident.
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+.cache/
+# Python build/env extras
+profile_output/
+.coverage
+htmlcov/
+# OS / editor
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

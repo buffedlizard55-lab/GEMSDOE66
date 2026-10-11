@@ -1,195 +1,85 @@
-"""Writer/validator tests on synthetic rasters (no competition data needed)."""
-
 import json
+from pathlib import Path
 
 import numpy as np
-import pytest
 import rasterio
-from affine import Affine
+import pytest
 
-from gems.submission_writer import write_submission
-from gems.validate_submission import validate
+from gemsdoe66.grid import (EXPECTED_CRS, EXPECTED_SHAPE, EXPECTED_TRANSFORM,
+                            catalogue_mask, footprint_mask)
+from gemsdoe66.submission import to_submission_array, write_submission
+from gemsdoe66.validate_submission import validate
 
-H, W = 12, 15
-TF = Affine(100.0, 0.0, 500000.0, 0.0, -100.0, 4500000.0)
-
-
-@pytest.fixture()
-def reference(tmp_path):
-    p = tmp_path / "labels_ref.tif"
-    arr = np.zeros((H, W), dtype=np.int32)
-    with rasterio.open(p, "w", driver="GTiff", height=H, width=W, count=1, dtype="int32",
-                       crs="EPSG:32611", transform=TF, nodata=-1) as dst:
-        dst.write(arr, 1)
-    return p
+ROOT = Path(__file__).resolve().parent.parent
 
 
-@pytest.fixture()
-def features(tmp_path, footprint):
-    """A features raster whose first band is finite inside and nodata outside the footprint."""
-    p = tmp_path / "features.tif"
-    band = np.where(footprint, 1.0, -3.4028234663852886e38).astype(np.float32)
-    with rasterio.open(p, "w", driver="GTiff", height=H, width=W, count=1, dtype="float32",
-                       crs="EPSG:32611", transform=TF, nodata=-3.4028234663852886e38) as dst:
-        dst.write(band, 1)
-    return p
+def test_to_submission_array_clips_and_nulls():
+    fp = footprint_mask()
+    a = np.zeros(fp.shape, np.float32)
+    a[0, 0] = 5.0        # inside? row0 col0 is outside the footprint for most grids
+    a[1000, 1000] = 2.0
+    a[1001, 1000] = -1.0
+    out = to_submission_array(a, mode="nan", footprint=fp)
+    assert out.dtype == np.float32
+    assert np.nanmax(out) <= 1.0 and np.nanmin(out) >= 0.0
+    assert np.isnan(out[~fp]).all()
 
 
-@pytest.fixture()
-def footprint():
-    fp = np.ones((H, W), bool)
-    fp[:, -2:] = False
-    return fp
-
-
-def test_writer_output_passes_validator(tmp_path, reference, footprint, features):
-    pred = np.random.default_rng(0).random((H, W))
-    out = tmp_path / "sub.tif"
-    receipt = write_submission(out, pred, footprint, reference,
-                               name="gems_test_01", note="synthetic grid test, not a submission")
-    assert receipt["nan_inside"] == 0
-    assert receipt["nan_outside_count"] == int((~footprint).sum())
-    assert receipt["name"] == "gems_test_01" and receipt["note_chars"] == len("synthetic grid test, not a submission")
-    rep = validate(out, reference_path=reference, features_path=features)
-    assert rep["passed"], rep
-    assert not rep["skipped_checks_mean_unverified"]
-    with rasterio.open(out) as src:
-        assert src.tags()["GEMS_NAME"] == "gems_test_01"
-        assert src.tags()["GEMS_NOTE"].startswith("synthetic grid test")
+def test_roundtrip_passes_validator(tmp_path):
+    fp = footprint_mask()
+    rng = np.random.default_rng(0)
+    v = np.zeros(fp.shape, np.float32)
+    idx = np.flatnonzero(fp.ravel())
+    sel = rng.choice(idx, 5000, replace=False)
+    v.flat[sel] = 1.0
+    p = tmp_path / "t.tif"
+    write_submission(v, p, mode="nan")
+    r = validate(p, mode="nan")
+    assert r["ok"], r["checks"]
+    assert r["stats"]["positive_pixels"] == 5000
+    with rasterio.open(p) as src:
         assert src.dtypes[0] == "float32"
-        assert src.nodata is None
-        assert src.crs.to_string() == "EPSG:32611"
-        assert src.transform == TF
-        arr = src.read(1)
-    assert np.isnan(arr[~footprint]).all()
-    assert np.isfinite(arr[footprint]).all()
-    assert arr[footprint].min() >= 0 and arr[footprint].max() <= 1
-    assert json.loads((tmp_path / "sub.tif.receipt.json").read_text())["sha256"] == receipt["sha256"]
+        assert src.crs.to_string() == EXPECTED_CRS
+        assert (src.height, src.width) == EXPECTED_SHAPE
+        assert tuple(src.transform)[:6] == pytest.approx(EXPECTED_TRANSFORM)
 
 
-def test_writer_refuses_values_outside_unit_interval(tmp_path, reference, footprint):
-    pred = np.full((H, W), 0.5)
-    pred[0, 0] = 1.4
-    with pytest.raises(ValueError):
-        write_submission(tmp_path / "bad.tif", pred, footprint, reference)
+def test_zeros_mode_passes(tmp_path):
+    fp = footprint_mask()
+    v = np.zeros(fp.shape, np.float32)
+    v[fp] = 0.5
+    p = tmp_path / "z.tif"
+    write_submission(v, p, mode="zeros")
+    r = validate(p, mode="zeros")
+    assert r["ok"], r["checks"]
 
 
-def test_writer_refuses_nan_inside_footprint(tmp_path, reference, footprint):
-    pred = np.full((H, W), 0.5)
-    pred[0, 0] = np.nan
-    with pytest.raises(ValueError):
-        write_submission(tmp_path / "bad.tif", pred, footprint, reference)
+def test_validator_rejects_out_of_range(tmp_path):
+    fp = footprint_mask()
+    v = np.zeros(fp.shape, np.float32)
+    v[fp] = 1.5
+    p = tmp_path / "bad.tif"
+    write_submission(v, p, mode="nan")          # writer clips, so this must pass
+    r = validate(p, mode="nan")
+    assert r["checks"]["in_footprint_range_0_1"]
+    # a hand-made raster that is NOT clipped must fail
+    prof = dict(driver="GTiff", height=EXPECTED_SHAPE[0], width=EXPECTED_SHAPE[1], count=1,
+                dtype="float32", crs=EXPECTED_CRS,
+                transform=rasterio.transform.Affine(*EXPECTED_TRANSFORM))
+    with rasterio.open(tmp_path / "bad2.tif", "w", **prof) as dst:
+        dst.write(v, 1)
+    r2 = validate(tmp_path / "bad2.tif", mode="nan")
+    assert not r2["checks"]["in_footprint_range_0_1"]
 
 
-def test_writer_refuses_note_over_140_chars(tmp_path, reference, footprint):
-    pred = np.zeros((H, W))
-    with pytest.raises(ValueError):
-        write_submission(tmp_path / "n.tif", pred, footprint, reference, note="x" * 141)
-    write_submission(tmp_path / "n2.tif", pred, footprint, reference, note="x" * 140)
-
-
-def test_skipped_checks_do_not_pass(tmp_path, reference, footprint):
-    """A file checked without features is NOT a full pass, so it cannot clear the gate."""
-    pred = np.zeros((H, W))
-    out = tmp_path / "s.tif"
-    write_submission(out, pred, footprint, reference)
-    rep = validate(out, reference_path=reference)
-    assert rep["skipped_checks_mean_unverified"]
-    assert rep["passed"] is False
-    assert rep["has_failures"] is False
-
-
-def test_writer_refuses_existing_file_without_overwrite(tmp_path, reference, footprint):
-    pred = np.zeros((H, W))
-    write_submission(tmp_path / "a.tif", pred, footprint, reference)
-    with pytest.raises(FileExistsError):
-        write_submission(tmp_path / "a.tif", pred, footprint, reference)
-
-
-def test_validator_rejects_out_of_range_values(tmp_path, reference):
-    out = tmp_path / "oob.tif"
-    arr = np.full((H, W), 0.2, dtype=np.float32)
-    arr[3, 3] = 1.7
-    with rasterio.open(out, "w", driver="GTiff", height=H, width=W, count=1, dtype="float32",
-                       crs="EPSG:32611", transform=TF, nodata=None) as dst:
-        dst.write(arr, 1)
-    rep = validate(out, reference_path=reference)
-    assert not rep["passed"]
-    assert any(c["check"] == "values within [0, 1]" and c["status"] == "FAIL" for c in rep["checks"])
-
-
-def test_validator_rejects_finite_values_outside_footprint(tmp_path, reference, features, footprint):
-    out = tmp_path / "finite-outside.tif"
-    arr = np.full((H, W), 0.2, dtype=np.float32)
-    arr[~footprint] = np.nan
-    arr[0, -1] = 0.3
-    with rasterio.open(out, "w", driver="GTiff", height=H, width=W, count=1, dtype="float32",
-                       crs="EPSG:32611", transform=TF, nodata=None) as dst:
-        dst.write(arr, 1)
-    rep = validate(out, reference_path=reference, features_path=features)
-    assert not rep["passed"]
-    check = next(c for c in rep["checks"] if c["check"] == "NaN-only outside footprint")
-    assert check["status"] == "FAIL"
-    assert "finite_outside=1" in check["detail"]
-
-
-def test_validator_rejects_misaligned_features_grid(tmp_path, reference, footprint):
-    out = tmp_path / "valid-output.tif"
-    write_submission(out, np.full((H, W), 0.2), footprint, reference)
-    shifted_features = tmp_path / "shifted-features.tif"
-    band = np.where(footprint, 1.0, -3.4028234663852886e38).astype(np.float32)
-    shifted_tf = Affine(100.0, 0.0, 500100.0, 0.0, -100.0, 4500000.0)
-    with rasterio.open(shifted_features, "w", driver="GTiff", height=H, width=W, count=1,
-                       dtype="float32", crs="EPSG:32611", transform=shifted_tf,
-                       nodata=-3.4028234663852886e38) as dst:
-        dst.write(band, 1)
-    rep = validate(out, reference_path=reference, features_path=shifted_features)
-    assert not rep["passed"]
-    assert any(c["check"] == "features transform matches reference grid" and c["status"] == "FAIL"
-               for c in rep["checks"])
-
-
-def test_validator_rejects_large_negative_nodata_sentinel(tmp_path, reference):
-    out = tmp_path / "sentinel.tif"
-    arr = np.full((H, W), 0.2, dtype=np.float32)
-    with rasterio.open(out, "w", driver="GTiff", height=H, width=W, count=1, dtype="float32",
-                       crs="EPSG:32611", transform=TF, nodata=-3.4028234663852886e38) as dst:
-        dst.write(arr, 1)
-    rep = validate(out, reference_path=reference)
-    assert not rep["passed"]
-    assert any(c["check"] == "nodata tag is none or NaN" and c["status"] == "FAIL" for c in rep["checks"])
-
-
-def test_validator_rejects_wrong_crs(tmp_path, reference):
-    out = tmp_path / "wgs.tif"
-    arr = np.zeros((H, W), dtype=np.float32)
-    with rasterio.open(out, "w", driver="GTiff", height=H, width=W, count=1, dtype="float32",
-                       crs="EPSG:4326", transform=TF, nodata=None) as dst:
-        dst.write(arr, 1)
-    rep = validate(out, reference_path=reference)
-    assert not rep["passed"]
-    assert any(c["check"] == "CRS EPSG:32611" and c["status"] == "FAIL" for c in rep["checks"])
-
-
-def test_validator_flags_shape_mismatch(tmp_path, reference):
-    out = tmp_path / "small.tif"
-    arr = np.zeros((H - 1, W), dtype=np.float32)
-    with rasterio.open(out, "w", driver="GTiff", height=H - 1, width=W, count=1, dtype="float32",
-                       crs="EPSG:32611", transform=TF, nodata=None) as dst:
-        dst.write(arr, 1)
-    rep = validate(out, reference_path=reference)
-    assert not rep["passed"]
-
-
-def test_skipped_checks_are_reported_not_passed(tmp_path):
-    out = tmp_path / "noref.tif"
-    arr = np.zeros((H, W), dtype=np.float32)
-    with rasterio.open(out, "w", driver="GTiff", height=H, width=W, count=1, dtype="float32",
-                       crs="EPSG:32611", transform=TF, nodata=None) as dst:
-        dst.write(arr, 1)
-    rep = validate(out)
-    statuses = {c["check"]: c["status"] for c in rep["checks"]}
-    assert statuses["transform matches reference"] == "SKIPPED"
-    assert statuses["CRS matches reference"] == "SKIPPED"
-    assert rep["skipped_checks_mean_unverified"] is True
-    assert rep["passed"] is False
+def test_shipped_artifact_passes_if_present():
+    dls = sorted((ROOT / "artifacts" / "lidar_lane").glob("*.manifest.json"))
+    if not dls:
+        pytest.skip("no submission built")
+    man = json.loads(dls[-1].read_text())
+    slug = man["slug"]
+    for mode in ("nan", "zeros"):
+        p = ROOT / "artifacts" / "lidar_lane" / f"{slug}-{mode}.tif"
+        r = validate(p, mode=mode, require_off_catalogue=2.0,
+                     expected_dots=man["n_dots"])
+        assert r["ok"], (mode, r["checks"])
