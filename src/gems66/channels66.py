@@ -1,34 +1,17 @@
-"""H66 lane channels: physical scarplet aggregates + the cultural-feature veto.
+"""Historical H66 feature-construction prototype; not a verified data product.
 
-Lane paragraph (verbatim requirement this module implements)
-------------------------------------------------------------
-"(i) scarplet template matching ... which returns amplitude, relative age, orientation and
-SNR from a GeoTIFF DEM, extended with slope-aware scarp templates ...; (ii) Steger sub-pixel
-ridge/valley lines ... and Frangi multiscale Hessian line measures ... at 2-20 m scales on a
-slope-detrended surface.  Aggregate to 100 m cells as scarp-pixel fraction, SNR-weighted
-amplitude, structure-tensor orientation coherence and dominant strike.  Mask roads, canals
-and field edges with the existing cultural-feature mask, then retrain under spatial CV."
+This module decodes an owner-described, quantized LiDAR stack and builds cell-level
+heuristic channels. The raster and its sidecar are absent from the current checkout;
+the claimed full-footprint 2 m coverage, processing lineage, tile count, and alignment
+have not been independently authenticated here. No current candidate uses this module.
 
-What is computable here, and the one deviation
-----------------------------------------------
-The competition grid is 100 m; the native-resolution evidence available *inside this
-checkout for the whole footprint* is the owner-pinned 2 m LiDAR scarp stack
-(``data/external/lidar_scarp_features_u8.tif``, 706/716 USGS 3DEP 1 m tiles, sidecar
-``lidar_scarp_features.json``).  Its ``ex_*``/``step_max``/``lap*_max`` bands **are** the
-cell-level aggregation of a slope-detrended, multi-scale LoG (Laplacian-of-Gaussian)
-scarplet template response -- i.e. the Sare & Hilley / AGU-2015 slope-aware template family,
-and the Frangi-type ridge measure -- already run at 2 m.  A Steger sub-pixel refinement and a
-2-20 m Frangi scale sweep on 1 m pixels are therefore **not re-run on the full footprint**:
-they are re-run here on the two committed 3 m pilot tiles (``scripts/e0_native_check.py``) to
-verify that the 100 m aggregation preserves the ranking, and the full-footprint channel is
-built from the pinned 2 m aggregates.  The deviation is recorded as IR-66-RES-01.
-
-The cultural mask: no ``cultural-feature mask`` exists in this family's data (verified by
-search -- ``grep -ri cultural`` over the pinned manifest and both data trees returns only a
-prose mention in ``60GEMSDOE/registry/preregistration-h71.json``).  It is therefore built here
-from geometry only, with no label input: roads, canals, field edges and mine benches are
-*straight over long distances, constant in amplitude, in flat terrain, and invisible to
-aeromagnetics*; a range-front or basin-boundary fault scarp is none of those at once.
+Several legacy variable names overstate what the formulas measure: ``frac`` is a
+mean/max aggregate-band ratio, not an observed scarp-pixel fraction; ``snr`` is a robust
+standardized-amplitude proxy, not a method-faithful Scarplet template-fit SNR;
+``rel_age`` is a cross-slope ratio, not published morphologic age; and ``height_m``
+uses a fixed assumed scale. These are proxies only. The cultural index is a geometry
+heuristic, not an independently supplied cultural-feature mask. The old H66 runner is
+disabled pending authorized inputs, scientific review, and a valid shared-tool path.
 """
 from __future__ import annotations
 

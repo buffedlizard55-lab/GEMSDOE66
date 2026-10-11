@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""Build the public evidence site from the canonical docs/data registers.
+"""Build the blocked project-status site from docs/data/*.json.
 
-No candidate raster is linked unless the canonical run card records every release gate
-as passed, marks the run promoted, permits downloads, and identifies a matching file
-under docs/downloads/. A local artifact or format receipt alone cannot open this gate.
+This version never emits a TIFF/ZIP download link. Enabling any future artifact link
+requires a separately reviewed change that checks the full release gates and exact
+artifact hash. The builder does not fetch or monitor external websites.
 """
 from __future__ import annotations
 
-import hashlib
 import html
 import json
 from pathlib import Path
@@ -15,374 +14,241 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 DATA = DOCS / "data"
-UPDATED = "2026-10-11"
-OFFICIAL_LEADERBOARD_URL = "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
-REQUIRED_RELEASE_GATES = (
-    "inputs_verified", "top_candidate_holdout_ci", "beats_frozen_holdout_best",
-    "leakage_canary", "registry_preplacement", "registry_postplacement",
-    "official_grid_validator",
-)
+
+PAGES = [
+    "index.html", "feed.html", "submission-guide.html", "analysis.html",
+    "hypotheses.html", "run-card.html", "irregularities.html", "sources.html",
+    "h66-session.html", "executive-summary.html",
+]
 NAV = [
-    ("index.html", "Summary"),
-    ("executive-summary.html", "Submission executive summary"),
-    ("submission-guide.html", "Clearance guide"),
+    ("index.html", "Overview"),
+    ("feed.html", "Project feed"),
+    ("submission-guide.html", "Submission workflow"),
+    ("hypotheses.html", "Ranked hypotheses"),
     ("analysis.html", "H33 attribution"),
-    ("hypotheses.html", "Hypotheses"),
-    (OFFICIAL_LEADERBOARD_URL, "Official leaderboard ↗"),
     ("run-card.html", "Run card"),
-    ("irregularities.html", "Irregularities"),
+    ("irregularities.html", "Audit findings"),
     ("sources.html", "Sources"),
-    ("research/metric-derivation.md", "Metric derivation"),
+    ("executive-summary.html", "Executive summary"),
+    ("h66-session.html", "H66 archive"),
 ]
 
+CSS = """
+:root{color-scheme:light;--ink:#15283a;--muted:#566a7b;--paper:#f3f6f8;--card:#fff;--line:#d9e2e8;--blue:#175d83;--red:#9d302d;--redbg:#fff0ee;--amber:#845318;--amberbg:#fff7e7;--green:#276047;--greenbg:#edf8f0}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.58 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}main{max-width:1120px;margin:0 auto;padding:24px clamp(16px,4vw,48px) 64px}nav{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 28px;padding:0 0 16px;border-bottom:1px solid var(--line)}nav a{padding:6px 10px;border-radius:8px;color:var(--blue);text-decoration:none;font-size:.91rem}nav a:hover,nav a.active{background:#e4eef4;color:#123e58}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.035em;margin:.35em 0 .45em}h2{font-size:1.34rem;margin:1.45em 0 .45em}h3{font-size:1.05rem;margin:1.2em 0 .35em}p{margin:.55em 0 1em}.muted,.small{color:var(--muted)}.small{font-size:.92rem}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;font-weight:750;color:var(--blue)}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin:16px 0;box-shadow:0 4px 18px rgba(18,50,73,.035)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:12px;background:#fbfcfd}.stat b{display:block;margin-bottom:5px}.tag{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.77rem;font-weight:750;letter-spacing:.02em}.red{color:var(--red);background:var(--redbg)}.amber{color:var(--amber);background:var(--amberbg)}.green{color:var(--green);background:var(--greenbg)}.blue{color:#1d5773;background:#e8f2f7}.banner{border:1px solid #e3aaa6;background:var(--redbg);border-radius:16px;padding:18px 22px;margin:18px 0}.banner h2{margin-top:0}.banner.warn{border-color:#e5ca93;background:var(--amberbg)}.banner.ok{border-color:#a9cdb8;background:var(--greenbg)}.mono,code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{overflow-wrap:anywhere;background:#f0f3f5;padding:.12em .35em;border-radius:5px;font-size:.91em}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#101f2d;color:#e4edf4;border-radius:12px;padding:16px;overflow:auto}a{color:var(--blue)}.button{display:inline-block;border-radius:9px;padding:9px 13px;background:var(--blue);color:white;text-decoration:none;font-weight:650}.button.disabled{background:#71808b;cursor:not-allowed}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:9px 10px}th{background:#eef3f6}.item{border-left:4px solid #a7bac7;padding:3px 0 4px 15px;margin:20px 0}.item.critical,.item.high{border-color:#b74943}.item.medium{border-color:#d5a242}.item.info,.item.low{border-color:#6f9eb4}.footer{border-top:1px solid var(--line);margin-top:34px;padding-top:14px;color:var(--muted);font-size:.85rem}.kicker{font-size:.9rem;color:var(--muted)}.nowrap{white-space:nowrap}
+@media(max-width:640px){main{padding-top:14px}nav{gap:2px}nav a{font-size:.83rem;padding:5px 7px}table{display:block;overflow-x:auto}.card{padding:17px}}
+"""
 
-def load(name: str) -> dict:
+
+def load(name: str):
     return json.loads((DATA / name).read_text(encoding="utf-8"))
 
 
 def e(value) -> str:
-    return html.escape("" if value is None else str(value))
+    return html.escape("" if value is None else str(value), quote=True)
 
 
-def tag(status: str) -> str:
-    text = str(status or "UNKNOWN")
-    upper = text.upper()
-    if upper.startswith(("VERIFIED", "CONFIRMED", "PASS", "CLEARED")):
-        css = "green"
-    elif upper.startswith(("NEGATIVE", "BLOCK", "BROKEN", "NOT RUN", "NOT CLEARED", "MISSING", "FAIL")):
-        css = "red"
-    elif upper.startswith(("PARTIAL", "OPEN", "UNVERIFIED", "UNATTRIBUTED", "PROJECTION", "OWNER", "NOT ACCESSED", "NOT FETCHED", "POLICY", "UNKNOWN", "INCONCLUSIVE", "HISTORICAL")):
-        css = "amber"
-    else:
-        css = "grey"
-    return f'<span class="tag {css}">{e(text)}</span>'
-
-
-def _candidate_download(rc: dict) -> str | None:
-    """Return a Pages-relative TIF path only when every explicit fail-closed gate passes."""
-    submission = rc.get("submission", {})
-    gates = rc.get("release_gates", {})
-    if (rc.get("verdict") != "promote" or rc.get("promote") is not True
-            or submission.get("download_ok") is not True
-            or not all(gates.get(key) is True for key in REQUIRED_RELEASE_GATES)):
-        return None
-    holdout = rc.get("holdout_dti", {})
-    ci = holdout.get("ci95")
-    paired_ci = holdout.get("paired_difference_ci95")
-    if (holdout.get("label") != "HOLDOUT-DTI"
-            or holdout.get("status") != "PASS"
-            or not isinstance(holdout.get("value"), (int, float))
-            or not isinstance(ci, list) or len(ci) != 2
-            or not all(isinstance(x, (int, float)) for x in ci)
-            or not isinstance(paired_ci, list) or len(paired_ci) != 2
-            or not all(isinstance(x, (int, float)) for x in paired_ci)
-            or paired_ci[0] <= 0.0
-            or holdout.get("beats_frozen_holdout_best") is not True):
-        return None
-    checks = rc.get("registry_checks", {})
-    pre = checks.get("pre_placement_surface", {})
-    post = checks.get("post_placement_final_dots", {})
-    if (pre.get("status") != "PASS" or post.get("status") != "PASS"
-            or pre.get("complete_registry") is not True or post.get("complete_registry") is not True
-            or pre.get("pixel_hash_agreement_pass") is not True
-            or post.get("pixel_hash_agreement_pass") is not True
-            or not isinstance(pre.get("max_abs_rank_correlation"), (int, float))
-            or abs(pre["max_abs_rank_correlation"]) > 0.90
-            or not isinstance(post.get("max_abs_rank_correlation"), (int, float))
-            or abs(post["max_abs_rank_correlation"]) > 0.90
-            or not isinstance(post.get("max_dot_overlap"), (int, float))
-            or post["max_dot_overlap"] > 0.70):
-        return None
-    if rc.get("leakage_canary", {}).get("status") != "PASS":
-        return None
-    validator = rc.get("validator", {})
-    if (validator.get("status") != "PASS" or validator.get("footprint_nan_ok") is not True
-            or validator.get("values_0_1_ok") is not True
-            or validator.get("crs_shape_transform_match") is not True):
-        return None
-    rel = rc.get("raster", {}).get("file")
-    digest = rc.get("raster", {}).get("sha256")
-    if not isinstance(rel, str) or not rel.startswith("docs/downloads/"):
-        return None
-    path = ROOT / rel
-    if not path.is_file() or not isinstance(digest, str) or len(digest) != 64:
-        return None
-    h = hashlib.sha256(path.read_bytes()).hexdigest()
-    if h != digest:
-        return None
-    return path.relative_to(DOCS).as_posix()
+def display(value, missing="Not measured") -> str:
+    return f"<em>{e(missing)}</em>" if value is None else e(value)
 
 
 def page(filename: str, title: str, body: str, active: str) -> None:
-    prefix = "../" if "/" in filename else ""
-    nav = "".join(
-        f'<a href="{e(href if href.startswith(("https://", "http://")) else prefix + href)}"'
-        f' class="{"active" if href == active else ""}">{e(label)}</a>'
+    links = "".join(
+        f'<a href="{e(href)}" class="{"active" if href == active else ""}">{e(label)}</a>'
         for href, label in NAV
     )
-    doc = f"""<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{e(title)} · GEMS Prize workbench</title>
-<link rel="stylesheet" href="{prefix}assets/site.css">
-</head>
-<body>
-<header class="site">
-  <div class="brand">GEMS Prize (DrivenData #306) · workbench</div>
-  <nav>{nav}</nav>
-</header>
-<main>
-{body}
-</main>
-<footer>Generated by scripts/build_site.py from docs/data/*.json · last updated {UPDATED} (UTC) · not affiliated with DrivenData or DOE.</footer>
-</body>
-</html>
-"""
-    target = DOCS / filename
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(doc, encoding="utf-8")
+    doc = f'''<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Auditable native-resolution LiDAR scarp-channel research; no candidate is currently cleared for submission.">
+<title>{e(title)} · GEMSDOE66</title><style>{CSS}</style></head>
+<body><main><nav aria-label="Primary">{links}</nav>{body}
+<footer class="footer">GEMSDOE66 · Maximize P(Win) · Own the Outcome · Status is repository state, not organizer acceptance. No leaderboard values are mirrored.</footer>
+</main></body></html>'''
+    (DOCS / filename).write_text(doc, encoding="utf-8")
 
 
-def sources_page() -> None:
-    data = load("sources.json")
-    rows = "".join(
-        f'<tr><td><code>{e(s["id"])}</code></td><td>{e(s["title"])}<br>'
-        f'<a href="{e(s["url"])}">{e(s["url"])}</a></td><td>{e(s["supports"])}</td>'
-        f'<td>{tag(s["status"])}</td><td class="note">{e(s["how"])}</td></tr>'
-        for s in data["sources"]
-    )
-    body = f"""<h1>Sources register</h1>
-<p class="sub">Manual review links and source-specific evidence limits. A source supports only the claims recorded for it. Machine-readable register: <a href="data/sources.json">data/sources.json</a>.</p>
-<table><thead><tr><th>ID</th><th>Source and link</th><th>What it supports</th><th>Status</th><th>How checked</th></tr></thead><tbody>{rows}</tbody></table>"""
-    page("sources.html", "Sources", body, "sources.html")
+def status_grid(rc: dict) -> str:
+    hd = rc["holdout_dti"]
+    reg = rc["registry_checks"]
+    return f'''<div class="grid">
+<div class="stat"><b>Authorized inputs</b><span class="tag red">BLOCKED</span><p class="small">{e(rc['data_access']['competition_data'])}</p></div>
+<div class="stat"><b>HOLDOUT-DTI</b><span class="tag red">NONE QUALIFIED</span><p class="small">{e(hd['status'])}</p></div>
+<div class="stat"><b>Registry uniqueness</b><span class="tag red">BLOCKED</span><p class="small">{e(reg['reason'])}</p></div>
+<div class="stat"><b>Validator</b><span class="tag red">NOT PASSED</span><p class="small">{e(rc['validator']['result'])}</p></div>
+<div class="stat"><b>GeoTIFF download</b><span class="tag red">NOT AVAILABLE</span><p class="small">{e(rc['submission']['download_status'])}</p></div>
+<div class="stat"><b>Independent scientific leads</b><span class="tag amber">OUTSTANDING</span><p class="small">{e(rc['independent_reviews']['status'])}</p></div>
+</div>'''
 
 
-def irregularities_page() -> None:
-    data = load("irregularities.json")
-    severity_class = {"high": "red", "medium": "amber", "low": "grey", "info": "blue"}
-    rows = "".join(
-        f'<tr><td><code>{e(i["id"])}</code></td>'
-        f'<td><span class="tag {severity_class.get(i["severity"], "grey")}">{e(i["severity"])}</span></td>'
-        f'<td>{e(i["statement"])}</td><td>{tag(i["status"])}</td>'
-        f'<td class="note">{e(i["source"])}</td></tr>'
-        for i in data["items"]
-    )
-    body = f"""<h1>Irregularities</h1>
-<p class="sub">Open, negative, and fixed-but-tested findings are kept visible. A status is not closed merely because code was edited.</p>
-<table><thead><tr><th>ID</th><th>Severity</th><th>Finding</th><th>Status</th><th>Source</th></tr></thead><tbody>{rows}</tbody></table>"""
-    page("irregularities.html", "Irregularities", body, "irregularities.html")
-
-
-def hypotheses_page() -> None:
-    data = load("hypotheses.json")
-    cards = []
-    for h in data["items"]:
-        cards.append(f"""<section class="card">
-<h2>Rank {h['rank']} · {e(h['id'])} · {e(h['title'])}</h2>
-<div class="kv">
-<div>Lane</div><div>{e(h['lane'])}</div>
-<div>Layers</div><div>{e(h['layers'])}</div>
-<div>Physical signature</div><div>{e(h['signature'])}</div>
-<div>Why faults may be absent from catalogue</div><div>{e(h['why_off_catalogue'])}</div>
-<div>Named non-fault mimic</div><div>{e(h['named_mimic'])}</div>
-<div>Repo-local novelty</div><div>{e(h['differs_from_repo'])}</div>
-<div>Implementation cost</div><div>{e(h['cost'])}</div>
-<div>Expected DTI improvement</div><div>{tag('NOT MEASURED')} {e(h['expected_gain'])}</div>
-<div>Data status</div><div>{e(h['data_status'])}</div>
-<div>Validation</div><div>{e(h['validation'])}</div>
-</div></section>""")
-    body = f"""<h1>Ranked lidar-scarp hypotheses</h1>
-<p class="sub">One method lane: native-resolution lidar scarp evidence, physical scales 2–20 m, aggregated to 100 m. Ranking is qualitative, not a DTI prediction. The highest-ranked candidate has not been generated or validated because inputs are unavailable and the research budget is exhausted. Test it alone on the buffered spatial holdout before considering a weekly slot. Leakage canary: any feature-alone AUC &gt;0.90 is leakage until disproven.</p>
-{''.join(cards)}
-<p class="note">Machine-readable hypotheses: <a href="data/hypotheses.json">data/hypotheses.json</a>. Prior-method overlap is disclosed; full-registry novelty is not established.</p>"""
-    page("hypotheses.html", "Hypotheses", body, "hypotheses.html")
-
-
-def _ci(value) -> str:
-    return "not measured" if value is None else e(value)
-
-
-def run_card_page() -> None:
-    rc = load("run-card.json")
-    h = rc["holdout_dti"]
-    pre = rc["registry_checks"]["pre_placement_surface"]
-    post = rc["registry_checks"]["post_placement_final_dots"]
+def index_page(rc: dict, feed: dict) -> str:
+    historical = rc["raster"]["historical_artifacts"][0]
     submission = rc["submission"]
-    note = submission.get("note") or "No submission note cleared."
-    hist = rc["historical_emitted_policy_holdout"]
-    detector = rc["historical_detector_arm"]
-    body = f"""<h1>Canonical run card · {e(rc['run_id'])}</h1>
-<p class="sub">One canonical JSON decision: <a href="data/run-card.json">docs/data/run-card.json</a>. Historical receipts are separated from the untested top hypothesis.</p>
-<div class="banner stop"><strong class="big">Verdict: NEGATIVE · PROMOTE: NO</strong>No competition-format file is offered for download or submission. The top-ranked proposal was not generated or tested.</div>
-<div class="card"><div class="kv">
-<div>Date (UTC)</div><div>{e(rc['date_utc'])}</div>
-<div>Lane</div><div>{e(rc['lane'])}</div>
-<div>Top candidate</div><div>{e(rc['top_candidate'])}</div>
-<div>Hypothesis</div><div>{e(rc['hypothesis'])}</div>
-<div>Mechanism</div><div>{e(rc['mechanism'])}</div>
-<div>Named non-fault mimic</div><div>{e(rc['non_fault_mimic'])}</div>
-<div>Top-candidate HOLDOUT-DTI</div><div>{tag(h['status'])}; value: {_ci(h['value'])}; evaluator: {e(h['evaluator_version'])}; withheld positives: {_ci(h['withheld_positive_count'])}; 95% CI: {_ci(h['ci95'])}</div>
-<div>Historical emitted-policy HOLDOUT-DTI</div><div>{tag(hist['status'])}; {e(hist['value'])}; evaluator: {e(hist['evaluator_version'])}; withheld observations: {e(hist['withheld_positive_count'])}; 95% CI: {_ci(hist['ci95'])}</div>
-<div>Historical detector-arm HOLDOUT-DTI</div><div>{tag(detector['status'])}; {e(detector['value'])}; evaluator: {e(detector['evaluator_version'])}; withheld observations: {e(detector['withheld_positive_count'])}; 95% CI: {_ci(detector['ci95'])}</div>
-<div>Feature-alone leakage canary</div><div>{tag(rc['leakage_canary']['status'])}; threshold AUC &gt; {e(rc['leakage_canary']['threshold_auc'])}; {e(rc['leakage_canary']['reason'])}</div>
-<div>Pre-placement continuous-surface registry check</div><div>{tag(pre['status'])}; absolute Spearman limit &gt; {e(pre['correlation_limit'])}; maximum measured correlation: {_ci(pre['max_abs_rank_correlation'])}; rasters checked: {_ci(pre['registry_count'])}; pixel/hash status: {e(pre['pixel_hash_status'])}</div>
-<div>Post-placement final-dot registry check</div><div>{tag(post['status'])}; absolute Spearman limit &gt; {e(post['correlation_limit'])}; 3-pixel dot-overlap limit &gt; {e(post['overlap_limit'])}; measured dot overlap: {_ci(post['max_dot_overlap'])}; rasters checked: {_ci(post['registry_count'])} of {_ci(post['expected_registry_count'])}; pixel/hash status: {e(post['pixel_hash_status'])}</div>
-<div>Strict input verifier (s0)</div><div>{tag(rc['input_verification']['status'])}; missing: {e(', '.join(rc['input_verification']['missing']))}; missing pins: {e(', '.join(rc['input_verification']['missing_pins']))}</div>
-<div>Historical audit raster / SHA-256</div><div>{e(rc['raster']['file'])} · <code>{e(rc['raster']['sha256'])}</code> · {e(rc['raster']['status'])}</div>
-<div>Official-grid validator</div><div>{tag(rc['validator']['status'])}; footprint NaN: {e(rc['validator']['footprint_nan_status'])}; [0,1]: {e(rc['validator']['values_0_1'])}; CRS/shape/transform: {e(rc['validator']['grid_status'])}</div>
-<div>Proposed submission name</div><div>{e(submission['name'])} <span class="note">(informational only)</span></div>
-<div>Proposed note</div><div><code>{e(note)}</code> · {e(submission['note_chars'])}/{e(submission['note_limit_chars'])} characters · not cleared</div>
-<div>Download clearance</div><div>{tag(submission['clearance'])}</div>
-<div>Budget</div><div>{e(json.dumps(rc['budget'], sort_keys=True))}</div>
-<div>Open irregularities</div><div>{e(', '.join(rc['open_irregularities']))}</div>
-</div></div>
-<p class="note">No score here is an organizer score. A historical HOLDOUT-DTI without a 95% CI does not clear the candidate gate. An owner or user leaderboard attribution is not a receipt.</p>"""
-    page("run-card.html", "Run card", body, "run-card.html")
+    return f'''<div class="eyebrow">Native-resolution LiDAR scarp channels · current gate</div>
+<h1>No submission-ready GeoTIFF</h1>
+<p class="kicker">As of {e(feed['generated_utc'])}, no candidate passed the complete science, provenance, uniqueness, and exact-footprint gates. This is an explicit stop state, not a missing download button.</p>
+<div class="banner"><h2>Download status: NOT AVAILABLE</h2><p><strong>There is no current TIFF or ZIP cleared for submission.</strong> Do not upload a historical H66 artifact. The old binaries were removed from the published downloads directory; H66-1 bytes are retained only in an unlinked audit archive outside the Pages document root.</p><p><b>Planning identifier only:</b> <code>{e(submission['name'])}</code> ({e(submission.get('name_status'))}). <b>Proposed note ({e(submission['note_chars'])}/140 characters):</b> “{e(submission['note'])}” ({e(submission.get('note_status'))}). This name and note are not cleared for use; no candidate file exists.</p></div>
+{status_grid(rc)}
+<section class="card"><h2>Why the project is blocked</h2><ul>
+<li>The official competition data tab redirected this unauthenticated session to login. No credentials were used; no official training rasters, labels, sample submission, or DEM-link inventory are present.</li>
+<li>The historical H66 runner uses full-catalogue distance when choosing candidate cells before hide-and-recover scoring. That lets withheld labels influence placement, so its old scalar is not a qualified HOLDOUT-DTI result.</li>
+<li>The required complete raster registry, whole-geologic-segment buffered holdout, LiDAR-covered evaluation mask, 95% CI, and independent scientific reviews are not available.</li>
+<li>The official output contract requires NaN outside the exact reference footprint. The canonical shared <code>gems.submission_writer</code> supports that contract, but the historical H66 path still calls older all-finite <code>gems57</code> helpers. It remains disabled until it is rewired to the shared writer and the exact reference grid is available.</li>
+</ul></section>
+<section class="card"><h2>What is ready</h2><p>Four distinct same-lane hypotheses are ranked before implementation. The lead is a method-faithful slope-aware scarp-template plus scale-persistent Steger/Frangi field. Its expected gain is qualitative only; it has not been implemented or tested.</p><p><a class="button" href="hypotheses.html">Review the ranked hypotheses</a> <a class="button" href="feed.html">Open the dated project feed</a></p></section>
+<section class="card"><h2>Historical file disposition</h2><p>The prior all-finite raster is retained only as an audit archive at <code>{e(historical.get('archive_file', 'not archived'))}</code>, outside the Pages document root and without a download link. SHA-256 <code>{e(historical['sha256'])}</code>. Its exact official transform/footprint was not verified. See the <a href="h66-session.html">H66 archive note</a> and the <a href="review/2026-10-11-audit.md">technical audit</a>.</p></section>
+<p><a href="submission-guide.html">Submission workflow</a> · <a href="analysis.html">H33 attribution</a> · <a href="run-card.html">Current JSON run card</a> · <a href="irregularities.html">Audit findings</a> · <a href="sources.html">Source register</a> · <a href="research/metric-derivation.md">Metric derivation</a></p>'''
 
 
-def index_page() -> None:
-    rc = load("run-card.json")
-    card_path = "data/run-card.json"
-    download = _candidate_download(rc)
-    h = rc["holdout_dti"]
-    hist = rc["historical_emitted_policy_holdout"]
-    if download:
-        clearance = f'<a class="btn" href="{e(download)}">Download cleared candidate GeoTIFF</a>'
-        banner_class = "ok"
-        status = "Research gates passed for download; competition-slot selection remains separate."
-    else:
-        clearance = '<strong>No TIF or ZIP download is cleared. Archived audit bytes are not linked.</strong>'
-        banner_class = "stop"
-        status = "Download: NOT CLEARED · Submission: NOT CLEARED · Promote: NO."
-    body = f"""<h1>GEMS DOE Prize workbench — lidar-scarp lane</h1>
-<p class="sub">Evidence status on {UPDATED} UTC. Scope: native-resolution lidar scarp channels only. The target is previously unmapped geological faults that may inform geothermal resource assessment; a scarp is not proof of geothermal productivity.</p>
-<div class="banner {banner_class}"><strong class="big">{e(status)}</strong>{clearance}<p>Every download requires the complete release gates in the canonical run card. A negative result, local format receipt, partial registry, or historical artifact never authorizes a download.</p></div>
-<div class="card"><h2>Purpose and core values</h2><p><strong>Maximize P(Win):</strong> use limited research time and any later competition slot only for credible, spatially blocked gains over a frozen holdout best.</p><p><strong>Own the Outcome:</strong> disclose missing inputs, failed gates, uncertainty, and negative results; fix shared defects at their source; do not turn an unknown into a pass.</p></div>
-<h2>What is known</h2>
-<ul class="steps">
-<li><strong>H33 score attribution is unresolved.</strong> The prompt/user-supplied 0.2778 attribution conflicts with owner-maintained wording that H33-2-B2 was unscored; no organizer receipt is tied to the exact raster hash. Neither claim is treated as verified. <a href="analysis.html">Review the evidence.</a></li>
-<li><strong>Top proposal:</strong> {e(rc['top_candidate'])} It is an untried hypothesis, not a score or candidate output. See the <a href="hypotheses.html">four same-lane proposals</a>.</li>
-<li><strong>Top-candidate holdout:</strong> {tag(h['status'])}; value {_ci(h['value'])}; evaluator {e(h['evaluator_version'])}; withheld positives {_ci(h['withheld_positive_count'])}; 95% CI {_ci(h['ci95'])}. No experiment was run in this review.</li>
-<li><strong>Historical emitted-policy holdout:</strong> {hist['label']} {hist['value']} using {e(hist['evaluator_version'])}, {hist['withheld_positive_count']} withheld observations, no 95% CI. It is a historical receipt and cannot validate the new top proposal.</li>
-<li><strong>Inputs and budget:</strong> authorized competition rasters and the complete registry are absent; the official data page is login-gated. The recorded research budget is exhausted ({rc['budget']['holdout_experiments_used']}/{rc['budget']['max_holdout_experiments']} experiments; {rc['budget']['wall_time_hours_reported']}/{rc['budget']['max_wall_time_hours']} hours).</li>
-<li><strong>Format and earlier [0,1] rejection:</strong> the cause is unknown. Historical local checks do not prove official-footprint validity or portal acceptance; no corrected file is cleared.</li>
-</ul>
-<h2>Manual review</h2>
-<p><a href="executive-summary.html">Submission executive summary</a> · <a href="submission-guide.html">clearance rules</a> · <a href="run-card.html">canonical run card</a> · <a href="irregularities.html">irregularities</a> · <a href="sources.html">trusted/official source register</a> · <a href="{OFFICIAL_LEADERBOARD_URL}">official live leaderboard</a></p>
-<p class="note">The project does not scrape, mirror, or monitor leaderboard rows. Open the official page directly; project-site and leaderboard claims remain unverified without receipts.</p>
-<p class="note">Canonical machine-readable status: <a href="{card_path}">docs/data/run-card.json</a>. All external-source limitations and manual review URLs are listed in <a href="sources.html">Sources</a>.</p>"""
-    page("index.html", "Executive summary", body, "index.html")
+def feed_page(feed: dict) -> str:
+    rows = []
+    for item in feed["entries"]:
+        links = " · ".join(f'<a href="{e(href)}">{e(href)}</a>' for href in item.get("links", []))
+        src = f'<p class="small">Source register: <code>{e(item["source_id"])}</code></p>' if item.get("source_id") else ""
+        rows.append(f'''<article class="item"><div class="eyebrow">{e(item['date'])} · {e(item['kind'])}</div>
+<h2>{e(item['status'])}</h2><p>{e(item['summary'])}</p>{src}{f'<p class="small">{links}</p>' if links else ''}</article>''')
+    actions = "".join(f"<li>{e(x)}</li>" for x in feed["next_actions"])
+    return f'''<div class="eyebrow">Project feed · not a leaderboard feed</div><h1>Current status and next actions</h1>
+<div class="banner"><h2>{e(feed['status'])}</h2><p>{e(feed['scope'])}</p><p class="small">{e(feed['external_monitoring'])}</p></div>
+<section class="card"><h2>Latest project events</h2>{''.join(rows)}</section>
+<section class="card"><h2>Next actions</h2><ol>{actions}</ol></section>
+<p class="small">This static status file is updated with repository changes. It does not poll DrivenData, copy public standings, or claim to be live. See <code>docs/status-feed.json</code> for the JSON feed.</p>'''
 
 
-def submission_executive_summary_page() -> None:
-    rc = load("run-card.json")
-    sub = rc["submission"]
-    h = rc["holdout_dti"]
-    hist = rc["historical_emitted_policy_holdout"]
-    detector = rc["historical_detector_arm"]
-    download = _candidate_download(rc)
-    if download:
-        banner = f'<a class="btn" href="{e(download)}">Download cleared candidate GeoTIFF</a>'
-        status = "DOWNLOAD GATES PASSED; weekly-slot selection is separate."
-        klass = "ok"
-    else:
-        banner = "No TIFF or ZIP is cleared. Do not download or submit the archived audit artifact."
-        status = "NEGATIVE — NO DOWNLOAD OR SUBMISSION CLEARANCE"
-        klass = "stop"
-    body = f"""<h1>Submission executive summary</h1>
-<p class="sub">Decision for {e(rc['run_id'])}. This page is intentionally a clearance summary, not a leaderboard claim.</p>
-<div class="banner {klass}"><strong class="big">{e(status)}</strong>{banner}</div>
-<table><tbody>
-<tr><th>Proposed method</th><td>{e(rc['top_candidate'])}</td></tr>
-<tr><th>Hypothesis</th><td>{e(rc['hypothesis'])}</td></tr>
-<tr><th>Top-candidate holdout</th><td>{tag(h['status'])}; value {_ci(h['value'])}; evaluator {e(h['evaluator_version'])}; withheld positives {_ci(h['withheld_positive_count'])}; 95% CI {_ci(h['ci95'])}</td></tr>
-<tr><th>Historical emitted-policy holdout</th><td>{hist['label']} {hist['value']}; evaluator {e(hist['evaluator_version'])}; withheld observations {hist['withheld_positive_count']}; 95% CI {_ci(hist['ci95'])}. Not the top proposal.</td></tr>
-<tr><th>Historical detector arm</th><td>{detector['label']} {detector['value']}; evaluator {e(detector['evaluator_version'])}; withheld observations {detector['withheld_positive_count']}; 95% CI {_ci(detector['ci95'])}. Not the emitted policy.</td></tr>
-<tr><th>Leakage canary</th><td>{tag(rc['leakage_canary']['status'])} — {e(rc['leakage_canary']['reason'])}</td></tr>
-<tr><th>Strict input verifier</th><td>{tag(rc['input_verification']['status'])}; missing inputs: {e(', '.join(rc['input_verification']['missing']))}; missing pins: {e(', '.join(rc['input_verification']['missing_pins']))}</td></tr>
-<tr><th>Registry checks</th><td>Pre-placement: {tag(rc['registry_checks']['pre_placement_surface']['status'])}; post-placement: {tag(rc['registry_checks']['post_placement_final_dots']['status'])}. Registry coverage is incomplete.</td></tr>
-<tr><th>Official-grid validator</th><td>{tag(rc['validator']['status'])} — {e(rc['validator']['reason'])}</td></tr>
-<tr><th>Historical raster SHA-256</th><td><code>{e(rc['raster']['sha256'])}</code> · audit-only archive path <code>{e(rc['raster']['file'])}</code></td></tr>
-<tr><th>Proposed name</th><td>{e(sub['name'])} (not reserved)</td></tr>
-<tr><th>Proposed note</th><td><code>{e(sub['note'])}</code> · {e(sub['note_chars'])}/{e(sub['note_limit_chars'])} characters · informational, not cleared</td></tr>
-<tr><th>[0,1] rejection</th><td>Cause unknown. No evidence establishes that NaN handling or any single change caused the earlier portal rejection.</td></tr>
-<tr><th>Decision</th><td><strong>Do not submit. No candidate beats the frozen holdout best with the required evidence. A real slot is a separate selector decision.</strong></td></tr>
-</tbody></table>
-<p>Next research, if separately authorized with a fresh budget and lawful inputs: generate LIDAR-01, validate only on the prescribed buffered whole-segment spatial holdout, record a 95% CI and withheld-positive count, then run all leakage, uniqueness, and official-grid gates. No experiment or weekly slot is authorized by this summary.</p>
-<p><a href="run-card.html">Open full run card</a> · <a href="submission-guide.html">Read clearance guide</a> · <a href="sources.html">Manual source links</a></p>"""
-    page("executive-summary.html", "Submission executive summary", body, "executive-summary.html")
-
-
-def submission_guide_page() -> None:
-    rc = load("run-card.json")
-    download = _candidate_download(rc)
-    if download:
-        status = f'<a href="{e(download)}">A candidate passed the research download gate.</a> Slot selection remains separate.'
-        klass = "ok"
-    else:
-        status = "No file is available for download or submission. The historical TIFF is audit-only and must not be uploaded."
-        klass = "stop"
-    body = f"""<h1>Submission and clearance guide</h1>
-<p class="sub">The live account-gated submission form was not inspected. This project does not upload automatically.</p>
-<div class="banner {klass}"><strong class="big">{e(rc['submission']['clearance'])}</strong>{status}</div>
-<h2>Why the earlier [0,1] rejection is unresolved</h2>
-<p>The earlier portal message alone does not identify whether the failure came from values, grid alignment, file encoding, or another validation condition. The cause is unknown. The historical local receipt did not revalidate against the authorized official sample and features in this checkout. Writing zeros rather than NaNs outside the footprint is not a verified fix and no file is cleared.</p>
-<h2>Required gates before any future file</h2>
-<ol class="steps">
-<li>Use lawfully obtained competition inputs with exact hashes and verify the official sample grid, footprint, CRS, transform, and features. Do not use an owner mirror as a substitute for login-gated competition files.</li>
-<li>Generate the single-lane LIDAR-01 hypothesis from native-resolution lidar scarp channels: slope-aware templates, Steger sub-pixel lines, Frangi 2–20 m evidence, aggregated to 100 m with scarp fraction, SNR-weighted amplitude, orientation coherence, and dominant strike; use the existing cultural mask.</li>
-<li>Hide whole fault segments/components in lidar-covered spatial blocks with a buffer. Derive catalogue features only from visible faults and mask visible known-fault pixels exactly. Evaluate pooled DTI with α=0.2, β=0.8, and the 300 m triangular kernel.</li>
-<li>Report every performance result as HOLDOUT-DTI with evaluator version, withheld-positive count, and 95% CI. Test each feature alone; AUC &gt;0.90 is leakage until disproven. Compare the candidate against the frozen holdout best before any slot is considered.</li>
-<li>Check the pre-placement surface and final emitted dots against every registry raster. Stop above 0.90 absolute rank correlation or above 70% 3-pixel dot overlap; verify hash/pixel agreement. Incomplete registry access is not a pass.</li>
-<li>Only after every science and uniqueness gate passes, write with the shared submission writer and validate against the authorized official reference/features. Check the footprint-NaN condition, [0,1] values, CRS, shape, transform, and hash. Local format success is not organizer acceptance.</li>
+def submission_page(rc: dict) -> str:
+    hist = rc["raster"]["historical_artifacts"][0]
+    return f'''<div class="eyebrow">Submission workflow</div><h1>How to submit — currently blocked</h1>
+<div class="banner"><h2>No file is available to upload</h2><p>{e(rc['submission']['clearance'])} There is no active TIFF/ZIP link. Historical file SHA-256 <code>{e(hist['sha256'])}</code> is shown for audit only; the file is not submission-cleared.</p></div>
+<section class="card"><h2>Release gates before any future download</h2><ol>
+<li><b>Inputs and provenance:</b> authorized competition training features, labels, sample grid, exact DEM tile inventory, and verified shareable data lineage.</li>
+<li><b>Pre-implementation review:</b> two independent scientific leads review the ranked hypotheses, geological mechanism, named mimics, and planned holdout.</li>
+<li><b>Valid science test:</b> whole vector-defined fault segments withheld with a preregistered buffer; catalogue-derived features use visible faults only; visible faults are masked pixel-exactly; truth and scoring restricted to LiDAR-covered holdout blocks; pooled DTI and 95% spatial-block CI; off-range-front check.</li>
+<li><b>Leakage and novelty:</b> each feature alone tested on the holdout; AUC above 0.90 is a stop pending explanation. Compare continuous pre-placement surfaces and final dots against the complete registry. An incomplete registry is not a pass.</li>
+<li><b>Official format:</b> normalize to float32 [0,1], write EPSG:32611 on the exact official shape/transform, and use NaN only outside the official footprint. Run the validator with both reference and features rasters; no skipped checks count as a pass.</li>
+<li><b>Artifact receipt:</b> record name, note, SHA-256, pixel agreement, validator output, run card, and all review sign-offs. Only after every gate passes may a one-click TIFF be published.</li>
+</ol></section>
+<section class="card"><h2>Portal steps once a candidate is cleared</h2><ol>
+<li>Use the download link on the project overview only after the run card explicitly changes to a cleared state.</li>
+<li>Open the DrivenData homepage and navigate manually to the GEMS Prize and its submission form. This project does not deep-link, automate, or monitor the platform.</li>
+<li>Upload the single-band TIFF or a ZIP containing exactly one TIFF, then use the run-card's unique name and short note. The project's field limit is 140 characters.</li>
+<li>Follow the current official rules: feedback submissions are limited to three per week, and one final entry must be selected.</li>
+<li>Include the required generative-AI disclosure in the submission narrative, describing the actual use across all submission materials. The text below is only a fill-in template.</li>
 </ol>
-<h2>Submission note</h2>
-<p>Informational proposed note only; not cleared for use: <code>{e(rc['submission']['note'])}</code> ({e(rc['submission']['note_chars'])}/{e(rc['submission']['note_limit_chars'])} characters).</p>
-<p>See the <a href="executive-summary.html">submission executive summary</a>, <a href="run-card.html">canonical run card</a>, and <a href="{OFFICIAL_LEADERBOARD_URL}">official live leaderboard</a> for manual review. No leaderboard rows are copied here.</p>"""
-    page("submission-guide.html", "Submission guide", body, "submission-guide.html")
+<pre>Generative-AI disclosure (edit to match actual use): [Name the tool(s)]. I used generative AI to assist with [specific code, review, or documentation tasks] in developing [identify submission elements]. I independently checked [specific analyses, sources, and outputs]. The tools did not access private test labels or submit to the competition. [Correct every sentence to match what actually occurred.]</pre>
+<p class="small">The official rules are the source of truth. The narrative template is not legal advice or a substitute for reading the current rules.</p></section>
+<section class="card"><h2>Why the old format check is not enough</h2><p>The historical all-finite file's basic raster metadata/range checks do not prove it matches the official transform or footprint. The official reference and feature rasters were absent, so those checks were skipped. The old file is withdrawn from the download path and must not be submitted.</p></section>'''
 
 
-def analysis_page() -> None:
-    body = f"""<h1>H33-2-B2 score attribution: unresolved</h1>
-<p class="sub">Assessment of the user-supplied 0.2778 association. No leaderboard number is treated as verified without an organizer receipt tied to exact raster bytes.</p>
-<h2>Evidence and limits</h2>
-<table><thead><tr><th>Evidence</th><th>Supports</th><th>Does not support</th></tr></thead><tbody>
-<tr><td>User-supplied prompt</td><td>An attribution claim associates 0.2778 with H33-2-B2.</td><td>An organizer-confirmed score or exact-hash linkage.</td></tr>
-<tr><td>Owner-maintained GEMSDOE32 record/site (<a href="https://github.com/buffedlizard55-lab/GEMSDOE32">repository</a>; <a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html">project page</a>)</td><td>Owner material associates the number with the artifact, while the project page describes the artifact as unscored and says no organizer score exists for those artifacts.</td><td>Independent verification of what the exact submitted bytes earned.</td></tr>
-<tr><td>This checkout</td><td>No organizer receipt, exact raster hash mapping, or controlled comparison is recorded.</td><td>A verified score or causal explanation.</td></tr>
-</tbody></table>
-<div class="banner warn"><strong class="big">Conclusion: may or may not be true.</strong>The attribution cannot be confirmed or disproved from the available evidence. Do not repeat 0.2778 as an organizer result.</div>
-<h2>Possible mechanisms — not findings</h2>
-<p>If a pruning variant did earn a higher score, deleting unsupported predictions might reduce false-positive cost while preserving true-positive credit under the asymmetric distance-weighted Tversky metric. Conversely, pruning could remove dots near genuinely new faults and increase false negatives. Different bytes, preprocessing, submission identity, score timing, or attribution mismatch are also plausible. No receipt or controlled experiment distinguishes these possibilities.</p>
-<p>See source IDs S02, S17, S18, and S28 in the <a href="sources.html">manual sources register</a>. Open the <a href="{OFFICIAL_LEADERBOARD_URL}">official leaderboard</a> directly; this repository does not scrape or mirror it.</p>"""
-    page("analysis.html", "H33 attribution", body, "analysis.html")
+def analysis_page(claims: dict) -> str:
+    return '''<div class="eyebrow">Attribution review</div><h1>H33-2-B2: no defensible score explanation yet</h1>
+<div class="banner warn"><h2>Attribution is unverified</h2><p>The supplied value is a user/owner-reported attribution, not an organizer-confirmed score. The owner-maintained GEMSDOE32 page describes the artifact as unscored and states that no organizer score exists for its artifacts. No receipt tied to the exact TIFF bytes or SHA-256 is present in this checkout.</p></div>
+<section class="card"><h2>Why the mechanism cannot be inferred</h2><p>Without a receipt-to-hash mapping, the file-to-score link itself is missing. Without the exact artifact bytes and a controlled comparison, it is impossible to know whether the alleged change came from ranking, placement, probability mass, catalogue-adjacent pruning, rasterization, or something else. Those are hypotheses, not findings.</p><p>The official distance-weighted Tversky metric rewards probability mass near labeled faults and penalizes unsupported mass; the false-negative coefficient exceeds the false-positive coefficient. This explains the metric's general trade-off, not the outcome of an unverified H33 file.</p><p>To answer causally, obtain an organizer receipt for the exact artifact hash, preserve the file, and compare controlled variants under the same valid, leakage-free spatial protocol. Do not use hidden labels or a public leaderboard row as an artifact receipt.</p><p><a href="research/metric-derivation.md">Read the metric derivation</a> · <a href="sources.html">Review the source register</a>.</p></section>
+<section class="card"><h2>Evidence disposition</h2><ul><li>Owner-maintained evidence is marked owner-reported only.</li><li>No leaderboard values are reproduced or mirrored in this site.</li><li>No organizer-confirmed numeric result is claimed.</li><li>The historical H66 holdout scalar is disqualified by the leakage and protocol audit.</li></ul></section>'''
 
 
-def h66_session_page() -> None:
+def hypotheses_page(d: dict) -> str:
+    items = []
+    for h in d["items"]:
+        items.append(f'''<article class="card"><div class="eyebrow">Rank {e(h['rank'])} · {e(h['id'])}</div><h2>{e(h['title'])}</h2>
+<p><b>Layers/features:</b> {e(h['layers'])}</p><p><b>Physical signature:</b> {e(h['signature'])}</p>
+<p><b>Why off-catalogue:</b> {e(h['why_off_catalogue'])}</p><p><b>Named non-fault mimic:</b> {e(h['named_mimic'])}</p>
+<p><b>Difference from repository:</b> {e(h['differs_from_repo'])}</p><p><b>Cost:</b> {e(h['cost'])}</p>
+<p><b>Expected gain:</b> {e(h['expected_gain'])}</p><p><b>Input availability:</b> {e(h['data_status'])}</p>
+<p><b>Validation:</b> {e(h['validation'])}</p><p class="small"><b>Sources:</b> {e(', '.join(h.get('source_ids', [])) or 'None')}</p></article>''')
+    p = d["protocol"]
+    return f'''<div class="eyebrow">Pre-implementation ranking</div><h1>Four hypotheses, one lane</h1>
+<div class="banner warn"><h2>No code or score is attached to these proposals</h2><p>{e(d['ranking_basis'])}</p><p>Only the lead proposal should enter implementation after scientific review and input/registry/tooling gates pass.</p></div>
+<section class="card"><h2>Shared preregistered protocol</h2><ul>
+<li><b>Scale and output:</b> {e(p['feature_scales_m'])} m native features, aggregated to {e(p['aggregation_m'])} m.</li>
+<li><b>Holdout:</b> {e(p['holdout'])}</li><li><b>Metric:</b> {e(p['metric'])}</li><li><b>Leakage:</b> {e(p['leakage'])}</li>
+<li><b>Range fronts:</b> {e(p['range_front_gate'])}</li><li><b>Uniqueness:</b> {e(p['uniqueness'])}</li><li><b>Budget:</b> {e(p['budget'])}</li>
+<li><b>Inputs:</b> {e(p['input_availability'])}</li></ul></section>
+{''.join(items)}'''
+
+
+def run_card_page(rc: dict) -> str:
+    hd = rc["holdout_dti"]
+    reg = rc["registry_checks"]
+    current = rc["raster"]
+    submission = rc["submission"]
+    validation = rc["validator"].get("current_candidate_result") or {}
+    old = "".join(f"<li><code>{e(x['file'])}</code> — SHA-256 <code>{e(x['sha256'])}</code> — {e(x['status'])}; audit archive: <code>{e(x.get('archive_file', 'not archived'))}</code></li>" for x in current["historical_artifacts"])
+    return f'''<div class="eyebrow">Canonical JSON run card</div><h1>{e(rc['run_id'])}</h1>
+<div class="banner"><h2>{e(rc['verdict'])}</h2><p>No current raster path, score, receipt, or download is present.</p></div>
+<section class="card"><h2>Hypothesis and mechanism</h2><p><b>Lane:</b> {e(rc['lane'])}</p><p><b>Top candidate:</b> {e(rc['top_candidate'])}</p><p>{e(rc['hypothesis'])}</p><p>{e(rc['mechanism'])}</p><p><b>Named non-fault mimic:</b> {e(rc['named_non_fault_mimic'])}</p></section>
+<section class="grid"><div class="card"><h2>HOLDOUT-DTI</h2><p><span class="tag red">NO QUALIFIED RESULT</span></p><p><b>Value:</b> {display(hd['value'])}</p><p><b>Evaluator:</b> {display(hd['evaluator_version'])}</p><p><b>Withheld positives:</b> {display(hd['withheld_positive_count'])}</p><p><b>95% CI:</b> {display(hd['ci95'])}</p><p>{e(hd['reason'])}</p></div>
+<div class="card"><h2>Leakage and registry</h2><p><b>Leakage canary:</b> {e(rc['leakage_canary']['status'])}</p><p><b>Threshold AUC:</b> {e(rc['leakage_canary']['threshold_auc'])}; no current feature results.</p><p><b>Pre-placement:</b> {e(reg['pre_placement_surface']['status'])}</p><p><b>Final dots:</b> {e(reg['post_placement_final_dots']['status'])}</p><p>{e(reg['reason'])}</p></div></section>
+<section class="card"><h2>Raster, validator, and submission</h2><p><b>Current raster:</b> {e(current['status'])}</p><p><b>Current file:</b> {display(current['file'])}</p><p><b>Validator:</b> {e(rc['validator']['status'])}</p><p>{e(rc['validator']['result'])}</p><p><b>Current candidate validation:</b> {e(validation.get('status', 'Not run'))}</p><p><b>Footprint NaN:</b> {e(validation.get('footprint_nan_status', 'Not reported'))}</p><p><b>[0,1] range:</b> {e(validation.get('range_0_1_status', 'Not reported'))}</p><p><b>CRS/shape/transform:</b> {e(validation.get('crs_shape_transform_status', 'Not reported'))}</p><p><b>Proposed submission name:</b> <code>{e(submission.get('name'))}</code> — {e(submission.get('name_status'))}</p><p><b>Proposed note ({e(submission.get('note_chars'))}/{e(submission.get('note_limit_chars'))} characters):</b> “{e(submission.get('note'))}” — {e(submission.get('note_status'))}. Not for submission.</p><p><b>Download:</b> {e(submission['download_status'])}</p><h3>Historical artifacts withdrawn from the public download path</h3><ul>{old}</ul></section>
+<section class="card"><h2>Inputs, budget, and reviews</h2><p><b>Competition inputs:</b> {e(rc['data_access']['competition_data'])}</p><p><b>DEM source:</b> {e(rc['data_access']['official_1m_dem_source'])}</p><p><b>Experiments used in this review:</b> {e(rc['budget']['new_experiments_used'])} / {e(rc['budget']['max_experiments'])}</p><p><b>Submission slots used:</b> {e(rc['budget']['submission_slots_used'])}</p><p><b>Independent scientific reviews:</b> {e(rc['independent_reviews']['completed'])} / {e(rc['independent_reviews']['scientific_lead_reviews_required'])} — {e(rc['independent_reviews']['status'])}</p></section>
+<p class="small">Machine-readable card: <a href="data/run-card.json">docs/data/run-card.json</a>. Full source review: <a href="review/2026-10-11-audit.md">technical audit</a>.</p>'''
+
+
+def irregularities_page(d: dict) -> str:
+    parts = []
+    for item in d["items"]:
+        sources = ", ".join(item.get("source_ids", [])) or "internal code/evidence review"
+        parts.append(f'''<article class="item {e(item['severity'])}"><div class="eyebrow">{e(item['id'])} · {e(item['severity'])}</div>
+<h2>{e(item['title'])}</h2><p><span class="tag {'red' if item['severity'] in ('critical','high') else 'amber'}">{e(item['status'])}</span></p>
+<p>{e(item['detail'])}</p><p class="small">Sources: {e(sources)}</p></article>''')
+    return f'''<div class="eyebrow">Audit register</div><h1>Open gates and corrected claims</h1>
+<p class="kicker">An issue closes only when the cited evidence and required checks are actually available. “Partial,” “owner-reported,” and “not verified” never mean pass.</p>{''.join(parts)}'''
+
+
+def sources_page(d: dict) -> str:
+    rows = []
+    for s in d["sources"]:
+        url = s["url"]
+        # DrivenData's Terms of Use restrict subpage links; cite the exact path as text.
+        if "drivendata.org/" in url and url.rstrip("/") != "https://www.drivendata.org":
+            url_html = f'<code>{e(url)}</code>'
+        else:
+            url_html = f'<a href="{e(url)}">{e(url)}</a>'
+        rows.append(f'''<article class="card"><div class="eyebrow">{e(s['id'])}</div><h2>{e(s['title'])}</h2>
+<p><span class="tag blue">{e(s['status'])}</span></p><p>{e(s['supports'])}</p><p><b>URL:</b> {url_html}</p><p class="small">{e(s['how'])}</p></article>''')
+    return f'''<div class="eyebrow">Evidence register</div><h1>Sources and provenance</h1>
+<div class="banner warn"><h2>Source status is explicit</h2><p>Official sources, public bibliographic records, owner-reported material, and current access failures are distinguished. Exact DrivenData subpage paths are shown as text, not deep-linked; no leaderboard rows are copied or monitored.</p><p>Last source review: {e(d['verified_on'])}</p></div>
+<section class="card"><p><a href="https://www.drivendata.org/">DrivenData homepage</a> · Use the official site navigation manually. The current data tab access state is recorded above; no credentials were used.</p></section>{''.join(rows)}'''
+
+
+def archive_page(rc: dict) -> str:
+    old = rc["raster"]["historical_artifacts"]
+    hashes = "".join(f"<li><code>{e(x['file'])}</code>: SHA-256 <code>{e(x['sha256'])}</code>. {e(x['status'])}.</li>" for x in old)
+    return f'''<div class="eyebrow">Historical H66 experiment · audit only</div><h1>H66 file withdrawn; no download</h1>
+<div class="banner"><h2>Do not submit these historical bytes</h2><p>The TIFF/ZIP variants were removed from <code>docs/downloads</code>; byte-identical copies are retained only under <code>evidence/archives/h66-1/</code>, outside the Pages document root and without site links. They were not cleared by the complete registry, exact official footprint validation, or the required holdout/leakage protocol. The legacy result is disqualified from current HOLDOUT-DTI reporting.</p></div>
+<section class="card"><h2>Identity retained for traceability</h2><ul>{hashes}</ul><p>The all-finite file had previously been inspected for basic raster metadata and pixel range. That does not establish exact reference transform, footprint, unique status, or organizer acceptance. The NaN variant's mask was not checked against the official features raster.</p></section>
+<section class="card"><h2>Why the result was withdrawn</h2><ul><li>Full-catalogue distance influenced pre-score candidate eligibility, leaking withheld catalogue labels into placement.</li><li>The holdout protocol and LiDAR-only denominator did not match the current brief, and no valid level 95% CI was produced.</li><li>The registry was incomplete, so uniqueness was not passed.</li><li>The historical writer bypassed the required shared submission writer; the format validator lacked official reference/features rasters and returned not passed.</li><li>The previous site advertised files and safety claims inconsistent with those unresolved gates.</li></ul><p>See <a href="review/2026-10-11-audit.md">the complete technical audit</a> and <a href="data/run-card.json">the current run card</a>.</p></section>'''
+
+
+def executive_page(rc: dict) -> str:
+    return f'''<div class="eyebrow">Executive summary</div><h1>Current outcome: stop before download</h1>
+<div class="banner"><h2>No candidate is cleared</h2><p>{e(rc['verdict'])}</p></div>
+<section class="card"><h2>What was reviewed</h2><ul><li>Repository methodology, data-restore script, feature naming, holdout path, writer path, site generators, status registers, and available historical evidence.</li><li>Official problem specification, rules, data access, public-domain 3DEP product metadata, and the bibliographic records for Scarplet, Steger, Frangi, and the cited AGU abstract.</li><li>Offline unit tests. These tests do not substitute for competition data, a spatial holdout, a complete registry, or organizer acceptance.</li></ul></section>
+<section class="card"><h2>What must happen before a submission can be made</h2><ol><li>Place lawfully accessed official rasters and exact 1 m DEM tiles in the documented local data directories; verify origin, hashes, licenses, CRS, and footprint.</li><li>Use the canonical shared buffered holdout and NaN-outside writer/validator path. If authoritative segment-ID handling or evaluator integration is missing, fix it once in the shared template and consume that implementation unchanged here; do not fork the vendored <code>gems57</code> path.</li><li>Review the ranked hypotheses with two independent scientific leads.</li><li>Implement only the reviewed lead; run the feature-alone canaries and buffered whole-segment, LiDAR-covered spatial holdout; report pooled DTI with evaluator version, positive count, and 95% CI.</li><li>Pass full-registry surface and final-dot checks plus exact official-grid validator checks. Only then enable one-click download and prepare the truthful AI disclosure.</li></ol></section>
+<p><a class="button" href="submission-guide.html">Open the complete submission workflow</a> <a class="button" href="feed.html">View the current feed</a></p>'''
+
+
+def main() -> int:
     rc = load("run-card.json")
-    body = f"""<h1>H66 historical session record</h1>
-<div class="banner stop"><strong class="big">No download clearance · negative result</strong>This page replaces an older session page that linked a historical TIFF and asserted unverified format/uniqueness clearance. Those claims have been withdrawn.</div>
-<p>The historical run card, archived raster hash, evidence classification, and unresolved checks are recorded in <a href="run-card.html">the canonical run card</a>. The raster is outside the Pages download directory and is not offered here.</p>
-<p>Current proposal and manual review steps: <a href="executive-summary.html">submission executive summary</a> · <a href="hypotheses.html">ranked hypotheses</a> · <a href="irregularities.html">irregularities</a>.</p>
-<p>Decision: {e(rc['verdict'])}; promote={e(rc['promote'])}; download clearance={e(rc['submission']['download_ok'])}; submit clearance={e(rc['submission']['submit_ok'])}.</p>"""
-    page("h66-session.html", "H66 session record", body, "h66-session.html")
-
-
-def main() -> None:
-    sources_page()
-    irregularities_page()
-    hypotheses_page()
-    run_card_page()
-    index_page()
-    submission_executive_summary_page()
-    submission_guide_page()
-    analysis_page()
-    h66_session_page()
-    (DOCS / "leaderboard.html").unlink(missing_ok=True)
-    print("built canonical evidence site; download cleared:", bool(_candidate_download(load("run-card.json"))))
+    feed = load("feed.json")
+    hypotheses = load("hypotheses.json")
+    irregularities = load("irregularities.json")
+    sources = load("sources.json")
+    pages = {
+        "index.html": ("GEMSDOE66 overview", index_page(rc, feed)),
+        "feed.html": ("Project status feed", feed_page(feed)),
+        "submission-guide.html": ("Submission workflow", submission_page(rc)),
+        "analysis.html": ("H33 attribution", analysis_page(load("claims.json"))),
+        "hypotheses.html": ("Ranked hypotheses", hypotheses_page(hypotheses)),
+        "run-card.html": ("Current run card", run_card_page(rc)),
+        "irregularities.html": ("Audit findings", irregularities_page(irregularities)),
+        "sources.html": ("Sources and provenance", sources_page(sources)),
+        "h66-session.html": ("Historical H66 archive", archive_page(rc)),
+        "executive-summary.html": ("Executive summary", executive_page(rc)),
+    }
+    for filename, (title, body) in pages.items():
+        page(filename, title, body, filename)
+    (DOCS / "status-feed.json").write_text(json.dumps(feed, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

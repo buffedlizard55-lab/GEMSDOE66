@@ -1,9 +1,9 @@
 {
-  "generated_utc": "2026-10-11 (reviewed after phase-aware uniqueness patch)",
-  "template": "https://github.com/buffedlizard55-lab/60GEMSDOE (main, tarball sha recorded in registry/template_pin.json)",
-  "policy": "Reuse the canonical shared src/gems57 package; the phase-aware uniqueness corrections are made in its shared uniqueness.py and gates.py modules, not in a private evaluator fork. These branch changes are not claimed to be merged into the external owner-maintained template; no external PR or merge occurred.",
+  "generated_utc": "2026-10-11 (reconciled against current shared package and stored per-file comparison hashes)",
+  "template": "https://github.com/buffedlizard55-lab/60GEMSDOE; the live upstream revision/tarball digest was not independently verified in this checkout. Per-file template_sha256 values are retained as the historical comparison basis.",
+  "policy": "Reuse the canonical shared src/gems57 package. This repository contains local shared-package differences; no external owner-template PR/merge is claimed. The legacy research runner remains disabled until upstream/shared-tooling and release gates are reviewed.",
   "n_files": 23,
-  "n_identical": 21,
+  "n_identical": 19,
   "files": {
     "__init__.py": {
       "sha256": "bd7f12b45caf67b7b4d0da4656c7c3895513bec524ec0b7f251227ecbdd39d26",
@@ -12,10 +12,10 @@
       "bytes": 641
     },
     "anatomy.py": {
-      "sha256": "f47103ae0f615a0f04ef0427ea83ad2dd11ecd4af34e53b99f2e20e557025cf9",
+      "sha256": "adbbad445c65eb91d693d3a3698ddafa47f6cc9ce456bb8a48a80e76c6e560a3",
       "template_sha256": "f47103ae0f615a0f04ef0427ea83ad2dd11ecd4af34e53b99f2e20e557025cf9",
-      "identical": true,
-      "bytes": 20081
+      "identical": false,
+      "bytes": 20046
     },
     "damagezone_envelope.py": {
       "sha256": "5e5cc359f3ccc239a0906d96f642057461ae7928e967f02249b62dab2ac98a36",
@@ -60,10 +60,10 @@
       "bytes": 10707
     },
     "gates.py": {
-      "sha256": "48a1a6277bbe5b6725560e5f617002e4128032726b3c99f6f39b31b946a0b7e5",
+      "sha256": "c4b0253277ebb25051e43337aaf19d9d619e3ab7672c796b5527a5146ac7bca8",
       "template_sha256": "7c57f70dbba58bb1112df4193a3de56516af0f981970d4b943b394f99b573dae",
       "identical": false,
-      "bytes": 10497
+      "bytes": 10890
     },
     "geo.py": {
       "sha256": "4320d4fb718a66a794b21c35af28cc1f2ce7b6e49649b17e86b3e9eb34235ff8",
@@ -84,10 +84,10 @@
       "bytes": 14883
     },
     "metric.py": {
-      "sha256": "4afe10cbaa229948520c75194b1ebc32676e72544f05582f0725092b097b4d7f",
+      "sha256": "4b10227952378d30cc1a60781cdff6ea58916abadde3af3b14185176c66c13e0",
       "template_sha256": "4afe10cbaa229948520c75194b1ebc32676e72544f05582f0725092b097b4d7f",
-      "identical": true,
-      "bytes": 9895
+      "identical": false,
+      "bytes": 9914
     },
     "network.py": {
       "sha256": "d5e53d7df182e69bb22a6e39ac16f43d3f5b730e503d86538d5f8f7360020943",
@@ -132,10 +132,10 @@
       "bytes": 6387
     },
     "uniqueness.py": {
-      "sha256": "cee001e09c262777e4d6b8921e9f31aff8c42bdf35d50f154bb557a5dde13f6c",
+      "sha256": "480ec371decb829eeeba36a75372ac6f7489b475a2e74625cc9198a6dab05bc3",
       "template_sha256": "1c5094b814277ae801ccea6a47cf744429cffcdc10f9cc79f229d5fc44a8df95",
       "identical": false,
-      "bytes": 25523
+      "bytes": 31502
     },
     "validate.py": {
       "sha256": "e7849554b47f6a2b66aeb2f7cfd5db06267412f049f52a73f1c41f934a2c34dd",
@@ -149,7 +149,12 @@
       "src/gems57/uniqueness.py",
       "src/gems57/gates.py"
     ],
-    "reason": "Separate continuous-surface rank/pixel checks from final-dot overlap; use absolute Spearman and preserve fail-closed completeness/hash/pixel rules.",
-    "upstream_status": "not submitted or merged"
-  }
+    "reason": "This PR separates continuous-surface rank/pixel checks from final-dot overlap; recomputes absolute Spearman/overlap thresholds for cached rows; requires an explicit organizer-complete registry certificate plus matching expected-raster count before any full uniqueness pass; keeps density classification diagnostic only.",
+    "upstream_status": "not submitted or merged; live upstream revision not independently verified"
+  },
+  "comparison_limitations": "origin/main does not track registry/template_pin.json although the earlier provenance note referenced it. Current hashes are checked against the stored per-file template_sha256 values only; no live upstream clone or tarball comparison was performed in this reconciliation.",
+  "inherited_main_source_differences": [
+    "src/gems57/anatomy.py",
+    "src/gems57/metric.py"
+  ]
 }

@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
-"""Compatibility entry point for the former H66-specific site builder.
+"""Deprecated legacy entry point; delegate to the single safe site builder.
 
-All site output now comes from scripts/build_site.py and the single canonical
-run card. Keeping a wrapper prevents old automation from regenerating stale
-"download: yes" pages from registry/run_card.json.
+The previous generator exposed historical TIFF/ZIP downloads unconditionally.
+All current and legacy site builds now use scripts/build_site.py, which only
+advertises an artifact if a current run card explicitly clears it.
 """
 from __future__ import annotations
 
-from build_site import main as build_canonical_site
-
-
-def build() -> int:
-    build_canonical_site()
-    return 0
+from build_site import main
 
 
 if __name__ == "__main__":
-    raise SystemExit(build())
+    raise SystemExit(main())

@@ -154,8 +154,10 @@ def lane_uniqueness_report(candidate, footprint, priors=None, *, sample, phase,
     A caller must provide the pinned public owner-repository inventory
     manifest, not just `priors`. This inventory is not organizer-complete.
     The continuous-surface phase uses absolute Spearman and exact pixel/hash
-    checks; only emitted dots receive the 3-pixel forward-overlap gate. No
-    density exemption or reverse-overlap clearance is applied.
+    checks; only emitted dots receive the 3-pixel forward-overlap gate. The
+    ``ok`` result additionally requires an explicit organizer-complete registry
+    certificate; scanning every currently accessible owner-repository file is
+    not sufficient. No density exemption or reverse-overlap clearance is applied.
     """
     from .uniqueness import compare_array_to_registry
     if registry_index is None:
@@ -173,9 +175,12 @@ def lane_uniqueness_report(candidate, footprint, priors=None, *, sample, phase,
         expected_grid=expected, phase=phase_used,
         progress=(lambda i, n, row: log(f'{phase_used} registry gate {i}/{n}')) if log else None)
     return dict(report, phase=phase_used, legacy_phase_label=phase,
-                ok=report['unique'], duplicate=report['duplicate_count'] > 0,
+                ok=report['unique'],
+                unique_within_accessible_scan=report['unique_within_accessible_scan'],
+                complete_registry_pass=report['unique'],
+                duplicate=report['duplicate_count'] > 0,
                 policy_exemptions=[],
-                rule='absolute Spearman and exact pixel/hash at both phases; 3-pixel overlap on emitted dots only')
+                rule='absolute Spearman and exact pixel/hash at both phases; 3-pixel overlap on emitted dots only; ok requires a complete organizer-registry certificate')
 
 
 def lane_report(candidate, eligible, priors=None, *, sample, phase='dots',

@@ -1,24 +1,15 @@
 #!/usr/bin/env python3
-"""Historical H66 pipeline plus fail-closed research/release guards.
+"""Historical H66 experiment code — execution disabled after the 2026-10-11 audit.
 
-This file is not the requested native-resolution LIDAR-01 feature implementation. The current
-``s1`` decoder consumes a precomputed, quantized 12-band stack and a heuristic cultural/TMI
-proxy; its old outputs must not be relabeled as LIDAR-01. The revised ``s4`` requires an
-explicitly tagged top-hypothesis field, shared blocked evaluator, and research budget. ``s4b``
-is retired. ``s5`` writes only after strict input, holdout, leakage, frozen-best, complete
-registry, and official-grid gates pass.
+The former runner could use full-catalogue distance during holdout placement, used a
+holdout that did not meet the buffered whole-geologic-segment/LiDAR-only protocol, and
+wrote artifacts directly to docs/downloads instead of passing through a cleared shared
+writer path. Its old score claims are not qualified HOLDOUT-DTI. No stage is runnable
+from this entry point; preserve the code and evidence for audit, not candidate generation.
 
-Stages:
-
-  s0  verify every required input byte against an exact pin in ``registry/data_manifest.json``
-  s1  decode the historical stack and build its proxy channels (not native Steger/Frangi)
-  s2  historical off-catalogue diagnostic (not hidden-fault HOLDOUT-DTI)
-  s3  historical spatial-CV diagnostic (not hidden-fault HOLDOUT-DTI)
-  s4  shared buffered whole-component spatial holdout; requires a tagged LIDAR-01 proposal
-  s4b retired detector-only holdout arm
-  s5  release-gated shared-writer GeoTIFF + ZIP; cannot promote old H66 fields
-
-Usage: ``python scripts/run_h66.py s0 s1 s2 ...`` (default: all; ``s0`` always runs first)
+Use ``bash scripts/fetch_inputs.sh`` for a local presence check. Future experiments must
+use authorized inputs and corrected shared-template evaluator/writer tools. Do not fork
+those shared tools in this repository.
 """
 from __future__ import annotations
 
@@ -35,8 +26,6 @@ from scipy import ndimage as ndi
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gems import holdout as GHOLD                               # noqa: E402
-from gems57 import evaluate_holdout as EH57                      # noqa: E402
 from gems57 import grid as G57                                   # noqa: E402
 from gems57 import holdout as H57                                # noqa: E402
 from gems57 import metric as M57                                 # noqa: E402
@@ -55,6 +44,14 @@ BUDGETS = (12_000, 24_000, 37_654, 60_000)   # 37,654 = mass-matched to the live
 N_RANDOM = 5
 
 
+def _legacy_stage_disabled(stage: str) -> None:
+    raise RuntimeError(
+        f"legacy H66 stage {stage!r} is disabled after the 2026-10-11 audit; "
+        "do not generate or report a candidate from this pipeline. See "
+        "docs/review/2026-10-11-audit.md and fix shared template tools upstream."
+    )
+
+
 def sha256(p: Path) -> str:
     h = hashlib.sha256()
     with p.open("rb") as fh:
@@ -63,133 +60,48 @@ def sha256(p: Path) -> str:
     return h.hexdigest()
 
 
-def _array_sha256(value: np.ndarray) -> str:
-    """Hash an array's dtype, shape, and C-order bytes for evidence binding."""
-    arr = np.ascontiguousarray(value)
-    h = hashlib.sha256()
-    h.update(arr.dtype.str.encode("ascii"))
-    h.update(np.asarray(arr.shape, dtype="<i8").tobytes())
-    h.update(arr.tobytes())
-    return h.hexdigest()
-
-
-def _candidate_field_hashes(score, score_unvetoed, dom, veto) -> dict[str, str]:
-    """Bind holdout/release evidence to the exact score/mask arrays used for emission."""
-    return {
-        "score": _array_sha256(np.asarray(score, np.float32)),
-        "score_unvetoed": _array_sha256(np.asarray(score_unvetoed, np.float32)),
-        "dom": _array_sha256(np.asarray(dom, bool)),
-        "veto": _array_sha256(np.asarray(veto, bool)),
-    }
-
-
 def now() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
 # ----------------------------------------------------------------------------- s0
-REQUIRED_H66_INPUTS = (
-    "training_features.tif",
-    "bridge/labels.tif",
-    "bridge/existing_faults.tif",
-    "bridge/sample_submission.tif",
-    "external/lidar_scarp_features_u8.tif",
-    "external/lidar_scarp_features.json",
-    "external/geodawn_extensions_u8.tif",
-    "external/derived_sgmc_faults_100m_u8.tif",
-    "external/topo_10m_derived_100m_u8.tif",
-)
-BUDGETED_STAGES = {"s1", "s2", "s3", "s4", "s4b"}
-_INPUTS_VERIFIED = False
-
-
-def _manifest_rel(raw: str) -> str:
-    """Normalize the manifest's repository-relative path to a data-dir relative path."""
-    value = str(raw).replace("\\", "/").strip("/")
-    return value[5:] if value.startswith("data/") else value
-
-
-def s0_verify(st=None, *, data_dir: Path | None = None, manifest_path: Path | None = None,
-              evidence_dir: Path | None = None) -> dict:
-    """Fail closed unless every H66 runtime input exists and has an exact manifest pin.
-
-    A sweep over files that happen to exist cannot prove completeness: missing roles and
-    unpinned required rasters are first-class failures. Owner-side receipts are not silently
-    promoted into input pins.
-    """
-    data_dir = Path(data_dir or DATA)
-    manifest_path = Path(manifest_path or ROOT / "registry" / "data_manifest.json")
-    evidence_dir = Path(evidence_dir or EV)
-    pins = json.loads(manifest_path.read_text(encoding="utf-8"))
-    entries: dict[str, list[dict]] = {}
-    for item in pins.get("files", []):
-        for raw in (item.get("path"), item.get("dest")):
-            if raw:
-                entries.setdefault(_manifest_rel(raw), []).append(item)
-
-    out = {"generated_utc": now(), "required_inputs": list(REQUIRED_H66_INPUTS),
-           "checked": {}, "missing": [], "missing_pins": [], "mismatch": [], "pin_conflicts": [],
-           "ok": False}
-    for rel in REQUIRED_H66_INPUTS:
-        path = data_dir / rel
-        records = entries.get(rel, [])
-        raw_hashes = [rec.get("sha256") for rec in records]
-        hashes = sorted({value.lower() for value in raw_hashes
-                         if isinstance(value, str) and len(value) == 64
-                         and all(char in "0123456789abcdefABCDEF" for char in value)})
-        pin_invalid = not records or any(
-            not isinstance(value, str) or len(value) != 64
-            or any(char not in "0123456789abcdefABCDEF" for char in value)
-            for value in raw_hashes)
-        if pin_invalid:
-            out["missing_pins"].append(rel)
-        if len(hashes) > 1:
-            out["pin_conflicts"].append(rel)
-        if not path.is_file():
-            out["missing"].append(rel)
-            out["checked"][rel] = {"present": False, "pinned": hashes or None, "match": False}
-            continue
+def s0_verify(st=None) -> dict:
+    _legacy_stage_disabled("s0")
+    pins = json.loads((ROOT / "registry" / "data_manifest.json").read_text())
+    # keyed by BOTH the manifest dest and the basename, because the bridge re-files the
+    # core rasters under data/bridge/ while the manifest records their original dest.
+    want = {}
+    for f in pins["files"]:
+        if f.get("dest"):
+            want[f["dest"]] = f["sha256"]
+            want[Path(f["dest"]).name] = f["sha256"]
+    out = {"generated_utc": now(), "checked": {}, "missing": [], "mismatch": []}
+    local = {}
+    for p in list(DATA.rglob("*.tif")) + list(DATA.rglob("*.json")):
+        local[str(p.relative_to(DATA))] = p
+    for dest, path in sorted(local.items()):
+        exp = want.get(dest) or want.get(path.name)
         got = sha256(path)
-        rec = {"present": True, "sha256": got, "bytes": path.stat().st_size,
-               "pinned": hashes[0] if len(hashes) == 1 else hashes or None,
-               "match": False}
-        if not pin_invalid and len(hashes) == 1:
-            rec["match"] = got == hashes[0]
-            if got != hashes[0]:
-                out["mismatch"].append(rel)
-        out["checked"][rel] = rec
-    out["ok"] = not any(out[k] for k in ("missing", "missing_pins", "mismatch", "pin_conflicts"))
-    evidence_dir.mkdir(parents=True, exist_ok=True)
-    (evidence_dir / "h66_inputs.json").write_text(json.dumps(out, indent=2, allow_nan=False) + "\n")
-    global _INPUTS_VERIFIED
-    _INPUTS_VERIFIED = bool(out["ok"])
+        rec = {"sha256": got, "pinned": exp, "match": (exp == got) if exp else None,
+               "bytes": path.stat().st_size}
+        if exp is None:                                  # second-tier pins: sibling receipts
+            for side in sorted(DATA.rglob("*.json")):
+                try:
+                    blob = side.read_text()
+                except UnicodeDecodeError:
+                    continue
+                if got in blob:
+                    rec.update(match=True, pinned=f"sha256 found verbatim in {side.relative_to(DATA)}")
+                    break
+        out["checked"][dest] = rec
+        if exp is None:
+            rec["note"] = "not in the pinned manifest"
+        elif exp != got:
+            out["mismatch"].append(dest)
+    out["ok"] = not out["mismatch"]
+    (EV / "h66_inputs.json").write_text(json.dumps(out, indent=2) + "\n")
+    assert out["ok"], f"hash mismatch: {out['mismatch']}"
     return out
-
-
-def _research_budget_available(card_path: Path | None = None) -> tuple[bool, str]:
-    """Use the canonical card as a hard stop; no experiment starts when either budget is spent."""
-    card_path = Path(card_path or ROOT / "docs" / "data" / "run-card.json")
-    if not card_path.is_file():
-        return False, "canonical run card is missing"
-    try:
-        budget = json.loads(card_path.read_text(encoding="utf-8"))["budget"]
-        used, limit = int(budget["holdout_experiments_used"]), int(budget["max_holdout_experiments"])
-        hours, hour_limit = float(budget["wall_time_hours_reported"]), float(budget["max_wall_time_hours"])
-    except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
-        return False, f"budget record is invalid: {exc}"
-    if used >= limit or hours >= hour_limit:
-        return False, f"research budget exhausted ({used}/{limit} experiments; {hours:g}/{hour_limit:g} hours)"
-    return True, "budget remains"
-
-
-def _stage_preflight(stage: str) -> None:
-    """Prevent direct function calls from bypassing s0 or the canonical research budget."""
-    if not _INPUTS_VERIFIED:
-        raise RuntimeError(f"{stage} blocked: strict s0 input verification has not passed in this process")
-    if stage in BUDGETED_STAGES:
-        allowed, reason = _research_budget_available()
-        if not allowed:
-            raise RuntimeError(f"{stage} blocked before execution: {reason}")
 
 
 # ----------------------------------------------------------------------------- shared state
@@ -214,7 +126,7 @@ def lidar_domain(st) -> np.ndarray:
 
 # ----------------------------------------------------------------------------- s1
 def s1_channels(st) -> dict:
-    _stage_preflight("s1")
+    _legacy_stage_disabled("s1")
     dom = lidar_domain(st)
     ch = C66.build_channels(EXT, dom, lid_min=LID_MIN)
     cul = C66.cultural_mask(ch, dom, EXT)
@@ -250,9 +162,7 @@ def s1_channels(st) -> dict:
         a = float(roc_auc_score(lab, v))
         canary[name] = dict(auc=round(a, 4), auc_reflected=round(max(a, 1 - a), 4),
                             verdict="LEAKAGE-SUSPECT" if max(a, 1 - a) > 0.90 else "ok")
-    rep = dict(generated_utc=now(), evidence_class="FEATURE-AUC-DIAGNOSTIC; not HOLDOUT-DTI",
-               diagnostic_target="public-catalogue proximity inside the lidar-covered footprint; not hidden expert test labels",
-               canary_clearance="NOT CLEARED: this diagnostic is not the required feature-alone held-out-fault canary",
+    rep = dict(generated_utc=now(), evidence_class="UNQUALIFIED_LEGACY_INSTRUMENT_NOT_HOLDOUT_DTI",
                lidar_covered_cells=int(dom.sum()), lidar_fraction_of_footprint=round(float(dom.sum() / st['dom'].sum()), 4),
                positive_control=dict(name="distance-to-catalogue itself",
                                      auc=round(float(roc_auc_score(lab, -st["dcat"][ys, xs])), 4),
@@ -348,14 +258,13 @@ def _random_dots(dom: np.ndarray, elig: np.ndarray, n: int, seed: int) -> np.nda
 
 # ----------------------------------------------------------------------------- s2
 def s2_e1(st) -> dict:
-    """E1 -- the population-matched, off-catalogue first test of the veto."""
-    _stage_preflight("s2")
+    """E1 -- historical population-matched proxy; disabled after audit."""
+    _legacy_stage_disabled("s2")
     f = np.load(EV / "h66_fields.npz")
     score, unvet, veto, dom = f["score"], f["score_unvetoed"], f["veto"], f["dom"]
     elig = dom & (st["dcat"] > CAT_SEP_PX)
     truth = _offcat_truth(st, dom)
-    rep = {"generated_utc": now(), "evidence_class": "OFF-CATALOGUE SGMC PROXY INSTRUMENT; not HOLDOUT-DTI",
-           "not_a_competition_score": True,
+    rep = {"generated_utc": now(), "evidence_class": "UNQUALIFIED_LEGACY_PROXY_NOT_HOLDOUT_DTI",
            "instrument": "pooled DTI + credit/dot of a binary emission against USGS SGMC mapped "
                          "faults that lie >300 m from the competition catalogue, inside the "
                          "lidar-covered footprint, catalogue cells excluded from scoring (gems57)",
@@ -381,8 +290,8 @@ def s2_e1(st) -> dict:
 
 # ----------------------------------------------------------------------------- s3
 def s3_retrain(st) -> dict:
-    """Retrain under spatial CV: does the cultural index carry independent information?"""
-    _stage_preflight("s3")
+    """Historical spatial-CV code; disabled after the 2026-10-11 audit."""
+    _legacy_stage_disabled("s3")
     from sklearn.linear_model import LogisticRegression
     from sklearn.metrics import roc_auc_score
     f = np.load(EV / "h66_fields.npz")
@@ -438,10 +347,8 @@ def s3_retrain(st) -> dict:
         raise SystemExit("s3: fewer than 2 usable spatial blocks -- refusing to report a CV AUC")
     out = dict(n_folds_used=len(rows.get("channels_only", [])), generated_utc=now(), label="cell within 100 m of a mapped catalogue fault, lidar-covered footprint",
                cv="4 disjoint 20 km spatial blocks (train off-block, score on-block)",
-               auc={k: dict(mean=float(np.mean(v)), fold_sd=float(np.std(v)), ci95=None,
-                            ci95_status="not computed; folds are not an independent sampling distribution",
+               auc={k: dict(mean=float(np.mean(v)), ci95=[float(np.mean(v) - 1.96 * np.std(v)), float(np.mean(v) + 1.96 * np.std(v))],
                             folds=[round(x, 4) for x in v]) for k, v in rows.items()},
-               evidence_class="SPATIAL-CV AUC DIAGNOSTIC; not HOLDOUT-DTI or a competition score",
                delta_auc_channels_plus_cultural_minus_channels_only=round(
                    float(np.mean(rows["channels_plus_cultural"]) - np.mean(rows["channels_only"])), 5),
                fold_coefficients=sub, leakage_note="label is the public catalogue; the lane field itself is catalogue-free, "
@@ -452,549 +359,183 @@ def s3_retrain(st) -> dict:
 
 
 # ----------------------------------------------------------------------------- s4
-HOLDOUT_BLOCK_PX = 200       # 20 km at the 100 m score grid
-HOLDOUT_SEEDS = (20, 21)
-HOLDOUT_PROTOCOL_ID = "gems66-buffered-whole-component-block-v1"
-EXPECTED_TOP_HYPOTHESIS_ID = "LIDAR-01"
-FROZEN_BEST_RECORD = ROOT / "registry" / "frozen_holdout_best.json"
-REGISTRY_INDEX = ROOT / "evidence" / "registry_full_index.json"
-
-
-def _feature_planes(fields) -> dict[str, np.ndarray]:
-    """Read the candidate's explicit, exhaustive feature manifest for leakage canaries.
-
-    Each feature entering the candidate must be stored as ``feature__<name>`` and named in
-    the one-dimensional ``feature_manifest`` array. This avoids silently testing only the
-    legacy H66 channels when the proposed native-resolution LIDAR-01 feature set changes.
-    """
-    keys = set(getattr(fields, "files", fields.keys() if hasattr(fields, "keys") else ()))
-    if "feature_manifest" not in keys:
-        raise ValueError("candidate lacks the exhaustive feature_manifest required for leakage canaries")
-    raw_names = np.asarray(fields["feature_manifest"])
-    if raw_names.ndim != 1 or not raw_names.size:
-        raise ValueError("feature_manifest must be a non-empty one-dimensional list")
-    names = [str(value) for value in raw_names.tolist()]
-    if any(not name or name == "None" for name in names) or len(set(names)) != len(names):
-        raise ValueError("feature_manifest contains empty or duplicate feature names")
-    expected_keys = {f"feature__{name}" for name in names}
-    actual_keys = {key for key in keys if key.startswith("feature__")}
-    if actual_keys != expected_keys:
-        missing = sorted(expected_keys - actual_keys)
-        extra = sorted(actual_keys - expected_keys)
-        raise ValueError(f"feature_manifest/feature planes disagree; missing={missing}, extra={extra}")
-    result = {}
-    for name in names:
-        plane = np.asarray(fields[f"feature__{name}"], np.float32)
-        if plane.ndim != 2:
-            raise ValueError(f"feature {name!r} must be a 2-D raster")
-        result[name] = plane
-    return result
-
-
-def _holdout_feature_auc(fields, split: dict, dom: np.ndarray, seed: int) -> dict:
-    """AUC for each feature alone against actual held fault pixels in the blocked split.
-
-    Negatives are sampled only from the same held blocks after visible known faults are
-    excluded. This is a leakage canary, not a competition score or a model-performance
-    estimate. The split's 8-connected components are a disclosed segment proxy when
-    authoritative fault-segment IDs are unavailable.
-    """
-    from sklearn.metrics import roc_auc_score
-
-    region = np.asarray(split["held_block"], bool) & np.asarray(dom, bool)
-    truth = np.asarray(split["holdout"], bool) & region
-    known = np.asarray(split["visible"], bool)
-    # Include the buffer-dropped mapped pixels among known negatives exclusions.
-    known_all = np.asarray(split["masked_known"], bool)
-    positive = np.flatnonzero(truth)
-    negative = np.flatnonzero(region & ~known_all & ~truth)
-    if positive.size == 0 or negative.size < 20:
-        return {"status": "INCONCLUSIVE", "n_positive": int(positive.size),
-                "n_negative_available": int(negative.size), "features": {}}
-    n_negative = min(int(negative.size), max(5000, 5 * int(positive.size)))
-    rng = np.random.default_rng(60_660_000 + int(seed))
-    chosen_negative = rng.choice(negative, size=n_negative, replace=False)
-    labels = np.concatenate([np.ones(positive.size, np.uint8), np.zeros(n_negative, np.uint8)])
-    features = {}
-    for name, plane in _feature_planes(fields).items():
-        plane = np.asarray(plane, np.float32)
-        if plane.shape != dom.shape:
-            raise ValueError(f"feature {name!r} grid shape differs from the holdout")
-        values = plane.ravel()
-        sampled = np.concatenate([values[positive], values[chosen_negative]])
-        if not np.isfinite(sampled).all() or np.ptp(sampled) == 0:
-            features[name] = {"auc": None, "auc_reflected": None,
-                              "status": "INCONCLUSIVE — constant or non-finite feature"}
-            continue
-        auc = float(roc_auc_score(labels, sampled))
-        reflected = max(auc, 1.0 - auc)
-        features[name] = {"auc": auc, "auc_reflected": reflected,
-                          "status": "LEAKAGE-SUSPECT" if reflected > 0.90 else "below threshold"}
-    tested = [v["auc_reflected"] for v in features.values() if v["auc_reflected"] is not None]
-    return {"status": "MEASURED" if tested and all(v["auc_reflected"] is not None for v in features.values())
-            else "INCONCLUSIVE", "n_positive": int(positive.size),
-            "n_negative_sampled": int(n_negative), "n_negative_available": int(negative.size),
-            "features": features, "max_auc_reflected": max(tested) if tested else None}
-
-
-def _frozen_best() -> tuple[np.ndarray | None, dict]:
-    """Load a byte-pinned frozen holdout-best raster; do not infer it from a score claim."""
-    if not FROZEN_BEST_RECORD.is_file():
-        return None, {"available": False, "reason": "registry/frozen_holdout_best.json is absent"}
-    try:
-        record = json.loads(FROZEN_BEST_RECORD.read_text(encoding="utf-8"))
-        rel = record["file"]
-        path = Path(rel)
-        if not path.is_absolute():
-            path = ROOT / path
-        expected = record["sha256"]
-        evaluator = record["evaluator_version"]
-        if evaluator != EH57.VERSION:
-            return None, {"available": False, "reason": "frozen-best evaluator version differs",
-                          "recorded_evaluator_version": evaluator}
-        if not path.is_file() or sha256(path) != expected:
-            return None, {"available": False, "reason": "frozen-best file missing or SHA-256 mismatch"}
-        with rasterio.open(path) as ds:
-            if (ds.count != 1 or ds.shape != G57.SHAPE or ds.crs is None
-                    or ds.crs.to_epsg() != 32611 or ds.transform != G57.TRANSFORM):
-                return None, {"available": False, "reason": "frozen-best raster grid is invalid"}
-            arr = ds.read(1).astype(np.float32)
-        finite = arr[np.isfinite(arr)]
-        if not finite.size or (finite < 0.0).any() or (finite > 1.0).any():
-            return None, {"available": False, "reason": "frozen-best values are invalid"}
-        arr[~np.isfinite(arr)] = 0.0
-        return arr, {"available": True, "file": str(path.relative_to(ROOT)),
-                     "sha256": expected, "evaluator_version": evaluator,
-                     "name": record.get("name", "frozen_holdout_best")}
-    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
-        return None, {"available": False, "reason": f"invalid frozen-best receipt: {exc}"}
-
-
 def s4_e2_holdout(st) -> dict:
-    """Evaluate a tagged H66 candidate on buffered whole-component spatial blocks.
-
-    Uses the shared ``gems.holdout.spatial_block_holdout`` splitter and the shared
-    ``gems57.evaluate_holdout`` pooled metric/bootstrap. It is intentionally protected by
-    the project research-budget guard and cannot validate untagged historical fields.
-    """
-    _stage_preflight("s4")
-    fields = np.load(EV / "h66_fields.npz")
-    if "hypothesis_id" not in fields:
-        raise RuntimeError("s4 refuses historical H66 fields: no top-hypothesis candidate manifest/ID")
-    candidate_id = str(np.asarray(fields["hypothesis_id"]).item())
-    if candidate_id != EXPECTED_TOP_HYPOTHESIS_ID:
-        raise RuntimeError(f"s4 candidate {candidate_id!r} is not the registered top hypothesis {EXPECTED_TOP_HYPOTHESIS_ID}")
-    score = np.asarray(fields["score"], np.float32)
-    unvetoed = np.asarray(fields["score_unvetoed"], np.float32)
-    dom_raw = np.asarray(fields["dom"], bool)
-    veto = np.asarray(fields["veto"], bool)
-    if any(a.shape != st["grid"].shape for a in (score, unvetoed, dom_raw, veto)):
-        raise ValueError("s4 candidate feature/mask shapes differ from the official grid")
-    if not np.isfinite(score).all() or not np.isfinite(unvetoed).all():
-        raise ValueError("s4 refuses non-finite feature fields")
-    candidate_field_hashes = _candidate_field_hashes(score, unvetoed, dom_raw, veto)
-    dom = dom_raw & st["grid"].footprint
-    frozen, frozen_record = _frozen_best()
-    arm_terms: dict[str, np.ndarray] = {}
-    split_receipts, canary_splits = [], []
-    for seed in HOLDOUT_SEEDS:
-        split = GHOLD.spatial_block_holdout(
-            st["grid"].catalogue, dom, block_px=HOLDOUT_BLOCK_PX, holdout_fraction=0.20,
-            buffer_px=3, seed=seed, min_lidar_fraction=LID_MIN)
-        if not split["holdout_fault_cells"] or not split["held_block"].any():
-            raise ValueError(f"seed {seed}: no lidar-covered held-out positives")
-        # Catalogue-derived eligibility is recomputed from visible faults only. Hidden
-        # catalogue pixels are never used to exclude predictions in their own test fold.
-        d_visible = ndi.distance_transform_edt(~split["visible"]).astype(np.float32)
-        eligible = dom & (d_visible > CAT_SEP_PX)
-        if int(eligible.sum()) < 37_654:
-            raise ValueError(f"seed {seed}: only {int(eligible.sum())} eligible cells for the fixed 37,654-dot budget")
-        candidate = _pick(score, eligible, 37_654)
-        controls = {
-            "h66_unvetoed": _pick(unvetoed, eligible, 37_654),
-            "mass_matched_random": _random_dots(dom, eligible, 37_654, 4242 + seed),
-        }
-        predictions = {"h66_candidate": candidate, **controls}
-        if frozen is not None:
-            predictions["frozen_holdout_best"] = frozen
-        fold = {
-            "region": split["held_block"],
-            "truth": split["holdout"],
-            "visible": split["visible"],
-            "masked_known": st["grid"].catalogue & ~split["held_segment"],
-        }
-        for arm, prediction in predictions.items():
-            result, terms = EH57.evaluate(
-                prediction, fold, valid=dom, block_side=HOLDOUT_BLOCK_PX,
-                origin=(0, 0), global_shape=dom.shape)
-            if arm not in arm_terms:
-                arm_terms[arm] = np.zeros_like(terms)
-            arm_terms[arm] += terms
-        canary_splits.append({"seed": seed,
-                              **_holdout_feature_auc(fields, split, dom, seed)})
-        split_receipts.append({
-            "seed": seed, "splitter": "gems.holdout.spatial_block_holdout",
-            "segment_id_source": split["segment_id_source"],
-            "held_blocks": split["held_block_ids"],
-            "held_segments": split["held_segment_ids"],
-            "eligible_blocks": split["eligible_block_count"],
-            "withheld_positive_pixels_in_lidar_covered_blocks": split["holdout_fault_cells"],
-            "whole_held_segment_pixels": split["held_segment_fault_cells"],
-            "buffer_dropped_visible_pixels": split["buffer_dropped_cells"],
-            "buffer_px": 3, "block_px": HOLDOUT_BLOCK_PX,
-            "visible_pixels_masked_exactly": int((st["grid"].catalogue & ~split["held_segment"]).sum()),
-            "catalogue_distance_source": "visible mask only"})
-
-    summary = EH57.pooled_summary(arm_terms, draws=1000, seed=66_2026,
-                                  candidate="h66_candidate")
-    all_feature_names = sorted(set().union(*(set(x.get("features", {})) for x in canary_splits)))
-    max_by_feature = {}
-    for name in all_feature_names:
-        vals = [row.get("features", {}).get(name, {}).get("auc_reflected") for row in canary_splits]
-        max_by_feature[name] = max(vals) if vals and all(v is not None for v in vals) else None
-    canary_complete = bool(max_by_feature) and all(v is not None for v in max_by_feature.values())
-    canary_max = max((v for v in max_by_feature.values() if v is not None), default=None)
-    canary_status = ("PASS" if canary_complete and canary_max <= 0.90 else
-                     "LEAKAGE-SUSPECT" if canary_max is not None and canary_max > 0.90 else
-                     "INCONCLUSIVE")
-    score_rows = summary["scores"]
-    diffs = summary["paired_differences"]
-    frozen_diff = diffs.get("frozen_holdout_best")
-    frozen_win = bool(frozen_record.get("available") and frozen_diff and
-                      frozen_diff.get("ci95") and frozen_diff["ci95"][0] > 0.0)
-    out = {
-        "generated_utc": now(), "evidence_class": "HOLDOUT-DTI",
-        "protocol_id": HOLDOUT_PROTOCOL_ID,
-        "evaluator_version": EH57.VERSION,
-        "splitter": "gems.holdout.spatial_block_holdout (8-connected whole-component proxy; 20 km blocks; 3 px buffer)",
-        "metric": {"alpha": summary["alpha"], "beta": summary["beta"],
-                   "triangular_radius_m": summary["triangular_radius_m"]},
-        "hypothesis_id": candidate_id,
-        "candidate_arm": "h66_candidate",
-        "candidate_field_hashes": candidate_field_hashes,
-        "candidate": score_rows["h66_candidate"],
-        "withheld_positive_count": score_rows["h66_candidate"]["withheld_positive_pixels"],
-        "scores": score_rows,
-        "paired_differences": diffs,
-        "bootstrap": summary["bootstrap"],
-        "frozen_holdout_best": {**frozen_record, "candidate_beats_best_with_paired_ci": frozen_win,
-                                 "paired_difference": frozen_diff},
-        "feature_alone_leakage_canary": {
-            "rule": "AUC >0.90 on held-out faults is leakage until disproven",
-            "status": canary_status, "max_auc_reflected": canary_max,
-            "per_feature_max_auc_reflected": max_by_feature,
-            "per_split": canary_splits,
-            "not_a_dti_score": True},
-        "split_receipts": split_receipts,
-        "range_front_stratification": {
-            "status": "NOT RUN — no validated range-front polygon was available; do not use the historical slope/relief proxy as a geographic truth.",
-            "values": None},
-        "gates": {
-            "candidate_beats_frozen_holdout_best": frozen_win,
-            "feature_alone_canary_pass": canary_status == "PASS",
-            "ci95_present": bool(score_rows["h66_candidate"].get("ci95")),
-        },
-        "source_hashes": {
-            "runner_sha256": sha256(Path(__file__).resolve()),
-            "shared_holdout_sha256": sha256(ROOT / "src" / "gems" / "holdout.py"),
-            "shared_evaluator_sha256": sha256(ROOT / "src" / "gems57" / "evaluate_holdout.py"),
-        },
-        "not_a_leaderboard_score": True,
-    }
-    (EV / "h66_e2_holdout.json").write_text(json.dumps(out, indent=2, allow_nan=False) + "\n")
+    _legacy_stage_disabled("s4")
+    f = np.load(EV / "h66_fields.npz")
+    score, unvet, veto, dom = f["score"], f["score_unvetoed"], f["veto"], f["dom"]
+    N = 37_654
+    elig = dom & (st["dcat"] > CAT_SEP_PX)
+    arms = {"h66_vetoed": _pick(score, elig, N),
+            "h66_unvetoed": _pick(unvet, elig, N),
+            "h66_random_mass_matched": _random_dots(dom, elig, N, 4242)}
+    champ_path = ROOT / "registry/rasters/GEMSDOE32__h33-2-b2-zeros.tif"
+    if champ_path.exists():
+        with rasterio.open(champ_path) as ds:
+            arms["champion_h33_2_b2"] = ds.read(1) > 0
+    ctx = H57.build_holdout(st["grid"])
+    res = {}
+    for name, dots in arms.items():
+        r = H57.evaluate(dots, ctx)
+        res[name] = {k: r[k] for k in ("emitted_pixels", "on_visible_catalogue", "pooled_dti",
+                                       "pooled_coverage", "pooled_tp", "pooled_fp", "pooled_fn",
+                                       "pooled_n_truth", "mean_fold_dti", "std_fold_dti", "per_quadrant_dti")}
+    # range-front stratification: is the gain confined to range fronts?
+    slope = __import__("gems66.spec66", fromlist=["topo_band"]).topo_band(EXT / "topo_10m_derived_100m_u8.tif", "slope_p90")
+    rel = __import__("gems66.spec66", fromlist=["topo_band"]).topo_band(EXT / "topo_10m_derived_100m_u8.tif", "relief_local")
+    front = dom & (slope >= np.quantile(slope[dom], 0.90)) & (rel >= np.quantile(rel[dom], 0.80))
+    strat = {}
+    for name, dots in arms.items():
+        strat[name] = {}
+        for tag, m in (("near_front", front), ("off_front", dom & ~front)):
+            r = H57.evaluate(dots & m, ctx)
+            strat[name][tag] = dict(pooled_dti=r["pooled_dti"], dots=int((dots & m).sum()),
+                                    coverage=r["pooled_coverage"])
+    gate = dict(veto_minus_unveto_holdout=round(res["h66_vetoed"]["pooled_dti"] - res["h66_unvetoed"]["pooled_dti"], 6),
+                off_front_veto_minus_unveto=round(strat["h66_vetoed"]["off_front"]["pooled_dti"]
+                                                  - strat["h66_unvetoed"]["off_front"]["pooled_dti"], 6),
+                near_front_veto_minus_unveto=round(strat["h66_vetoed"]["near_front"]["pooled_dti"]
+                                                    - strat["h66_unvetoed"]["near_front"]["pooled_dti"], 6))
+    out = dict(generated_utc=now(), evidence_class="UNQUALIFIED_LEGACY_HOLDOUT_PROXY_NOT_HOLDOUT_DTI",
+               evaluator="gems57-pooled-hide-v2 (4 spatial quadrants x 2 seeds x {all,detached}, whole-segment "
+                         "withholding, visible faults masked pixel-exactly, alpha=0.2 beta=0.8, 300 m triangular)",
+               withheld_positive_pixels=res["h66_vetoed"]["pooled_n_truth"],
+               budget=N, range_front_proxy="lidar-covered cells with 10 m slope_p90 >= p90 and relief_local >= p80",
+               results=res, stratified=strat, gate=gate,
+               caveat="the registered holdout's truth IS the catalogue, so it is structurally blind to "
+                      "off-catalogue placement (IR-INSTR-01, rho=+0.14 vs 12 live owner-reported scores)")
+    (EV / "h66_e2_holdout.json").write_text(json.dumps(out, indent=2) + "\n")
     return out
 
 
-def s4b_detector_holdout(st) -> dict:
-    _stage_preflight("s4b")
-    raise RuntimeError("s4b is retired: the detector arm is not the emitted policy. Use the single s4 whole-segment blocked holdout after a separately authorized budget reset.")
-
-
-def _release_evidence_failures() -> list[str]:
-    """Return every missing/failed evidence gate. This check must run before any TIFF write."""
-    failures = []
-    try:
-        inputs = json.loads((EV / "h66_inputs.json").read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        inputs = {}
-    if not isinstance(inputs, dict):
-        inputs = {}
-    if inputs.get("ok") is not True:
-        failures.append("required H66 input bytes/pins are missing or mismatched")
-    try:
-        holdout = json.loads((EV / "h66_e2_holdout.json").read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        holdout = {}
-    if not isinstance(holdout, dict):
-        holdout = {}
-
-    if holdout.get("protocol_id") != HOLDOUT_PROTOCOL_ID:
-        failures.append("required buffered whole-component spatial holdout is missing")
-    if holdout.get("hypothesis_id") != EXPECTED_TOP_HYPOTHESIS_ID or holdout.get("candidate_arm") != "h66_candidate":
-        failures.append("holdout is not for the registered top-hypothesis candidate arm")
-    if holdout.get("evidence_class") != "HOLDOUT-DTI" or holdout.get("evaluator_version") != EH57.VERSION:
-        failures.append("required shared HOLDOUT-DTI evaluator result/version is missing")
-
-    metric = holdout.get("metric", {})
-    if not isinstance(metric, dict):
-        metric = {}
-    if (metric.get("alpha") != M57.ALPHA or metric.get("beta") != M57.BETA
-            or metric.get("triangular_radius_m") != M57.R_M):
-        failures.append("holdout metric parameters do not match the shared competition DTI")
-    receipts = holdout.get("split_receipts")
-    if (not isinstance(receipts, list)
-            or {r.get("seed") for r in receipts if isinstance(r, dict)} != set(HOLDOUT_SEEDS)
-            or any(not isinstance(r, dict) or r.get("buffer_px") != 3
-                   or r.get("block_px") != HOLDOUT_BLOCK_PX
-                   or r.get("catalogue_distance_source") != "visible mask only"
-                   or not isinstance(r.get("withheld_positive_pixels_in_lidar_covered_blocks"), int)
-                   or r.get("withheld_positive_pixels_in_lidar_covered_blocks", 0) <= 0
-                   for r in receipts)):
-        failures.append("holdout split receipts do not prove both buffered lidar-covered spatial folds")
-
-    candidate = holdout.get("candidate", {})
-    if not isinstance(candidate, dict):
-        candidate = {}
-    ci = candidate.get("ci95")
-    is_number = lambda x: isinstance(x, (int, float)) and not isinstance(x, bool) and np.isfinite(x)
-    count = candidate.get("withheld_positive_pixels")
-    dti = candidate.get("dti")
-    ci_ok = (isinstance(ci, list) and len(ci) == 2 and all(is_number(x) and 0.0 <= x <= 1.0 for x in ci)
-             and ci[0] <= ci[1])
-    if (candidate.get("evidence_class") != "HOLDOUT-DTI"
-            or candidate.get("evaluator_version") != EH57.VERSION
-            or not isinstance(count, int) or isinstance(count, bool) or count <= 0
-            or holdout.get("withheld_positive_count") != count
-            or not is_number(dti) or not 0.0 <= dti <= 1.0
-            or not ci_ok):
-        failures.append("candidate HOLDOUT-DTI value, evaluator, positive count, or 95% CI is missing/invalid")
-
-    hashes = holdout.get("candidate_field_hashes", {})
-    required_hashes = {"score", "score_unvetoed", "dom", "veto"}
-    hashes_ok = (isinstance(hashes, dict) and set(hashes) == required_hashes
-                 and all(isinstance(v, str) and len(v) == 64
-                         and all(c in "0123456789abcdef" for c in v.lower()) for v in hashes.values()))
-    if not hashes_ok:
-        failures.append("holdout is not bound to the exact candidate score/domain/veto field hashes")
-
-    source_hashes = holdout.get("source_hashes", {})
-    if not isinstance(source_hashes, dict):
-        source_hashes = {}
-    current_hashes = {
-        "runner_sha256": sha256(Path(__file__).resolve()),
-        "shared_holdout_sha256": sha256(ROOT / "src" / "gems" / "holdout.py"),
-        "shared_evaluator_sha256": sha256(ROOT / "src" / "gems57" / "evaluate_holdout.py"),
-    }
-    if any(source_hashes.get(key) != value for key, value in current_hashes.items()):
-        failures.append("holdout source hashes do not match the current runner/shared evaluator")
-
-    frozen = holdout.get("frozen_holdout_best", {})
-    if not isinstance(frozen, dict):
-        frozen = {}
-    diff = frozen.get("paired_difference") or {}
-    if not isinstance(diff, dict):
-        diff = {}
-    diff_ci = diff.get("ci95")
-    diff_ci_ok = (isinstance(diff_ci, list) and len(diff_ci) == 2
-                  and all(is_number(x) and -1.0 <= x <= 1.0 for x in diff_ci)
-                  and diff_ci[0] <= diff_ci[1])
-    current_best, current_best_record = _frozen_best()
-    if not isinstance(current_best_record, dict):
-        current_best_record = {}
-    frozen_matches_current = (
-        current_best is not None and current_best_record.get("available") is True
-        and frozen.get("sha256") == current_best_record.get("sha256")
-        and frozen.get("evaluator_version") == EH57.VERSION
-        and frozen.get("file") == current_best_record.get("file"))
-    if (frozen.get("available") is not True or not frozen_matches_current
-            or frozen.get("candidate_beats_best_with_paired_ci") is not True
-            or diff.get("evidence_class") != "HOLDOUT-DTI" or not diff_ci_ok or diff_ci[0] <= 0.0
-            or diff.get("withheld_positive_pixels") != count):
-        failures.append("candidate has not beaten the current hash-pinned frozen holdout best with paired 95% CI")
-
-    canary = holdout.get("feature_alone_leakage_canary", {})
-    if not isinstance(canary, dict):
-        canary = {}
-    per_feature = canary.get("per_feature_max_auc_reflected", {})
-    if not isinstance(per_feature, dict):
-        per_feature = {}
-    canary_max = canary.get("max_auc_reflected")
-    if (canary.get("status") != "PASS" or not isinstance(per_feature, dict) or not per_feature
-            or not is_number(canary_max) or not 0.0 <= canary_max <= 0.90
-            or any(not is_number(value) or not 0.0 <= value <= 0.90 for value in per_feature.values())):
-        failures.append("feature-alone held-fault leakage canary did not pass or is incomplete")
-    return failures
-
-
-def _registry_uniqueness_gate(surface: np.ndarray, dots: np.ndarray, grid, footprint: np.ndarray) -> tuple[bool, dict]:
-    """Run both literal registry checks; missing/incomplete indices are never a pass."""
-    from gems57 import uniqueness as U57
-    index_path = REGISTRY_INDEX
-    if not index_path.is_file():
-        return False, {"status": "INCONCLUSIVE", "reason": f"complete registry index absent: {index_path.relative_to(ROOT)}"}
-    expected_grid = (grid.shape, grid.crs, grid.transform)
-    reports = {}
-    for stage, candidate, phase in (("pre_placement_surface", surface, "surface"),
-                                    ("post_placement_dots", dots, "emitted")):
-        report = U57.compare_array_to_registry(
-            candidate, index_path, footprint, expected_grid=expected_grid, phase=phase)
-        reports[stage] = report
-        (EV / f"h66_uniqueness_{stage}.json").write_text(
-            json.dumps(report, indent=2, allow_nan=False) + "\n")
-    passed = all(r.get("complete_accessible_scan") is True and r.get("unique") is True
-                 and r.get("missing_or_invalid", 1) == 0 and not r.get("source_errors")
-                 for r in reports.values())
-    return passed, reports
-
-
+# ----------------------------------------------------------------------------- s5
 def s5_emit(st) -> dict:
-    """Write a unique competition TIFF only after all scientific/release gates pass."""
-    _stage_preflight("s5")
-    current_inputs = s0_verify()
-    if not current_inputs.get("ok"):
-        raise RuntimeError("release blocked: strict s0 no longer verifies current inputs; no TIFF written")
-    failures = _release_evidence_failures()
-    if failures:
-        rep = {"generated_utc": now(), "release_cleared": False,
-               "tiff_written": False, "failures": failures}
-        (EV / "h66_release_preflight.json").write_text(json.dumps(rep, indent=2) + "\n")
-        raise RuntimeError("release blocked; no TIFF written: " + "; ".join(failures))
-
-    from gems.submission_writer import write_submission
-    from gems.validate_submission import validate
-    import os
-    import shutil
-    import tempfile
-    import zipfile
-
-    fields = np.load(EV / "h66_fields.npz")
-    if "hypothesis_id" not in fields or str(np.asarray(fields["hypothesis_id"]).item()) != EXPECTED_TOP_HYPOTHESIS_ID:
-        raise RuntimeError("s5 refuses untagged historical fields; no LIDAR-01 candidate raster exists")
-    score = np.asarray(fields["score"], np.float32)
-    score_unvetoed = np.asarray(fields["score_unvetoed"], np.float32)
-    veto = np.asarray(fields["veto"], bool)
-    dom = np.asarray(fields["dom"], bool)
-    holdout = json.loads((EV / "h66_e2_holdout.json").read_text(encoding="utf-8"))
-    if _candidate_field_hashes(score, score_unvetoed, dom, veto) != holdout.get("candidate_field_hashes"):
-        raise RuntimeError("s5 candidate score/domain/veto fields differ from the validated HOLDOUT-DTI fields")
+    """Historical un-gated writer path; disabled after the 2026-10-11 audit."""
+    _legacy_stage_disabled("s5")
+    from gems57 import grid as G
+    f = np.load(EV / "h66_fields.npz")
+    score, veto, dom = f["score"], f["veto"], f["dom"]
     elig = dom & (st["dcat"] > CAT_SEP_PX) & ~veto
-    dots = _pick(score, elig, 37_654)
+    N = 37_654
+    dots = _pick(score, elig, N)
+    n = int(dots.sum())
     pred = np.zeros(dots.shape, np.float32)
     pred[dots] = 1.0
-    registry_ok, registry_reports = _registry_uniqueness_gate(score, pred, st["grid"], st["grid"].footprint)
-    if not registry_ok:
-        rep = {"generated_utc": now(), "release_cleared": False,
-               "tiff_written": False, "registry": registry_reports,
-               "failures": ["pre-placement surface and/or final-dot registry check failed or was incomplete"]}
-        (EV / "h66_release_preflight.json").write_text(json.dumps(rep, indent=2, allow_nan=False) + "\n")
-        raise RuntimeError("release blocked by incomplete or failed uniqueness registry; no TIFF written")
-
-    note = "Native-resolution lidar scarp channels; spatially blocked validation; see run card."
-    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    name = f"GEMSDOE66-LIDAR-SCARP-{int(dots.sum())}-{stamp}"
-    final_path = ROOT / "docs" / "downloads" / f"{name}.tif"
-    sample = DATA / "bridge" / "sample_submission.tif"
-    features = DATA / "training_features.tif"
-    with tempfile.TemporaryDirectory(prefix="h66-release-", dir=EV) as tmpdir:
-        temp_path = Path(tmpdir) / "candidate.tif"
-        receipt = write_submission(temp_path, pred, st["grid"].footprint, sample,
-                                  name=name, note=note)
-        validator = validate(temp_path, reference_path=sample, features_path=features)
-        if validator.get("passed") is not True or validator.get("skipped_checks_mean_unverified"):
-            rep = {"generated_utc": now(), "release_cleared": False, "tiff_written": False,
-                   "writer_receipt": receipt, "validator": validator,
-                   "failures": ["shared official-grid validator did not fully pass"]}
-            (EV / "h66_release_preflight.json").write_text(json.dumps(rep, indent=2) + "\n")
-            raise RuntimeError("shared official-grid validator failed; no downloadable TIFF written")
-        with rasterio.open(temp_path) as ds:
-            on_disk = ds.read(1).astype(np.float32)
-            disk_grid_ok = (ds.count == 1 and ds.shape == st["grid"].shape
-                            and ds.crs == st["grid"].crs and ds.transform == st["grid"].transform)
-        fp = st["grid"].footprint
-        if (not disk_grid_ok or not np.array_equal(on_disk[fp], pred[fp])
-                or not np.isnan(on_disk[~fp]).all() or sha256(temp_path) != receipt["sha256"]):
-            rep = {"generated_utc": now(), "release_cleared": False, "tiff_written": False,
-                   "writer_receipt": receipt, "validator": validator,
-                   "failures": ["writer output bytes/pixels/grid differ from the checked candidate"]}
-            (EV / "h66_release_preflight.json").write_text(json.dumps(rep, indent=2) + "\n")
-            raise RuntimeError("shared writer output failed exact on-disk verification; no TIFF placed")
-        # Compare the decoded on-disk candidate, normalized outside the official footprint,
-        # against the complete registry; the raw output hash is checked in the same pass.
-        from gems57 import uniqueness as U57
-        emitted = np.where(fp, on_disk, 0.0).astype(np.float32)
-        final_uniqueness = U57.compare_array_to_registry(
-            emitted, REGISTRY_INDEX, fp, file_sha256=receipt["sha256"],
-            expected_grid=(st["grid"].shape, st["grid"].crs, st["grid"].transform),
-            phase="emitted")
-        if final_uniqueness.get("complete_accessible_scan") is not True or final_uniqueness.get("unique") is not True:
-            (EV / "h66_uniqueness_final_bytes.json").write_text(
-                json.dumps(final_uniqueness, indent=2, allow_nan=False) + "\n")
-            raise RuntimeError("on-disk TIFF hash/pixel registry check failed; no downloadable TIFF written")
-        final_path.parent.mkdir(parents=True, exist_ok=True)
-        zip_path = final_path.with_suffix(".zip")
-        if final_path.exists() or zip_path.exists():
-            raise FileExistsError("refusing to overwrite an existing candidate download")
-        staged_zip = Path(tmpdir) / f"{name}.zip"
-        with zipfile.ZipFile(staged_zip, "w", zipfile.ZIP_DEFLATED) as archive:
-            archive.write(temp_path, arcname=final_path.name)
-        with zipfile.ZipFile(staged_zip, "r") as archive:
-            if archive.testzip() is not None or archive.namelist() != [final_path.name]:
-                raise RuntimeError("staged submission ZIP failed integrity checks")
-        final_receipt = dict(receipt, file=final_path.name,
-                             receipt_kind="local shared-writer receipt; NOT an organizer receipt")
-        try:
-            os.replace(temp_path, final_path)
-            if sha256(final_path) != receipt["sha256"]:
-                raise RuntimeError("placed TIFF hash differs from shared-writer receipt")
-            os.replace(staged_zip, zip_path)
-            Path(str(final_path) + ".receipt.json").write_text(
-                json.dumps(final_receipt, indent=2) + "\n")
-        except Exception:
-            final_path.unlink(missing_ok=True)
-            zip_path.unlink(missing_ok=True)
-            Path(str(final_path) + ".receipt.json").unlink(missing_ok=True)
-            raise
-    result = {"generated_utc": now(), "tiff_written": True, "file": str(final_path.relative_to(ROOT)),
-              "zip": str(zip_path.relative_to(ROOT)), "sha256": receipt["sha256"],
-              "name": name, "note": note, "note_chars": len(note), "writer_receipt": final_receipt,
-              "validator": validator, "registry": registry_reports,
-              "release_cleared": True}
-    (EV / "h66_emission.json").write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
-    return result
+    import os
+    stamp = os.getenv("GEMS_STAMP", "20261011T203224Z")
+    tag = f"gems66-h66-1-scarplet-veto-{n}-{stamp}"
+    dl = ROOT / "docs/downloads"
+    dl.mkdir(parents=True, exist_ok=True)
+    rec = dict(generated_utc=now(), tag=tag, dots=n, budget_requested=N,
+               budget_shortfall=int(N - n), eligibility_cells=int(elig.count_nonzero() if hasattr(elig, "count_nonzero") else elig.sum()))
+    outs = {}
+    for mode in ("allfinite", "nan"):
+        name = f"{tag}-{mode}.tif"
+        path = dl / name
+        if mode == "allfinite":
+            G.write_geotiff(path, pred, nodata=None)
+        else:
+            soft = np.where(st["dom"], pred, np.nan).astype(np.float32)
+            import rasterio as rs
+            from affine import Affine
+            prof = dict(driver="GTiff", height=soft.shape[0], width=soft.shape[1], count=1, dtype="float32",
+                        crs="EPSG:32611", transform=Affine(*[float(v) for v in tuple(G.TRANSFORM)[:6]]),
+                        tiled=True, blockxsize=256, blockysize=256, compress="deflate", predictor=2, nodata=float("nan"))
+            with rs.open(path, "w", **prof) as ds:
+                ds.write(soft, 1)
+        outs[mode] = str(path.relative_to(ROOT))
+    # ZIP (single TIFF inside) for the portal's ".zip containing a single GeoTIFF" option
+    import zipfile
+    zp = dl / f"{tag}-allfinite.zip"
+    with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED) as z:
+        z.write(dl / f"{tag}-allfinite.tif", arcname=f"{tag}-allfinite.tif")
+    outs["zip"] = str(zp.relative_to(ROOT))
+    rec["files"] = outs
+    # self-consistency: re-read the bytes and recompute the metric terms from them
+    with rasterio.open(dl / f"{tag}-allfinite.tif") as ds:
+        a = ds.read(1)
+    rec["reread"] = dict(dtype=ds.dtypes[0], crs=str(ds.crs), shape=[ds.height, ds.width],
+                         vmin=float(a.min()), vmax=float(a.max()), n_positive=int((a > 0).sum()),
+                         finite=bool(np.isfinite(a).all()), nodata=str(ds.nodata))
+    truth = _offcat_truth(st, dom)
+    rec["offcat_instrument"] = instrument(st, a > 0, truth, dom)
+    rec["sha256"] = {k: sha256(ROOT / v) for k, v in outs.items()}
+    (EV / "h66_emission.json").write_text(json.dumps(rec, indent=2) + "\n")
+    return rec
 
 
-STAGES = {"s0": s0_verify, "s1": s1_channels, "s2": s2_e1, "s3": s3_retrain,
-          "s4": s4_e2_holdout, "s4b": s4b_detector_holdout, "s5": s5_emit}
+def s4b_detector_holdout(st) -> dict:
+    """Gate as the lane paragraph states it: DTI gain on lidar-covered holdout blocks.
+
+    The registered evaluator's truth is *withheld catalogue segments*, so an emission that
+    policy-excludes everything within 300 m of the catalogue (s4) cannot score by construction.
+    Here the eligibility rule is relaxed to "not on a visible catalogue pixel", which is what
+    the evaluator itself masks, so the arm measures detector quality rather than emission policy.
+    Both readings are reported; neither is a leaderboard score.
+    """
+    _legacy_stage_disabled("s4b")
+    f = np.load(EV / "h66_fields.npz")
+    score, unvet, veto, dom = f["score"], f["score_unvetoed"], f["veto"], f["dom"]
+    N = 37_654
+    elig = dom & (st["dcat"] > 0.5)
+    truth = st["grid"].catalogue
+    slope = __import__("gems66.spec66", fromlist=["topo_band"]).topo_band(EXT / "topo_10m_derived_100m_u8.tif", "slope_p90")
+    rel = __import__("gems66.spec66", fromlist=["topo_band"]).topo_band(EXT / "topo_10m_derived_100m_u8.tif", "relief_local")
+    front = dom & (slope >= np.quantile(slope[dom], 0.90)) & (rel >= np.quantile(rel[dom], 0.80))
+    off = dom & ~front
+    arms = {"vetoed": _pick(score, elig, N), "unvetoed": _pick(unvet, elig, N),
+            "random_mass_matched": _random_dots(dom, elig, N, 909)}
+    cp = ROOT / "registry/rasters/GEMSDOE32__h33-2-b2-zeros.tif"
+    if cp.exists():
+        with rasterio.open(cp) as ds:
+            arms["champion_h33_2_b2"] = ds.read(1) > 0
+    ctx = H57.build_holdout(st["grid"])
+    out = {"generated_utc": now(), "evidence_class": "UNQUALIFIED_LEGACY_HOLDOUT_PROXY_NOT_HOLDOUT_DTI", "N": N,
+           "evaluator": "gems57 pooled hide-and-recover (identical to s4; only the eligibility rule differs)",
+           "eligibility": "lidar-covered footprint cells, >=50 m off a visible catalogue pixel",
+           "arms": {}}
+    for nm, dots in arms.items():
+        r = H57.evaluate(dots, ctx)
+        ro = H57.evaluate(dots & off, ctx)
+        out["arms"][nm] = dict({k: r[k] for k in ("emitted_pixels", "on_visible_catalogue", "pooled_dti",
+                                                  "pooled_coverage", "pooled_n_truth", "mean_fold_dti",
+                                                  "std_fold_dti", "per_quadrant_dti")},
+                               dots_on_front=int((dots & front).sum()), dots_off_front=int((dots & off).sum()),
+                               off_front_only={k: ro[k] for k in ("pooled_dti", "pooled_coverage", "emitted_pixels")})
+    out.pop("arms", None) if False else None
+    out["gate"] = dict(
+        channel_beats_random=bool(out["arms"]["unvetoed"]["pooled_dti"] > out["arms"]["random_mass_matched"]["pooled_dti"]),
+        veto_helps=bool(out["arms"]["vetoed"]["pooled_dti"] >= out["arms"]["unvetoed"]["pooled_dti"]),
+        gain_not_confined_to_range_fronts=bool(
+            out["arms"]["unvetoed"]["off_front_only"]["pooled_dti"]
+            > out["arms"]["random_mass_matched"]["off_front_only"]["pooled_dti"]))
+    (EV / "h66_e2b_detector_holdout.json").write_text(json.dumps(out, indent=2) + "\n")
+    return out
 
 
-def main(argv: list[str]) -> int:
-    want = argv[1:] or list(STAGES)
-    unknown = [k for k in want if k not in STAGES]
-    if unknown:
-        raise SystemExit(f"unknown stages: {unknown}; valid stages: {sorted(STAGES)}")
-    # s0 is always first and never loads project arrays. Missing inputs/pins are a
-    # documented exit, not an exception hidden behind load_state().
-    t0 = time.time()
-    inputs = s0_verify()
-    print(f"[s0] {time.time() - t0:6.1f}s  ok={inputs['ok']} missing={inputs['missing']} "
-          f"missing_pins={inputs['missing_pins']} mismatch={inputs['mismatch']}")
-    sys.stdout.flush()
-    if not inputs["ok"]:
+LEGACY_STAGES = ("s0", "s1", "s2", "s3", "s4", "s4b", "s5")
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Historical H66 experiment runner (disabled; audit-only code retained)."
+    )
+    parser.add_argument(
+        "stages", nargs="*", choices=LEGACY_STAGES,
+        help="historical stages are listed for reference but cannot be executed",
+    )
+    args = parser.parse_args(argv)
+    if not args.stages:
+        parser.print_help()
+        print("\nExecution is disabled. See docs/review/2026-10-11-audit.md.", file=sys.stderr)
         return 2
-    if any(k in BUDGETED_STAGES for k in want):
-        allowed, reason = _research_budget_available()
-        if not allowed:
-            raise SystemExit(f"research stopped before any experiment: {reason}")
-    st = load_state()
-    for k in want:
-        if k == "s0":
-            continue
-        t0 = time.time()
-        out = STAGES[k](st)
-        print(f"[{k}] {time.time() - t0:6.1f}s  {json.dumps({kk: vv for kk, vv in list(out.items())[:3]}, default=str)[:300]}")
-        sys.stdout.flush()
-    return 0
+    parser.error(
+        "all historical H66 stages are disabled; do not use this pipeline to score or "
+        "generate candidates. See docs/review/2026-10-11-audit.md"
+    )
+    return 2  # argparse.error exits; keeps the return type explicit for static tools.
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv))
+    raise SystemExit(main())

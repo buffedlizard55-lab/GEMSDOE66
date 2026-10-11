@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Synchronize legacy run-card paths from the single canonical JSON decision.
+"""Synchronize legacy run-card mirrors from the canonical blocked review card.
 
-This utility never derives clearance from an emission receipt, validator summary,
-or historical leaderboard claim. Edit docs/data/run-card.json through a reviewed
-research/release process; this script only validates and copies that decision.
+This script never reads experiment evidence, calculates a score, infers a verdict,
+or creates/downloads an artifact. Edit docs/data/run-card.json as the single source
+of truth, then run this script to update the two historical mirror paths.
 """
 from __future__ import annotations
 
@@ -12,32 +12,22 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL = ROOT / "docs" / "data" / "run-card.json"
-ALIASES = (ROOT / "registry" / "run_card.json", ROOT / "docs" / "runcard.json")
+MIRRORS = (ROOT / "registry" / "run_card.json", ROOT / "docs" / "runcard.json")
 
 
 def main() -> int:
     card = json.loads(CANONICAL.read_text(encoding="utf-8"))
-    if card.get("schema") != 4:
-        raise SystemExit("unsupported canonical run-card schema; refusing to synthesize clearance")
-    submission = card.get("submission", {})
-    note = submission.get("note")
-    note_chars = submission.get("note_chars")
-    if note is not None and (len(note) != note_chars or len(note) > 140):
-        raise SystemExit("canonical submission note length is inconsistent or exceeds 140 characters")
-    if card.get("verdict") == "negative":
-        if card.get("promote") is not False or submission.get("download_ok") is not False \
-                or submission.get("submit_ok") is not False:
-            raise SystemExit("negative card cannot authorize promotion, download, or submission")
-    if card.get("promote") is not (card.get("verdict") == "promote"):
-        raise SystemExit("canonical verdict/promote fields conflict")
-    text = json.dumps(card, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
-    for path in ALIASES:
-        path.write_text(text, encoding="utf-8")
-    print(json.dumps({"canonical": str(CANONICAL.relative_to(ROOT)),
-                      "aliases_synchronized": [str(p.relative_to(ROOT)) for p in ALIASES],
-                      "verdict": card["verdict"],
-                      "download_ok": submission.get("download_ok"),
-                      "submit_ok": submission.get("submit_ok")}, indent=2))
+    if card.get("run_id") != "gemsdoe66-native-lidar-review-2026-10-11":
+        raise ValueError("unexpected canonical run-card identity")
+    if card.get("submission", {}).get("download_status") != "NO DOWNLOAD — no file is cleared or offered":
+        raise ValueError("refusing to mirror a run card that does not explicitly block downloads")
+    if card.get("holdout_dti", {}).get("value") is not None:
+        raise ValueError("refusing to mirror an unreviewed holdout value")
+
+    serialized = json.dumps(card, indent=2, ensure_ascii=False) + "\n"
+    for path in MIRRORS:
+        path.write_text(serialized, encoding="utf-8")
+    print("Synchronized blocked run-card mirrors; no evidence or score was read.")
     return 0
 
 

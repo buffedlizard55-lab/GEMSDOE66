@@ -47,7 +47,8 @@ def _jaccard(a, b):
 
 
 def summarize_registry_rows(rows, *, registry_rasters_expected, complete_accessible_scan,
-                            source_errors, candidate_meta, scope, phase='emitted'):
+                            source_errors, candidate_meta, scope, phase='emitted',
+                            organizer_registry_complete=False):
     """Apply the same literal thresholds to already hash-verified comparison rows.
 
     This allows a complete immutable prior audit to be extended with only newly
@@ -55,13 +56,48 @@ def summarize_registry_rows(rows, *, registry_rasters_expected, complete_accessi
     The caller must prove candidate identity and the completeness/count of the
     combined registry before passing ``complete_accessible_scan=True``.
     """
-    rows = list(rows)
-    source_errors = list(source_errors or [])
-    expected = int(registry_rasters_expected)
-    checked = [r for r in rows if 'error' not in r]
-    errors = [r for r in rows if 'error' in r]
     if phase not in {'surface', 'emitted'}:
         raise ValueError("phase must be 'surface' or 'emitted'")
+    rows = [dict(row) for row in rows]
+    source_errors = list(source_errors or [])
+    expected = int(registry_rasters_expected)
+    # Recompute threshold flags from the measurements, rather than trusting cached
+    # booleans produced by an older signed-correlation implementation. Malformed
+    # metrics become errored rows and therefore make the inventory incomplete.
+    for row in rows:
+        if 'error' in row:
+            continue
+        try:
+            rho = row.get('spearman_full_footprint')
+            if rho is not None:
+                rho = float(rho)
+                if not np.isfinite(rho) or abs(rho) > 1.0 + 1e-9:
+                    raise ValueError('invalid Spearman value')
+                row['spearman_full_footprint'] = rho
+            rho_flag = bool(row.get('duplicate_by_rho', False))
+            if rho is not None:
+                rho_flag = rho_flag or abs(rho) > RHO_LIMIT
+            row['duplicate_by_rho'] = rho_flag
+            if phase == 'emitted':
+                overlap = row.get('my_dots_within_3px_of_theirs')
+                if overlap is not None:
+                    overlap = float(overlap)
+                    if not np.isfinite(overlap) or not 0.0 <= overlap <= 1.0:
+                        raise ValueError('invalid 3-pixel overlap fraction')
+                    row['my_dots_within_3px_of_theirs'] = overlap
+                overlap_flag = bool(row.get('duplicate_by_overlap', False))
+                if overlap is not None:
+                    overlap_flag = overlap_flag or overlap > OVERLAP_LIMIT
+                row['duplicate_by_overlap'] = overlap_flag
+            else:
+                # Cached dot overlap has no meaning for a continuous surface.
+                row['my_dots_within_3px_of_theirs'] = None
+                row['their_dots_within_3px_of_mine'] = None
+                row['duplicate_by_overlap'] = False
+        except (TypeError, ValueError, OverflowError) as exc:
+            row['error'] = f'malformed uniqueness measurement: {exc}'
+    checked = [r for r in rows if 'error' not in r]
+    errors = [r for r in rows if 'error' in r]
     complete = bool(complete_accessible_scan and expected == len(rows)
                     and not errors and not source_errors)
     # Both phases stop on absolute Spearman > 0.90 or exact byte/pixel identity.
@@ -73,45 +109,56 @@ def summarize_registry_rows(rows, *, registry_rasters_expected, complete_accessi
         or (phase == 'emitted' and r.get('duplicate_by_overlap', False)))]
     rank_rows = [r for r in checked if r.get('spearman_full_footprint') is not None]
     worst_rho = max(rank_rows, key=lambda r: abs(r['spearman_full_footprint']), default=None)
-    overlap_rows = [r for r in checked if r.get('my_dots_within_3px_of_theirs') is not None]
+    overlap_rows = ([r for r in checked if r.get('my_dots_within_3px_of_theirs') is not None]
+                    if phase == 'emitted' else [])
     worst_ov = max(overlap_rows, key=lambda r: r['my_dots_within_3px_of_theirs'], default=None)
     jac_rows = [r for r in checked if r.get('jaccard_dot_sets') is not None]
     worst_jac = max(jac_rows, key=lambda r: r['jaccard_dot_sets'], default=None)
     my_dot_count = int(candidate_meta['my_dots'])
     norm = bool(candidate_meta['candidate_rank_variation'])
     support_ok = phase == 'surface' or my_dot_count > 0
-    unique = complete and support_ok and norm and not flags
+    unique_within_accessible_scan = complete and support_ok and norm and not flags
+    complete_registry = bool(complete and organizer_registry_complete is True)
+    unique = bool(unique_within_accessible_scan and complete_registry)
+    if unique:
+        verdict = 'complete-registry-unique; selector review only'
+    elif unique_within_accessible_scan:
+        verdict = 'no duplicate found in supplied accessible subset; complete registry not certified'
+    else:
+        verdict = 'negative'
     return dict(
         phase=phase,
         my_file=candidate_meta.get('my_file'), evidence_class='REGISTRY-MEASUREMENT',
-        my_dots=my_dot_count,
+        my_dots=(my_dot_count if phase == 'emitted' else None),
         candidate_decoded_sha256=candidate_meta.get('candidate_decoded_sha256'),
         candidate_file_sha256=candidate_meta.get('candidate_file_sha256'),
         rho_limit=RHO_LIMIT, rho_comparison='absolute Spearman',
         overlap_limit=OVERLAP_LIMIT, overlap_applicable=(phase == 'emitted'),
         jaccard_limit=JACCARD_LIMIT,
         registry_rasters_expected=expected, registry_rasters_checked=len(checked),
-        complete_accessible_scan=complete, missing_or_invalid=len(errors),
-        source_errors=source_errors,
+        complete_accessible_scan=complete,
+        organizer_registry_complete=complete_registry,
+        missing_or_invalid=len(errors), source_errors=source_errors,
         worst_spearman_full_footprint=(worst_rho['spearman_full_footprint'] if worst_rho else None),
         worst_abs_spearman_full_footprint=(abs(worst_rho['spearman_full_footprint']) if worst_rho else None),
-        worst_rho_submission=(worst_rho['submission'] if worst_rho else None),
-        worst_dot_overlap=(worst_ov['my_dots_within_3px_of_theirs'] if worst_ov else None),
-        worst_overlap_submission=(worst_ov['submission'] if worst_ov else None),
-        worst_jaccard_dot_sets=(worst_jac['jaccard_dot_sets'] if worst_jac else None),
-        worst_jaccard_submission=(worst_jac['submission'] if worst_jac else None),
+        worst_rho_submission=(worst_rho.get('submission') if worst_rho else None),
+        worst_dot_overlap=(worst_ov.get('my_dots_within_3px_of_theirs') if worst_ov else None),
+        worst_overlap_submission=(worst_ov.get('submission') if worst_ov else None),
+        worst_jaccard_dot_sets=(worst_jac.get('jaccard_dot_sets') if worst_jac else None),
+        worst_jaccard_submission=(worst_jac.get('submission') if worst_jac else None),
         byte_unique_among_checked=bool(checked) and not any(r.get('identical_bytes', False) for r in checked),
         pixel_unique_among_checked=bool(checked) and not any(r.get('identical_decoded_predictions', False) for r in checked),
-        duplicate_count=len(flags), unique=bool(unique), rows=rows,
-        jaccard_diagnostic_only=True,
-        verdict='promote-to-selector-only' if unique else 'negative',
-        stop_required=bool(flags or not complete or not support_ok or not norm),
+        duplicate_count=len(flags), unique=bool(unique),
+        unique_within_accessible_scan=bool(unique_within_accessible_scan), rows=rows,
+        jaccard_diagnostic_only=True, verdict=verdict,
+        stop_required=bool(flags or not complete or not complete_registry or not support_ok or not norm),
         candidate_rank_variation=norm,
         scope=scope)
 
 
 def merge_registry_audits(previous, extension, *, registry_rasters_expected,
-                          complete_accessible_scan=True, scope=None):
+                          complete_accessible_scan=True, scope=None,
+                          organizer_registry_complete=None):
     """Extend a full prior raster audit with a checked delta and keep fail-closed.
 
     Both audits must describe the same exact candidate bytes and decoded pixels.
@@ -167,12 +214,18 @@ def merge_registry_audits(previous, extension, *, registry_rasters_expected,
     meta['my_file'] = previous.get('my_file')
     expected = int(registry_rasters_expected)
     complete = bool(complete_accessible_scan and len(rows) == expected)
+    if organizer_registry_complete is None:
+        organizer_registry_complete = bool(
+            previous.get('organizer_registry_complete') is True
+            and extension.get('organizer_registry_complete') is True
+        )
     result = summarize_registry_rows(
         rows, registry_rasters_expected=expected,
         complete_accessible_scan=complete,
         source_errors=[], candidate_meta=meta,
-        scope=scope or 'Indexed public owner-repository inventory; not a complete organizer registry. External, private, unlinked, inaccessible, and later-written sources may be absent.',
+        scope=scope or 'Indexed public owner-repository inventory; not a complete organizer registry unless explicitly certified. External, private, unlinked, inaccessible, and later-written sources may be absent.',
         phase=extension.get('phase', previous.get('phase', 'emitted')),
+        organizer_registry_complete=organizer_registry_complete,
     )
     result['phase'] = extension.get('phase', previous.get('phase', 'emitted'))
     result['reviewed_utc'] = extension.get('reviewed_utc')
@@ -234,6 +287,14 @@ def compare_array_to_registry(mine, registry_index, footprint, *, file_sha256=No
         raise ValueError('positive candidate mass outside footprint')
     idx = registry_index if isinstance(registry_index, (list, dict)) else json.loads(Path(registry_index).read_text())
     records, inventory_complete, source_errors = records_from_index(idx)
+    expected_registry_count = idx.get('registry_rasters_expected') if isinstance(idx, dict) else None
+    organizer_registry_complete = bool(
+        isinstance(idx, dict)
+        and idx.get('organizer_registry_complete') is True
+        and isinstance(expected_registry_count, int)
+        and not isinstance(expected_registry_count, bool)
+        and expected_registry_count == len(records)
+    )
     rows = []
     values = mine[fp]
     ranks = rankdata(values).astype(np.float64)
@@ -313,8 +374,9 @@ def compare_array_to_registry(mine, registry_index, footprint, *, file_sha256=No
             candidate_file_sha256=file_sha256,
             candidate_rank_variation=norm > 0,
         ),
-        scope='All hash-verified accessible entries in the indexed public owner-repository inventory; not a complete organizer registry. External/private/unlinked/inaccessible files may be absent. Reverse overlap is diagnostic only.',
+        scope='All hash-verified accessible entries in the indexed public owner-repository inventory; not a complete organizer registry unless the manifest explicitly sets organizer_registry_complete=true. External/private/unlinked/inaccessible files may be absent. Reverse overlap is diagnostic only.',
         phase=phase,
+        organizer_registry_complete=organizer_registry_complete,
     )
 
 
@@ -396,69 +458,118 @@ def representation_class(their_dots: int, footprint_cells: int,
 def two_phase_summary(rows, footprint_cells: int, *, rho_limit: float = RHO_LIMIT,
                       overlap_limit: float = OVERLAP_LIMIT,
                       jaccard_limit: float = JACCARD_LIMIT,
-                      expected_rasters: int | None = None) -> dict:
-    """Report the literal and the like-for-like readings side by side.
+                      expected_rasters: int | None = None,
+                      phase: str = 'emitted',
+                      organizer_registry_complete: bool = False) -> dict:
+    """Summarize registry comparisons without promoting a partial scan.
 
-    ``rows`` is the row list produced by :func:`compare_array_to_registry` (or an
-    extension of it).  Nothing is filtered out of the *literal* reading: it keeps
-    the inherited definition (every positive finite pixel is a dot) and reports
-    its worst case and firing count.  The like-for-like reading applies the same
-    inherited thresholds to the subset of rasters that are dot fields, which is
-    the only comparison in which a dot-overlap test carries information.  The
-    rank-correlation test is applied to every raster in both readings.
+    Rank correlation and exact byte/pixel identity apply in both phases; the
+    3-pixel overlap gate applies only to emitted dots. Representation classes
+    are retained as diagnostics, never as density exemptions. A complete pass
+    requires both a full accessible count and an explicit organizer-registry
+    completeness certificate.
     """
     from math import isnan
 
+    if phase not in {'surface', 'emitted'}:
+        raise ValueError("phase must be 'surface' or 'emitted'")
+    rows = [dict(r) for r in rows]
     checked = [r for r in rows if "error" not in r]
     if not checked:
         raise ValueError("no checked registry rows to summarise")
+    if footprint_cells <= 0:
+        raise ValueError("footprint_cells must be positive")
     for r in checked:
         r.setdefault("representation", representation_class(
             int(r.get("their_dots", 0)), footprint_cells)["kind"])
 
-    def _worst(subset, key):
-        vals = [r[key] for r in subset if r.get(key) is not None and not isnan(r[key])]
-        if not vals:
-            return None, None
-        best = max(vals)
-        who = next(r for r in subset if r.get(key) == best)
-        return float(best), who
+    def _values(subset, key):
+        out = []
+        for row in subset:
+            value = row.get(key)
+            if value is None:
+                continue
+            value = float(value)
+            if not np.isfinite(value):
+                continue
+            out.append((value, row))
+        return out
 
-    rho_lit, rho_who = _worst(checked, "spearman_full_footprint")
-    ov_lit, ov_who = _worst(checked, "my_dots_within_3px_of_theirs")
+    def _worst(subset, key):
+        pairs = _values(subset, key)
+        if not pairs:
+            return None, None
+        value, who = max(pairs, key=lambda pair: pair[0])
+        return value, who
+
+    rho_pairs = _values(checked, "spearman_full_footprint")
+    rho_who = max(rho_pairs, key=lambda pair: abs(pair[0]), default=(None, None))[1]
+    rho_lit = rho_who.get("spearman_full_footprint") if rho_who else None
+    worst_abs_rho = abs(float(rho_lit)) if rho_lit is not None else None
+    ov_lit, ov_who = _worst(checked, "my_dots_within_3px_of_theirs") if phase == 'emitted' else (None, None)
     dot_rows = [r for r in checked if r["representation"] == "dot_field"]
     surf_rows = [r for r in checked if r["representation"] == "continuous_surface"]
-    ov_dot, ov_dot_who = _worst(dot_rows, "my_dots_within_3px_of_theirs")
-    ov_rev, ov_rev_who = _worst(checked, "their_dots_within_3px_of_mine")
+    ov_dot, ov_dot_who = _worst(dot_rows, "my_dots_within_3px_of_theirs") if phase == 'emitted' else (None, None)
+    ov_rev, ov_rev_who = _worst(checked, "their_dots_within_3px_of_mine") if phase == 'emitted' else (None, None)
     jac, jac_who = _worst(checked, "jaccard_dot_sets")
     literal_firings = [dict(submission=r.get("submission"), repo=r.get("repo"),
                             representation=r["representation"],
-                            forward_overlap=r["my_dots_within_3px_of_theirs"],
+                            forward_overlap=r.get("my_dots_within_3px_of_theirs"),
                             their_dots=r.get("their_dots"))
-                       for r in checked if r["my_dots_within_3px_of_theirs"] > overlap_limit]
+                       for r in checked
+                       if phase == 'emitted'
+                       and r.get("my_dots_within_3px_of_theirs") is not None
+                       and float(r["my_dots_within_3px_of_theirs"]) > overlap_limit]
     like_firings = [f for f in literal_firings if f["representation"] == "dot_field"]
     literal_rho_firings = [r.get("submission") for r in checked
                            if r.get("spearman_full_footprint") is not None
-                           and r["spearman_full_footprint"] > rho_limit]
+                           and abs(float(r["spearman_full_footprint"])) > rho_limit]
+    exact_firings = [r.get("submission") for r in checked
+                     if r.get("identical_bytes", False)
+                     or r.get("identical_decoded_predictions", False)]
+    accessible_complete = bool(
+        isinstance(expected_rasters, int) and not isinstance(expected_rasters, bool)
+        and expected_rasters == len(rows) and len(checked) == len(rows)
+    )
+    organizer_complete = bool(accessible_complete and organizer_registry_complete is True)
+    scoped_gate_fired = bool(literal_firings or literal_rho_firings or exact_firings)
+    unique_within_accessible = bool(accessible_complete and not scoped_gate_fired)
+    unique = bool(organizer_complete and not scoped_gate_fired)
+    if unique:
+        verdict = "complete organizer registry passed uniqueness; selector review only"
+    elif unique_within_accessible:
+        verdict = "no gate fired in supplied scan; full organizer registry is not certified"
+    else:
+        verdict = "negative or incomplete; stop"
     return dict(
         evidence_class="REGISTRY-MEASUREMENT",
+        phase=phase,
         rasters_checked=len(checked),
         rasters_expected=expected_rasters,
+        complete_accessible_scan=accessible_complete,
+        organizer_registry_complete=organizer_complete,
+        unique_within_accessible_scan=unique_within_accessible,
+        unique=unique,
+        stop_required=bool(scoped_gate_fired or not organizer_complete),
+        verdict=verdict,
         scope_note=("Checked against every registry raster whose bytes are present locally (plus any "
                     "explicitly fetched witnesses). Un-fetched registry entries are a stated scope "
                     "limitation, never a claim of absence."),
         footprint_cells=int(footprint_cells),
         dense_support_fraction=DENSE_SUPPORT_FRACTION,
-        thresholds=dict(rho=rho_limit, forward_overlap=overlap_limit, jaccard=jaccard_limit),
+        thresholds=dict(rho=rho_limit, rho_comparison="absolute Spearman",
+                        forward_overlap=overlap_limit, jaccard=jaccard_limit),
         literal_reading=dict(
-            worst_spearman_full_footprint=rho_lit, worst_spearman_submission=(rho_who or {}).get("submission"),
+            worst_spearman_full_footprint=rho_lit,
+            worst_abs_spearman_full_footprint=worst_abs_rho,
+            worst_spearman_submission=(rho_who or {}).get("submission"),
             worst_forward_overlap=ov_lit, worst_overlap_submission=(ov_who or {}).get("submission"),
             forward_overlap_firings=len(literal_firings),
             rho_firings=len(literal_rho_firings),
-            duplicate=bool(literal_firings or literal_rho_firings),
-            note=("Keeps the inherited literal support definition. A continuous-surface prior fires on "
-                  "every nonempty candidate, so a firing here is not evidence of duplication; it is "
-                  "reported for completeness."),
+            exact_identity_firings=len(exact_firings),
+            stop_required=scoped_gate_fired,
+            note=("The literal emitted-dot gate is applied to every indexed raster, including dense "
+                  "surfaces; a stop is a policy trigger, not a causal claim of duplication."),
         ),
         like_for_like_reading=dict(
             dot_field_rasters=len(dot_rows), continuous_surface_rasters=len(surf_rows),
@@ -468,9 +579,13 @@ def two_phase_summary(rows, footprint_cells: int, *, rho_limit: float = RHO_LIMI
             worst_reverse_overlap_submission=(ov_rev_who or {}).get("submission"),
             worst_jaccard=jac, worst_jaccard_submission=(jac_who or {}).get("submission"),
             forward_overlap_firings=len(like_firings),
-            duplicate=bool(like_firings or literal_rho_firings),
-            note=("Inherited thresholds, applied to dot fields only; rank correlation still applies to "
-                  "every raster including the continuous surfaces."),
+            rho_firings=len(literal_rho_firings),
+            exact_identity_firings=len(exact_firings),
+            diagnostic_only=True,
+            note=("Density classification is descriptive only and cannot exempt a registry raster "
+                  "from the literal emitted-dot stop rule."),
         ),
         literal_firings=literal_firings,
+        absolute_rho_firings=literal_rho_firings,
+        exact_identity_firings=exact_firings,
     )

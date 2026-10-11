@@ -1,0 +1,114 @@
+{
+  "schema": "gems-project-status-feed/1",
+  "generated_utc": "2026-10-11",
+  "status": "BLOCKED — no candidate cleared for download or submission",
+  "scope": "Project-state feed only. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages.",
+  "external_monitoring": "Disabled. DrivenData Terms of Use restrict automated access and manual monitoring/copying without prior written consent. No leaderboard values are stored.",
+  "entries": [
+    {
+      "date": "2026-10-11",
+      "kind": "experiment-h66-2",
+      "status": "NEGATIVE-NOT-PROMOTED",
+      "summary": "One preregistered H66-2 experiment is preserved from the earlier main-branch session (concordance of 10-vs-50 m step, dip-sense and crest-toe sharpness on the pinned 2 m LiDAR stack). Emitted a 37,654-dot raster with local format/range checks; its verdict is NEGATIVE-NOT-PROMOTED. Every H66-2 metric in the cited evidence is an off-catalogue proxy measurement, not HOLDOUT-DTI or ORGANIZER-CONFIRMED; no organizer receipt is present. Bytes remain in artifacts/h66-2/ for audit, not on the site; no slot used. This PR reconciliation ran no experiment. Two corrections from the earlier session are recorded: IR-66-BASE-01 (the first strata run's random control was an index-ordered corner sample; the advertised x16 upland ratio is x1.20) and IR-66-GUARD-02 (the stop guard hard-coded a foreign lane name).",
+      "links": [
+        "review/2026-10-11-h66-2-verdict.md",
+        "run-card.html",
+        "irregularities.html",
+        "feed.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "repository-audit",
+      "status": "BLOCKED",
+      "summary": "Audited the legacy H66 path. Full-catalogue distance affects candidate eligibility before holdout scoring; the holdout is not the required buffered whole-geologic-segment/LiDAR-only protocol; the writer path conflicts with the official NaN-outside contract. Legacy H66 scores are not qualified HOLDOUT-DTI.",
+      "links": [
+        "review/2026-10-11-audit.md",
+        "run-card.html",
+        "irregularities.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "competition-data-access",
+      "status": "BLOCKED",
+      "summary": "The official data tab redirected to login. No credentials were used and no competition rasters or sample grid are in this checkout.",
+      "source_id": "S05",
+      "links": []
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "free-official-dem-source",
+      "status": "AVAILABLE IN PRINCIPLE; EXACT TILE COVERAGE UNVERIFIED",
+      "summary": "USGS 3DEP lists public-domain 1 m bare-earth DEMs and The National Map access. This does not verify exact competition tile coverage, alignment, or completeness.",
+      "source_id": "S07",
+      "links": []
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "candidate-download",
+      "status": "NOT AVAILABLE",
+      "summary": "The three H66-1 TIFF/ZIP binaries were withdrawn from docs/downloads and restored only under evidence/archives/h66-1/ for audit. The archive is outside the Pages document root and is not linked. No new GeoTIFF was generated in this review.",
+      "links": [
+        "downloads/README.md",
+        "data/run-card.json"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "hypothesis-ranking",
+      "status": "READY FOR INDEPENDENT REVIEW",
+      "summary": "Four distinct same-lane LiDAR scarp-channel hypotheses are ranked before implementation. None is claimed as novel against the incomplete registry or as a measured gain.",
+      "links": [
+        "hypotheses.html",
+        "data/hypotheses.json"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "test-suite",
+      "status": "PASS — 72 offline tests",
+      "summary": "The final local offline suite passed 72 tests. This verifies repository-level behavior only; it does not validate competition inputs, a spatial holdout, registry completeness, official-grid alignment, or organizer acceptance.",
+      "links": []
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "historical-input-preflight",
+      "status": "BLOCKED — one-off s0 returned exit 2",
+      "summary": "Before merging the newer main state, the session-branch strict verifier found all 9 required roles absent and 2 input pins missing. It returned before data loading or any experiment; the snapshot is preserved as evidence/h66_inputs_s0_review.json and is not current output from the disabled main runner.",
+      "links": [
+        "data/run-card.json",
+        "review/2026-10-11-pr12-reconciliation.md"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "h66-1-archive-disposition",
+      "status": "AUDIT ONLY — not cleared or linked",
+      "summary": "H66-1 historical bytes are retained under evidence/archives/h66-1/ with SHA-256 identities checked. They remain withdrawn from downloads, outside the Pages document root, and not cleared for submission.",
+      "links": [
+        "downloads/README.md",
+        "data/run-card.json",
+        "irregularities.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "pr12-main-reconciliation",
+      "status": "NEGATIVE / NOT CLEARED — no new experiment or candidate",
+      "summary": "Reconciled PR #12 against newer main without overwriting its historical H66-2 negative record or disabled-runner safeguards. Added phase-aware shared uniqueness checks and explicit full-registry certification; archived H66-1 bytes outside the Pages root. This turn ran 0 experiments, 0 holdouts, 0 emissions, and used 0 slots. Offline suite: 88 passed; no scientific, official-grid, or organizer result is established.",
+      "links": [
+        "review/2026-10-11-pr12-reconciliation.md",
+        "run-card.html",
+        "irregularities.html"
+      ]
+    }
+  ],
+  "next_actions": [
+    "Keep LIDAR-01 blocked; do not run the historical H66-2 union proposal or another experiment without authorized inputs, preserved provenance, scientific review, and an explicit approved research budget.",
+    "Fix and review the buffered whole-segment holdout, LiDAR-covered evaluator, and NaN-outside shared writer in the upstream shared template before re-enabling any research runner; do not use a private fork.",
+    "Obtain two independent scientific-lead reviews of the ranked same-lane hypothesis, named terrace/channel-bank/landslide mimics, and preregistered holdout protocol.",
+    "Keep all artifacts unpublished unless both continuous pre-placement and final emitted-dot checks pass against a complete registry, exact official-grid/footprint validation passes, and a valid HOLDOUT-DTI with evaluator/version/count/95% CI beats the frozen best.",
+    "Complete the missing official-rules PDF section and full applicable Terms of Use review; retain the conservative stop while IR-66-RELEASE-01 remains unresolved."
+  ]
+}

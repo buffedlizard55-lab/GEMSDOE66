@@ -1,47 +1,34 @@
 {
   "schema": 3,
-  "scope": "Conservative evidence register for the user-supplied H33 attribution and H66 claims. No organizer-confirmed score is present. A DTI-like value from a local or owner report is not an organizer receipt.",
+  "scope": "Attribution and mechanism claims relevant to the native-resolution LiDAR lane. Owner statements and leaderboard rows are not treated as receipts.",
   "claims": [
     {
       "id": "C-H33-ATTRIBUTION",
-      "claim": "The user-supplied brief associates the value 0.2778 with GEMSDOE32 artifact H33-2-B2.",
-      "attributed_value": "0.2778",
+      "claim": "The H33-2-B2 artifact earned the score value supplied in the prior brief.",
       "claim_type": "USER-SUPPLIED / OWNER-REPORTED ATTRIBUTION; NOT ORGANIZER-CONFIRMED",
-      "evidence_for": "The attribution appears in user-provided context and owner-maintained project-family material (S17, S28).",
-      "evidence_against_or_missing": "The GEMSDOE32 owner page describes H33-2-B2 as unscored and says no organizer score exists for its artifacts (S18). No organizer receipt, submission identifier, date, or exact raster SHA-256 tied to the attribution is available here.",
-      "verdict": "UNATTRIBUTED. The claim may refer to a result, but this repository cannot establish that the exact H33-2-B2 bytes earned it.",
-      "source_ids": ["S17", "S18", "S28"]
+      "evidence_for": "The attribution appears in user/owner-maintained material.",
+      "evidence_against_or_missing": "The GEMSDOE32 owner page describes the artifact as unscored and says no organizer score exists for its artifacts. No organizer submission-page receipt tied to the exact TIFF bytes or SHA-256 is present in this checkout. A public leaderboard row, even if displayed, is not an artifact/hash receipt.",
+      "verdict": "UNATTRIBUTED. Do not report it as a verified score or infer why it occurred.",
+      "source_ids": ["S14", "S15"]
     },
     {
-      "id": "C-H33-PRUNING-MECHANISM",
-      "claim": "If the reported H33 value is genuine, pruning predictions near mapped faults may have contributed to a metric change.",
-      "attributed_value": null,
-      "claim_type": "CONDITIONAL MECHANISM; UNTESTED INFERENCE",
-      "evidence_for": "Owner-maintained method descriptions characterize H33-2-B2 as a post-processing/pruning variant near mapped catalogue faults (S17, S31). The official metric penalizes false-positive and false-negative mass asymmetrically (S02).",
-      "evidence_against_or_missing": "There is no controlled same-fold comparison, exact byte-linked organizer receipt, private-label access, or counterfactual raster. Removing unsupported or redundant predictions could reduce false-positive contribution; removing predictions near genuinely new labels could reduce true-positive credit. Changes in preprocessing, raster bytes, submission identity, scoring time, or attribution mismatch also remain untested possibilities.",
-      "verdict": "PLAUSIBLE BUT NOT TESTED. No causal explanation or performance claim is supported.",
-      "source_ids": ["S02", "S17", "S18", "S31"]
+      "id": "C-H33-MECHANISM",
+      "claim": "Catalogue-adjacent pruning or sparse mass explains the H33-2-B2 attribution.",
+      "claim_type": "CONDITIONAL MECHANISM; NOT TESTED",
+      "evidence_for": "The owner-maintained method notes discuss catalogue-aware pruning as a possible processing choice.",
+      "evidence_against_or_missing": "No receipt/hash establishes the score-to-file mapping; no exact bytes, controlled same-fold ablation, or organizer-labeled test set is available. Pruning can remove false-positive mass or remove useful prediction mass, depending on unknown truth.",
+      "verdict": "NO CAUSAL EXPLANATION SUPPORTED. The official metric's trade-off can be described, but it cannot explain this artifact's alleged result.",
+      "source_ids": ["S02", "S14", "S15"]
     },
     {
-      "id": "C-H66-CULTURAL-VETO",
-      "claim": "A hand-built cultural-looking-feature veto on H66 lidar channels improves fault prediction.",
-      "attributed_value": null,
-      "claim_type": "HISTORICAL LOCAL NEGATIVE RESULT; NOT ORGANIZER-CONFIRMED",
-      "evidence_for": "The historical H66 off-catalogue SGMC instrument and local spatial-CV receipts are available as owner/local artifacts, not as competition-test labels. The recorded paired change interval crossed zero.",
-      "evidence_against_or_missing": "The feature is a geometry/TMI heuristic, not an existing labeled cultural-feature mask. The registered submission-policy holdout arm is recorded as HOLDOUT-DTI 0.0, has no 95% CI, and does not validate the emitted raster. The off-catalogue instrument is not the required organizer-label holdout. No fresh run is possible within the exhausted budget.",
-      "verdict": "NEGATIVE FOR CLEARANCE. Do not present the proxy or historical detector arm as proof of cultural-veto benefit.",
-      "source_ids": ["S02", "S17"]
-    },
-    {
-      "id": "C-H66-PORTAL-REJECTION",
-      "claim": "Writing an all-finite raster fixes the previous '[0,1]' portal rejection.",
-      "attributed_value": null,
-      "claim_type": "UNVERIFIED PORTAL-CAUSE CLAIM",
-      "evidence_for": "A local validator can check finite values and [0,1] against an authorized reference grid when those inputs are supplied.",
-      "evidence_against_or_missing": "No original rejected bytes, portal diagnostic receipt, or successful organizer acceptance tied to the archived TIFF is present. A range error could reflect values, nodata, array/grid interpretation, or other portal validation. NaN removal is not a verified remedy.",
-      "verdict": "UNKNOWN. The archived all-finite raster is not cleared for upload.",
-      "source_ids": ["S02", "S05"]
+      "id": "C-H66-HOLDOUT",
+      "claim": "The prior H66 detector-arm scalar is a valid HOLDOUT-DTI result.",
+      "claim_type": "LEGACY REPOSITORY CLAIM; DISQUALIFIED BY AUDIT",
+      "evidence_for": "The raw legacy JSON remains in evidence for traceability.",
+      "evidence_against_or_missing": "The H66 runner uses distance to the full catalogue to select emitted cells before holdout scoring, so withheld positives affect candidate eligibility. It also scores beyond the LiDAR-covered validation mask, does not implement the required full-segment buffered protocol, and records no valid 95% CI for the level. The value therefore fails the user's reporting and leakage gates.",
+      "verdict": "RETRACTED AS A QUALIFIED HOLDOUT-DTI CLAIM. Raw evidence is retained but must not be quoted as a score.",
+      "source_ids": ["S02"]
     }
   ],
-  "policy": "Report performance only as HOLDOUT-DTI with evaluator version, withheld-positive count and 95% CI, or as ORGANIZER-CONFIRMED from a receipt tied to the exact raster hash. Projections, owner-reported values, exploratory instruments, AUCs, and missing receipts are not scores."
+  "policy": "Report a research score only as HOLDOUT-DTI with evaluator version, withheld-positive count, and a 95% CI. Report an organizer value only as ORGANIZER-CONFIRMED copied from a receipt tied to the exact artifact/hash. Projections, owner claims, and unreceipted leaderboard associations are not scores."
 }

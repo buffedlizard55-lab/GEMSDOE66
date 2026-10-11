@@ -1,4 +1,5 @@
-[s4b]   39.5s  {"generated_utc": "2026-10-11T20:34:59Z", "evidence_class": "HOLDOUT-DTI", "N": 37654}
+# QUARANTINED LEGACY LOG — NOT VALID HOLDOUT-DTI; scores/metrics in this file are unqualified. See docs/review/2026-10-11-audit.md.
+[s4b]   39.5s  {"generated_utc": "2026-10-11T20:34:59Z", "evidence_class": "UNQUALIFIED_LEGACY_HOLDOUT_PROXY_NOT_HOLDOUT_DTI", "N": 37654}
 /home/user/venv/lib/python3.11/site-packages/sklearn/metrics/_ranking.py:469: UndefinedMetricWarning: Only one class is present in y_true. ROC AUC score is not defined in that case.
   warnings.warn(
 /home/user/venv/lib/python3.11/site-packages/sklearn/metrics/_ranking.py:469: UndefinedMetricWarning: Only one class is present in y_true. ROC AUC score is not defined in that case.

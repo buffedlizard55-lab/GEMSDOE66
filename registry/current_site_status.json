@@ -1,51 +1,54 @@
 {
-  "schema": 2,
+  "schema": "gems-project-site-status/2",
   "review_date": "2026-10-11",
-  "active_run": "gemsdoe66-h66-1-reaudit-2026-10-11",
-  "active_lane": "native-resolution lidar scarp channels",
-  "status": "NEGATIVE / NOT CLEARED",
-  "stop_reason": "Strict s0 returned exit code 2 before state load: all nine required competition/derived inputs are absent; the lidar sidecar and topography pins are missing. LIDAR-01 was not generated or tested, the complete registry and release evidence are absent, and the research budget is exhausted. No download or competition slot is cleared.",
+  "active_run": null,
+  "active_lane": "native-resolution LiDAR scarp channels",
+  "status": "BLOCKED — no current candidate cleared",
+  "stop_reason": "The unauthenticated official data page redirected to login; authorized competition rasters and the cached LiDAR stack are absent. The historical H66 holdout claim is disqualified because full-catalogue distance affected candidate eligibility, scoring was not restricted to LiDAR-covered held-out blocks, and the required buffered whole-segment protocol/95% CI were not established. The complete raster registry and exact official footprint validation are also unavailable. No new experiment or candidate was produced.",
   "new_tiff_created_in_this_review": false,
+  "historical_download_files_removed": true,
+  "current_candidate": null,
   "submission_slots_used_in_this_review": 0,
   "recommended_competition_submission": null,
-  "download_clearance": false,
-  "submission_clearance": false,
-  "historical_audit_artifact": {
-    "path": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
-    "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-    "status": "archived outside docs/downloads; not cleared or linked"
-  },
+  "download_status": "NO DOWNLOAD — no current file is cleared or offered",
+  "historical_artifacts": [
+    {
+      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+      "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
+      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
+    },
+    {
+      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
+      "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
+      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
+    },
+    {
+      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
+      "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
+      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
+    }
+  ],
   "gates": {
-    "inputs_verified": false,
-    "top_candidate_holdout_ci": false,
-    "beats_frozen_holdout_best": false,
-    "leakage_canary": false,
-    "registry_preplacement": false,
-    "registry_postplacement": false,
-    "official_grid_validator": false
+    "authorized_inputs": "BLOCKED — official data tab requires login; no credentials used",
+    "hypotheses": "FOUR RANKED SAME-LANE PROPOSALS — NOT YET INDEPENDENTLY REVIEWED",
+    "new_holdout": "NONE — no qualified HOLDOUT-DTI value, evaluator/count/95% CI unavailable",
+    "feature_leakage_canaries": "NOT RUN on the required holdout",
+    "range_front_analysis": "NOT RUN on the required holdout",
+    "registry_uniqueness": "BLOCKED — complete family corpus unavailable; no pass claimed",
+    "official_grid_validator": "NOT PASSED — official reference/features rasters are unavailable",
+    "independent_scientific_reviews": "0 of 2 complete",
+    "submission_slot": "NONE USED"
   },
-  "run_card": "docs/data/run-card.json",
-  "site_builder": "scripts/build_site.py; scripts/build_site66.py is a compatibility wrapper",
-  "input_verification": {
-    "status": "BLOCKED — strict s0 returned exit code 2; no downstream state load or research stage executed.",
-    "evidence": "evidence/h66_inputs.json",
-    "required_inputs_count": 9,
-    "missing": [
-      "training_features.tif",
-      "bridge/labels.tif",
-      "bridge/existing_faults.tif",
-      "bridge/sample_submission.tif",
-      "external/lidar_scarp_features_u8.tif",
-      "external/lidar_scarp_features.json",
-      "external/geodawn_extensions_u8.tif",
-      "external/derived_sgmc_faults_100m_u8.tif",
-      "external/topo_10m_derived_100m_u8.tif"
-    ],
-    "missing_pins": [
-      "external/lidar_scarp_features.json",
-      "external/topo_10m_derived_100m_u8.tif"
-    ],
-    "mismatch": [],
-    "pin_conflicts": []
-  }
+  "feed_policy": "Repository-state only; no leaderboard values copied, stored, refreshed, or monitored. No DrivenData subpage is deep-linked from the site absent written authorization.",
+  "canonical_run_card": "docs/data/run-card.json",
+  "technical_audit": "docs/review/2026-10-11-audit.md",
+  "input_preflight_snapshot": {
+    "evidence": "evidence/h66_inputs_s0_review.json",
+    "status": "BLOCKED; one-off pre-merge s0 exited 2; 9 required roles absent, 2 pin records absent; no load/experiment followed",
+    "not_current_runner_output": true
+  },
+  "release_disposition": "H66-2 is retained as a historical NEGATIVE-NOT-PROMOTED experiment from the newer main branch; no new experiment or candidate emission occurred in this PR reconciliation."
 }

@@ -1,27 +1,40 @@
-"""The historic H66 raster is archival only; nothing is currently publishable."""
-
+"""Withdrawal checks for historical H66 artifacts; never promotion/score evidence."""
 import hashlib
 import json
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+DOCS = ROOT / "docs"
+CARD_PATH = DOCS / "data" / "run-card.json"
+HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 
 
-def test_historical_bytes_are_archived_outside_public_downloads():
-    card = json.loads((ROOT / "docs/data/run-card.json").read_text(encoding="utf-8"))
-    submission = card["submission"]
-    assert card["verdict"] == "negative" and card["promote"] is False
-    assert submission["download_ok"] is False and submission["submit_ok"] is False
-    assert (ROOT / card["raster"]["file"]).is_file()
-    assert hashlib.sha256((ROOT / card["raster"]["file"]).read_bytes()).hexdigest() == card["raster"]["sha256"]
-    assert not list((ROOT / "docs/downloads").glob("*.tif"))
-    assert not list((ROOT / "docs/downloads").glob("*.zip"))
+def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
+    card = json.loads(CARD_PATH.read_text(encoding="utf-8"))
+    historical = card["raster"]["historical_artifacts"]
+    assert len(historical) == 3
+    for item in historical:
+        assert item["file"].startswith(HISTORICAL_PREFIX)
+        assert len(item["sha256"]) == 64
+        assert "WITHDRAWN" in item["status"]
+        assert not (DOCS / "downloads" / item["file"]).exists()
+        archived = ROOT / item["archive_file"]
+        assert archived.is_file()
+        assert hashlib.sha256(archived.read_bytes()).hexdigest() == item["sha256"]
+    zip_path = ROOT / next(item["archive_file"] for item in historical if item["file"].endswith(".zip"))
+    with zipfile.ZipFile(zip_path) as archive:
+        assert len(archive.namelist()) == 1
+        assert archive.testzip() is None
+    assert sorted(path.name for path in (DOCS / "downloads").iterdir()) == ["README.md"]
 
 
-def test_proposed_name_and_note_are_not_clearance():
-    card = json.loads((ROOT / "docs/data/run-card.json").read_text(encoding="utf-8"))
-    submission = card["submission"]
-    assert submission["name"] and "PROPOSED" in submission["name_status"]
-    assert len(submission["note"]) == submission["note_chars"] <= 140
-    assert submission["download_ok"] is False
-    assert submission["competition_slot_used"] is False
+def test_current_run_card_cannot_clear_a_historical_artifact():
+    card = json.loads(CARD_PATH.read_text(encoding="utf-8"))
+    assert card["raster"]["file"] is None
+    assert card["raster"]["sha256"] is None
+    assert card["submission"]["download_status"].startswith("NO DOWNLOAD")
+    assert card["submission"]["organizer_confirmed_receipt"] is None
+    assert card["budget"]["submission_slots_used"] == 0
+    assert card["holdout_dti"]["value"] is None
+    assert card["holdout_dti"]["ci95"] is None
