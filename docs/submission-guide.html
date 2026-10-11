@@ -3,60 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How to submit · GEMS Prize workbench</title>
+<title>Submission guide · GEMS Prize workbench</title>
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 <header class="site">
   <div class="brand">GEMS Prize (DrivenData #306) · workbench</div>
-  <nav><a href="index.html" class="">Summary</a><a href="submission-guide.html" class="active">How to submit</a><a href="analysis.html" class="">H33 attribution</a><a href="hypotheses.html" class="">Hypotheses</a><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" class="">Official leaderboard ↗</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
+  <nav><a href="index.html" class="">Summary</a><a href="executive-summary.html" class="">Submission executive summary</a><a href="submission-guide.html" class="active">Clearance guide</a><a href="analysis.html" class="">H33 attribution</a><a href="hypotheses.html" class="">Hypotheses</a><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" class="">Official leaderboard ↗</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
 </header>
 <main>
-<h1>How to submit</h1>
-<p class="sub">Procedural guidance. The live submission form was not inspected because it requires an account login that this environment does not have.</p>
-
-<div class="banner warn"><strong class="big">Download: yes, for audit. Weekly slot: no.</strong>The file is format-validated (single-band float32, EPSG:32611, exact grid, all values finite in [0,1], no NaN anywhere — which is what fixes the earlier portal rejection "Predicted values must be in range [0, 1]"), it is unique against the scanned registry, and it passed the lane's channel gate; its headline mechanism measured negative, so it is not promoted. Download: <a href="downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif">.tif</a> · <a href="downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip">.zip</a> · <a href="h66-session.html">step-by-step</a>.</div>
-
-<h2>1. Expected file contract</h2>
-<table><thead><tr><th>Property</th><th>Project requirement</th><th>Evidence/status</th></tr></thead><tbody>
-<tr><td>Raster</td><td>Single-band GeoTIFF, float32</td><td>Official problem-page description; validate against the provided reference file.</td></tr>
-<tr><td>Grid</td><td>EPSG:32611, 100 m, exact shape/transform/bounds of the official reference</td><td>CRS/resolution are published; do not trust an assumed shape or transform without the official raster.</td></tr>
-<tr><td>Values</td><td>Finite in [0, 1] inside the footprint; NaN only outside</td><td>Checked by the shared validator when both reference and features are supplied.</td></tr>
-<tr><td>Name and note</td><td>Unique name; note ≤140 characters</td><td>140 characters is the project brief's limit, enforced by the writer; live form was not checked.</td></tr>
-</tbody></table>
-
-<h2>2. Required scientific gate before writing a candidate</h2>
+<h1>Submission and clearance guide</h1>
+<p class="sub">The live account-gated submission form was not inspected. This project does not upload automatically.</p>
+<div class="banner stop"><strong class="big">BLOCKED — no download or submission clearance; proposed name/note are informational only.</strong>No file is available for download or submission. The historical TIFF is audit-only and must not be uploaded.</div>
+<h2>Why the earlier [0,1] rejection is unresolved</h2>
+<p>The earlier portal message alone does not identify whether the failure came from values, grid alignment, file encoding, or another validation condition. The cause is unknown. The historical local receipt did not revalidate against the authorized official sample and features in this checkout. Writing zeros rather than NaNs outside the footprint is not a verified fix and no file is cleared.</p>
+<h2>Required gates before any future file</h2>
 <ol class="steps">
-<li>Use the shared cached lidar stack, existing mask, segment-aware spatial holdout, and pooled DTI evaluator. Those inputs and the end-to-end evaluator are not currently in this checkout; do not replace them with a private implementation.</li>
-<li>Derive catalogue features from visible faults only and mask visible fault pixels exactly. Score only held-out lidar-covered spatial blocks; report range-front and non-range-front results.</li>
-<li>Run each feature alone as a leakage canary. AUC &gt;0.90 is leakage until disproven.</li>
-<li>Compare the continuous surface to every registry raster before placement; compare final emitted dots to every registry raster after placement. Pearson correlation &gt;0.90 or &gt;70% of dots within 3 px means duplicate/stop. An absent registry is not a pass.</li>
-<li>Record `HOLDOUT-DTI` only with evaluator version, withheld-positive count, and 95% CI. No score or projection is inferred from the public leaderboard.</li>
+<li>Use lawfully obtained competition inputs with exact hashes and verify the official sample grid, footprint, CRS, transform, and features. Do not use an owner mirror as a substitute for login-gated competition files.</li>
+<li>Generate the single-lane LIDAR-01 hypothesis from native-resolution lidar scarp channels: slope-aware templates, Steger sub-pixel lines, Frangi 2–20 m evidence, aggregated to 100 m with scarp fraction, SNR-weighted amplitude, orientation coherence, and dominant strike; use the existing cultural mask.</li>
+<li>Hide whole fault segments/components in lidar-covered spatial blocks with a buffer. Derive catalogue features only from visible faults and mask visible known-fault pixels exactly. Evaluate pooled DTI with α=0.2, β=0.8, and the 300 m triangular kernel.</li>
+<li>Report every performance result as HOLDOUT-DTI with evaluator version, withheld-positive count, and 95% CI. Test each feature alone; AUC &gt;0.90 is leakage until disproven. Compare the candidate against the frozen holdout best before any slot is considered.</li>
+<li>Check the pre-placement surface and final emitted dots against every registry raster. Stop above 0.90 absolute rank correlation or above 70% 3-pixel dot overlap; verify hash/pixel agreement. Incomplete registry access is not a pass.</li>
+<li>Only after every science and uniqueness gate passes, write with the shared submission writer and validate against the authorized official reference/features. Check the footprint-NaN condition, [0,1] values, CRS, shape, transform, and hash. Local format success is not organizer acceptance.</li>
 </ol>
-
-<h2>3. Local format checks (only after the science gate)</h2>
-<pre><code>python scripts/verify_competition_data.py
-python -m gems.validate_submission outputs/candidate.tif     --reference data/labels.tif --features data/training_features.tif
-python scripts/lane_check.py --stage surface candidate_surface.tif registry_a.tif registry_b.tif
-python scripts/lane_check.py --stage emitted candidate.tif registry_a.tif registry_b.tif</code></pre>
-<p class="note">The data checker does not download files. The validator's exit code 0 is a format pass only; a skipped check is not a pass. The lane tool requires the complete registry and aligned rasters. A successful format check alone never clears the download gate.</p>
-
-<h2>4. Manual upload—only after a future clearance</h2>
-<ol class="steps">
-<li>Confirm the run card says the candidate beat the frozen holdout best and all leakage, uniqueness, and format gates passed.</li>
-<li>Use the shared `submission_writer.py` to write a unique name and note of at most 140 characters. Record the exact file SHA-256 and validator output.</li>
-<li>Open the official submission form while signed in, check the live field labels and upload limits, then submit manually only if separately selected within the weekly cap.</li>
-<li>Record an organizer score only from the submission receipt and tie that receipt to the exact raster hash; label it `ORGANIZER-CONFIRMED`.</li>
-</ol>
-
-<h2>5. Do not</h2>
-<ul>
-<li>Do not upload or provide a file while the run card is negative.</li>
-<li>Do not copy a raster from another team or publicly mirror competition data.</li>
-<li>Do not scrape, monitor, or reproduce leaderboard values; use the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">official live page</a> directly.</li>
-<li>Do not report projections as scores or spend a slot without a holdout win.</li>
-</ul>
-
+<h2>Submission note</h2>
+<p>Informational proposed note only; not cleared for use: <code>Unvalidated LIDAR-01 proposal; no holdout, registry, or official-grid clearance. Do not submit.</code> (95/140 characters).</p>
+<p>See the <a href="executive-summary.html">submission executive summary</a>, <a href="run-card.html">canonical run card</a>, and <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">official live leaderboard</a> for manual review. No leaderboard rows are copied here.</p>
 </main>
 <footer>Generated by scripts/build_site.py from docs/data/*.json · last updated 2026-10-11 (UTC) · not affiliated with DrivenData or DOE.</footer>
 </body>

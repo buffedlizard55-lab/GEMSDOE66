@@ -2,11 +2,11 @@
 """Compare candidate surfaces or final emissions with supplied registry rasters.
 
 Stages:
-  surface  — pre-placement: continuous-surface Pearson correlation and exact pixel agreement;
+  surface  — pre-placement: continuous-surface Spearman rank correlation and exact pixel/hash agreement;
   emitted  — post-placement: the same checks plus final-dot overlap within 3 px.
 
-A correlation >0.90, >70% of candidate dots within 3 px of one registry raster, or an exact
-pixel duplicate flags lane drift. Empty/constant comparisons are INCONCLUSIVE, not a pass.
+Absolute rank correlation >0.90, >70% of candidate dots within 3 px of one registry raster, or
+an exact pixel duplicate flags lane drift. Empty/constant comparisons are INCONCLUSIVE, not a pass.
 All inputs must already share one aligned grid; the tool never reprojects rasters.
 
 Examples:
@@ -62,14 +62,17 @@ def _assert_aligned(candidate_meta: dict, registry_meta: dict, path: str | Path)
         raise ValueError(f"transform mismatch for {path}; align to the official grid before comparison")
 
 
-def pearson_on_common(a: np.ndarray, b: np.ndarray) -> float:
+def spearman_on_common(a: np.ndarray, b: np.ndarray) -> float:
+    """Exact Spearman rank correlation over common finite cells."""
+    from scipy.stats import spearmanr
+
     m = np.isfinite(a) & np.isfinite(b)
     if m.sum() < 2:
         return float("nan")
     x, y = a[m], b[m]
-    if x.std() == 0 or y.std() == 0:
+    if np.ptp(x) == 0 or np.ptp(y) == 0:
         return float("nan")
-    return float(np.corrcoef(x, y)[0, 1])
+    return float(spearmanr(x, y).statistic)
 
 
 def dot_fraction_near(dots_a: np.ndarray, dots_b: np.ndarray, radius: float = DOT_RADIUS_PX) -> float:
@@ -107,7 +110,7 @@ def lane_check(candidate: str | Path, registry: list[str | Path], stage: str = "
     for r in registry:
         b, registry_meta = _read(r)
         _assert_aligned(candidate_meta, registry_meta, r)
-        corr = pearson_on_common(a, b)
+        corr = spearman_on_common(a, b)
         agreement, compared_cells = exact_pixel_agreement(a, b)
         if stage == "emitted":
             dots_b = np.argwhere(np.isfinite(b) & (b > 0))
@@ -118,13 +121,14 @@ def lane_check(candidate: str | Path, registry: list[str | Path], stage: str = "
             fraction = None
             dot_overlap_drift = False
             registry_dot_count = None
-        corr_drift = np.isfinite(corr) and corr > CORR_LIMIT
+        corr_drift = np.isfinite(corr) and abs(corr) > CORR_LIMIT
         exact_duplicate = np.isfinite(agreement) and agreement == 1.0
         drift = bool(corr_drift or dot_overlap_drift or exact_duplicate)
         rows.append({
             "registry": Path(r).name,
             "sha256": sha256_file(r),
-            "pearson_r": _json_number(corr),
+            "spearman_rho": _json_number(corr),
+            "absolute_spearman_rho": _json_number(abs(corr)) if np.isfinite(corr) else None,
             "exact_pixel_agreement": _json_number(agreement),
             "compared_cells": compared_cells,
             "registry_dots": registry_dot_count,
@@ -137,7 +141,7 @@ def lane_check(candidate: str | Path, registry: list[str | Path], stage: str = "
         "candidate_sha256": sha256_file(candidate),
         "candidate_dots": int(len(dots_a)) if dots_a is not None else None,
         "stage": stage,
-        "limits": {"pearson_r": CORR_LIMIT, "dots_within_3px": DOT_OVERLAP_LIMIT,
+        "limits": {"absolute_spearman_rho": CORR_LIMIT, "dots_within_3px": DOT_OVERLAP_LIMIT,
                    "dot_radius_px": DOT_RADIUS_PX},
         "comparisons": rows,
         "verdict": _verdict(rows, stage),
@@ -149,7 +153,7 @@ def _verdict(rows, stage: str) -> str:
         return "INCONCLUSIVE - no registry rasters supplied"
     if any(r["drift"] for r in rows):
         return "LANE DRIFT - log duplicate and stop"
-    if any(r["pearson_r"] is None or r["exact_pixel_agreement"] is None for r in rows):
+    if any(r["spearman_rho"] is None or r["exact_pixel_agreement"] is None for r in rows):
         return "INCONCLUSIVE - empty or constant comparison; not a pass"
     if stage == "emitted" and any(r["candidate_dots_within_3px"] is None for r in rows):
         return "INCONCLUSIVE - no candidate dots to compare; not a pass"

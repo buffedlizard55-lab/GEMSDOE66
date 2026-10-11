@@ -153,25 +153,29 @@ def lane_uniqueness_report(candidate, footprint, priors=None, *, sample, phase,
 
     A caller must provide the pinned public owner-repository inventory
     manifest, not just `priors`. This inventory is not organizer-complete.
-    The pre-placement SURFACE phase tests positive support too. No >=0.5
-    threshold, density exemption or reverse-overlap clearance is applied.
+    The continuous-surface phase uses absolute Spearman and exact pixel/hash
+    checks; only emitted dots receive the 3-pixel forward-overlap gate. No
+    density exemption or reverse-overlap clearance is applied.
     """
     from .uniqueness import compare_array_to_registry
     if registry_index is None:
         raise RuntimeError("A public owner-repository inventory manifest is required; partial priors cannot clear a lane")
     if priors is not None:
         raise ValueError("Pass registry_index only; legacy partial priors are not a clearance source")
-    if phase not in ('surface', 'dots') or rank_limit != .90 or near_limit != .70:
+    if phase not in ('surface', 'dots', 'emitted') or rank_limit != .90 or near_limit != .70:
         raise ValueError("literal phases/thresholds are fixed by the standing protocol")
+    phase_used = 'surface' if phase == 'surface' else 'emitted'
     with rasterio.open(sample) as ref:
         expected = (ref.shape, ref.crs, ref.transform)
     if np.asarray(candidate).shape != expected[0]:
         raise ValueError('candidate shape differs from reference')
     report = compare_array_to_registry(candidate, registry_index, footprint,
-        expected_grid=expected,
-        progress=(lambda i, n, row: log(f'{phase} registry gate {i}/{n}')) if log else None)
-    return dict(report, phase=phase, ok=report['unique'], duplicate=report['duplicate_count'] > 0,
-                policy_exemptions=[], rule='literal finite >0 support at BOTH phases; no alternate policy')
+        expected_grid=expected, phase=phase_used,
+        progress=(lambda i, n, row: log(f'{phase_used} registry gate {i}/{n}')) if log else None)
+    return dict(report, phase=phase_used, legacy_phase_label=phase,
+                ok=report['unique'], duplicate=report['duplicate_count'] > 0,
+                policy_exemptions=[],
+                rule='absolute Spearman and exact pixel/hash at both phases; 3-pixel overlap on emitted dots only')
 
 
 def lane_report(candidate, eligible, priors=None, *, sample, phase='dots',

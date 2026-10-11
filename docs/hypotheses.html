@@ -9,65 +9,65 @@
 <body>
 <header class="site">
   <div class="brand">GEMS Prize (DrivenData #306) · workbench</div>
-  <nav><a href="index.html" class="">Summary</a><a href="submission-guide.html" class="">How to submit</a><a href="analysis.html" class="">H33 attribution</a><a href="hypotheses.html" class="active">Hypotheses</a><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" class="">Official leaderboard ↗</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
+  <nav><a href="index.html" class="">Summary</a><a href="executive-summary.html" class="">Submission executive summary</a><a href="submission-guide.html" class="">Clearance guide</a><a href="analysis.html" class="">H33 attribution</a><a href="hypotheses.html" class="active">Hypotheses</a><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" class="">Official leaderboard ↗</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
 </header>
 <main>
-<h1>Hypotheses, ranked</h1>
-<p class="sub">All four stay in the native-resolution lidar scarp lane: operators at 2–20 m, aggregated to 100 m. Qualitative prior for experiment order only: physical specificity, expected separability from named mimics, and cost. No numeric DTI projection; all items are untested. <strong>No expected DTI gain is a number.</strong> Each candidate must be tested alone on the frozen lidar-covered, segment-aware spatial holdout before any slot is considered. Leakage canary: single-feature AUC &gt;0.90 is leakage until disproven.</p>
-<div class="card">
-<h3>Rank 1 · LIDAR-01 · Slope-aware scarp-template field plus multiscale line consensus</h3>
+<h1>Ranked lidar-scarp hypotheses</h1>
+<p class="sub">One method lane: native-resolution lidar scarp evidence, physical scales 2–20 m, aggregated to 100 m. Ranking is qualitative, not a DTI prediction. The highest-ranked candidate has not been generated or validated because inputs are unavailable and the research budget is exhausted. Test it alone on the buffered spatial holdout before considering a weekly slot. Leakage canary: any feature-alone AUC &gt;0.90 is leakage until disproven.</p>
+<section class="card">
+<h2>Rank 1 · LIDAR-01 · Cross-scale slope-aware template and line-evidence consensus</h2>
 <div class="kv">
 <div>Lane</div><div>native-resolution lidar scarp channels</div>
-<div>Data layers</div><div>Shared 1 m bare-earth DEM/cache and existing cultural-feature mask (both unavailable in this checkout); slope-aware template amplitude, relative age, orientation and SNR; Steger sub-pixel ridge/valley evidence and Frangi Hessian line measures at 2–20 m; aggregate scarp fraction, SNR-weighted amplitude, orientation coherence and dominant strike to 100 m.</div>
-<div>Signature</div><div>Collinear cross-profile template fits allowing finite initial and far-field slopes, co-located with ridge/valley evidence persistent across adjacent physical scales and a coherent strike.</div>
-<div>Why off-catalogue</div><div>Expert test labels include new faults. A subtle metre-scale geomorphic scarp may remain visible in the native DEM but be lost or diluted in a 100 m summary. This is a physical rationale, not a measured result.</div>
-<div>Named mimic</div><div>Fluvial terrace riser; other controls include road/canal embankments, natural channel banks and landslide headscarps.</div>
-<div>Versus owner registry</div><div>This checkout had no feature implementation. Sibling reports already describe metre-scale lidar scarp channels, ridge thinning and multichannel consensus (S17, S25–S27); the proposed distinction is the joined slope-aware template outputs plus Steger/Frangi scale persistence and orientation coherence (S11–S14). The complete raster registry is absent, so novelty and uniqueness are unverified.</div>
-<div>Cost</div><div>Very high: tiled DEM handling, multi-orientation/multiscale operators, mask integration, 100 m aggregation, feature-alone canaries, blocked validation and two-stage registry audit; runtime is unknown.</div>
-<div>Expected DTI gain</div><div><span class="tag red">NOT MEASURED</span> Highest qualitative prior among these proposals, but sign and size are unknown. Not a DTI projection or score.</div>
-<div>Data status</div><div>Not runnable here. The official 1 m DEM-link list is login-gated; a public 3DEP 1 m product is listed in principle, but exact tiles, footprint coverage and alignment are unverified (S05, S08). The shared cache and existing mask are absent from this checkout.</div>
-<div>Validation</div><div>NOT RUN. Competition rasters, cached stack, mask, end-to-end holdout evaluator/CI runner and complete registry are unavailable.</div>
-</div></div><div class="card">
-<h3>Rank 2 · LIDAR-02 · Slope-aware scarp-template channels alone</h3>
+<div>Layers</div><div>Authorized native-resolution bare-earth DEM or shared cached lidar stack; existing cultural-feature mask; slope-aware scarplet-template amplitude, relative age, orientation and SNR; Steger sub-pixel ridge/valley positions; Frangi Hessian responses at 2, 5, 10 and 20 m. Aggregate scarp fraction, SNR-weighted amplitude, orientation coherence and dominant strike to 100 m.</div>
+<div>Physical signature</div><div>A candidate scarp has a slope-aware cross-profile template fit and a sub-pixel ridge/toe pair whose line evidence persists across neighboring physical scales with a coherent strike; weak single-scale edges are downweighted.</div>
+<div>Why faults may be absent from catalogue</div><div>Expert test labels include faults absent from the current public catalogue. A subdued, continuous surface scarp may remain measurable in native lidar where it is not represented in the existing map. This is a physical rationale, not a measured prediction.</div>
+<div>Named non-fault mimic</div><div>A fluvial terrace riser; secondary mimics include road/canal embankments, channel banks, landslide headscarps, mine benches and paleo-shorelines.</div>
+<div>Repo-local novelty</div><div>The H66 implementation in this checkout only decodes a precomputed quantized 12-band stack into a 100 m score; it does not implement a native-resolution slope-aware template bank plus Steger localization and a 2–20 m Frangi persistence fusion. Related owner-maintained work exists, so novelty is repo-local only and cannot be certified against the absent full registry (S17, S25–S27, S30–S33).</div>
+<div>Implementation cost</div><div>Very high: authorized DEM acquisition/provenance, tiled 2–20 m processing, multi-orientation template bank, Steger/Frangi operators, existing-mask integration, 100 m aggregation, feature-alone canaries, spatial holdout/CI, and two-stage registry audit; runtime is unknown.</div>
+<div>Expected DTI improvement</div><div><span class="tag grey">NOT MEASURED</span> Highest qualitative upside among these proposals because independent geometric evidence must persist across scales; actual gain may be zero or negative. Magnitude is unknown and unmeasured; this is not a DTI projection.</div>
+<div>Data status</div><div>Blocked. The DrivenData DEM-link table is login-gated, the shared cached stack and existing mask are absent in this checkout, and public USGS 1 m DEM coverage is in progress; exact tiles, footprint and alignment are unverified (S05, S35, S36).</div>
+<div>Validation</div><div>NOT RUN. No top-candidate holdout is authorized under the exhausted 3-experiment/2-hour budget; competition inputs and complete registry are unavailable.</div>
+</div></section><section class="card">
+<h2>Rank 2 · LIDAR-02 · Signed crest-to-toe profile consistency with sub-pixel localization</h2>
 <div class="kv">
 <div>Lane</div><div>native-resolution lidar scarp channels</div>
-<div>Data layers</div><div>Shared 1 m bare-earth DEM/cache and existing cultural-feature mask (unavailable here); templates spanning 2–20 m with amplitude, relative morphologic age, orientation, finite initial slope, far-field slopes and SNR; aggregate to 100 m.</div>
-<div>Signature</div><div>A cross-profile curvature/step fit that tolerates a dipping surface and unequal slopes on either side, with consistent amplitude and orientation along a trace.</div>
-<div>Why off-catalogue</div><div>Small or gently dipping fault scarps may be omitted from existing maps and may not survive coarse elevation aggregation; the template is intended to recover that exposed geomorphic expression.</div>
-<div>Named mimic</div><div>Road-cut or canal-bank embankment; terrace risers and landslide scarps are additional controls.</div>
-<div>Versus owner registry</div><div>No implementation is present in this checkout. Sare and Hilley provide a related external scarp-template precedent (S11, S14), but it does not establish that this exact slope-parameterized channel is absent from sibling rasters or improves this competition task. Registry comparison is required.</div>
-<div>Cost</div><div>High: parameter/scale search, edge and nodata handling, calibration on visible faults, matched ablation against the existing template, and registry checks.</div>
-<div>Expected DTI gain</div><div><span class="tag red">NOT MEASURED</span> High qualitative prior for subtle sloping scarps, unquantified; no score or projection.</div>
-<div>Data status</div><div>Same blocked DEM, cache and cultural-mask dependencies as LIDAR-01; exact study tiles and data alignment are unverified (S05, S08).</div>
-<div>Validation</div><div>NOT RUN. Must be tested alone as a leakage canary and against a matched baseline on the frozen blocked holdout.</div>
-</div></div><div class="card">
-<h3>Rank 3 · LIDAR-03 · Scale-persistent Steger ridge/valley and Frangi line field alone</h3>
+<div>Layers</div><div>Same authorized bare-earth DEM/cache and existing cultural mask; slope-aware template amplitude and orientation, signed Steger ridge/valley positions, Frangi line evidence at 2–20 m; aggregate to the required 100 m scarp fraction, SNR-weighted amplitude, orientation coherence and dominant strike.</div>
+<div>Physical signature</div><div>A narrow ridge–trough or trough–ridge pair has the expected signed cross-scarp order, a stable sub-pixel separation, and consistent template amplitude on both sides of the break.</div>
+<div>Why faults may be absent from catalogue</div><div>A low-relief tectonic scarp can be omitted from a map yet preserve a paired profile break; the test is whether that cross-profile structure occurs on withheld segments, not whether it approaches the known catalogue.</div>
+<div>Named non-fault mimic</div><div>An irrigation-canal bank or road cut; paired natural terrace/channel margins are also a confounder.</div>
+<div>Repo-local novelty</div><div>The historical H66 feature score uses max/mean stack aggregates and a 100 m shape composite; it does not evaluate signed native-resolution crest–toe ordering or sub-pixel spacing as a distinct channel. Prior method overlap exists, so project-wide novelty remains unverified (S17, S25–S27, S30–S33).</div>
+<div>Implementation cost</div><div>High: native DEM tiling, signed profile extraction, robust local-slope normalization, line-pair matching, aggregation, and the same holdout/canary/registry gates.</div>
+<div>Expected DTI improvement</div><div><span class="tag grey">NOT MEASURED</span> Second-ranked qualitative prior; could improve separation from isolated edges, but natural paired terrace forms may erase the advantage. Sign and magnitude are unknown and unmeasured; not a DTI projection.</div>
+<div>Data status</div><div>Blocked by the same login-gated DEM list, absent shared cache/mask and unverified USGS tile coverage/alignment (S05, S35, S36).</div>
+<div>Validation</div><div>NOT RUN; no experiment budget remains and no authorized data or complete registry is present.</div>
+</div></section><section class="card">
+<h2>Rank 3 · LIDAR-03 · Template-fit persistence across scale and local slope</h2>
 <div class="kv">
 <div>Lane</div><div>native-resolution lidar scarp channels</div>
-<div>Data layers</div><div>Slope-detrended 1 m bare-earth DEM/cache (unavailable here); Steger sub-pixel ridge and valley responses, Frangi Hessian line measures and local structure-tensor orientation at 2–20 m; aggregate strength, sign, persistence and orientation coherence to 100 m.</div>
-<div>Signature</div><div>Thin ridge/valley responses that persist across neighboring scales and align into coherent traces, rather than isolated curvature responses at one scale.</div>
-<div>Why off-catalogue</div><div>A short, subtle scarp can be smoothed away by coarse products; native-scale, sub-pixel line evidence could preserve continuity when a single cross-profile fit is weak.</div>
-<div>Named mimic</div><div>Natural stream-bank line; roads, field edges, terrace breaks and DEM seams are additional controls.</div>
-<div>Versus owner registry</div><div>Steger and Frangi are established line operators, not novel methods (S12, S13). Owner-maintained sibling pages describe lidar ridge thinning and scarp consensus (S25, S26); no complete registry is present to establish whether this precise signed, scale-persistence channel is distinct.</div>
-<div>Cost</div><div>High: multiscale Hessian/line extraction, edge suppression, sign handling, scale calibration and per-feature leakage checks.</div>
-<div>Expected DTI gain</div><div><span class="tag red">NOT MEASURED</span> Moderate qualitative prior, with high mimic risk; sign and size unknown. No DTI projection.</div>
-<div>Data status</div><div>Requires the unavailable official 1 m DEM tiles/cache and cultural mask; public 3DEP availability does not establish required tile coverage or alignment (S05, S08).</div>
-<div>Validation</div><div>NOT RUN. Test each response alone before combining; a holdout AUC above 0.90 is leakage until disproven.</div>
-</div></div><div class="card">
-<h3>Rank 4 · LIDAR-04 · Ordered cross-profile scarp polarity and along-strike continuity</h3>
+<div>Layers</div><div>Same native-resolution DEM/cache and existing cultural mask; slope-aware scarp-template amplitude, relative age and orientation; Steger/Frangi responses at 2, 5, 10 and 20 m; aggregate the required channels to 100 m.</div>
+<div>Physical signature</div><div>A feature&#x27;s template fit and strike remain stable as the analysis window expands from a narrow scarp to a broader 20 m support; a transient road edge or noise ridge loses support quickly.</div>
+<div>Why faults may be absent from catalogue</div><div>Faults missing from the catalogue may have weak or partially degraded scarps; persistence provides a physical filter without using the hidden fault location.</div>
+<div>Named non-fault mimic</div><div>A long, straight section-line road embankment; resistant terrace edges can also persist across scale.</div>
+<div>Repo-local novelty</div><div>The current H66 rank combination has no explicit scale-persistence statistic from fresh 2–20 m operators. This is a new channel design, not a competition-wide novelty claim; registry comparison is incomplete (S17, S25–S27, S30–S33).</div>
+<div>Implementation cost</div><div>High: a tiled multiscale response bank, scale registration, robust persistence summaries, feature-alone tests, and full blocked validation.</div>
+<div>Expected DTI improvement</div><div><span class="tag grey">NOT MEASURED</span> Moderate qualitative prior; may reject short-lived edge artifacts but can also suppress narrow real scarps. Actual gain is unknown and unmeasured; not a DTI projection.</div>
+<div>Data status</div><div>Blocked: exact competition DEM tiles and existing mask are unavailable; the public 1 m product&#x27;s local coverage and grid match are unverified (S05, S35, S36).</div>
+<div>Validation</div><div>NOT RUN; budget exhausted, inputs absent, uniqueness corpus incomplete.</div>
+</div></section><section class="card">
+<h2>Rank 4 · LIDAR-04 · Orientation-coherent scarp fraction with robust width and amplitude</h2>
 <div class="kv">
 <div>Lane</div><div>native-resolution lidar scarp channels</div>
-<div>Data layers</div><div>Shared 1 m bare-earth DEM/cache and existing cultural mask (unavailable here); 2–20 m detrended cross-profiles encoding paired slope breaks, step polarity, width, local relief and along-strike persistence; aggregate profile fractions and coherence to 100 m.</div>
-<div>Signature</div><div>Repeated, similarly oriented step profiles with consistent ridge/valley ordering along a line, rather than a single edge or isolated topographic break.</div>
-<div>Why off-catalogue</div><div>A coherent chain of small fault scarps may be too weak or discontinuous to enter a regional fault catalogue but retain repeated profile geometry at native resolution.</div>
-<div>Named mimic</div><div>Fluvial terrace edge; road/canal banks and landslide headscarps also create ordered breaks.</div>
-<div>Versus owner registry</div><div>This is a proposed profile-shape/polarity test within the lidar lane, not evidence of a new lane. Existing owner reports describe scarp channels and consensus (S17, S25–S27), so exact distinction must be checked against registry surfaces and final dots before any claim of uniqueness.</div>
-<div>Cost</div><div>Medium-high: profile sampling and orientation handling are moderate, but continuity rules, cultural masking, aggregation, ablation and registry checks remain necessary.</div>
-<div>Expected DTI gain</div><div><span class="tag red">NOT MEASURED</span> Lower qualitative prior than the top three; may improve precision if polarity/continuity separates faults from mimics, but could also discard real discontinuous scarps. Unquantified.</div>
-<div>Data status</div><div>Not runnable here: required 1 m tiles, cache, cultural mask and aligned competition grid are absent or unverified (S05, S08).</div>
-<div>Validation</div><div>NOT RUN. Prespecify continuity and polarity thresholds, then run the same segment-blocked holdout and leakage/uniqueness gates.</div>
-</div></div>
-<p class="note">Machine-readable: <a href="data/hypotheses.json">data/hypotheses.json</a>. Prior-method overlap and uniqueness limits are in IR-14; registry comparison is not run.</p>
+<div>Layers</div><div>Same native-resolution DEM/cache and existing cultural mask; template amplitude and relative age, Steger sub-pixel line positions, Frangi 2–20 m line widths, orientation coherence and dominant strike; required 100 m aggregates.</div>
+<div>Physical signature</div><div>A candidate cell receives support only when a measurable fraction of native samples form a compact line with stable strike and plausible scarp width; broad diffuse slope changes are downweighted.</div>
+<div>Why faults may be absent from catalogue</div><div>An unmapped fault may be expressed by a small but spatially coherent scarp fraction that a coarse mean or isolated edge detector would dilute.</div>
+<div>Named non-fault mimic</div><div>A mine bench or stock-pond berm; these can be linear and coherent but often have different widths and profile shapes.</div>
+<div>Repo-local novelty</div><div>The H66 code has scarp-fraction and structure-tensor summaries from a precomputed stack but no native-resolution width-calibrated Steger/Frangi line support. Existing sibling methods make broader novelty uncertain (S17, S25–S27, S30–S33).</div>
+<div>Implementation cost</div><div>Medium-high: line-width calibration, orientation-aware aggregation, mask application, plus the same input, leakage, holdout, and registry checks.</div>
+<div>Expected DTI improvement</div><div><span class="tag grey">NOT MEASURED</span> Lowest qualitative upside in this set; robust width could help against diffuse terrain edges, but the signal may be redundant with existing stack channels. Sign and size are unknown and unmeasured; not a DTI projection.</div>
+<div>Data status</div><div>Blocked: no authorized native DEM, shared cache, existing mask, or complete registry in this checkout; exact USGS overlap is unverified (S05, S35, S36).</div>
+<div>Validation</div><div>NOT RUN; do not generate a candidate or reserve a weekly submission slot.</div>
+</div></section>
+<p class="note">Machine-readable hypotheses: <a href="data/hypotheses.json">data/hypotheses.json</a>. Prior-method overlap is disclosed; full-registry novelty is not established.</p>
 </main>
 <footer>Generated by scripts/build_site.py from docs/data/*.json · last updated 2026-10-11 (UTC) · not affiliated with DrivenData or DOE.</footer>
 </body>

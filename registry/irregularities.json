@@ -1,55 +1,264 @@
-[
-  {
-    "id": "IR-66-GATE-01",
-    "severity": "high",
-    "status": "open-for-owner-decision",
-    "title": "The registered catalogue-hidden holdout cannot rank an off-catalogue emission (measured, not argued)",
-    "detail": "With the lane's eligibility rule (>=300 m from the published catalogue) the pooled hide-and-recover DTI is exactly 0.0 for our emission and 0.004729 for the live-scored champion h33-2-b2, because the evaluator's truth is withheld catalogue trace. Reported: evidence/h66_e2_holdout.json (policy arm) and evidence/h66_e2b_detector_holdout.json (detector arm, 0.048007 vs 0.032862 random). Consequence: the rule 'do not spend a slot on an idea that has not beaten the current holdout best' is unsatisfiable for any off-catalogue method, including the two best live scores in this project's history.",
-    "asked_of_owner": "choose the promotion instrument: (a) population-matched SGMC-off credit/dot, (b) a two-upload identification pair (h69A/h69B pattern) that pins |G| and credit/dot, or (c) accept that off-catalogue lanes can never be promoted locally."
-  },
-  {
-    "id": "IR-66-RES-01",
-    "severity": "high",
-    "status": "disclosed-deviation",
-    "title": "Lane asked for 1 m Steger/Frangi; executed on pinned 2 m-derived 100 m aggregates",
-    "detail": "No 1 m DEM is in the checkout and no data host is reachable (curl probes to drivendata/dropbox/usgs/zenodo all return 000). The physical bands decoded here ARE 2 m results aggregated with max/mean, so amplitude, relative age, orientation and SNR are all recoverable; what is NOT available footprint-wide are sub-pixel ridge offsets and 2-20 m scale sweeps. A two-tile 3 m check (data/pilot/dem3m, sha256 pinned by GEMSDOE48's dem_pilot_receipt.json) is left as the next session's E0.",
-    "asked_of_owner": "one Actions bridge job reusing 60GEMSDOE/.github/workflows/dem10-chi.yml to produce a 1 m native aggregate with a manifest."
-  },
-  {
-    "id": "IR-66-SCORE-01",
-    "severity": "medium",
-    "status": "flagged",
-    "title": "Brief's leaderboard claims do not match the official page read today",
-    "detail": "Brief says 'Current competition leaderboard GEMSDOE high score: 0.3774' and '0.3195 is the highest score right now'. The public board read on 2026-10-11 has #1 = 0.4133 (xiaofanhu), #2 = 0.3585 (cfld__), and 0.3195 at rank 9 (DARD); 0.3774 is not in the top rows. 0.3774 matches no artifact score in the family ledger we can see. Treated as stale numbers, not as a target.",
-    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
-  },
-  {
-    "id": "IR-66-FORK-01",
-    "severity": "info",
-    "status": "closed",
-    "title": "Template reuse verified byte-identical",
-    "detail": "src/gems57 is a verbatim copy of 60GEMSDOE/src/gems57 (23/23 sha256 equal, registry/template_provenance.json). No private fork, no local patch to the metric, holdout, grid or validator."
-  },
-  {
-    "id": "IR-66-GUARD-01",
-    "severity": "info",
-    "status": "disclosed",
-    "title": "Shared stop_guard is scoped to another lane; its verdict is recorded, not bypassed silently",
-    "detail": "60GEMSDOE/scripts/check_uniqueness66.py starts by calling scripts/stop_guard.py, which stops every runner unless registry/current_site_status.json names 'channel-steepness' as the active lane. This lane is not channel-steepness, so adopting the guard verbatim would refuse this lane's audit. The uniqueness check is therefore reimplemented in scripts/verify66.py against the same two literal clauses plus the IR-60-GATE-01 random-control correction; both shared files are vendored unchanged for inspection."
-  },
-  {
-    "id": "IR-66-SEM-01",
-    "severity": "medium",
-    "status": "upstream-fix-candidate",
-    "title": "Shared template mislabels a LiDAR band (documented bug, not propagated here)",
-    "detail": "60GEMSDOE/src/gems32/h33.py lidar_scarp_composite() documents '0.45*ex_max + 0.35*step_max + 0.20*downface_max' but reads raster bands 1, 2 and 5. Against the pinned sidecar band order [ex_max, ex_mean, step_max, lapneg_max, lappos_max, downface_max, upface_max, cross_max, relief, coh100, strike, valid], band 2 is ex_mean (not step_max, which is band 3) and band 5 is lappos_max (not downface_max, which is band 6). So two of the three terms are not the documented ones, and they are also the wrong kind of quantity: the code averages a mean-slope and a Laplacian convexity where the prose claims a slope-break amplitude and a down-face gradient. Verified by reading both files in this sandbox (lines 149-156 and the sidecar band list). This repo does not reuse that composite; the fix belongs in the template (one edit, one PR) and is reported here rather than silently forked. Any H32/H33/H68-descended 'scarp' weight in a shipped raster inherits this.",
-    "source": "https://github.com/buffedlizard55-lab/60GEMSDOE/blob/main/src/gems32/h33.py#L149-L155 vs https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features.json"
-  },
-  {
-    "id": "IR-66-NEG-01",
-    "severity": "high",
-    "status": "delivered-negative-result",
-    "title": "Cultural-feature veto does not help this lane",
-    "detail": "Conjunction veto (long-corridor coherence p97 x along-strike amplitude constancy x flat setting x no aeromagnetic gradient, mag_rank<p50) removed 108,468 of 3,892,984 LiDAR-covered cells but only 28 of the top 37,654 emission cells; paired 20 km block bootstrap of the off-catalogue DTI: -1.0e-5 [-1.5e-5, +6.5e-6], P(delta>0)=0.129. Spatial-CV logistic regression assigned a POSITIVE coefficient (1.39-1.59) to the cultural index against catalogue proximity: basin-floor cultural scarps co-locate with range-front faults, so a blanket veto would delete real evidence at the most faulted locations. Mechanistic read: the anthropogenic contamination of the LiDAR scarp channel lives in the middle of the ranking, where this emission policy never goes, and the 100 m aggregation also destroys the discriminator (a canal's double-edged profile) that a 1 m run could see."
-  }
-]
+{
+  "schema": 3,
+  "items": [
+    {
+      "id": "IR-01",
+      "severity": "medium",
+      "statement": "User-supplied project context contains multiple score-like attributions and labels different values as current/high. No exact organizer receipt, submission ID, date, and TIFF SHA-256 linkage is available here. Do not copy a current leaderboard table or claim a score.",
+      "status": "OPEN — no organizer receipts or hash mapping",
+      "source": "User-provided context; S03 is a manual official link only; S17–S18 owner pages."
+    },
+    {
+      "id": "IR-02",
+      "severity": "high",
+      "statement": "The prompt associates 0.2778 with GEMSDOE32 H33-2-B2, while the owner-maintained GEMSDOE32 page calls it unscored and states no organizer score exists for its artifacts. Neither side supplies a hash-linked organizer receipt in this checkout. The attribution may or may not refer to a genuine result; it is not confirmed.",
+      "status": "UNATTRIBUTED — no organizer receipt tied to exact bytes/hash",
+      "source": "docs/data/claims.json; S17, S18, S28."
+    },
+    {
+      "id": "IR-03",
+      "severity": "medium",
+      "statement": "A sibling-page association between H33-2-B2 and a leaderboard value is owner-reported. A page association is not a receipt, byte match, or causal explanation.",
+      "status": "OWNER-REPORTED ONLY",
+      "source": "S28"
+    },
+    {
+      "id": "IR-04",
+      "severity": "medium",
+      "statement": "The phrase 'GeoDAWN lidar' conflates datasets: GeoDAWN is described as an airborne magnetic/radiometric survey; lidar is a separate elevation product/program. Do not assume matching footprint or tiles.",
+      "status": "CORRECTED; exact lidar coverage still unverified",
+      "source": "S07, S08"
+    },
+    {
+      "id": "IR-05",
+      "severity": "low",
+      "statement": "The linked AGU abstract describes slope-aware scarp templates, but the prompt’s separate T31A-2838 identifier has not been matched to that record. Treat the paper as method context, not performance evidence.",
+      "status": "OPEN — method precedent only; cited identifier unresolved",
+      "source": "S14."
+    },
+    {
+      "id": "IR-06",
+      "severity": "low",
+      "statement": "The training raster name differs between the official problem description and the reference notebook. The shared data checker accepts the two recorded names; actual files are absent.",
+      "status": "OPEN — confirm names against the lawfully obtained official files",
+      "source": "S02, S06"
+    },
+    {
+      "id": "IR-07",
+      "severity": "low",
+      "statement": "Label-source wording differs between the problem page and competition rules. Preserve this discrepancy and do not infer a single catalogue provenance without reviewing both documents.",
+      "status": "OPEN",
+      "source": "S02, S04"
+    },
+    {
+      "id": "IR-08",
+      "severity": "high",
+      "statement": "The official data tab currently redirects to login. Competition rasters and the 1m_DEM_links.csv were not obtained. No authentication was attempted and no owner mirror was used.",
+      "status": "BLOCKER — authorized competition inputs are absent",
+      "source": "Current data-tab fetch; S02, S05, S24."
+    },
+    {
+      "id": "IR-09",
+      "severity": "high",
+      "statement": "DrivenData's published Terms of Use restrict redistribution and automated/manual copying or monitoring absent written consent. This project uses no public competition-data mirror and does not copy or monitor the leaderboard. The complete data-license terms still need qualified review before any public redistribution.",
+      "status": "POLICY HOLD — no copying/mirroring; full terms review incomplete",
+      "source": "S04, S23"
+    },
+    {
+      "id": "IR-10",
+      "severity": "medium",
+      "statement": "An owner-maintained data manifest reports inconsistent finite-footprint counts for two names of the same labels file. This project has no bytes with which to resolve the discrepancy.",
+      "status": "OWNER-REPORTED; NOT RECOMPUTED",
+      "source": "S17"
+    },
+    {
+      "id": "IR-11",
+      "severity": "high",
+      "statement": "The competition rules require original submitted work. Reusing another team's raster or public mirror would not establish an original candidate and is not permitted by this workflow.",
+      "status": "POLICY — enforced; no prior raster is copied",
+      "source": "S04"
+    },
+    {
+      "id": "IR-12",
+      "severity": "low",
+      "statement": "The official metric page leaves implementation details such as epsilon, exact distance convention and NaN handling unspecified. The shared metric documents these as interpretation choices; it is not asserted to be organizer source code.",
+      "status": "ASSUMPTIONS DOCUMENTED; organizer evaluator not available",
+      "source": "S02; docs/research/metric-derivation.md"
+    },
+    {
+      "id": "IR-13",
+      "severity": "high",
+      "statement": "The official competition inputs, cached native lidar stack, existing cultural mask, exact sample footprint, and full raster registry are absent. Previous evidence files are historical receipts only; no new experiment was run.",
+      "status": "BLOCKER — current checkout cannot reproduce H66",
+      "source": "Workspace review; docs/data/run-card.json; S05, S35, S36."
+    },
+    {
+      "id": "IR-14",
+      "severity": "medium",
+      "statement": "Native-resolution lidar scarp work is already described in the owner registry/sibling reports (including H33-C and H61-5). This branch makes no broad novelty claim; candidate surfaces and final dots must be compared with the complete registry.",
+      "status": "PRIOR-METHOD OVERLAP; UNIQUENESS UNVERIFIED",
+      "source": "S17, S25, S26, S27"
+    },
+    {
+      "id": "IR-15",
+      "severity": "high",
+      "statement": "USGS lists an open 1 m DEM product and National Map/LidarExplorer access, but production is in progress and exact competition-area tile coverage, acquisition dates, vertical/horizontal alignment, and complete footprint are unverified.",
+      "status": "OPEN — public access path is not coverage proof",
+      "source": "S35, S36; official DEM-link list at S02/S05."
+    },
+    {
+      "id": "IR-16",
+      "severity": "high",
+      "statement": "The archived TIFF is not offered. The final-policy HOLDOUT-DTI is historically 0.0 with no 95% CI; detector-arm evidence is not the emitted policy; pre-placement uniqueness is absent; post-placement registry coverage is incomplete; official footprint validation was not repeated.",
+      "status": "BLOCKED — negative run card; no download or submit clearance",
+      "source": "docs/data/run-card.json; evidence/h66_e2_holdout.json; evidence/h66_verify.json."
+    },
+    {
+      "id": "IR-17",
+      "severity": "medium",
+      "statement": "The shared root package has a whole-component spatial-block splitter with a buffer, but the historical H66 runner called gems57.holdout.build_holdout, which divides branches into <=12-pixel chunks and does not implement the required whole-segment buffered block holdout. No corrected holdout was run because the budget is exhausted.",
+      "status": "SHARED SPLITTER AVAILABLE; H66 runner used an older protocol",
+      "source": "src/gems/holdout.py; src/gems57/holdout.py; scripts/run_h66.py; no new experiment."
+    },
+    {
+      "id": "IR-18",
+      "severity": "high",
+      "statement": "The historical pre-placement continuous-surface hash was not distinct from the final TIFF hash. The post-placement correlation was sampled and only 62 rasters were checked; the recorded full family registry is absent. Neither stage is cleared.",
+      "status": "OPEN — pre-placement check absent; post-placement scan incomplete",
+      "source": "evidence/h66_verify.json; docs/data/run-card.json; scripts/verify66.py."
+    },
+    {
+      "id": "IR-19",
+      "severity": "high",
+      "statement": "The historical all-finite TIFF was locally checked against repository constants. The official reference/features raster is absent in this checkout, so exact sample-grid transform/bounds and NaN-only-outside-footprint behavior are not independently verified. Local success is not portal acceptance.",
+      "status": "PARTIAL LOCAL CHECK ONLY — official footprint check unavailable",
+      "source": "evidence/h66_verify.json; src/gems/validate_submission.py; S02, S05."
+    },
+    {
+      "id": "IR-20",
+      "severity": "low",
+      "statement": "A 140-character submission-note limit is specified by the project brief and enforced by the shared writer; the account-gated live form was not inspected in this review.",
+      "status": "USER-PROTOCOL VALUE; live form limit UNVERIFIED",
+      "source": "user-supplied brief; src/gems/submission_writer.py"
+    },
+    {
+      "id": "IR-21",
+      "severity": "medium",
+      "statement": "The official rules PDF and Terms of Use were only partially reviewed in the source record; the rules' remaining data-license section and the remaining Terms sections have not been independently checked in this branch.",
+      "status": "OPEN — legal/data-license review incomplete",
+      "source": "S04, S23"
+    },
+    {
+      "id": "IR-22",
+      "severity": "medium",
+      "statement": "The repository intentionally does not mirror or monitor leaderboard rows. This review leaves the official leaderboard as a direct manual link; any user-supplied or owner-reported standings remain unverified.",
+      "status": "NO SNAPSHOT IN CURRENT TREE; LEADERBOARD NOT REFRESHED",
+      "source": "S03; current source register."
+    },
+    {
+      "id": "IR-23",
+      "severity": "high",
+      "statement": "The historical emitted-policy arm is recorded as HOLDOUT-DTI 0.0 with evaluator version gems57-pooled-hide-v2 and 45,260 withheld-positive observations; no 95% CI was computed. The separate detector-arm HOLDOUT-DTI is not the emission policy and also has no CI. The older holdout policy/eligibility setup must not be treated as validation of the emitted artifact.",
+      "status": "OPEN — historical final-policy HOLDOUT-DTI failed and lacks CI",
+      "source": "evidence/h66_e2_holdout.json; evidence/h66_e2b_detector_holdout.json; docs/data/run-card.json."
+    },
+    {
+      "id": "IR-24",
+      "severity": "high",
+      "statement": "The historical H66 code decoded a precomputed quantized 2 m-derived stack. It did not rerun full-footprint 2–20 m Steger/Frangi on the native DEM, and the cultural-looking mask was a heuristic rather than an existing labeled cultural mask. Exact DEM inputs/provenance are absent now.",
+      "status": "DISCLOSED DEVIATION — prior run used derived aggregates, not requested fresh native operators",
+      "source": "src/gems66/channels66.py; src/gems66/spec66.py; docs/data/run-card.json; S02, S05, S30, S35."
+    },
+    {
+      "id": "IR-25",
+      "severity": "medium",
+      "statement": "The prompt’s leaderboard and H33 numerical claims have not been re-fetched in this review. The official page is available only as a direct manual link; do not repeat user-supplied standings as facts.",
+      "status": "UNVERIFIED — no current leaderboard or project-score snapshot",
+      "source": "S03; docs/data/claims.json."
+    },
+    {
+      "id": "IR-26",
+      "severity": "info",
+      "statement": "registry/template_provenance.json records a prior byte comparison of shared gems57 files. This branch now modifies the shared uniqueness.py and gates.py implementations for phase-aware absolute Spearman and emitted-dot overlap; external template status is not upstream-merged.",
+      "status": "LOCAL SHARED-SOURCE PATCH — external template not updated or merged",
+      "source": "registry/template_provenance.json; src/gems57/uniqueness.py; src/gems57/gates.py."
+    },
+    {
+      "id": "IR-27",
+      "severity": "info",
+      "statement": "The historical uniqueness auditor reports an inherited stop-guard scoped to another lane. This review does not bypass that guard or interpret its status as a scientific result.",
+      "status": "DISCLOSED — shared stop-guard scope is a separate repository concern",
+      "source": "scripts/check_uniqueness66.py; registry/current_site_status.json."
+    },
+    {
+      "id": "IR-28",
+      "severity": "medium",
+      "statement": "IR-66-SEM-01 — Shared template mislabels a LiDAR band (documented bug, not propagated here). 60GEMSDOE/src/gems32/h33.py lidar_scarp_composite() documents '0.45*ex_max + 0.35*step_max + 0.20*downface_max' but reads raster bands 1, 2 and 5. Against the pinned sidecar band order [ex_max, ex_mean, step_max, lapneg_max, lappos_max, downface_max, upface_max, cross_max, relief, coh100, strike, valid], band 2 is ex_mean (not step_max, which is band 3) and band 5 is lappos_max (not downface_max, which is band 6). So two of the three terms are not the documented ones, and they are also the wrong kind of quantity: the code averages a mean-slope and a Laplacian convexity where the prose claims a slope-break amplitude and a down-face gradient. Verified by reading both files in this sandbox (lines 149-156 and the sidecar band list). This repo does not reuse that composite; the fix belongs in the template (one edit, one PR) and is reported here rather than silently forked. Any H32/H33/H68-descended 'scarp' weight in a shipped raster inherits this.",
+      "status": "UPSTREAM-FIX-CANDIDATE",
+      "source": "S31; band list in S30"
+    },
+    {
+      "id": "IR-29",
+      "severity": "high",
+      "statement": "The recorded H66 hand-built cultural-looking-feature veto changed the off-catalogue SGMC proxy instrument negatively, with a paired interval crossing zero. The instrument is not the competition hidden-fault holdout, and the mask is not an existing labeled cultural-feature mask. This does not support a claim that a cultural veto improves this lane.",
+      "status": "NEGATIVE HISTORICAL PROXY RESULT; not organizer-label evidence",
+      "source": "evidence/h66_e1_offcat.json; evidence/h66_spatial_cv.json; docs/data/claims.json."
+    },
+    {
+      "id": "IR-30",
+      "severity": "high",
+      "status": "TESTED — canonical site gate and page/link checks pass (part of 87 passing tests)",
+      "statement": "The former run-card generator and duplicate site builders made conflicting availability/portal-safety claims. The replacement makes docs/data/run-card.json canonical, makes the H66 builder a wrapper, and puts explicit release-gate checks before any public TIFF link; the canonical-clearance and generated-page tests pass.",
+      "source": "scripts/write_run_card.py; scripts/build_site.py; scripts/build_site66.py; tests/test_site.py."
+    },
+    {
+      "id": "IR-31",
+      "severity": "high",
+      "status": "TESTED — synthetic safety suite passes; live s0 blocked as required (exit 2)",
+      "statement": "The previous s0 verifier scanned only files that existed and could return ok=true without required inputs. The replacement enumerates all runtime inputs, checks exact pins/conflicts, and main/direct research stages fail closed on s0 and the canonical budget. The required topo raster and lidar sidecar are unpinned; synthetic safety tests pass, and live s0 correctly remains blocked.",
+      "source": "scripts/run_h66.py; registry/data_manifest.json; tests/test_run_h66_safety.py."
+    },
+    {
+      "id": "IR-32",
+      "severity": "high",
+      "status": "SAFETY CHECKS TESTED — negative preflight; no successful candidate emission",
+      "statement": "The earlier s5 emitted files regardless of the failed policy-arm holdout and incomplete uniqueness. The replacement requires strict current s0, exact top-hypothesis HOLDOUT-DTI evidence with frozen-best paired-CI win, the prescribed metric/fold receipts, an exhaustive feature manifest for per-feature canaries, matching implementation and candidate-field hashes, in-range score/CI, leakage pass, complete pre/post registry checks, and shared writer/validator plus on-disk hash/pixel/grid verification. Negative-preflight tests pass, but no LIDAR-01 output or successful end-to-end release was run.",
+      "source": "scripts/run_h66.py; src/gems/submission_writer.py; src/gems/validate_submission.py; tests/test_run_h66_safety.py."
+    },
+    {
+      "id": "IR-33",
+      "severity": "high",
+      "status": "TESTED — blocked summary/executive/guide/session pages and local links pass (part of 87 passing tests)",
+      "statement": "The summary, H66 session page, and submission guide previously linked a historical TIFF and asserted unsupported portal/uniqueness safety. The updated generators show no clearance, no artifact link, and explicitly leave the earlier [0,1] error cause unknown; the updated-page and link-resolution tests pass.",
+      "source": "scripts/build_site.py; scripts/build_site66.py; docs/data/run-card.json; tests/test_site.py."
+    },
+    {
+      "id": "IR-34",
+      "severity": "medium",
+      "status": "OPEN — historical CV interval was mislabeled",
+      "statement": "The historical spatial-CV receipt calls mean ±1.96 standard deviations over two usable folds a 95% CI. This is not a justified 95% confidence interval; no inferential interval should be reported from that receipt.",
+      "source": "evidence/h66_spatial_cv.json; scripts/run_h66.py."
+    },
+    {
+      "id": "IR-35",
+      "severity": "medium",
+      "status": "FIXED — legacy fetch script is verify-only and says so",
+      "statement": "The script name fetch_inputs.sh suggested copying/downloading from a local template path and printed a GitHub API copying command. It has been changed to a verify-only compatibility wrapper; no data are fetched or mirrored.",
+      "source": "scripts/fetch_inputs.sh; scripts/verify_competition_data.py; README.md."
+    },
+    {
+      "id": "IR-36",
+      "severity": "high",
+      "statement": "The previous shared registry uniqueness function applied 3-pixel dot overlap to dense continuous surfaces and used signed Spearman. The shared source now separates surface rank/pixel/hash checks from emitted-dot overlap and flags absolute Spearman; phase and absolute-correlation tests pass; no candidate was scanned. Historical 62-raster results do not become a complete pass.",
+      "status": "TESTED — phase/absolute-Spearman cases pass; no candidate registry scan run",
+      "source": "src/gems57/uniqueness.py; src/gems57/gates.py; scripts/lane_check.py; tests/test_uniqueness.py; registry/template_provenance.json."
+    },
+    {
+      "id": "IR-37",
+      "severity": "medium",
+      "statement": "After the archive move, the reconstructed workspace retained the tracked docs/downloads deletions and archive notice but not the three binary archive copies. They were restored from the tracked HEAD blobs into evidence/archives/h66-1 and all three SHA-256 values were checked against the archive README.",
+      "status": "RESOLVED — byte-identical archive copies restored; all three hashes verified; no public download remains",
+      "source": "evidence/archives/h66-1/README.md; sha256sum of all three archived artifacts; tracked HEAD blobs under docs/downloads/."
+    }
+  ]
+}

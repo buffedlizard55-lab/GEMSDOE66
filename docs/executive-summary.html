@@ -1,73 +1,39 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>How to submit · GEMSDOE66</title>
-<style>
-:root{--bg:#0d1117;--card:#161b22;--ink:#e6edf3;--mut:#9198a1;--ok:#2ea043;--no:#db61a2;--warn:#d29922;--line:#30363d}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-main{max-width:1080px;margin:0 auto;padding:26px 20px 80px}h1{font-size:30px;margin:.2em 0}h2{margin-top:2em;border-bottom:1px solid var(--line);padding-bottom:6px}
-a{color:#4493f8}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0}
-.banner{border-left:6px solid var(--warn)}.banner.no{border-left-color:var(--no)}.banner.ok{border-left-color:var(--ok)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}.kpi b{display:block;font-size:24px}
-.btn{display:inline-block;background:var(--ok);color:#fff;padding:11px 16px;border-radius:9px;text-decoration:none;font-weight:600;margin:4px 8px 4px 0}
-.btn.alt{background:#21262d;color:var(--ink);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
-th{background:#1c2128}code{background:#1c2128;padding:1px 5px;border-radius:5px;font-size:13px}
-.mut{color:var(--mut);font-size:13.5px}nav{position:sticky;top:0;background:#0d1117ee;border-bottom:1px solid var(--line);padding:10px 0;z-index:9}
-nav a{margin-right:14px;font-size:14px}ul{padding-left:22px}.small{font-size:13px}
-</style></head><body><main><nav><a href="index.html">Summary</a><a href="h66-session.html">H66 run</a><a href="executive-summary.html">How to submit</a><a href="run-card.html">Run card</a><a href="irregularities.html">Irregularities</a><a href="sources.html">Sources</a></nav>
-<h1>Exactly how to make a submission into the GEMS Prize</h1>
-<p class="mut">Five steps. Nothing to install, nothing to configure. The portal rejects a file whose values are not
-inside [0, 1]; the files on this page are written so that cannot happen.</p>
-
-<div class="banner ok card"><h2 style="margin-top:0;border:0">Step 1 — download <code>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip</code></h2>
-<p>The submission form accepts “a single-band GeoTIFF (.tif), or a .zip file containing a single GeoTIFF”. The .zip
-is the smallest upload and contains exactly one file. If you prefer the bare raster, take
-<code>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif</code>; both are the same bytes inside the footprint.</p></div>
-
-<div class="card"><h2 style="margin-top:0;border:0">Step 2 — open the submission form</h2>
-<p><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submission/">
-https://www.drivendata.org/competitions/306/competition-doe-gems/submission/</a> → <em>New submission</em> →
-<em>File to submit</em> → choose the .zip.</p></div>
-
-<div class="banner card"><h2 style="margin-top:0;border:0">Step 3 — why your last attempt failed, and why this one will not</h2>
-<p>The portal said <code>Predicted values must be in range [0, 1]</code>. That is a value check, not a format check,
-and it fires for three reasons — all of them fixed in the writer here:</p>
-<ol><li><b>NaN outside the footprint.</b> The problem page says data outside the bounds may be “null or nan”, but the
-range validator reads the whole array. A file with NaN outside the footprint fails <code>0 ≤ p ≤ 1</code> for
-those pixels. <code>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif</code> therefore writes <b>0.0 everywhere outside the footprint and carries no
-nodata tag</b>; the NaN variant is kept only for spec-literalism (<code>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif</code>).</li>
-<li><b>Unnormalised units.</b> A logit, a z-score or a 0–255 raster is out of range. The writer refuses to emit
-anything not already finite and inside [0,1] — <code>src/gems52/submission_writer.py</code>-style fail-closed,
-re-implemented in <code>scripts/run_h66.py s5</code> and checked again by <code>scripts/verify66.py</code>.</li>
-<li><b>Wrong CRS/shape/transform or an HTML error page saved as <code>.tif</code>.</b> Check the first bytes: a
-GeoTIFF starts with <code>II*\0</code> or <code>MM\0*</code>; a Git-LFS pointer or an S3 error page starts with
-<code>version https://git-lfs…</code> or <code>&lt;?xml</code>. Our receipt below pins the sha256 of the exact bytes.</li></ol>
-<p class="small"><b>Receipt for the bytes you are downloading:</b> sha256 <code>44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1</code> ·
-3730×3292 · EPSG:32611 ·
-dtype float32 · 37,654 positive pixels ·
-min 0.0 max 1.0 · no NODATA tag ·
-all local checks passed <code>true</code>.</p></div>
-
-<div class="card"><h2 style="margin-top:0;border:0">Step 4 — fill in the note (≤140 characters)</h2>
-<p>The form asks for “a short comment to help you or your team tell submissions apart later”. Paste exactly:</p>
-<pre style="background:#1c2128;padding:12px;border-radius:8px;overflow:auto">H66-1 LiDAR scarplet channels + cultural veto, 37654 dots >=300m off catalogue; HOLDOUT-DTI 0.048 vs 0.033 random; veto NEGATIVE</pre>
-<p class="small">128 characters. Suggested submission <b>name</b> if your mirror asks for one:
-<code>GEMSDOE66-H66-1-LIDAR-SCARPLET-VETO-37654</code>.</p></div>
-
-<div class="banner no card"><h2 style="margin-top:0;border:0">Step 5 — decide: this file is NOT promoted</h2>
-<p>Uploading it is allowed by the rules (one submission per day per team is the only hard cadence limit in this
-family's notes; the weekly cap is shown on the submission page). But the honest read of the evidence is that this
-artifact scores in the 0.04–0.16 band where every LiDAR-scarp emission has landed, versus a standing 0.2778 and a
-board top near 0.41. Spend a slot on the selector's pick, not on a negative-result lane.</p></div>
-
-<div class="card"><h2 style="margin-top:0;border:0">Regenerate the file yourself (auditable end to end)</h2>
-<pre style="background:#1c2128;padding:12px;border-radius:8px;overflow:auto">bash scripts/fetch_inputs.sh          # restores hash-pinned inputs into data/
-python scripts/run_h66.py s0 s1 s2 s3 s4 s4b s5
-python scripts/verify66.py --candidate docs/downloads/&lt;file&gt;.tif
-python scripts/write_run_card.py && python scripts/build_site66.py</pre>
-<p class="small">Requires: <code>pip install -r requirements.txt</code> (~2 GB RAM, 2 cores, no GPU; whole run ≈ 4 min).
-Every stage writes its own JSON into <code>evidence/</code> before the next one starts.</p></div>
-<p class="mut small">Official format requirements being satisfied: single band · float32 · values in [0, 1] ·
-EPSG:32611 · 100 m pixels · same bounds as the training data · see
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">the problem page</a>.</p>
-</main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Submission executive summary · GEMS Prize workbench</title>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site">
+  <div class="brand">GEMS Prize (DrivenData #306) · workbench</div>
+  <nav><a href="index.html" class="">Summary</a><a href="executive-summary.html" class="active">Submission executive summary</a><a href="submission-guide.html" class="">Clearance guide</a><a href="analysis.html" class="">H33 attribution</a><a href="hypotheses.html" class="">Hypotheses</a><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" class="">Official leaderboard ↗</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
+</header>
+<main>
+<h1>Submission executive summary</h1>
+<p class="sub">Decision for gemsdoe66-h66-1-reaudit-2026-10-11. This page is intentionally a clearance summary, not a leaderboard claim.</p>
+<div class="banner stop"><strong class="big">NEGATIVE — NO DOWNLOAD OR SUBMISSION CLEARANCE</strong>No TIFF or ZIP is cleared. Do not download or submit the archived audit artifact.</div>
+<table><tbody>
+<tr><th>Proposed method</th><td>LIDAR-01 — Cross-scale slope-aware template and line-evidence consensus (proposal only; not generated or tested).</td></tr>
+<tr><th>Hypothesis</th><td>At native resolution, a slope-aware scarplet-template fit reinforced by coherent Steger sub-pixel ridge/valley positions and Frangi line responses persistent across 2, 5, 10, and 20 m scales may identify surface scarps on faults absent from the public catalogue. Aggregate scarp fraction, SNR-weighted amplitude, orientation coherence, and dominant strike to 100 m. This is untested.</td></tr>
+<tr><th>Top-candidate holdout</th><td><span class="tag red">NOT RUN — LIDAR-01 was not generated or evaluated; inputs are unavailable and the budget is exhausted.</span>; value not measured; evaluator Not run; planned shared evaluator: gems57-pooled-hide-v2.; withheld positives not measured; 95% CI not measured</td></tr>
+<tr><th>Historical emitted-policy holdout</th><td>HOLDOUT-DTI 0.0; evaluator gems57-pooled-hide-v2 (historical H66 s4 receipt; not independently rerun in this review); withheld observations 45260; 95% CI not measured. Not the top proposal.</td></tr>
+<tr><th>Historical detector arm</th><td>HOLDOUT-DTI 0.04800722761599403; evaluator gems57 pooled hide-and-recover (historical H66 s4b receipt; not independently rerun in this review); withheld observations 45260; 95% CI not measured. Not the emitted policy.</td></tr>
+<tr><th>Leakage canary</th><td><span class="tag red">NOT RUN</span> — The required feature-alone AUC canary on the same buffered held-fault folds was not run for LIDAR-01. A public-catalogue proximity diagnostic is not a substitute.</td></tr>
+<tr><th>Strict input verifier</th><td><span class="tag red">BLOCKED — strict s0 returned exit code 2; no downstream state load or research stage executed.</span>; missing inputs: training_features.tif, bridge/labels.tif, bridge/existing_faults.tif, bridge/sample_submission.tif, external/lidar_scarp_features_u8.tif, external/lidar_scarp_features.json, external/geodawn_extensions_u8.tif, external/derived_sgmc_faults_100m_u8.tif, external/topo_10m_derived_100m_u8.tif; missing pins: external/lidar_scarp_features.json, external/topo_10m_derived_100m_u8.tif</td></tr>
+<tr><th>Registry checks</th><td>Pre-placement: <span class="tag red">NOT RUN / NOT CLEARED</span>; post-placement: <span class="tag amber">HISTORICAL PARTIAL SCREEN ONLY — NOT CLEARED</span>. Registry coverage is incomplete.</td></tr>
+<tr><th>Official-grid validator</th><td><span class="tag amber">PARTIAL / NOT CLEARED</span> — A skipped or historical-only reference comparison is not a format pass. The earlier portal [0,1] rejection cause is unknown.</td></tr>
+<tr><th>Historical raster SHA-256</th><td><code>44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1</code> · audit-only archive path <code>evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif</code></td></tr>
+<tr><th>Proposed name</th><td>GEMSDOE66-LIDAR-01-CROSS-SCALE-SCARP (not reserved)</td></tr>
+<tr><th>Proposed note</th><td><code>Unvalidated LIDAR-01 proposal; no holdout, registry, or official-grid clearance. Do not submit.</code> · 95/140 characters · informational, not cleared</td></tr>
+<tr><th>[0,1] rejection</th><td>Cause unknown. No evidence establishes that NaN handling or any single change caused the earlier portal rejection.</td></tr>
+<tr><th>Decision</th><td><strong>Do not submit. No candidate beats the frozen holdout best with the required evidence. A real slot is a separate selector decision.</strong></td></tr>
+</tbody></table>
+<p>Next research, if separately authorized with a fresh budget and lawful inputs: generate LIDAR-01, validate only on the prescribed buffered whole-segment spatial holdout, record a 95% CI and withheld-positive count, then run all leakage, uniqueness, and official-grid gates. No experiment or weekly slot is authorized by this summary.</p>
+<p><a href="run-card.html">Open full run card</a> · <a href="submission-guide.html">Read clearance guide</a> · <a href="sources.html">Manual source links</a></p>
+</main>
+<footer>Generated by scripts/build_site.py from docs/data/*.json · last updated 2026-10-11 (UTC) · not affiliated with DrivenData or DOE.</footer>
+</body>
+</html>

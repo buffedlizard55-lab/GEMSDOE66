@@ -1,93 +1,212 @@
 {
-  "schema": 2,
-  "run_id": "gemsdoe66-h66-1-scarplet-veto-2026-10-11",
+  "schema": 4,
+  "run_id": "gemsdoe66-h66-1-reaudit-2026-10-11",
   "date_utc": "2026-10-11",
-  "lane": "native-resolution lidar scarp channels + cultural-feature veto",
-  "top_candidate": "H66-1: physical-unit scarplet channels (amplitude, fill fraction, SNR, orientation coherence, relative age) with a conjunctive cultural veto",
-  "hypothesis": "Scarplet-template and Hessian-line evidence decoded from the pinned 2 m LiDAR stack (amplitude in m/m, implied height in m, scarp fill fraction, structure-tensor coherence, relative age) concentrates unmapped fault trace better than mass-matched random inside the LiDAR-covered footprint, and masking roads/canals/field edges raises that concentration further because the prior LiDAR arms' poor live scores are attributed to cultural contamination.",
-  "mechanism": "A fault the compilation omits still leaves a ~0.3-1.5 m step in the bare-earth surface. The 2 m stack aggregates the max and the mean of the slope-excess over each 100 m cell; their ratio is the fraction of the cell actually scarped, and dividing the amplitude by the 20 km-block robust background turns it into a per-cell SNR. Combining the SNR-weighted amplitude with the coherence of the scarp strike and the crest/toe sharpness selects cells where a real, fresh, near-straight step exists off the mapped network.",
-  "non_fault_mimic": "Irrigation canals, stock-pond berms, section-line roads, farm field edges and mine benches on basin floors -- plus the mimics named in the stack's own sidecar caveat ('roads, channels, terrace risers, paleo-shorelines, landslides and mines also create steps'). Pluvial Lake Lahontan/Bonneville shorelines are the non-anthropogenic twin.",
+  "lane": "native-resolution lidar scarp channels",
+  "top_candidate": "LIDAR-01 — Cross-scale slope-aware template and line-evidence consensus (proposal only; not generated or tested).",
+  "hypothesis": "At native resolution, a slope-aware scarplet-template fit reinforced by coherent Steger sub-pixel ridge/valley positions and Frangi line responses persistent across 2, 5, 10, and 20 m scales may identify surface scarps on faults absent from the public catalogue. Aggregate scarp fraction, SNR-weighted amplitude, orientation coherence, and dominant strike to 100 m. This is untested.",
+  "mechanism": "A subdued fault scarp omitted from the catalogue may retain a cross-profile step and line response across neighboring physical scales. Requiring agreement among slope-aware profile shape, sub-pixel line location, and multiscale Hessian evidence may distinguish persistent fault scarps from isolated edges. No performance inference follows from this physical rationale.",
+  "non_fault_mimic": "A fluvial terrace riser; other named mimics include road/canal embankments, channel banks, landslide headscarps, mine benches, field edges, and paleo-shorelines.",
   "protocol": {
-    "holdout": "Whole fault segments assigned within lidar-covered spatial blocks, with a buffer; catalogue-derived features from visible faults only; visible fault pixels masked exactly.",
+    "holdout": "Whole fault segments/components in lidar-covered spatial blocks, buffered; catalogue-derived features from visible faults only; visible known-fault pixels masked exactly.",
     "alpha": 0.2,
     "beta": 0.8,
     "kernel": "300 m triangular distance kernel",
     "feature_scales_m": [
       2,
+      5,
+      10,
       20
     ],
     "aggregation_m": 100,
-    "range_front_gate": "Gain must not be confined to range-front blocks.",
-    "leakage_auc_stop_threshold": 0.9
+    "leakage_auc_stop_threshold": 0.9,
+    "uniqueness_surface_rank_stop_threshold": 0.9,
+    "uniqueness_dot_overlap_stop_threshold": 0.7,
+    "uniqueness_dot_radius_px": 3,
+    "budget_max_experiments": 3,
+    "budget_max_hours": 2
   },
   "holdout_dti": {
     "label": "HOLDOUT-DTI",
+    "value": null,
+    "status": "NOT RUN — LIDAR-01 was not generated or evaluated; inputs are unavailable and the budget is exhausted.",
+    "evaluator_version": "Not run; planned shared evaluator: gems57-pooled-hide-v2.",
+    "withheld_positive_count": null,
+    "ci95": null,
+    "ci95_status": "NOT RUN; no score or projection is available for the proposed top candidate.",
+    "source": null,
+    "beats_frozen_holdout_best": false,
+    "paired_difference_ci95": null
+  },
+  "historical_emitted_policy_holdout": {
+    "label": "HOLDOUT-DTI",
+    "value": 0.0,
+    "arm": "Historical emitted submission-policy arm; not LIDAR-01.",
+    "status": "NEGATIVE / NOT CLEARED — recorded score is structurally zero under this historical holdout policy and does not validate the archived emission for new faults.",
+    "evaluator_version": "gems57-pooled-hide-v2 (historical H66 s4 receipt; not independently rerun in this review)",
+    "withheld_positive_count": 45260,
+    "ci95": null,
+    "ci95_status": "NOT COMPUTED in the historical receipt. A 95% CI is required; null is not a pass.",
+    "source": "evidence/h66_e2_holdout.json",
+    "interpretation": "The final emission excludes cells within 300 m of the public catalogue while this holdout scores withheld catalogue trace. The detector-arm result below is not the emitted policy arm and cannot substitute for it."
+  },
+  "historical_detector_arm": {
+    "label": "HOLDOUT-DTI",
     "value": 0.04800722761599403,
-    "status": "MEASURED \u2014 detector arm of the registered pooled hide-and-recover; +46% over mass-matched random, and the gain survives restriction to non-range-front cells",
-    "evaluator_version": "gems57.holdout.evaluate (pooled), vendored byte-identical from 60GEMSDOE (registry/template_provenance.json, 23/23 sha256)",
-    "withheld_positives": 45260,
-    "ci95": "not claimed for the level (one pooled run per arm, no replicate arms); the contrast is 5 mass-matched uniform-random dot sets, mean 0.032862. The paired 20 km block bootstrap CI is quoted where it was designed: the veto delta on the off-catalogue instrument, -1.0e-5 [-1.5e-5, +6.5e-6].",
-    "reason": "Off-catalogue eligibility (>=300 m from the catalogue) makes the registered policy arm structurally 0.0 \u2014 recorded as IR-23 \u2014 so the gate is read on the detector arm (0.048007 vs 0.032862 random; off-range-front 0.040739 vs 0.031743) and on a population-matched off-catalogue instrument (0.18796 vs 0.09028 random, 2.08x)."
+    "status": "HISTORICAL DETECTOR ARM ONLY — not the emitted raster policy arm; 95% CI missing; not release evidence.",
+    "evaluator_version": "gems57 pooled hide-and-recover (historical H66 s4b receipt; not independently rerun in this review)",
+    "withheld_positive_count": 45260,
+    "ci95": null,
+    "mass_matched_random_control_value": 0.03286179137826537,
+    "source": "evidence/h66_e2b_detector_holdout.json",
+    "interpretation": "Historical detector arm only; not the emitted policy, not LIDAR-01, and not release evidence."
   },
   "leakage_canary": {
-    "status": "PASS",
+    "status": "NOT RUN",
     "threshold_auc": 0.9,
-    "feature_results": "worst single feature sharp AUC 0.5762; deliberate positive control {'name': 'distance-to-catalogue itself', 'auc': 1.0, 'note': 'deliberate positive control, not a lane input'} (so the canary can detect leakage); verdict PASS - no lane channel exceeds 0.58; the positive control (distance to the catalogue itself) scores 1.00, so the audit can detect leakage when it exists",
-    "reason": "No feature restates the catalogue; the lane's inputs are not catalogue-derived at 100 m (registry/preregistration-h66.json)."
+    "reason": "The required feature-alone AUC canary on the same buffered held-fault folds was not run for LIDAR-01. A public-catalogue proximity diagnostic is not a substitute.",
+    "historical_diagnostic": "Existing historical diagnostic tested channels against public-catalogue proximity, not against the proposed held-out faults."
   },
   "registry_checks": {
     "pre_placement_surface": {
-      "status": "PASS (incomplete corpus)",
+      "status": "NOT RUN / NOT CLEARED",
+      "correlation_metric": "absolute Spearman rank correlation",
       "correlation_limit": 0.9,
-      "registry_count": 62,
-      "candidate_sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-      "comparisons": "max |Spearman rho| 0.0196 over the 100 m scored plane",
-      "reason": "61 rasters are physically present here; the family's full pinned corpus (655 grid rasters across 56 sibling repos) is not in this checkout and is not reachable from this sandbox (egress allow-list)."
+      "max_abs_rank_correlation": null,
+      "registry_count": null,
+      "complete_registry": false,
+      "pixel_hash_status": "NOT RUN",
+      "reason": "No LIDAR-01 continuous surface or complete registry scan is available. Historical surface identity reused the final-raster hash and is not accepted as a pre-placement check.",
+      "pixel_hash_agreement_pass": false
     },
     "post_placement_final_dots": {
-      "status": "PASS (incomplete corpus)",
+      "status": "HISTORICAL PARTIAL SCREEN ONLY — NOT CLEARED",
+      "correlation_metric": "historical sampled Spearman rank correlation",
       "correlation_limit": 0.9,
+      "max_abs_rank_correlation": null,
+      "historical_sampled_max_abs_rank_correlation": 0.0196,
       "overlap_limit": 0.7,
       "radius_px": 3,
+      "max_dot_overlap": 0.5099,
       "registry_count": 62,
+      "expected_registry_count": 655,
+      "complete_registry": false,
       "candidate_sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-      "comparisons": "worst 3-px dot overlap 0.5099; worst excess over mass-matched random 0.319; byte-unique True; pixel-unique True",
-      "reason": "Both readings of the literal clause are reported (the shared template measured it unsatisfiable against space-filling comparators, 99.87%). docs/downloads is excluded as a self-comparison and the candidate's own NaN twin is excluded explicitly."
+      "pixel_hash_status": "Historical byte/pixel uniqueness reported among 62 scanned rasters only; full registry comparison is incomplete.",
+      "reason": "The receipt sampled 400,000 cells for rank correlation and considered only 62 raster comparators; the recorded full owner-family corpus was 655 rasters and is absent. Hash/pixel agreement against every registry entry is therefore incomplete.",
+      "pixel_hash_agreement_pass": false
     }
   },
   "raster": {
-    "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+    "file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
     "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-    "pixel_agreement": "0 positive pixels on the mapped catalogue; nearest dot sits exactly 3.00 px (300 m) from it; 37,654 dots, value 1.0 at dots and 0.0 elsewhere"
+    "status": "HISTORICAL AUDIT ARTIFACT — archived outside docs/downloads; not cleared for download or submission.",
+    "one_band_float32": true,
+    "shape_hw": [
+      3730,
+      3292
+    ],
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "positive_pixels": 37654,
+    "sha256_status": "Historical on-disk receipt; file is archived outside docs/downloads and is not offered for submission."
   },
   "validator": {
-    "status": "PASS (all checks)",
-    "checks": "all_checks_passed=true, format_report.ok=true, problems=[]",
-    "reason": "float32, EPSG:32611, 3730x3292, transform and bounds identical to sample_submission.tif, values finite in [0,1], no NaN inside the footprint, 0 positive pixels on the mapped catalogue"
+    "status": "PARTIAL / NOT CLEARED",
+    "footprint_nan_status": "The archived all-finite TIFF had no NaN anywhere in the historical read. Exact official footprint was unavailable in this review; NaN-only-outside-footprint compliance is not established.",
+    "values_0_1": "Historical local check passed for finite values, but no fresh comparison against the authorized official sample/features was possible.",
+    "grid_status": "Historical CRS/shape/transform values only; exact authorized-reference match was not independently rechecked.",
+    "crs": "EPSG:32611 in the historical raster read; exact authorized-reference match not independently rechecked.",
+    "shape": "3730 x 3292 in the historical raster read; exact authorized-reference match not independently rechecked.",
+    "transform": "[100, 0, 243350, 0, -100, 4508550] in the historical raster read; exact authorized-reference match not independently rechecked.",
+    "reason": "A skipped or historical-only reference comparison is not a format pass. The earlier portal [0,1] rejection cause is unknown.",
+    "receipt": "evidence/h66_verify.json (historical local receipt)",
+    "footprint_nan_ok": false,
+    "values_0_1_ok": false,
+    "crs_shape_transform_match": false
   },
   "submission": {
-    "name": "GEMSDOE66-H66-1-LIDAR-SCARPLET-VETO-37654",
-    "note": "H66-1 LiDAR scarplet channels + cultural veto, 37654 dots >=300m off catalogue; HOLDOUT-DTI 0.048 vs 0.033 random; veto NEGATIVE",
-    "note_chars": 128,
+    "name": "GEMSDOE66-LIDAR-01-CROSS-SCALE-SCARP",
+    "name_status": "PROPOSED ONLY — no candidate raster produced; name is not reserved.",
+    "note": "Unvalidated LIDAR-01 proposal; no holdout, registry, or official-grid clearance. Do not submit.",
+    "note_chars": 95,
     "note_limit_chars": 140,
-    "clearance": "PARTIAL \u2014 download YES for audit; weekly slot NO: the veto gate is negative and promotion is the selector's step"
+    "download_ok": false,
+    "submit_ok": false,
+    "clearance": "BLOCKED — no download or submission clearance; proposed name/note are informational only.",
+    "competition_slot_used": false
   },
-  "verdict": "negative \u2014 channel gate PASS; cultural-veto gate NEGATIVE (28 of 37,654 dots removed, paired CI crosses 0); not promoted for a slot",
+  "release_gates": {
+    "inputs_verified": false,
+    "top_candidate_holdout_ci": false,
+    "beats_frozen_holdout_best": false,
+    "leakage_canary": false,
+    "registry_preplacement": false,
+    "registry_postplacement": false,
+    "official_grid_validator": false
+  },
   "budget": {
     "holdout_experiments_used": 3,
     "max_holdout_experiments": 3,
-    "time_budget_hours": 2,
-    "wall_time_hours": 3.4,
-    "submission_slots_used": 0
+    "wall_time_hours_reported": 3.4,
+    "max_wall_time_hours": 2,
+    "remaining_experiments": 0,
+    "remaining_hours": 0,
+    "submission_slots_used": 0,
+    "new_experiments_this_review": 0,
+    "new_tiff_this_review": false
   },
+  "verdict": "negative",
+  "promote": false,
+  "verdict_detail": [
+    "LIDAR-01 is a ranked proposal only; it was not generated or validated.",
+    "The historical emitted-policy HOLDOUT-DTI is 0.0 and lacks the required 95% CI; it does not validate LIDAR-01.",
+    "The historical detector-arm HOLDOUT-DTI is not the emitted policy and also lacks a 95% CI.",
+    "The feature-alone held-fault leakage canary was not run for LIDAR-01.",
+    "Pre-placement uniqueness was not run; post-placement registry screening was partial (62 of 655 rasters).",
+    "Official competition inputs, lidar sidecar, topo raster pin, and complete registry are unavailable; strict s0 must stop.",
+    "The research budget is exhausted; no new holdout experiment or candidate TIFF was run or generated."
+  ],
   "open_irregularities": [
+    "IR-08",
+    "IR-13",
+    "IR-16",
     "IR-23",
     "IR-24",
     "IR-25",
-    "IR-26",
-    "IR-27",
-    "IR-28",
-    "IR-29"
+    "IR-31",
+    "IR-32",
+    "IR-36"
   ],
-  "artifact_page": "h66-session.html"
+  "canonical_card_path": "docs/data/run-card.json",
+  "artifact_page": "executive-summary.html",
+  "input_verification": {
+    "status": "BLOCKED — strict s0 returned exit code 2; no downstream state load or research stage executed.",
+    "evidence": "evidence/h66_inputs.json",
+    "required_inputs_count": 9,
+    "missing": [
+      "training_features.tif",
+      "bridge/labels.tif",
+      "bridge/existing_faults.tif",
+      "bridge/sample_submission.tif",
+      "external/lidar_scarp_features_u8.tif",
+      "external/lidar_scarp_features.json",
+      "external/geodawn_extensions_u8.tif",
+      "external/derived_sgmc_faults_100m_u8.tif",
+      "external/topo_10m_derived_100m_u8.tif"
+    ],
+    "missing_pins": [
+      "external/lidar_scarp_features.json",
+      "external/topo_10m_derived_100m_u8.tif"
+    ],
+    "mismatch": [],
+    "pin_conflicts": []
+  }
 }

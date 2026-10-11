@@ -1,43 +1,27 @@
-"""Invariants of the shipped artifact.  Skipped automatically when data/ is not restored."""
+"""The historic H66 raster is archival only; nothing is currently publishable."""
+
+import hashlib
 import json
 from pathlib import Path
-import numpy as np
-import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-card_p = ROOT / "registry/run_card.json"
-card = json.loads(card_p.read_text()) if card_p.exists() else {}
-f = (card.get("submission") or {})
 
 
-@pytest.mark.skipif(not (ROOT / "data/bridge/sample_submission.tif").exists(), reason="pinned inputs not restored")
-def test_shipped_bytes_match_the_run_card():
-    import rasterio
-    from gems57 import grid as G57, validate as V57
-    p = ROOT / "docs/downloads" / f["file"]
-    with rasterio.open(p) as ds:
-        a = ds.read(1)
-        assert str(ds.crs) == "EPSG:32611" and (ds.height, ds.width) == (3730, 3292)
-        assert tuple(ds.transform)[:6] == tuple(G57.TRANSFORM)[:6]
-    assert np.isfinite(a).all() and a.min() >= 0.0 and a.max() <= 1.0
-    grid = G57.load_grid()
-    assert int((a[grid.footprint] > 0).sum()) == int((a > 0).sum())      # nothing outside the footprint
-    assert int((a > 0).sum()) == card["validator_output"]["reread"]["n_positive"]
-    assert (a[grid.catalogue] == 0).all(), "no positive pixel may sit on the mapped catalogue"
-    r = V57.validate(p, footprint=grid.footprint, catalogue=grid.catalogue)
-    assert r["all_checks_passed"], [k for k, v in r["checks"].items() if not v]
+def test_historical_bytes_are_archived_outside_public_downloads():
+    card = json.loads((ROOT / "docs/data/run-card.json").read_text(encoding="utf-8"))
+    submission = card["submission"]
+    assert card["verdict"] == "negative" and card["promote"] is False
+    assert submission["download_ok"] is False and submission["submit_ok"] is False
+    assert (ROOT / card["raster"]["file"]).is_file()
+    assert hashlib.sha256((ROOT / card["raster"]["file"]).read_bytes()).hexdigest() == card["raster"]["sha256"]
+    assert not list((ROOT / "docs/downloads").glob("*.tif"))
+    assert not list((ROOT / "docs/downloads").glob("*.zip"))
 
 
-def test_note_and_name_fit_the_portal_field():
-    assert len(f.get("note", "")) <= 140 and f.get("name")
-    assert f["file"].endswith("-allfinite.tif")      # the NaN-free variant is the one to upload
-
-
-def test_zip_contains_exactly_one_tiff():
-    import zipfile
-    zp = ROOT / "docs/downloads" / f["file_zip"]
-    if not zp.exists():
-        pytest.skip("zip not built")
-    with zipfile.ZipFile(zp) as z:
-        assert z.namelist() == [f["file"]]
-        assert z.read(f["file"]).startswith((b"II*\x00", b"MM\x00*"))
+def test_proposed_name_and_note_are_not_clearance():
+    card = json.loads((ROOT / "docs/data/run-card.json").read_text(encoding="utf-8"))
+    submission = card["submission"]
+    assert submission["name"] and "PROPOSED" in submission["name_status"]
+    assert len(submission["note"]) == submission["note_chars"] <= 140
+    assert submission["download_ok"] is False
+    assert submission["competition_slot_used"] is False

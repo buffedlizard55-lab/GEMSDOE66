@@ -1,9 +1,9 @@
 {
-  "generated_utc": "2026-10-11T20:28:08Z",
+  "generated_utc": "2026-10-11 (reviewed after phase-aware uniqueness patch)",
   "template": "https://github.com/buffedlizard55-lab/60GEMSDOE (main, tarball sha recorded in registry/template_pin.json)",
-  "policy": "REUSE, DO NOT REBUILD: vendored byte-for-byte. Any fix goes in the template first.",
+  "policy": "Reuse the canonical shared src/gems57 package; the phase-aware uniqueness corrections are made in its shared uniqueness.py and gates.py modules, not in a private evaluator fork. These branch changes are not claimed to be merged into the external owner-maintained template; no external PR or merge occurred.",
   "n_files": 23,
-  "n_identical": 23,
+  "n_identical": 21,
   "files": {
     "__init__.py": {
       "sha256": "bd7f12b45caf67b7b4d0da4656c7c3895513bec524ec0b7f251227ecbdd39d26",
@@ -60,10 +60,10 @@
       "bytes": 10707
     },
     "gates.py": {
-      "sha256": "7c57f70dbba58bb1112df4193a3de56516af0f981970d4b943b394f99b573dae",
+      "sha256": "48a1a6277bbe5b6725560e5f617002e4128032726b3c99f6f39b31b946a0b7e5",
       "template_sha256": "7c57f70dbba58bb1112df4193a3de56516af0f981970d4b943b394f99b573dae",
-      "identical": true,
-      "bytes": 10238
+      "identical": false,
+      "bytes": 10497
     },
     "geo.py": {
       "sha256": "4320d4fb718a66a794b21c35af28cc1f2ce7b6e49649b17e86b3e9eb34235ff8",
@@ -132,10 +132,10 @@
       "bytes": 6387
     },
     "uniqueness.py": {
-      "sha256": "1c5094b814277ae801ccea6a47cf744429cffcdc10f9cc79f229d5fc44a8df95",
+      "sha256": "cee001e09c262777e4d6b8921e9f31aff8c42bdf35d50f154bb557a5dde13f6c",
       "template_sha256": "1c5094b814277ae801ccea6a47cf744429cffcdc10f9cc79f229d5fc44a8df95",
-      "identical": true,
-      "bytes": 24437
+      "identical": false,
+      "bytes": 25523
     },
     "validate.py": {
       "sha256": "e7849554b47f6a2b66aeb2f7cfd5db06267412f049f52a73f1c41f934a2c34dd",
@@ -143,5 +143,13 @@
       "identical": true,
       "bytes": 4765
     }
+  },
+  "local_shared_source_patch": {
+    "files": [
+      "src/gems57/uniqueness.py",
+      "src/gems57/gates.py"
+    ],
+    "reason": "Separate continuous-surface rank/pixel checks from final-dot overlap; use absolute Spearman and preserve fail-closed completeness/hash/pixel rules.",
+    "upstream_status": "not submitted or merged"
   }
 }

@@ -1,9 +1,9 @@
-"""Literal parallel-run gates, fail closed on incomplete registries.
+"""Phase-aware parallel-run gates; fail closed on incomplete registries.
 
-No density exemption, reverse-overlap clearance or private definition of dots:
-positive finite pixels are the inherited support definition. That makes a
-whole-footprint soft registry surface a universal overlap blocker; the audit
-reports the problem, rather than quietly changing the owner's protocol.
+Continuous detector surfaces are screened for rank correlation and exact
+pixel/hash agreement. The emitted sparse submission is additionally screened
+for the inherited 3-pixel dot-overlap threshold. Keeping those phases distinct
+avoids treating every positive surface pixel as a submitted fault dot.
 """
 from __future__ import annotations
 import hashlib
@@ -47,7 +47,7 @@ def _jaccard(a, b):
 
 
 def summarize_registry_rows(rows, *, registry_rasters_expected, complete_accessible_scan,
-                            source_errors, candidate_meta, scope):
+                            source_errors, candidate_meta, scope, phase='emitted'):
     """Apply the same literal thresholds to already hash-verified comparison rows.
 
     This allows a complete immutable prior audit to be extended with only newly
@@ -60,31 +60,41 @@ def summarize_registry_rows(rows, *, registry_rasters_expected, complete_accessi
     expected = int(registry_rasters_expected)
     checked = [r for r in rows if 'error' not in r]
     errors = [r for r in rows if 'error' in r]
+    if phase not in {'surface', 'emitted'}:
+        raise ValueError("phase must be 'surface' or 'emitted'")
     complete = bool(complete_accessible_scan and expected == len(rows)
                     and not errors and not source_errors)
-    # The inherited stop gate is literal: only Spearman > 0.90 or forward
-    # 3-pixel overlap > 0.70 (plus byte/pixel identity safeguards) can block.
-    # Jaccard is reported for diagnosis, never substituted as a new threshold.
-    flags = [r for r in checked if any(r.get(k, False) for k in (
-        'duplicate_by_rho', 'duplicate_by_overlap',
-        'identical_bytes', 'identical_decoded_predictions'))]
+    # Both phases stop on absolute Spearman > 0.90 or exact byte/pixel identity.
+    # Only emitted sparse dots are subject to the inherited 3-pixel overlap gate.
+    # Jaccard remains diagnostic and is never substituted as a new threshold.
+    flags = [r for r in checked if (
+        r.get('duplicate_by_rho', False) or r.get('identical_bytes', False)
+        or r.get('identical_decoded_predictions', False)
+        or (phase == 'emitted' and r.get('duplicate_by_overlap', False)))]
     rank_rows = [r for r in checked if r.get('spearman_full_footprint') is not None]
-    worst_rho = max(rank_rows, key=lambda r: r['spearman_full_footprint'], default=None)
-    worst_ov = max(checked, key=lambda r: r['my_dots_within_3px_of_theirs'], default=None)
-    worst_jac = max(checked, key=lambda r: r['jaccard_dot_sets'], default=None)
+    worst_rho = max(rank_rows, key=lambda r: abs(r['spearman_full_footprint']), default=None)
+    overlap_rows = [r for r in checked if r.get('my_dots_within_3px_of_theirs') is not None]
+    worst_ov = max(overlap_rows, key=lambda r: r['my_dots_within_3px_of_theirs'], default=None)
+    jac_rows = [r for r in checked if r.get('jaccard_dot_sets') is not None]
+    worst_jac = max(jac_rows, key=lambda r: r['jaccard_dot_sets'], default=None)
     my_dot_count = int(candidate_meta['my_dots'])
     norm = bool(candidate_meta['candidate_rank_variation'])
-    unique = complete and my_dot_count > 0 and norm and not flags
+    support_ok = phase == 'surface' or my_dot_count > 0
+    unique = complete and support_ok and norm and not flags
     return dict(
+        phase=phase,
         my_file=candidate_meta.get('my_file'), evidence_class='REGISTRY-MEASUREMENT',
         my_dots=my_dot_count,
         candidate_decoded_sha256=candidate_meta.get('candidate_decoded_sha256'),
         candidate_file_sha256=candidate_meta.get('candidate_file_sha256'),
-        rho_limit=RHO_LIMIT, overlap_limit=OVERLAP_LIMIT, jaccard_limit=JACCARD_LIMIT,
+        rho_limit=RHO_LIMIT, rho_comparison='absolute Spearman',
+        overlap_limit=OVERLAP_LIMIT, overlap_applicable=(phase == 'emitted'),
+        jaccard_limit=JACCARD_LIMIT,
         registry_rasters_expected=expected, registry_rasters_checked=len(checked),
         complete_accessible_scan=complete, missing_or_invalid=len(errors),
         source_errors=source_errors,
         worst_spearman_full_footprint=(worst_rho['spearman_full_footprint'] if worst_rho else None),
+        worst_abs_spearman_full_footprint=(abs(worst_rho['spearman_full_footprint']) if worst_rho else None),
         worst_rho_submission=(worst_rho['submission'] if worst_rho else None),
         worst_dot_overlap=(worst_ov['my_dots_within_3px_of_theirs'] if worst_ov else None),
         worst_overlap_submission=(worst_ov['submission'] if worst_ov else None),
@@ -95,7 +105,7 @@ def summarize_registry_rows(rows, *, registry_rasters_expected, complete_accessi
         duplicate_count=len(flags), unique=bool(unique), rows=rows,
         jaccard_diagnostic_only=True,
         verdict='promote-to-selector-only' if unique else 'negative',
-        stop_required=bool(flags or not complete or not my_dot_count or not norm),
+        stop_required=bool(flags or not complete or not support_ok or not norm),
         candidate_rank_variation=norm,
         scope=scope)
 
@@ -114,8 +124,8 @@ def merge_registry_audits(previous, extension, *, registry_rasters_expected,
         if previous.get(key) != extension.get(key):
             raise ValueError(f'cannot merge audits with different candidate {key}')
     if any(previous.get(key) != extension.get(key)
-           for key in ('rho_limit', 'overlap_limit', 'jaccard_limit')):
-        raise ValueError('cannot merge audits with different uniqueness thresholds')
+           for key in ('rho_limit', 'overlap_limit', 'jaccard_limit', 'phase')):
+        raise ValueError('cannot merge audits with different uniqueness thresholds or phases')
     if not previous.get('complete_accessible_scan'):
         raise ValueError('base audit is not a complete accessible registry scan')
     if not extension.get('complete_accessible_scan'):
@@ -162,8 +172,9 @@ def merge_registry_audits(previous, extension, *, registry_rasters_expected,
         complete_accessible_scan=complete,
         source_errors=[], candidate_meta=meta,
         scope=scope or 'Indexed public owner-repository inventory; not a complete organizer registry. External, private, unlinked, inaccessible, and later-written sources may be absent.',
+        phase=extension.get('phase', previous.get('phase', 'emitted')),
     )
-    result['phase'] = extension.get('phase', previous.get('phase'))
+    result['phase'] = extension.get('phase', previous.get('phase', 'emitted'))
     result['reviewed_utc'] = extension.get('reviewed_utc')
     result['submission_slots_used'] = int(previous.get('submission_slots_used', 0))
     result['incremental_extension'] = dict(
@@ -209,7 +220,10 @@ def records_from_index(index):
 
 
 def compare_array_to_registry(mine, registry_index, footprint, *, file_sha256=None,
-                              include_reverse=True, progress=None, expected_grid=None):
+                              include_reverse=True, progress=None, expected_grid=None,
+                              phase='emitted'):
+    if phase not in {'surface', 'emitted'}:
+        raise ValueError("phase must be 'surface' or 'emitted'")
     mine = np.asarray(mine, np.float32)
     fp = np.asarray(footprint, bool)
     if mine.ndim != 2 or mine.shape != fp.shape or not fp.any():
@@ -227,7 +241,7 @@ def compare_array_to_registry(mine, registry_index, footprint, *, file_sha256=No
     norm = float(np.linalg.norm(ranks))
     my_support = _dots(mine) & fp
     my_dot_count = int(my_support.sum())
-    my_near = _near(my_support) if include_reverse else None
+    my_near = _near(my_support) if include_reverse and phase == 'emitted' else None
     decoded_digest = hashlib.sha256(np.ascontiguousarray(mine).tobytes()).hexdigest()
     for i, rec in enumerate(records):
         p = Path(rec['file'])
@@ -266,8 +280,10 @@ def compare_array_to_registry(mine, registry_index, footprint, *, file_sha256=No
                 tr = rankdata(tv).astype(np.float64)
                 tr -= tr.mean()
                 rho = float(np.dot(ranks,tr)/(norm*np.linalg.norm(tr)))
-            ov = float(_near(support)[my_support].mean()) if my_dot_count else 0.0
-            reverse = float(my_near[support].mean()) if include_reverse and support.any() else 0.0
+            ov = (float(_near(support)[my_support].mean()) if my_dot_count else 0.0) \
+                if phase == 'emitted' else None
+            reverse = (float(my_near[support].mean()) if include_reverse and support.any() else 0.0) \
+                if phase == 'emitted' else None
             jac = _jaccard(my_support, support)
             their_decoded = hashlib.sha256(np.ascontiguousarray(theirs).tobytes()).hexdigest()
             row = {**base, 'sha256':digest, 'decoded_sha256':their_decoded,
@@ -276,8 +292,8 @@ def compare_array_to_registry(mine, registry_index, footprint, *, file_sha256=No
                 'jaccard_dot_sets':jac,
                 'identical_bytes':bool(file_sha256 and digest==file_sha256),
                 'identical_decoded_predictions':bool(their_decoded==decoded_digest),
-                'duplicate_by_rho':bool(rho is not None and rho > RHO_LIMIT),
-                'duplicate_by_overlap':bool(ov > OVERLAP_LIMIT),
+                'duplicate_by_rho':bool(rho is not None and abs(rho) > RHO_LIMIT),
+                'duplicate_by_overlap':bool(ov is not None and ov > OVERLAP_LIMIT),
                 'duplicate_by_jaccard':bool(jac > JACCARD_LIMIT)}
             rows.append(row)
         except (OSError, ValueError, rasterio.errors.RasterioError) as e:
@@ -298,6 +314,7 @@ def compare_array_to_registry(mine, registry_index, footprint, *, file_sha256=No
             candidate_rank_variation=norm > 0,
         ),
         scope='All hash-verified accessible entries in the indexed public owner-repository inventory; not a complete organizer registry. External/private/unlinked/inaccessible files may be absent. Reverse overlap is diagnostic only.',
+        phase=phase,
     )
 
 
