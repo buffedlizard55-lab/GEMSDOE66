@@ -24,7 +24,7 @@
    0.03803334540003565,
    0.041230025615689954
   ],
-  "lane_minus_chance": 0.031021235718839187,
+  "lane_minus_chance": null,
   "lane_minus_chance_ci95": [
    0.012527018335628125,
    0.04978434094456125
@@ -158,6 +158,134 @@
     ],
     "excluded_px": 2788251
    }
+  },
+  "relief_matched_deconfounded_instrument": {
+   "why": "the pooled novelty truth is 59.3% range front vs the footprint's 25.2%, so a range-front-concentrated field beats a uniform one by construction; the relief-matched instrument allocates the dot budget across relief strata in proportion to footprint area and averages the per-stratum DTI with footprint weights",
+   "lane": {
+    "mean": 0.026379292458538928,
+    "ci95": [
+     0.02086712035847897,
+     0.03182535231656457
+    ],
+    "n_folds": 8
+   },
+   "incumbent": {
+    "mean": 0.027268059772272476,
+    "ci95": [
+     0.02420904425953922,
+     0.030490240420193705
+    ],
+    "n_folds": 8
+   },
+   "random": {
+    "mean": 0.026116925268553366,
+    "ci95": [
+     0.024362349906689625,
+     0.027412197995965785
+    ],
+    "n_folds": 8
+   },
+   "gains": {
+    "lane_minus_inc": {
+     "mean": -0.0008887673137335508,
+     "ci95": [
+      -0.008356438925991094,
+      0.006639641986626998
+     ],
+     "folds_positive": 3,
+     "n_folds": 8
+    },
+    "lane_minus_rand": {
+     "mean": 0.0002623671899855565,
+     "ci95": [
+      -0.005521591264943661,
+      0.0060130548938111105
+     ],
+     "folds_positive": 4,
+     "n_folds": 8
+    }
+   },
+   "per_stratum": {
+    "lane": {
+     "basin": {
+      "mean": 0.0009040169040999663,
+      "ci95": [
+       3.715242595490106e-06,
+       0.002616390122997396
+      ],
+      "n_folds": 8
+     },
+     "mid": {
+      "mean": 0.02630029940101935,
+      "ci95": [
+       0.02217968646140306,
+       0.03040258282094697
+      ],
+      "n_folds": 8
+     },
+     "range_front": {
+      "mean": 0.05054019989371375,
+      "ci95": [
+       0.036128144606935024,
+       0.06537856455955152
+      ],
+      "n_folds": 8
+     }
+    },
+    "inc": {
+     "basin": {
+      "mean": 0.0008733989349274979,
+      "ci95": [
+       0.0,
+       0.0026201968047824937
+      ],
+      "n_folds": 8
+     },
+     "mid": {
+      "mean": 0.03947510476464264,
+      "ci95": [
+       0.034527822202385504,
+       0.04433509786584412
+      ],
+      "n_folds": 8
+     },
+     "range_front": {
+      "mean": 0.027372967995336655,
+      "ci95": [
+       0.020287125229884254,
+       0.034354522230992786
+      ],
+      "n_folds": 8
+     }
+    },
+    "rand": {
+     "basin": {
+      "mean": 0.002744587001148609,
+      "ci95": [
+       0.0012443513957455224,
+       0.004475145219362083
+      ],
+      "n_folds": 8
+     },
+     "mid": {
+      "mean": 0.025852389060429443,
+      "ci95": [
+       0.023048101847280573,
+       0.0283958427205409
+      ],
+      "n_folds": 8
+     },
+     "range_front": {
+      "mean": 0.04867299472455436,
+      "ci95": [
+       0.045066054003214596,
+       0.05254795323529601
+      ],
+      "n_folds": 8
+     }
+    }
+   },
+   "confound_size": 0.022682404352662475
   }
  },
  "correlation_overlap_vs_registry": {
@@ -208,7 +336,7 @@
   "note_140chars": "GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN lidar, 37,654 dots, 0 within 200 m of the catalogue.",
   "note_length": 128
  },
- "verdict": "promote",
- "verdict_basis": "gate = lane beats the incumbent's raster on the novelty holdout AND the lane-minus-chance 95% CI excludes zero AND the format validator passes on the bytes AND the duplicate gate returns UNIQUE",
+ "verdict": "negative",
+ "verdict_basis": "gate = lane beats the incumbent on the POOLED novelty holdout AND the lane-minus-chance 95% CI excludes zero AND the format validator passes on the bytes AND the duplicate gate returns UNIQUE AND -- decisively -- the lane still beats the incumbent on the RELIEF-MATCHED instrument with a CI excluding zero. The last condition fails: matched lane-minus-incumbent is -0.0008887673137335508 with CI [-0.008356438925991094, 0.006639641986626998], and matched lane-minus-random is 0.0002623671899855565.",
  "not_claimed": "no organiser score exists for this or any artifact here; the holdout truth is SGMC, not the expert panel's hidden set; promotion here means 'meets the local gate', not 'will score X'"
 }

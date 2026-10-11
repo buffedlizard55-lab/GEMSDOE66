@@ -38,6 +38,7 @@ def main() -> int:
     e3 = load(ROOT / "evidence" / "experiment3_controls.json")
     rf = load(ROOT / "evidence" / "range_front_stratification.json")
     rg = load(ROOT / "evidence" / "relief_gate.json")
+    rmatch = load(ROOT / "evidence" / "relief_matched.json")
     sb = load(ROOT / "evidence" / f"submission_{slug}.json")
 
     lane = e1.get("lidar_lane", {}).get("N", [])
@@ -48,12 +49,22 @@ def main() -> int:
             f"lidar, {man.get('n_dots', 0):,} dots, 0 within 200 m of the catalogue.")
     assert len(note) <= 140, len(note)
 
+    # The gate is evaluated on the DE-CONFOUNDED instrument.  The pooled instrument is
+    # confounded: the holdout truth is 59.3 % range front vs the footprint's 25.2 %, so any
+    # range-front-concentrated field beats a uniform one by construction.  The relief-matched
+    # instrument removes that prior, and it is the one that decides.
+    matched_lane = rmatch.get("relief_matched", {}).get("lane", {}).get("mean")
+    matched_inc = rmatch.get("relief_matched", {}).get("inc", {}).get("mean")
+    matched_gap_ci = rmatch.get("gains_matched", {}).get("lane_minus_inc", {}).get(
+        "ci95", [-1, 1])
     gate_met = (
         lane and inc and chance
         and (sum(lane) / len(lane)) > (sum(inc) / len(inc))
         and chance.get("lane_minus_random", {}).get("ci95", [1, -1])[0] > 0
         and checks.get("ok") is True
         and uniq_dots.get("verdict") == "UNIQUE"
+        and matched_lane is not None and matched_inc is not None
+        and matched_lane > matched_inc and matched_gap_ci[0] > 0
     )
     card = {
         "lane": "native-resolution lidar scarp channels (scarplet / Steger / Frangi)",
@@ -93,7 +104,7 @@ def main() -> int:
             "incumbent_ci95": chance.get("incumbent_prior", {}).get("ci95"),
             "chance_level_dti": chance.get("random", {}).get("mean"),
             "chance_ci95": chance.get("random", {}).get("ci95"),
-            "lane_minus_chance": chance.get("lane_minus_random", {}).get("mean"),
+            "lane_minus_chance": chance.get("lane_minus_rand", {}).get("mean"),
             "lane_minus_chance_ci95": chance.get("lane_minus_random", {}).get("ci95"),
             "lane_minus_chance_folds_positive":
                 chance.get("lane_minus_random", {}).get("folds_positive"),
@@ -102,6 +113,19 @@ def main() -> int:
             "range_front_stratification": rf.get("strata"),
             "range_front_verdict": rf.get("verdict"),
             "relief_gate_measured_not_shipped": rg.get("gates"),
+            "relief_matched_deconfounded_instrument": {
+                "why": ("the pooled novelty truth is 59.3% range front vs the footprint's "
+                        "25.2%, so a range-front-concentrated field beats a uniform one by "
+                        "construction; the relief-matched instrument allocates the dot "
+                        "budget across relief strata in proportion to footprint area and "
+                        "averages the per-stratum DTI with footprint weights"),
+                "lane": rmatch.get("relief_matched", {}).get("lane"),
+                "incumbent": rmatch.get("relief_matched", {}).get("inc"),
+                "random": rmatch.get("relief_matched", {}).get("rand"),
+                "gains": rmatch.get("gains_matched"),
+                "per_stratum": rmatch.get("per_stratum"),
+                "confound_size": rmatch.get("confound_size"),
+            },
         },
         "correlation_overlap_vs_registry": {
             "n_registry_rasters_compared": uniq_dots.get("n_compared")
@@ -146,9 +170,14 @@ def main() -> int:
         },
         "verdict": "promote" if gate_met else "negative",
         "verdict_basis": (
-            "gate = lane beats the incumbent's raster on the novelty holdout AND the "
+            "gate = lane beats the incumbent on the POOLED novelty holdout AND the "
             "lane-minus-chance 95% CI excludes zero AND the format validator passes on the "
-            "bytes AND the duplicate gate returns UNIQUE"),
+            "bytes AND the duplicate gate returns UNIQUE AND -- decisively -- the lane still "
+            "beats the incumbent on the RELIEF-MATCHED instrument with a CI excluding zero. "
+            "The last condition fails: matched lane-minus-incumbent is "
+            f"{rmatch.get('gains_matched', {}).get('lane_minus_inc', {}).get('mean')} with "
+            f"CI {matched_gap_ci}, and matched lane-minus-random is "
+            f"{rmatch.get('gains_matched', {}).get('lane_minus_rand', {}).get('mean')}."),
         "not_claimed": (
             "no organiser score exists for this or any artifact here; the holdout truth is "
             "SGMC, not the expert panel's hidden set; promotion here means 'meets the local "

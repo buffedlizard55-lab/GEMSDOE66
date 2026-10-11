@@ -73,13 +73,13 @@ def test_validator_rejects_out_of_range(tmp_path):
 
 
 def test_shipped_artifact_passes_if_present():
-    dls = sorted((ROOT / "docs" / "downloads").glob("*.manifest.json"))
+    dls = sorted((ROOT / "artifacts" / "lidar_lane").glob("*.manifest.json"))
     if not dls:
         pytest.skip("no submission built")
     man = json.loads(dls[-1].read_text())
     slug = man["slug"]
     for mode in ("nan", "zeros"):
-        p = ROOT / "docs" / "downloads" / f"{slug}-{mode}.tif"
+        p = ROOT / "artifacts" / "lidar_lane" / f"{slug}-{mode}.tif"
         r = validate(p, mode=mode, require_off_catalogue=2.0,
                      expected_dots=man["n_dots"])
         assert r["ok"], (mode, r["checks"])

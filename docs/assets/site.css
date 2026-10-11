@@ -47,3 +47,16 @@ pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:14
 footer{border-top:1px solid var(--line);margin-top:50px;padding:24px 0;color:var(--dim);font-size:13px}
 .tag{display:inline-block;padding:1px 7px;border-radius:5px;background:#22303f;color:#9fd0ff;
   font-family:var(--mono);font-size:12px;margin-right:4px}
+
+/* Not-cleared / negative-verdict banner: must read as a stop, not as a call to action. */
+.stop {
+  border: 2px solid #b3261e;
+  border-left-width: 8px;
+  background: #fdecea;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+.stop h2 { margin-top: 0; color: #8c1d18; }
+.stop table { background: #fff; }
+.stop .btn { display: none; }

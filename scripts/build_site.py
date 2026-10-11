@@ -79,14 +79,17 @@ def submission_block() -> str:
             f"lidar, {m.get('n_dots', 0):,} dots, 0 within 200 m of the catalogue.")
     note = note[:140]
     return f"""
-<div class="banner">
-  <h2>⬇ Download the submission file</h2>
-  <p class="small">One GeoTIFF. Upload it as-is to the competition submission page.
-  It is a single-band <code>float32</code> raster, EPSG:32611, 3730 × 3292, 100 m,
-  values in <b>[0, 1]</b>, NaN outside the footprint — so it passes the
-  <code>Predicted values must be in range [0, 1]</code> check.</p>
-  <a class="btn" href="downloads/{esc(nan.name)}">Download {esc(nan.name)}</a>
-  <a class="btn alt" href="downloads/{esc(zro.name)}">zeros-outside variant</a>
+<div class="stop">
+  <h2>⛔ Nothing is cleared to submit</h2>
+  <p class="small">A GeoTIFF was built and passes every <i>format</i> rule, but the
+  scientific gate is <b>NOT MET</b>, so it is not published as a download. A late
+  de-confounding test showed the lane's measured advantage over the incumbent is
+  <b>entirely an artifact of the holdout truth's own relief bias</b> — see
+  <a href="results.html">results</a> and the
+  <a href="executive-summary.html">executive summary</a>. Uploading a file that our own
+  evidence cannot distinguish from the incumbent would spend a weekly slot on a coin
+  toss. The bytes are kept in
+  <code>artifacts/lidar_lane/</code> for audit and for a future cleared release.</p>
   <table>
     <tr><th>sha256</th><td class="mono">{esc(chk.get('sha256', ''))}</td></tr>
     <tr><th>size</th><td>{chk.get('size_bytes', 0):,} bytes</td></tr>
@@ -102,9 +105,9 @@ def submission_block() -> str:
     <tr><th>submission note (paste into the form, {len(note)}/140 chars)</th>
         <td class="mono">{esc(note)}</td></tr>
   </table>
-  <p class="small">Is it OK to download and submit? <b>Yes</b> — see the
-  <a href="executive-summary.html">executive summary</a>, which states the gate, the
-  measurement behind it, and what is <i>not</i> claimed.</p>
+  <p class="small">Is it OK to download and submit? <b>No — not yet.</b> The
+  <a href="executive-summary.html">executive summary</a> states the gate, the measurement
+  that failed it, and exactly what would have to be true for this file to be worth a slot.</p>
 </div>
 """
 
@@ -186,14 +189,30 @@ def exec_page() -> str:
     note = (f"GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN "
             f"lidar, {m.get('n_dots', 0):,} dots, 0 within 200 m of the catalogue.")[:140]
     return page("How to submit", f"""
-<h2>Executive summary — how to make a submission</h2>
-<div class="banner">
-<h2>1 · Download</h2>
-<p><a class="btn" href="downloads/{esc(slug)}-nan.tif">Download {esc(slug)}-nan.tif</a></p>
-<p class="small">Single-band float32 GeoTIFF · EPSG:32611 · 3730 × 3292 · 100 m ·
-values in [0, 1] · NaN outside the footprint.
-If your browser or the uploader mangles a bare <code>.tif</code>, use the
-<a href="downloads/{esc(slug)}-nan.zip">zip</a>.</p>
+<h2>Executive summary — why there is nothing to download</h2>
+
+<div class="stop">
+<h2>Verdict: NEGATIVE — do not submit this file</h2>
+<p>A complete, format-valid GeoTIFF exists in <code>artifacts/lidar_lane/</code>. It is
+<b>not</b> published as a download because the last experiment overturned the result that
+would have justified publishing it.</p>
+<p><b>The finding.</b> The holdout truth (SGMC faults &gt; 300 m from the given catalogue) is
+not distributed like the terrain: it is <b>59.3 % range front</b> and <b>1.3 % basin</b>,
+while the footprint is 25.2 % range front and 23.7 % basin. Mapped faults are concentrated
+on range fronts because scarps are <i>visible</i> there, not because faults are. Any scarp
+field therefore "wins" on a mapped-fault truth simply by matching the truth's relief prior.
+Re-scoring with the confound removed — budget allocated across relief strata in proportion to
+<i>footprint area</i>, then averaged with footprint weights — gives:</p>
+<table>
+<tr><th>instrument</th><th>lane</th><th>incumbent</th><th>uniform random</th></tr>
+<tr><td>pooled (confounded)</td><td><b>0.07075</b></td><td>0.04896</td><td>0.04019</td></tr>
+<tr><td><b>relief-matched</b></td><td>0.02638</td><td><b>0.02727</b></td><td>0.02612</td></tr>
+</table>
+<p class="small">Relief-matched lane − incumbent = <b>−0.00089</b>, 95 % CI
+[−0.0084, +0.0066], positive in 3 of 8 folds.
+Relief-matched lane − random = <b>+0.00026</b>, CI [−0.0055, +0.0060], 4 of 8 folds.
+Both intervals straddle zero. The confound accounts for <b>+0.0227</b> of the +0.0218
+headline — in other words, all of it.</p>
 </div>
 
 <h2>2 · Upload</h2>
@@ -229,21 +248,43 @@ every check from scratch:</p>
 <b>not</b> claimed.
 <ul>
 <li><b>Format</b>: verified, on the bytes, by re-reading the written file. Receipt:
-<code>docs/downloads/checks-{esc(slug)}-nan.tif.json</code>.</li>
+<code>artifacts/lidar_lane/checks-{esc(slug)}-nan.tif.json</code>.</li>
 <li><b>Originality</b>: the duplicate gate against all 60 registry rasters returns
 <b>UNIQUE</b> (max |ρ| = 0.28 on the dots, 0.08 on the surface, against a 0.90 threshold).
 It is a new raster, not a copy.</li>
-<li><b>Skill</b>: on the 8-fold blocked holdout it beats chance by
-<b>+0.031 DTI</b> (95% CI +0.013 to +0.050, 7/8 folds) and beats the family's best-scoring
-raster, re-scored through the identical envelope, by <b>+0.022</b>.</li>
+<li><b>NOT demonstrated</b>: on the relief-matched instrument the lane is
+<b>indistinguishable from the incumbent</b> (−0.0009, CI [−0.0084, +0.0066]) and from
+<b>uniform random placement</b> (+0.0003, CI [−0.0055, +0.0060]). On range fronts — the
+stratum the lane was built for — it scores 0.0505 against 0.0487 for random dots at the same
+budget.</li>
 <li><b>NOT claimed</b>: <b>no organiser score exists for this file.</b> Every leaderboard
-number on this site is an owner report or a public-page snapshot. The holdout is a proxy whose
-truth is SGMC, not the expert panel's hidden set. Submitting it is a bet on a measured proxy,
-not a promise.</li>
+number on this site is an owner report or a public-page snapshot. The holdout's truth is SGMC,
+not the expert panel's hidden set.</li>
 </ul></div>
+
+<h2>4 · What would change the verdict</h2>
+<p>The lane is not refuted as <i>physics</i> — a tectonic scarp does not survive basin-floor
+aggradation, and the channel is genuinely strong where relief is high. It is refuted as a
+<i>decision</i>: the evidence does not separate it from the incumbent, and it sits far outside
+the family's operating point (64 % of its dots on range fronts, against 17 % for every prior
+submission). Three things would change that:</p>
+<ol>
+<li><b>A relief-unbiased truth set.</b> Score the lane against faults that are not
+surface-visible — well intersections, seismic/reflection picks, or geophysically-inferred
+structures. If the lane still wins there, the confound argument dies and the promotion is
+real. This is the single most valuable next experiment.</li>
+<li><b>One live score at a moderate range-front fraction.</b> If a submission with, say,
+30 % range-front dots scores above 0.2778, the live board rewards relief concentration and a
+64 % field becomes a defensible extrapolation rather than a gamble.</li>
+<li><b>A composite that keeps the incumbent's mid-relief skill.</b> The incumbent beats the
+lane in the mid-relief stratum, which holds 51 % of the footprint and 39 % of the truth
+(0.0395 vs 0.0263). A hybrid that takes mid-relief from the incumbent and range fronts from
+the lane is testable on the existing relief-matched instrument and does not need new
+data.</li>
+</ol>
 <div class="note"><b>Weekly cap.</b> The competition allows 3 scored submissions per week and
-the same file is scored in both prize rounds. Promotion to a real slot is a separate selector
-step; this page does not spend a slot by itself.</div>
+the same file is scored in both prize rounds. With a NEGATIVE verdict this page spends no
+slot; promotion remains a separate selector step.</div>
 """, "executive-summary.html")
 
 
@@ -270,7 +311,8 @@ lacks, and how it differs from everything already in the project family.</p>
      scarp is visible at 1 m and absent from the Quaternary catalogue; the 100 m stack
      averages that scarp away.</td>
  <td>low</td>
- <td><span class="pill ok">PROMOTED</span><br>+0.031 over chance</td></tr>
+ <td><span class="pill bad">NEGATIVE</span><br>+0.031 over chance pooled,<br>
+     <b>+0.000 vs chance relief-matched</b></td></tr>
 
 <tr><td><b>H2</b><br><span class="tag">tested</span></td>
  <td>SGMC off-catalogue supervised field</td>
@@ -508,6 +550,24 @@ def irr_page() -> str:
 <h2>Irregularities</h2>
 <table>
 <tr><th>id</th><th>what</th><th>status</th></tr>
+<tr><td><b>IR-66-CONFOUND-01</b><br><span class="tag">verdict-changing</span></td>
+ <td><b>The primary instrument was confounded, and the confound was the whole result.</b> The
+ novelty holdout truth (SGMC faults &gt; 300 m from the catalogue) is <b>59.3 % range front</b>
+ and <b>1.3 % basin</b>, against a footprint that is 25.2 % range front and 23.7 % basin.
+ Mapped faults concentrate where scarps are <i>visible</i>, so any range-front-heavy field
+ beats a uniform one on a mapped-fault truth by construction. The lane puts 64.3 % of its dots
+ on range fronts (the incumbent: 17.2 %), i.e. it matches the truth's own relief prior.
+ De-confounded — budget allocated across relief strata in proportion to footprint area,
+ per-stratum DTI averaged with footprint weights — the lane scores <b>0.02638</b> against the
+ incumbent's <b>0.02727</b> and random's 0.02612: lane−incumbent <b>−0.00089</b>
+ (CI [−0.0084, +0.0066], 3/8 folds), lane−random <b>+0.00026</b> (CI [−0.0055, +0.0060],
+ 4/8 folds). The confound is worth <b>+0.0227</b> — the entire +0.0218 headline. On range
+ fronts specifically the lane's 0.0505 barely exceeds <i>random placement</i>'s 0.0487 at the
+ same budget. <b>The run card's verdict was therefore changed from <code>promote</code> to
+ <code>negative</code></b> and the GeoTIFF moved out of <code>docs/downloads/</code> into
+ <code>artifacts/lidar_lane/</code>, unpublished. The pooled numbers reproduce exactly
+ (0.07075 / 0.04896), so only the de-confounding is new, not the pipeline.</td>
+ <td><span class="pill bad">OPEN — verdict flipped</span></td></tr>
 <tr><td><b>IR-66-SCORE-01</b></td>
  <td>The task brief states "0.3195 is the highest score right now". The live public
  leaderboard on 2026-10-11 shows <b>0.4133 at #1</b> and 0.3195 (DARD) at <b>rank 9</b>. The

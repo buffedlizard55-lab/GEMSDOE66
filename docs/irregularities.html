@@ -11,6 +11,24 @@
 <h2>Irregularities</h2>
 <table>
 <tr><th>id</th><th>what</th><th>status</th></tr>
+<tr><td><b>IR-66-CONFOUND-01</b><br><span class="tag">verdict-changing</span></td>
+ <td><b>The primary instrument was confounded, and the confound was the whole result.</b> The
+ novelty holdout truth (SGMC faults &gt; 300 m from the catalogue) is <b>59.3 % range front</b>
+ and <b>1.3 % basin</b>, against a footprint that is 25.2 % range front and 23.7 % basin.
+ Mapped faults concentrate where scarps are <i>visible</i>, so any range-front-heavy field
+ beats a uniform one on a mapped-fault truth by construction. The lane puts 64.3 % of its dots
+ on range fronts (the incumbent: 17.2 %), i.e. it matches the truth's own relief prior.
+ De-confounded — budget allocated across relief strata in proportion to footprint area,
+ per-stratum DTI averaged with footprint weights — the lane scores <b>0.02638</b> against the
+ incumbent's <b>0.02727</b> and random's 0.02612: lane−incumbent <b>−0.00089</b>
+ (CI [−0.0084, +0.0066], 3/8 folds), lane−random <b>+0.00026</b> (CI [−0.0055, +0.0060],
+ 4/8 folds). The confound is worth <b>+0.0227</b> — the entire +0.0218 headline. On range
+ fronts specifically the lane's 0.0505 barely exceeds <i>random placement</i>'s 0.0487 at the
+ same budget. <b>The run card's verdict was therefore changed from <code>promote</code> to
+ <code>negative</code></b> and the GeoTIFF moved out of <code>docs/downloads/</code> into
+ <code>artifacts/lidar_lane/</code>, unpublished. The pooled numbers reproduce exactly
+ (0.07075 / 0.04896), so only the de-confounding is new, not the pipeline.</td>
+ <td><span class="pill bad">OPEN — verdict flipped</span></td></tr>
 <tr><td><b>IR-66-SCORE-01</b></td>
  <td>The task brief states "0.3195 is the highest score right now". The live public
  leaderboard on 2026-10-11 shows <b>0.4133 at #1</b> and 0.3195 (DARD) at <b>rank 9</b>. The
