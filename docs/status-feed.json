@@ -7,6 +7,26 @@
   "entries": [
     {
       "date": "2026-10-11",
+      "kind": "release-safety",
+      "status": "NEGATIVE — NO SUBMISSION CLEARED",
+      "summary": "Current checkout has none of 8 required competition/cache inputs; no raw native 1 m DEM, valid holdout, complete registry, official footprint validation or independent scientific approvals. Shared writer refuses wrong CRS/resolution and empty footprints; shared release preflight now checks pinned hashes, scientific/uniqueness/format gates and never automatically publishes. This session ran 0 experiments, created no candidate, used 0 competition slots. Owner H33 page says its artifact was UNSCORED; user-supplied association is unverified.",
+      "links": [
+        "review/2026-10-11-release-safety.md",
+        "data/run-card.json",
+        "executive-summary.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "offline-tests",
+      "status": "PASS — 119 passed, 5 skipped",
+      "summary": "Shared release gate, writer, validator and site regression tests passed locally. Five official-grid tests skipped because the authorized sample raster is absent; this is code verification, not a science or organizer result.",
+      "links": [
+        "review/2026-10-11-release-safety.md"
+      ]
+    },
+    {
+      "date": "2026-10-11",
       "kind": "experiment-h66-2",
       "status": "NEGATIVE-NOT-PROMOTED",
       "summary": "One preregistered H66-2 experiment is preserved from the earlier main-branch session (concordance of 10-vs-50 m step, dip-sense and crest-toe sharpness on the pinned 2 m LiDAR stack). Emitted a 37,654-dot raster with local format/range checks; its verdict is NEGATIVE-NOT-PROMOTED. Every H66-2 metric in the cited evidence is an off-catalogue proxy measurement, not HOLDOUT-DTI or ORGANIZER-CONFIRMED; no organizer receipt is present. Bytes remain in artifacts/h66-2/ for audit, not on the site; no slot used. This PR reconciliation ran no experiment. Two corrections from the earlier session are recorded: IR-66-BASE-01 (the first strata run's random control was an index-ordered corner sample; the advertised x16 upland ratio is x1.20) and IR-66-GUARD-02 (the stop guard hard-coded a foreign lane name).",

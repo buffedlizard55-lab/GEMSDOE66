@@ -182,11 +182,11 @@ complete organizer registry, and no pre-placement surface comparison is recorded
 <a href="irregularities.html">IR-71</a> and the <a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a>.</p>
 
 <div class="grid">
- <div class="card"><h4>Data</h4><p class="big">23/23</p>
-   <p class="small">hash-pinned mirrors restored and byte-verified</p></div>
- <div class="card"><h4>Layers</h4><p class="big">59</p>
-   <p class="small">competition bands, 1 m-LiDAR scarp descriptors, 10 m topography, χ,
-   GeoDAWN radiometrics</p></div>
+ <div class="card"><h4>Current official inputs</h4><p class="big">NOT AVAILABLE</p>
+   <p class="small">No authorized reference raster or native 1 m tile in this checkout. A
+   historical 23-file mirror receipt is not organizer provenance or current availability.</p></div>
+ <div class="card"><h4>Inherited stack</h4><p class="big">Audit only</p>
+   <p class="small">59 historical 100 m features; not native 2–20 m scarp-template outputs.</p></div>
  <div class="card"><h4>Holdout</h4><p class="big">8</p>
    <p class="small">spatially coherent balanced folds, 300 m buffer, training-only</p></div>
  <div class="card"><h4>Duplicate gate</h4><p class="big">STOP / UNVERIFIED</p>
@@ -238,7 +238,20 @@ remains negative and the artifact remains unsubmitted.</p>
 <div class="stop"><b>No file or note is cleared for use.</b> Do not open a submission form, upload an
 artifact, or spend a competition slot. If every scientific, provenance, registry, and official-grid
 gate is passed in a future review, use the official competition interface and record its receipt.
-This page intentionally provides no upload instructions or submit-ready note.</div>
+No submission name or note on this page is cleared. The following instructions are
+<b>conditional, not authorization to submit</b>.</div>
+<ol>
+<li>After an independent selector approves a candidate, confirm that its exact SHA-256
+matches the approved run card, and that the shared validator passed against the official
+sample grid and feature footprint (single-band float32, EPSG:32611, 100 m, values [0,1]
+inside and NaN only outside). Never substitute an all-finite audit variant.</li>
+<li>Only then download the specifically approved TIFF from this site's top-of-page download
+link. There is no such link now. Check the downloaded file SHA-256 before using it.</li>
+<li>On the official DrivenData competition page, review the current rules and weekly limit,
+open the submission form, select the <code>.tif</code> file, enter the approved unique name
+and the approved note (at most 140 characters), then submit. Record the portal receipt and
+its exact file hash; do not claim a score from an owner page or a projection.</li>
+</ol>
 
 <h2>3 · Format information is not release clearance</h2>
 <p>The inherited local sidecar records a format-only check on its artifact bytes. That is not

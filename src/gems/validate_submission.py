@@ -151,7 +151,9 @@ def validate(path: str | Path, reference_path: str | Path | None = None,
     checks.append(_check("info: emitted cells (value > 0)", True, f"emitted={nonzero}", status="INFO"))
     failed = [c for c in checks if c["status"] == "FAIL"]
     skipped = [c for c in checks if c["status"] == "SKIPPED"]
-    return {"file": str(path), "passed": not failed and not skipped, "has_failures": bool(failed),
+    from .submission_writer import sha256_file
+    return {"file": str(path), "sha256": sha256_file(path),
+            "passed": not failed and not skipped, "has_failures": bool(failed),
             "checks": checks, "skipped_checks_mean_unverified": bool(skipped)}
 
 

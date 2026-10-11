@@ -4,6 +4,8 @@
 The local ``gemsdoe66`` comparison is diagnostic only. Release uniqueness is delegated to
 ``gems57`` and requires an organizer-complete indexed registry, raw final-dot thresholds,
 and a separately supplied pre-placement surface. A missing index/surface fails closed.
+This script NEVER grants download clearance: it runs the canonical run-card gate for
+triage and returns blocked; publication requires a separate independently reviewed selector.
 
     python3 scripts/check_submission.py <candidate.tif> --surface field.npy
 """
@@ -25,6 +27,8 @@ from gemsdoe66.grid import footprint_mask  # noqa: E402
 from gemsdoe66.uniqueness import check_registry  # noqa: E402
 from gemsdoe66.validate_submission import validate, write_receipt  # noqa: E402
 from gems57.uniqueness import compare_array_to_registry  # noqa: E402
+from gems.validate_submission import validate as validate_official_grid  # noqa: E402
+from gems.release_gate import assess_release  # noqa: E402
 
 
 def strict_registry_report(candidate: np.ndarray, footprint: np.ndarray, *, phase: str,
@@ -111,7 +115,9 @@ def main() -> int:
         else:
             s = s.copy()
             s[~fp] = 0.0
-            strict_surface = strict_registry_report(s, fp, phase="surface")
+            strict_surface = strict_registry_report(
+                s, fp, phase="surface",
+                candidate_file_sha256=hashlib.sha256(Path(args.surface).read_bytes()).hexdigest())
         (ROOT / "evidence" / f"shared_uniqueness_{p.stem}-surface.json").write_text(
             json.dumps(strict_surface, indent=2))
         print(f"[shared release gate, pre-placement surface] "
@@ -120,10 +126,22 @@ def main() -> int:
     else:
         print("[shared release gate, pre-placement surface] BLOCKED: provide --surface field")
 
-    release_ok = bool(val["ok"] and strict_dots.get("unique") is True
-                      and strict_surface.get("unique") is True)
-    print(f"\n[release decision] {'PASS' if release_ok else 'BLOCKED'}")
-    return 0 if release_ok else 1
+    # Legacy 'ok' and a partial raster scan are not scientific or official-grid clearance.
+    # Re-read the candidate with the shared exact-grid/footprint validator. Missing reference
+    # files are SKIPPED, never PASS. Even a complete machine preflight only permits a separate
+    # independent selector review; this diagnostic CLI never publishes a submission.
+    reference = ROOT / "data" / "bridge" / "sample_submission.tif"
+    features = ROOT / "data" / "bridge" / "training_features.tif"
+    official = validate_official_grid(p,
+        reference_path=reference if reference.is_file() else None,
+        features_path=features if features.is_file() else None)
+    card = json.loads((ROOT / "docs" / "data" / "run-card.json").read_text())
+    surface_sha = hashlib.sha256(Path(args.surface).read_bytes()).hexdigest() if args.surface else None
+    decision = assess_release(p, card, official, strict_surface, strict_dots,
+                              surface_sha256=surface_sha)
+    print("\n[release decision] BLOCKED — check_submission is a diagnostic, not a selector")
+    print(json.dumps(decision, indent=2))
+    return 1
 
 
 if __name__ == "__main__":

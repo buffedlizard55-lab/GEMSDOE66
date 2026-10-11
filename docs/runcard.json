@@ -220,7 +220,11 @@
     "this_turn_holdout_runs": 0,
     "this_turn_candidate_emissions": 0,
     "this_turn_submission_slots_used": 0,
-    "historical_h66_2_record": "Preserved from newer main; one prior preregistered experiment with a NEGATIVE-NOT-PROMOTED verdict and proxy-only measurements. It is not an experiment run in this PR reconciliation."
+    "historical_h66_2_record": "Preserved from newer main; one prior preregistered experiment with a NEGATIVE-NOT-PROMOTED verdict and proxy-only measurements. It is not an experiment run in this PR reconciliation.",
+    "latest_review": "2026-10-11 release-safety three-pass review: zero native-LiDAR experiments/holdouts/emissions and zero submission slots; new shared fail-closed release preflight and synthetic tests only.",
+    "latest_preflight": "evidence/release_preflight_2026-10-11.json",
+    "latest_input_presence": "scripts/fetch_inputs.sh: missing all 8 listed roles; check-only, no data transfer",
+    "latest_review_document": "docs/review/2026-10-11-release-safety.md"
   },
   "promote": false,
   "promotion_decision": "negative"
