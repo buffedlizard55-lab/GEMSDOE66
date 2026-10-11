@@ -32,6 +32,6 @@
     "G5_format": "PASS",
     "G6_uniqueness": "PASS rho<=0.90 (0.0196), 3-px overlap<=0.70 (0.5099), excess-over-random 0.319, byte+pixel unique among 62 scanned rasters; corpus is NOT the complete family corpus"
   },
-  "leaderboard_snapshot": "registry/leaderboard_snapshot_2026-10-11.json",
+  "leaderboard_snapshot": "no snapshot captured in-tree (IR-22 policy); the live page is authoritative",
   "leaderboard_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ read through the Arena fetcher this session; no authenticated request, no scraping of the private test set"
 }

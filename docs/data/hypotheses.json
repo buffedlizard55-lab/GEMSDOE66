@@ -1,0 +1,73 @@
+{
+  "schema": 2,
+  "lane": "native-resolution lidar scarp channels",
+  "ranking_basis": "Qualitative prior for experiment order only: physical specificity, expected separability from named mimics, and cost. No numeric DTI projection; all items are untested.",
+  "protocol": {
+    "feature_scales_m": [2, 20],
+    "aggregation_m": 100,
+    "holdout": "Whole fault segments assigned to lidar-covered spatial blocks, buffered; catalogue-derived features use visible faults only and visible faults are pixel-exactly masked.",
+    "metric": "Pooled distance-weighted Tversky; alpha=0.2, beta=0.8, 300 m triangular kernel."
+  },
+  "items": [
+    {
+      "id": "LIDAR-01",
+      "rank": 1,
+      "lane": "native-resolution lidar scarp channels",
+      "title": "Slope-aware scarp-template field plus multiscale line consensus",
+      "layers": "Shared 1 m bare-earth DEM/cache and existing cultural-feature mask (both unavailable in this checkout); slope-aware template amplitude, relative age, orientation and SNR; Steger sub-pixel ridge/valley evidence and Frangi Hessian line measures at 2–20 m; aggregate scarp fraction, SNR-weighted amplitude, orientation coherence and dominant strike to 100 m.",
+      "signature": "Collinear cross-profile template fits allowing finite initial and far-field slopes, co-located with ridge/valley evidence persistent across adjacent physical scales and a coherent strike.",
+      "why_off_catalogue": "Expert test labels include new faults. A subtle metre-scale geomorphic scarp may remain visible in the native DEM but be lost or diluted in a 100 m summary. This is a physical rationale, not a measured result.",
+      "named_mimic": "Fluvial terrace riser; other controls include road/canal embankments, natural channel banks and landslide headscarps.",
+      "differs_from_repo": "This checkout had no feature implementation. Sibling reports already describe metre-scale lidar scarp channels, ridge thinning and multichannel consensus (S17, S25–S27); the proposed distinction is the joined slope-aware template outputs plus Steger/Frangi scale persistence and orientation coherence (S11–S14). The complete raster registry is absent, so novelty and uniqueness are unverified.",
+      "cost": "Very high: tiled DEM handling, multi-orientation/multiscale operators, mask integration, 100 m aggregation, feature-alone canaries, blocked validation and two-stage registry audit; runtime is unknown.",
+      "expected_gain": "Highest qualitative prior among these proposals, but sign and size are unknown. Not a DTI projection or score.",
+      "data_status": "Not runnable here. The official 1 m DEM-link list is login-gated; a public 3DEP 1 m product is listed in principle, but exact tiles, footprint coverage and alignment are unverified (S05, S08). The shared cache and existing mask are absent from this checkout.",
+      "validation": "NOT RUN. Competition rasters, cached stack, mask, end-to-end holdout evaluator/CI runner and complete registry are unavailable."
+    },
+    {
+      "id": "LIDAR-02",
+      "rank": 2,
+      "lane": "native-resolution lidar scarp channels",
+      "title": "Slope-aware scarp-template channels alone",
+      "layers": "Shared 1 m bare-earth DEM/cache and existing cultural-feature mask (unavailable here); templates spanning 2–20 m with amplitude, relative morphologic age, orientation, finite initial slope, far-field slopes and SNR; aggregate to 100 m.",
+      "signature": "A cross-profile curvature/step fit that tolerates a dipping surface and unequal slopes on either side, with consistent amplitude and orientation along a trace.",
+      "why_off_catalogue": "Small or gently dipping fault scarps may be omitted from existing maps and may not survive coarse elevation aggregation; the template is intended to recover that exposed geomorphic expression.",
+      "named_mimic": "Road-cut or canal-bank embankment; terrace risers and landslide scarps are additional controls.",
+      "differs_from_repo": "No implementation is present in this checkout. Sare and Hilley provide a related external scarp-template precedent (S11, S14), but it does not establish that this exact slope-parameterized channel is absent from sibling rasters or improves this competition task. Registry comparison is required.",
+      "cost": "High: parameter/scale search, edge and nodata handling, calibration on visible faults, matched ablation against the existing template, and registry checks.",
+      "expected_gain": "High qualitative prior for subtle sloping scarps, unquantified; no score or projection.",
+      "data_status": "Same blocked DEM, cache and cultural-mask dependencies as LIDAR-01; exact study tiles and data alignment are unverified (S05, S08).",
+      "validation": "NOT RUN. Must be tested alone as a leakage canary and against a matched baseline on the frozen blocked holdout."
+    },
+    {
+      "id": "LIDAR-03",
+      "rank": 3,
+      "lane": "native-resolution lidar scarp channels",
+      "title": "Scale-persistent Steger ridge/valley and Frangi line field alone",
+      "layers": "Slope-detrended 1 m bare-earth DEM/cache (unavailable here); Steger sub-pixel ridge and valley responses, Frangi Hessian line measures and local structure-tensor orientation at 2–20 m; aggregate strength, sign, persistence and orientation coherence to 100 m.",
+      "signature": "Thin ridge/valley responses that persist across neighboring scales and align into coherent traces, rather than isolated curvature responses at one scale.",
+      "why_off_catalogue": "A short, subtle scarp can be smoothed away by coarse products; native-scale, sub-pixel line evidence could preserve continuity when a single cross-profile fit is weak.",
+      "named_mimic": "Natural stream-bank line; roads, field edges, terrace breaks and DEM seams are additional controls.",
+      "differs_from_repo": "Steger and Frangi are established line operators, not novel methods (S12, S13). Owner-maintained sibling pages describe lidar ridge thinning and scarp consensus (S25, S26); no complete registry is present to establish whether this precise signed, scale-persistence channel is distinct.",
+      "cost": "High: multiscale Hessian/line extraction, edge suppression, sign handling, scale calibration and per-feature leakage checks.",
+      "expected_gain": "Moderate qualitative prior, with high mimic risk; sign and size unknown. No DTI projection.",
+      "data_status": "Requires the unavailable official 1 m DEM tiles/cache and cultural mask; public 3DEP availability does not establish required tile coverage or alignment (S05, S08).",
+      "validation": "NOT RUN. Test each response alone before combining; a holdout AUC above 0.90 is leakage until disproven."
+    },
+    {
+      "id": "LIDAR-04",
+      "rank": 4,
+      "lane": "native-resolution lidar scarp channels",
+      "title": "Ordered cross-profile scarp polarity and along-strike continuity",
+      "layers": "Shared 1 m bare-earth DEM/cache and existing cultural mask (unavailable here); 2–20 m detrended cross-profiles encoding paired slope breaks, step polarity, width, local relief and along-strike persistence; aggregate profile fractions and coherence to 100 m.",
+      "signature": "Repeated, similarly oriented step profiles with consistent ridge/valley ordering along a line, rather than a single edge or isolated topographic break.",
+      "why_off_catalogue": "A coherent chain of small fault scarps may be too weak or discontinuous to enter a regional fault catalogue but retain repeated profile geometry at native resolution.",
+      "named_mimic": "Fluvial terrace edge; road/canal banks and landslide headscarps also create ordered breaks.",
+      "differs_from_repo": "This is a proposed profile-shape/polarity test within the lidar lane, not evidence of a new lane. Existing owner reports describe scarp channels and consensus (S17, S25–S27), so exact distinction must be checked against registry surfaces and final dots before any claim of uniqueness.",
+      "cost": "Medium-high: profile sampling and orientation handling are moderate, but continuity rules, cultural masking, aggregation, ablation and registry checks remain necessary.",
+      "expected_gain": "Lower qualitative prior than the top three; may improve precision if polarity/continuity separates faults from mimics, but could also discard real discontinuous scarps. Unquantified.",
+      "data_status": "Not runnable here: required 1 m tiles, cache, cultural mask and aligned competition grid are absent or unverified (S05, S08).",
+      "validation": "NOT RUN. Prespecify continuity and polarity thresholds, then run the same segment-blocked holdout and leakage/uniqueness gates."
+    }
+  ]
+}

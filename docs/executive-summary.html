@@ -14,7 +14,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid 
 th{background:#1c2128}code{background:#1c2128;padding:1px 5px;border-radius:5px;font-size:13px}
 .mut{color:var(--mut);font-size:13.5px}nav{position:sticky;top:0;background:#0d1117ee;border-bottom:1px solid var(--line);padding:10px 0;z-index:9}
 nav a{margin-right:14px;font-size:14px}ul{padding-left:22px}.small{font-size:13px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="runcard.json">Run card (JSON)</a><a href="downloads/">Downloads</a></nav>
+</style></head><body><main><nav><a href="index.html">Summary</a><a href="h66-session.html">H66 run</a><a href="executive-summary.html">How to submit</a><a href="run-card.html">Run card</a><a href="irregularities.html">Irregularities</a><a href="sources.html">Sources</a></nav>
 <h1>Exactly how to make a submission into the GEMS Prize</h1>
 <p class="mut">Five steps. Nothing to install, nothing to configure. The portal rejects a file whose values are not
 inside [0, 1]; the files on this page are written so that cannot happen.</p>
@@ -45,7 +45,7 @@ GeoTIFF starts with <code>II*\0</code> or <code>MM\0*</code>; a Git-LFS pointer 
 <p class="small"><b>Receipt for the bytes you are downloading:</b> sha256 <code>44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1</code> ·
 3730×3292 · EPSG:32611 ·
 dtype float32 · 37,654 positive pixels ·
-min 0.0 max 1.0 · nodata None ·
+min 0.0 max 1.0 · no NODATA tag ·
 all local checks passed <code>true</code>.</p></div>
 
 <div class="card"><h2 style="margin-top:0;border:0">Step 4 — fill in the note (≤140 characters)</h2>
@@ -58,7 +58,7 @@ all local checks passed <code>true</code>.</p></div>
 <p>Uploading it is allowed by the rules (one submission per day per team is the only hard cadence limit in this
 family's notes; the weekly cap is shown on the submission page). But the honest read of the evidence is that this
 artifact scores in the 0.04–0.16 band where every LiDAR-scarp emission has landed, versus a standing 0.2778 and a
-board top of 0.4133. Spend a slot on the selector's pick, not on a negative-result lane.</p></div>
+board top near 0.41. Spend a slot on the selector's pick, not on a negative-result lane.</p></div>
 
 <div class="card"><h2 style="margin-top:0;border:0">Regenerate the file yourself (auditable end to end)</h2>
 <pre style="background:#1c2128;padding:12px;border-radius:8px;overflow:auto">bash scripts/fetch_inputs.sh          # restores hash-pinned inputs into data/

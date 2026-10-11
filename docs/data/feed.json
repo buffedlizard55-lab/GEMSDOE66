@@ -1,0 +1,249 @@
+{
+  "generated_utc": "2026-10-11T20:40:08Z",
+  "current": {
+    "schema": "gems-run-card/1",
+    "generated_utc": "2026-10-11T20:38:29Z",
+    "repo": "buffedlizard55-lab/GEMSDOE66",
+    "lane": "native-resolution LiDAR scarplet channels + cultural-feature veto",
+    "hypothesis": "Scarplet-template and Hessian-line evidence decoded from the pinned 2 m LiDAR stack (amplitude in m/m, implied height in m, scarp fill fraction, structure-tensor coherence, relative age) concentrates unmapped fault trace better than mass-matched random inside the LiDAR-covered footprint, and masking roads/canals/field edges raises that concentration further because the prior LiDAR arms' poor live scores are attributed to cultural contamination.",
+    "mechanism": "A fault the compilation omits still leaves a ~0.3-1.5 m step in the bare-earth surface. The 2 m stack aggregates the max and the mean of the slope-excess over each 100 m cell; their ratio is the fraction of the cell actually scarped, and dividing the amplitude by the 20 km-block robust background turns it into a per-cell SNR. Combining the SNR-weighted amplitude with the coherence of the scarp strike and the crest/toe sharpness selects cells where a real, fresh, near-straight step exists off the mapped network.",
+    "named_non_fault_mimic": "Irrigation canals, stock-pond berms, section-line roads, farm field edges and mine benches on basin floors -- plus the mimics named in the stack's own sidecar caveat ('roads, channels, terrace risers, paleo-shorelines, landslides and mines also create steps'). Pluvial Lake Lahontan/Bonneville shorelines are the non-anthropogenic twin.",
+    "holdout_dti": {
+      "evidence_class": "HOLDOUT-DTI",
+      "evaluator_version": "gems57 pooled hide-and-recover (4 quadrants x 2 seeds x {all,detached})",
+      "detector_arm": {
+        "mean": 0.04800722761599403,
+        "unvetoed": 0.048008406052731246,
+        "mass_matched_random": 0.03286179137826537,
+        "champion_h33_2_b2_same_protocol": 0.004729038412082699,
+        "withheld_positive_pixels": 45260,
+        "off_front_only": {
+          "pooled_dti": 0.040738058241717084,
+          "pooled_coverage": 0.04882838020741622,
+          "emitted_pixels": 23308
+        },
+        "note": "single pooled run of the registered protocol; the 95% intervals reported for the differences are the paired 20 km spatial-block bootstrap in evidence/h66_e1_offcat.json -- no replicate arms were run, so no CI is claimed for these levels"
+      },
+      "submission_policy_arm": {
+        "mean": 0.0,
+        "champion_same_protocol": 0.004729038412082699,
+        "why_zero": "the emission excludes every cell within 300 m of the catalogue while this evaluator's truth is withheld catalogue trace -> structurally incompatible (IR-66-GATE-01), measured not assumed"
+      },
+      "off_catalogue_instrument_37654": {
+        "dti": 0.1879596031416817,
+        "credit_per_dot": 0.07641003160662621,
+        "random_mass_matched_dti": 0.0902791687396606,
+        "paired_bootstrap_veto_vs_unveto": {
+          "candidate": "vetoed",
+          "reference": "unvetoed",
+          "blocks": 138,
+          "draws": 1000,
+          "delta_dti_mean": -5.08662700985954e-06,
+          "delta_dti_ci95": [
+            -1.4952230153163909e-05,
+            6.4529842099383944e-06
+          ],
+          "p_positive": 0.129
+        },
+        "truth": "USGS SGMC mapped faults >300 m from the competition catalogue, inside the LiDAR-covered footprint"
+      },
+      "spatial_cv_auc": {
+        "channels_only": {
+          "mean": 0.7513427044776038,
+          "ci95": [
+            0.6008040348833366,
+            0.901881374071871
+          ],
+          "folds": [
+            0.6745,
+            0.8281
+          ]
+        },
+        "channels_plus_cultural": {
+          "mean": 0.7513427044776038,
+          "ci95": [
+            0.6008040348833366,
+            0.901881374071871
+          ],
+          "folds": [
+            0.6745,
+            0.8281
+          ]
+        }
+      },
+      "organizer_confirmed": null,
+      "not_a_leaderboard_score": true
+    },
+    "leakage_canary": {
+      "rule": "AUC above 0.90 for any single feature alone = leakage until proven otherwise",
+      "worst_feature": "sharp",
+      "max_auc_reflected": 0.5762,
+      "per_feature": {
+        "amp_snr": {
+          "auc": 0.5538,
+          "auc_reflected": 0.5538,
+          "verdict": "ok"
+        },
+        "snr": {
+          "auc": 0.5507,
+          "auc_reflected": 0.5507,
+          "verdict": "ok"
+        },
+        "frac": {
+          "auc": 0.505,
+          "auc_reflected": 0.505,
+          "verdict": "ok"
+        },
+        "coh100": {
+          "auc": 0.4869,
+          "auc_reflected": 0.5131,
+          "verdict": "ok"
+        },
+        "rel_age": {
+          "auc": 0.5245,
+          "auc_reflected": 0.5245,
+          "verdict": "ok"
+        },
+        "facing": {
+          "auc": 0.4972,
+          "auc_reflected": 0.5028,
+          "verdict": "ok"
+        },
+        "sharp": {
+          "auc": 0.5762,
+          "auc_reflected": 0.5762,
+          "verdict": "ok"
+        },
+        "step": {
+          "auc": 0.5664,
+          "auc_reflected": 0.5664,
+          "verdict": "ok"
+        },
+        "height_m": {
+          "auc": 0.5664,
+          "auc_reflected": 0.5664,
+          "verdict": "ok"
+        },
+        "relief_m": {
+          "auc": 0.5717,
+          "auc_reflected": 0.5717,
+          "verdict": "ok"
+        },
+        "cultural": {
+          "auc": 0.4577,
+          "auc_reflected": 0.5423,
+          "verdict": "ok"
+        }
+      },
+      "deliberate_positive_control": {
+        "name": "distance-to-catalogue itself",
+        "auc": 1.0,
+        "note": "deliberate positive control, not a lane input"
+      },
+      "verdict": "PASS - no lane channel exceeds 0.58; the positive control (distance to the catalogue itself) scores 1.00, so the audit can detect leakage when it exists"
+    },
+    "uniqueness_vs_registry": {
+      "comparators_scanned": 62,
+      "complete_family_corpus": false,
+      "corpus_note": "61 rasters are physically present here; the family's full pinned corpus (655 grid rasters across 56 sibling repos) is not in this checkout and is not reachable from this sandbox (egress allow-list).",
+      "max_abs_spearman_rho": 0.0196,
+      "max_frac_dots_within_3px": 0.5099,
+      "max_excess_over_mass_matched_random": 0.319,
+      "gates": {
+        "rho_le_0p90": true,
+        "overlap_le_0p70_LITERAL_INLANE": true,
+        "overlap_le_0p70_IR60_CORRECTED_EXCESS_ONLY": true,
+        "pixel_unique": true,
+        "byte_unique": true
+      },
+      "lane_rule": "rho > 0.90 or > 70% of dots within 3 px of a registry raster = drifted into another lane",
+      "verdict": "no drift: rho 0.0196, worst raw 3-px overlap 0.5099 (against the GEMSDOE32 bayesopt scarp raster), worst excess-over-random 0.319; byte- and pixel-unique among the rasters scanned"
+    },
+    "validator_output": {
+      "sha256_allfinite": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
+      "sha256_nan": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
+      "sha256_zip": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
+      "reread": {
+        "dtype": "float32",
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "vmin": 0.0,
+        "vmax": 1.0,
+        "n_positive": 37654,
+        "finite": true,
+        "nodata": "None"
+      },
+      "all_checks_passed": true,
+      "format_report": {
+        "ok": true,
+        "problems": []
+      },
+      "interpretation": "float32, EPSG:32611, 3730x3292, transform and bounds identical to sample_submission.tif, values finite in [0,1], no NaN inside the footprint, 0 positive pixels on the mapped catalogue"
+    },
+    "inputs_verified": {
+      "pinned_files_matched": 9,
+      "files_checked": 13,
+      "mismatches": [],
+      "lidar_covered_cells": 3892984,
+      "lidar_fraction_of_footprint": 0.7534
+    },
+    "submission": {
+      "name": "GEMSDOE66-H66-1-LIDAR-SCARPLET-VETO-37654",
+      "note": "H66-1 LiDAR scarplet channels + cultural veto, 37654 dots >=300m off catalogue; HOLDOUT-DTI 0.048 vs 0.033 random; veto NEGATIVE",
+      "note_chars": 128,
+      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+      "file_zip": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
+      "file_nan_variant": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
+    },
+    "verdict": "negative",
+    "verdict_detail": {
+      "channel_gate_holdout_gain_not_confined_to_range_fronts": "PASS",
+      "cultural_veto_gate": "NEGATIVE - neutral inside the top 37,654 (-1.0e-5 DTI, CI crosses 0, 28 of 37,654 dots removed), and the spatial-CV logistic puts a POSITIVE coefficient on the cultural index (1.39-1.59): cultural-looking cells are not fault-depleted, because valley-floor development co-locates with range-front faults",
+      "promotion": "NOT PROMOTED. Rule 6 keeps promotion to a real slot with the selector. The family's own live record for LiDAR-scarp emissions (0.0430, 0.0764, 0.1294, 0.1461, 0.1589) against a standing 0.2778, plus a measured 2.08x over mass-matched random on the off-catalogue instrument, is reported as the evidence; no expected score is projected.",
+      "downloadable": true,
+      "format_safe_to_upload": true,
+      "negative_results_delivered": [
+        "cultural-feature veto (this lane's headline mechanism)",
+        "scarplet-channel ranking measured against the live-scored champion field"
+      ]
+    },
+    "budget": {
+      "experiments_run": 3,
+      "wall_clock_hours_target": 2,
+      "submission_slots_used": 0,
+      "experiments": "E1 off-catalogue population instrument; E2/E2b registered holdout (both eligibility readings); E3 spatial-CV retrain. Nothing else was run."
+    },
+    "files": {
+      "evidence": [
+        "h66_e1_canary.json",
+        "h66_e1_offcat.json",
+        "h66_e2_holdout.json",
+        "h66_e2b_detector_holdout.json",
+        "h66_emission.json",
+        "h66_inputs.json",
+        "h66_spatial_cv.json",
+        "h66_verify.json"
+      ],
+      "downloads": [
+        "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+        "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
+        "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
+      ]
+    }
+  },
+  "feed": [
+    {
+      "ts": "2026-10-11T20:38:29Z",
+      "event": "H66-1 built, gated, audited",
+      "verdict": "negative",
+      "artifact": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+      "holdout_dti": 0.04800722761599403,
+      "random": 0.03286179137826537,
+      "rho_max": 0.0196,
+      "slots_used": 0
+    }
+  ]
+}

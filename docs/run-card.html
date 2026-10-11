@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Run card · GEMS Prize workbench</title>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site">
+  <div class="brand">GEMS Prize (DrivenData #306) · workbench</div>
+  <nav><a href="index.html" class="">Summary</a><a href="submission-guide.html" class="">How to submit</a><a href="analysis.html" class="">H33 attribution</a><a href="hypotheses.html" class="">Hypotheses</a><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" class="">Official leaderboard ↗</a><a href="run-card.html" class="active">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
+</header>
+<main>
+<h1>Run card · gemsdoe66-h66-1-scarplet-veto-2026-10-11</h1>
+<p class="sub">One card per experiment. Unknown and unrun fields remain explicit. Machine-readable: <a href="data/run-card.json">data/run-card.json</a>.</p>
+<div class="banner stop"><strong class="big">Verdict: negative — channel gate PASS; cultural-veto gate NEGATIVE (28 of 37,654 dots removed, paired CI crosses 0); not promoted for a slot</strong>No file is offered for download or submission from this run.</div>
+<div class="card"><div class="kv">
+<div>Date (UTC)</div><div>2026-10-11</div>
+<div>Lane</div><div>native-resolution lidar scarp channels + cultural-feature veto</div>
+<div>Top candidate</div><div>H66-1: physical-unit scarplet channels (amplitude, fill fraction, SNR, orientation coherence, relative age) with a conjunctive cultural veto</div>
+<div>Hypothesis</div><div>Scarplet-template and Hessian-line evidence decoded from the pinned 2 m LiDAR stack (amplitude in m/m, implied height in m, scarp fill fraction, structure-tensor coherence, relative age) concentrates unmapped fault trace better than mass-matched random inside the LiDAR-covered footprint, and masking roads/canals/field edges raises that concentration further because the prior LiDAR arms&#x27; poor live scores are attributed to cultural contamination.</div>
+<div>Mechanism</div><div>A fault the compilation omits still leaves a ~0.3-1.5 m step in the bare-earth surface. The 2 m stack aggregates the max and the mean of the slope-excess over each 100 m cell; their ratio is the fraction of the cell actually scarped, and dividing the amplitude by the 20 km-block robust background turns it into a per-cell SNR. Combining the SNR-weighted amplitude with the coherence of the scarp strike and the crest/toe sharpness selects cells where a real, fresh, near-straight step exists off the mapped network.</div>
+<div>Named non-fault mimic</div><div>Irrigation canals, stock-pond berms, section-line roads, farm field edges and mine benches on basin floors -- plus the mimics named in the stack&#x27;s own sidecar caveat (&#x27;roads, channels, terrace risers, paleo-shorelines, landslides and mines also create steps&#x27;). Pluvial Lake Lahontan/Bonneville shorelines are the non-anthropogenic twin.</div>
+<div>Frozen metric parameters</div><div>α=0.2; β=0.8; 300 m triangular distance kernel; feature scales [2, 20] m; aggregate to 100 m</div>
+<div>Holdout DTI (HOLDOUT-DTI)</div><div><span class="tag grey">MEASURED — detector arm of the registered pooled hide-and-recover; +46% over mass-matched random, and the gain survives restriction to non-range-front cells</span>; value: 0.04800722761599403; evaluator version: gems57.holdout.evaluate (pooled), vendored byte-identical from 60GEMSDOE (registry/template_provenance.json, 23/23 sha256); withheld positives: 45260; 95% CI: not claimed for the level (one pooled run per arm, no replicate arms); the contrast is 5 mass-matched uniform-random dot sets, mean 0.032862. The paired 20 km block bootstrap CI is quoted where it was designed: the veto delta on the off-catalogue instrument, -1.0e-5 [-1.5e-5, +6.5e-6].</div>
+<div>Leakage canary</div><div><span class="tag grey">PASS</span>; threshold AUC &gt; 0.9; No feature restates the catalogue; the lane&#x27;s inputs are not catalogue-derived at 100 m (registry/preregistration-h66.json).</div>
+<div>Pre-placement surface check</div><div><span class="tag grey">PASS (incomplete corpus)</span>; surface correlation limit 0.9; registry rasters checked: 62; 61 rasters are physically present here; the family&#x27;s full pinned corpus (655 grid rasters across 56 sibling repos) is not in this checkout and is not reachable from this sandbox (egress allow-list).</div>
+<div>Post-placement final-raster check</div><div><span class="tag grey">PASS (incomplete corpus)</span>; surface correlation limit 0.9; dot-overlap limit 0.7; radius 3 px; registry rasters checked: 62; Both readings of the literal clause are reported (the shared template measured it unsatisfiable against space-filling comparators, 99.87%). docs/downloads is excluded as a self-comparison and the candidate&#x27;s own NaN twin is excluded explicitly.</div>
+<div>Raster file / SHA-256</div><div>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif / 44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1</div>
+<div>Validator</div><div><span class="tag grey">PASS (all checks)</span>; float32, EPSG:32611, 3730x3292, transform and bounds identical to sample_submission.tif, values finite in [0,1], no NaN inside the footprint, 0 positive pixels on the mapped catalogue</div>
+<div>Submission name</div><div>GEMSDOE66-H66-1-LIDAR-SCARPLET-VETO-37654</div>
+<div>Submission note</div><div>H66-1 LiDAR scarplet channels + cultural veto, 37654 dots &gt;=300m off catalogue; HOLDOUT-DTI 0.048 vs 0.033 random; veto NEGATIVE; characters: 128; maximum: 140</div>
+<div>Download / submit clearance</div><div><span class="tag amber">PARTIAL — download YES for audit; weekly slot NO: the veto gate is negative and promotion is the selector&#x27;s step</span></div>
+<div>Budget</div><div><code>{&quot;holdout_experiments_used&quot;: 3, &quot;max_holdout_experiments&quot;: 3, &quot;submission_slots_used&quot;: 0, &quot;time_budget_hours&quot;: 2, &quot;wall_time_hours&quot;: 3.4}</code></div>
+<div>Open irregularities</div><div>IR-23, IR-24, IR-25, IR-26, IR-27, IR-28, IR-29</div>
+</div></div>
+</main>
+<footer>Generated by scripts/build_site.py from docs/data/*.json · last updated 2026-10-11 (UTC) · not affiliated with DrivenData or DOE.</footer>
+</body>
+</html>

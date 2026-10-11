@@ -26,8 +26,9 @@ th{background:#1c2128}code{background:#1c2128;padding:1px 5px;border-radius:5px;
 nav a{margin-right:14px;font-size:14px}ul{padding-left:22px}.small{font-size:13px}
 """
 
-NAV = ('<nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a>'
-       '<a href="runcard.json">Run card (JSON)</a><a href="downloads/">Downloads</a></nav>')
+NAV = ('<nav><a href="index.html">Summary</a><a href="h66-session.html">H66 run</a>'
+       '<a href="executive-summary.html">How to submit</a><a href="run-card.html">Run card</a>'
+       '<a href="irregularities.html">Irregularities</a><a href="sources.html">Sources</a></nav>')
 
 
 def fmt(x, n=5):
@@ -103,9 +104,10 @@ exactly 300 m away</b> — the last rung of a pruning ladder in which every <i>d
 <code>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)</code> with a 300 m triangular kernel, emitted mass is a
 cost: a dot pays only if its kernel credit beats <code>0.2·DTI</code> (≈0.056 at 0.2778). So the score is bought
 by <b>placement and near-minimal mass</b>, not by a better probability surface.</p>
-<p>Verified against the official public leaderboard today, <b>0.2778 is rank ~23, not the top</b>: the leader is
-0.4133 and 0.3195 is rank 9 — see <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">the leaderboard</a>
-and <code>registry/leaderboard_snapshot_2026-10-11.json</code>. Beating 0.3195 therefore needs <i>more covered
+<p>Checked against the official public leaderboard while this run was built, 0.2778 sits in the twenties, not at the
+top — roughly 0.14 below the leader — and the brief's “0.3195 is the highest” is a mid-top-10 value, not the maximum
+(<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">live page</a>; no standings
+snapshot or copied table is kept in this repository, per IR-22). Beating it therefore needs <i>more covered
 truth</i>, not just tidier mass: which is why this lane was asked to bring an independent physical channel
 (1 m LiDAR scarps) and why its negative result matters — the LiDAR-scarp channel, however decoded, ranks
 off-catalogue structure only ~2× better than random dots, and every LiDAR-scarp emission this family has
@@ -257,7 +259,7 @@ GeoTIFF starts with <code>II*\\0</code> or <code>MM\\0*</code>; a Git-LFS pointe
 <p class="small"><b>Receipt for the bytes you are downloading:</b> sha256 <code>{val['sha256_allfinite']}</code> ·
 {val['reread']['shape'][0]}×{val['reread']['shape'][1]} · EPSG:{val['reread']['crs'].split(':')[1]} ·
 dtype {val['reread']['dtype']} · {val['reread']['n_positive']:,} positive pixels ·
-min {val['reread']['vmin']} max {val['reread']['vmax']} · nodata {val['reread']['nodata']} ·
+min {val['reread']['vmin']} max {val['reread']['vmax']} · {'no NODATA tag' if str(val['reread']['nodata']) == 'None' else 'nodata ' + str(val['reread']['nodata'])} ·
 all local checks passed <code>{str(val['all_checks_passed']).lower()}</code>.</p></div>
 
 <div class="card"><h2 style="margin-top:0;border:0">Step 4 — fill in the note (≤140 characters)</h2>
@@ -270,7 +272,7 @@ all local checks passed <code>{str(val['all_checks_passed']).lower()}</code>.</p
 <p>Uploading it is allowed by the rules (one submission per day per team is the only hard cadence limit in this
 family's notes; the weekly cap is shown on the submission page). But the honest read of the evidence is that this
 artifact scores in the 0.04–0.16 band where every LiDAR-scarp emission has landed, versus a standing 0.2778 and a
-board top of 0.4133. Spend a slot on the selector's pick, not on a negative-result lane.</p></div>
+board top near 0.41. Spend a slot on the selector's pick, not on a negative-result lane.</p></div>
 
 <div class="card"><h2 style="margin-top:0;border:0">Regenerate the file yourself (auditable end to end)</h2>
 <pre style="background:#1c2128;padding:12px;border-radius:8px;overflow:auto">bash scripts/fetch_inputs.sh          # restores hash-pinned inputs into data/
@@ -285,20 +287,13 @@ EPSG:32611 · 100 m pixels · same bounds as the training data · see
 </main></body></html>"""
 
     DOCS.mkdir(exist_ok=True)
-    (DOCS / "index.html").write_text(index)
+    (DOCS / "h66-session.html").write_text(index)
     (DOCS / "executive-summary.html").write_text(exec_sum)
     (DOCS / "downloads" / "README.md").write_text(
         "# Downloads\n\nFiles here are produced by `python scripts/run_h66.py s5` and validated by\n"
         "`python scripts/verify66.py`. The `.tif`/`.zip` pair is byte-identical inside the footprint; the `-allfinite`\n"
         "variant is the one to upload (see `executive-summary.html`, step 3). Receipts (`*.json`) carry sha256.\n")
-    feed = dict(generated_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), current=c,
-                feed=[dict(ts=c["generated_utc"], event="H66-1 built, gated, audited",
-                           verdict=c["verdict"], artifact=f["file"], holdout_dti=det["mean"],
-                           random=det["mass_matched_random"], rho_max=uni["max_abs_spearman_rho"],
-                           slots_used=0)])
-    (DOCS / "data").mkdir(exist_ok=True)
-    (DOCS / "data" / "feed.json").write_text(json.dumps(feed, indent=2) + "\n")
-    print("wrote docs/index.html, docs/executive-summary.html, docs/data/feed.json")
+    print("wrote docs/h66-session.html, docs/executive-summary.html")
     return 0
 
 
