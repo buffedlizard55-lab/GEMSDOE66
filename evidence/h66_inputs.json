@@ -1,0 +1,93 @@
+{
+  "generated_utc": "2026-10-11T20:29:26Z",
+  "checked": {
+    "bridge/existing_faults.tif": {
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "pinned": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "match": true,
+      "bytes": 425830
+    },
+    "bridge/labels.tif": {
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "pinned": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "match": true,
+      "bytes": 425830
+    },
+    "bridge/sample_submission.tif": {
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "pinned": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "match": true,
+      "bytes": 1599597
+    },
+    "external/derived_sgmc_faults_100m_u8.tif": {
+      "sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+      "pinned": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+      "match": true,
+      "bytes": 198602
+    },
+    "external/geodawn_extensions_u8.tif": {
+      "sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+      "pinned": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+      "match": true,
+      "bytes": 27132925
+    },
+    "external/lidar_scarp_features.json": {
+      "sha256": "9ef0df6e87598a8b0cd52fe821661e5fdb3a00568c5d9b1c5d61fd6b242dcd41",
+      "pinned": null,
+      "match": null,
+      "bytes": 3531,
+      "note": "not in the pinned manifest"
+    },
+    "external/lidar_scarp_features_u8.tif": {
+      "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+      "pinned": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+      "match": true,
+      "bytes": 36943606
+    },
+    "external/sgmc_faults_100m.tif": {
+      "sha256": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c",
+      "pinned": null,
+      "match": null,
+      "bytes": 213034,
+      "note": "not in the pinned manifest"
+    },
+    "external/topo_10m_derived_100m_u8.manifest.json": {
+      "sha256": "181d5527ba7ed2990031918a8b6c9d5d94e3998b2daf656de0c33322ca94120a",
+      "pinned": null,
+      "match": null,
+      "bytes": 2720,
+      "note": "not in the pinned manifest"
+    },
+    "external/topo_10m_derived_100m_u8.tif": {
+      "sha256": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4",
+      "pinned": "sha256 found verbatim in external/topo_10m_derived_100m_u8.manifest.json",
+      "match": true,
+      "bytes": 32523329,
+      "note": "not in the pinned manifest"
+    },
+    "pilot/dem3m/dem_pilot_receipt.json": {
+      "sha256": "b2747403576e5c0f3a63d637eaebcc0549f9933aca2f12fadb9ccd1633e8defd",
+      "pinned": null,
+      "match": null,
+      "bytes": 2803,
+      "note": "not in the pinned manifest"
+    },
+    "pilot/dem3m/x40y427_3m.tif": {
+      "sha256": "3a14850f2d33bb8b7ae077951c589ad9866f1978e0722691f2ef6ffcffeee718",
+      "pinned": "sha256 found verbatim in pilot/dem3m/dem_pilot_receipt.json",
+      "match": true,
+      "bytes": 5677887,
+      "note": "not in the pinned manifest"
+    },
+    "pilot/dem3m/x42y425_3m.tif": {
+      "sha256": "927c36c88debcaa65e9de9fbd0f3adf02b338614fbaed86e3e321111084735de",
+      "pinned": "sha256 found verbatim in pilot/dem3m/dem_pilot_receipt.json",
+      "match": true,
+      "bytes": 4156097,
+      "note": "not in the pinned manifest"
+    }
+  },
+  "missing": [],
+  "mismatch": [],
+  "ok": true
+}

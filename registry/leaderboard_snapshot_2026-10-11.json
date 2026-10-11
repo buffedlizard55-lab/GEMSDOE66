@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "observed_utc": "2026-10-11T20:20:00Z",
+  "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "verified": true,
+  "retrieval_method": "Arena fetch_page render of the public leaderboard page, chunk 0 read verbatim in this session; no authenticated request to the competition host.",
+  "public_scope": "Public leaderboard rows only. Not private-test performance, not this repository's score, and no file attribution to any team.",
+  "rows": [
+    {"rank": 1, "participant": "xiaofanhu", "score": 0.4133, "submissions": 16},
+    {"rank": 2, "participant": "cfld__", "score": 0.3585, "submissions": 5},
+    {"rank": 3, "participant": "JerryDataWorks", "score": 0.3418, "submissions": 19},
+    {"rank": 4, "participant": "alexoktaba", "score": 0.3361, "submissions": 27},
+    {"rank": 5, "participant": "joeyfezster", "score": 0.3333, "submissions": 27},
+    {"rank": 6, "participant": "Batik Shirt Brothers", "score": 0.3300, "submissions": 26},
+    {"rank": 7, "participant": "nchuzhoy", "score": 0.3262, "submissions": 6},
+    {"rank": 8, "participant": "kinghorton42", "score": 0.3261, "submissions": 10},
+    {"rank": 9, "participant": "DARD", "score": 0.3195, "submissions": 18},
+    {"rank": 10, "participant": "mzoorob", "score": 0.3129, "submissions": 30},
+    {"rank": 22, "participant": "op01", "score": 0.2797, "submissions": 10},
+    {"rank": 23, "participant": "extradr19", "score": 0.2778, "submissions": 15}
+  ],
+  "irregularity_note": "rank 23 row was read from the same page; the row list beyond rank 10 is quoted only where the rendered chunk carried it. 0.3774 (cited in the session brief as the leaderboard high) does not appear in the top rows today; 0.3195 is rank 9 today, not the maximum."
+}

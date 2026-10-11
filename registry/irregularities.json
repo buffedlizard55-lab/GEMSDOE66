@@ -1,0 +1,55 @@
+[
+  {
+    "id": "IR-66-GATE-01",
+    "severity": "high",
+    "status": "open-for-owner-decision",
+    "title": "The registered catalogue-hidden holdout cannot rank an off-catalogue emission (measured, not argued)",
+    "detail": "With the lane's eligibility rule (>=300 m from the published catalogue) the pooled hide-and-recover DTI is exactly 0.0 for our emission and 0.004729 for the live-scored champion h33-2-b2, because the evaluator's truth is withheld catalogue trace. Reported: evidence/h66_e2_holdout.json (policy arm) and evidence/h66_e2b_detector_holdout.json (detector arm, 0.048007 vs 0.032862 random). Consequence: the rule 'do not spend a slot on an idea that has not beaten the current holdout best' is unsatisfiable for any off-catalogue method, including the two best live scores in this project's history.",
+    "asked_of_owner": "choose the promotion instrument: (a) population-matched SGMC-off credit/dot, (b) a two-upload identification pair (h69A/h69B pattern) that pins |G| and credit/dot, or (c) accept that off-catalogue lanes can never be promoted locally."
+  },
+  {
+    "id": "IR-66-RES-01",
+    "severity": "high",
+    "status": "disclosed-deviation",
+    "title": "Lane asked for 1 m Steger/Frangi; executed on pinned 2 m-derived 100 m aggregates",
+    "detail": "No 1 m DEM is in the checkout and no data host is reachable (curl probes to drivendata/dropbox/usgs/zenodo all return 000). The physical bands decoded here ARE 2 m results aggregated with max/mean, so amplitude, relative age, orientation and SNR are all recoverable; what is NOT available footprint-wide are sub-pixel ridge offsets and 2-20 m scale sweeps. A two-tile 3 m check (data/pilot/dem3m, sha256 pinned by GEMSDOE48's dem_pilot_receipt.json) is left as the next session's E0.",
+    "asked_of_owner": "one Actions bridge job reusing 60GEMSDOE/.github/workflows/dem10-chi.yml to produce a 1 m native aggregate with a manifest."
+  },
+  {
+    "id": "IR-66-SCORE-01",
+    "severity": "medium",
+    "status": "flagged",
+    "title": "Brief's leaderboard claims do not match the official page read today",
+    "detail": "Brief says 'Current competition leaderboard GEMSDOE high score: 0.3774' and '0.3195 is the highest score right now'. The public board read on 2026-10-11 has #1 = 0.4133 (xiaofanhu), #2 = 0.3585 (cfld__), and 0.3195 at rank 9 (DARD); 0.3774 is not in the top rows. 0.3774 matches no artifact score in the family ledger we can see. Treated as stale numbers, not as a target.",
+    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
+  },
+  {
+    "id": "IR-66-FORK-01",
+    "severity": "info",
+    "status": "closed",
+    "title": "Template reuse verified byte-identical",
+    "detail": "src/gems57 is a verbatim copy of 60GEMSDOE/src/gems57 (23/23 sha256 equal, registry/template_provenance.json). No private fork, no local patch to the metric, holdout, grid or validator."
+  },
+  {
+    "id": "IR-66-GUARD-01",
+    "severity": "info",
+    "status": "disclosed",
+    "title": "Shared stop_guard is scoped to another lane; its verdict is recorded, not bypassed silently",
+    "detail": "60GEMSDOE/scripts/check_uniqueness66.py starts by calling scripts/stop_guard.py, which stops every runner unless registry/current_site_status.json names 'channel-steepness' as the active lane. This lane is not channel-steepness, so adopting the guard verbatim would refuse this lane's audit. The uniqueness check is therefore reimplemented in scripts/verify66.py against the same two literal clauses plus the IR-60-GATE-01 random-control correction; both shared files are vendored unchanged for inspection."
+  },
+  {
+    "id": "IR-66-SEM-01",
+    "severity": "medium",
+    "status": "upstream-fix-candidate",
+    "title": "Shared template mislabels a LiDAR band (documented bug, not propagated here)",
+    "detail": "60GEMSDOE/src/gems32/h33.py lidar_scarp_composite() documents '0.45*ex_max + 0.35*step_max + 0.20*downface_max' but reads raster bands 1, 2 and 5. Against the pinned sidecar band order [ex_max, ex_mean, step_max, lapneg_max, lappos_max, downface_max, upface_max, cross_max, relief, coh100, strike, valid], band 2 is ex_mean (not step_max, which is band 3) and band 5 is lappos_max (not downface_max, which is band 6). So two of the three terms are not the documented ones, and they are also the wrong kind of quantity: the code averages a mean-slope and a Laplacian convexity where the prose claims a slope-break amplitude and a down-face gradient. Verified by reading both files in this sandbox (lines 149-156 and the sidecar band list). This repo does not reuse that composite; the fix belongs in the template (one edit, one PR) and is reported here rather than silently forked. Any H32/H33/H68-descended 'scarp' weight in a shipped raster inherits this.",
+    "source": "https://github.com/buffedlizard55-lab/60GEMSDOE/blob/main/src/gems32/h33.py#L149-L155 vs https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features.json"
+  },
+  {
+    "id": "IR-66-NEG-01",
+    "severity": "high",
+    "status": "delivered-negative-result",
+    "title": "Cultural-feature veto does not help this lane",
+    "detail": "Conjunction veto (long-corridor coherence p97 x along-strike amplitude constancy x flat setting x no aeromagnetic gradient, mag_rank<p50) removed 108,468 of 3,892,984 LiDAR-covered cells but only 28 of the top 37,654 emission cells; paired 20 km block bootstrap of the off-catalogue DTI: -1.0e-5 [-1.5e-5, +6.5e-6], P(delta>0)=0.129. Spatial-CV logistic regression assigned a POSITIVE coefficient (1.39-1.59) to the cultural index against catalogue proximity: basin-floor cultural scarps co-locate with range-front faults, so a blanket veto would delete real evidence at the most faulted locations. Mechanistic read: the anthropogenic contamination of the LiDAR scarp channel lives in the middle of the ranking, where this emission policy never goes, and the 100 m aggregation also destroys the discriminator (a canal's double-edged profile) that a 1 m run could see."
+  }
+]

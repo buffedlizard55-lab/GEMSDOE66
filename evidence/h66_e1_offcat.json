@@ -1,0 +1,194 @@
+{
+  "generated_utc": "2026-10-11T20:30:20Z",
+  "evidence_class": "HOLDOUT-DTI (population-matched instrument)",
+  "instrument": "pooled DTI + credit/dot of a binary emission against USGS SGMC mapped faults that lie >300 m from the competition catalogue, inside the lidar-covered footprint, catalogue cells excluded from scoring (gems57)",
+  "truth_pixels_off_catalogue": 39846,
+  "eligibility_cells": 3541556,
+  "veto_cells": 102665,
+  "budgets": {
+    "12000": {
+      "vetoed": {
+        "tp": 2812.7431203014785,
+        "fp": 10979.589348052936,
+        "fn": 37033.25687969852,
+        "n_truth": 39846,
+        "n_emitted": 12000,
+        "dti": 0.08121037904574716,
+        "coverage": 0.07059035085834157,
+        "credit_per_dot": 0.08503422099558867,
+        "n_dots": 12000,
+        "on_visible_catalogue": 0
+      },
+      "unvetoed": {
+        "tp": 2810.981379182185,
+        "fp": 10980.256014719602,
+        "fn": 37035.01862081781,
+        "n_truth": 39846,
+        "n_emitted": 12000,
+        "dti": 0.0811600267302758,
+        "coverage": 0.07054613710741818,
+        "credit_per_dot": 0.08497866544003312,
+        "n_dots": 12000,
+        "on_visible_catalogue": 0
+      },
+      "random_mass_matched": {
+        "dti_mean": 0.03475934840331613,
+        "dti_sd": 0.0010010579312528943,
+        "n": 5,
+        "dots": 12000
+      },
+      "paired_bootstrap_veto_vs_unveto": {
+        "candidate": "vetoed",
+        "reference": "unvetoed",
+        "blocks": 136,
+        "draws": 1000,
+        "delta_dti_mean": 0.0,
+        "delta_dti_ci95": [
+          0.0,
+          0.0
+        ],
+        "p_positive": 0.0
+      },
+      "union_overlap_pct": 99.99,
+      "veto_removed_from_unvetoed": 1
+    },
+    "24000": {
+      "vetoed": {
+        "tp": 5140.576492848946,
+        "fp": 22088.760321413298,
+        "fn": 34705.423507151056,
+        "n_truth": 39846,
+        "n_emitted": 24000,
+        "dti": 0.13773336302231717,
+        "coverage": 0.12901110507576535,
+        "credit_per_dot": 0.07963498660777932,
+        "n_dots": 24000,
+        "on_visible_catalogue": 0
+      },
+      "unvetoed": {
+        "tp": 5140.576492848946,
+        "fp": 22088.760321413294,
+        "fn": 34705.423507151056,
+        "n_truth": 39846,
+        "n_emitted": 24000,
+        "dti": 0.13773336302231717,
+        "coverage": 0.12901110507576535,
+        "credit_per_dot": 0.07963498660777932,
+        "n_dots": 24000,
+        "on_visible_catalogue": 0
+      },
+      "random_mass_matched": {
+        "dti_mean": 0.06343854500563044,
+        "dti_sd": 0.002868214206525972,
+        "n": 5,
+        "dots": 24000
+      },
+      "paired_bootstrap_veto_vs_unveto": {
+        "candidate": "vetoed",
+        "reference": "unvetoed",
+        "blocks": 137,
+        "draws": 1000,
+        "delta_dti_mean": -5.40873674141952e-06,
+        "delta_dti_ci95": [
+          -1.0680535540583125e-05,
+          -1.0566841174473904e-06
+        ],
+        "p_positive": 0.0
+      },
+      "union_overlap_pct": 99.96,
+      "veto_removed_from_unvetoed": 9
+    },
+    "37654": {
+      "vetoed": {
+        "tp": 7583.97572662665,
+        "fp": 34776.856669884095,
+        "fn": 32262.02427337335,
+        "n_truth": 39846,
+        "n_emitted": 37654,
+        "dti": 0.1879596031416817,
+        "coverage": 0.19033217202797395,
+        "credit_per_dot": 0.07641003160662621,
+        "n_dots": 37654,
+        "on_visible_catalogue": 0
+      },
+      "unvetoed": {
+        "tp": 7583.97572662665,
+        "fp": 34776.856669884095,
+        "fn": 32262.02427337335,
+        "n_truth": 39846,
+        "n_emitted": 37654,
+        "dti": 0.1879596031416817,
+        "coverage": 0.19033217202797395,
+        "credit_per_dot": 0.07641003160662621,
+        "n_dots": 37654,
+        "on_visible_catalogue": 0
+      },
+      "random_mass_matched": {
+        "dti_mean": 0.0902791687396606,
+        "dti_sd": 0.0026057712588638867,
+        "n": 5,
+        "dots": 37654
+      },
+      "paired_bootstrap_veto_vs_unveto": {
+        "candidate": "vetoed",
+        "reference": "unvetoed",
+        "blocks": 138,
+        "draws": 1000,
+        "delta_dti_mean": -5.08662700985954e-06,
+        "delta_dti_ci95": [
+          -1.4952230153163909e-05,
+          6.4529842099383944e-06
+        ],
+        "p_positive": 0.129
+      },
+      "union_overlap_pct": 99.93,
+      "veto_removed_from_unvetoed": 28
+    },
+    "60000": {
+      "vetoed": {
+        "tp": 10379.895206427802,
+        "fp": 55951.84601338688,
+        "fn": 29466.104793572198,
+        "n_truth": 39846,
+        "n_emitted": 60000,
+        "dti": 0.22993290477510997,
+        "coverage": 0.26050030634010446,
+        "credit_per_dot": 0.06746923311021857,
+        "n_dots": 60000,
+        "on_visible_catalogue": 0
+      },
+      "unvetoed": {
+        "tp": 10375.080656156504,
+        "fp": 55954.21284840802,
+        "fn": 29470.919343843496,
+        "n_truth": 39846,
+        "n_emitted": 60000,
+        "dti": 0.22982874635043796,
+        "coverage": 0.2603794773918713,
+        "credit_per_dot": 0.06742978585986642,
+        "n_dots": 60000,
+        "on_visible_catalogue": 0
+      },
+      "random_mass_matched": {
+        "dti_mean": 0.12257008580416348,
+        "dti_sd": 0.0017027041609735288,
+        "n": 5,
+        "dots": 60000
+      },
+      "paired_bootstrap_veto_vs_unveto": {
+        "candidate": "vetoed",
+        "reference": "unvetoed",
+        "blocks": 138,
+        "draws": 1000,
+        "delta_dti_mean": 0.00014196011622080856,
+        "delta_dti_ci95": [
+          -2.013055768190705e-05,
+          0.0003594073125178086
+        ],
+        "p_positive": 0.947
+      },
+      "union_overlap_pct": 99.8,
+      "veto_removed_from_unvetoed": 119
+    }
+  }
+}

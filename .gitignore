@@ -1,0 +1,12 @@
+# data is hash-pinned but NOT in git (GitHub 100 MB blob cap); restore with
+#   bash scripts/fetch_inputs.sh   (verified against registry/data_manifest.json pins)
+data/
+registry/rasters/
+src/gemsdoe48/
+evidence/*.npz
+work/
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/

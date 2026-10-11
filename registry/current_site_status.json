@@ -1,0 +1,37 @@
+{
+  "review_date": "2026-10-11",
+  "active_run": "H66-1",
+  "active_lane": "native-resolution LiDAR scarplet channels + cultural-feature veto",
+  "status": "COMPLETE-NEGATIVE",
+  "stop_reason": "The lane's headline mechanism (cultural-feature veto) failed its preregistered gate: it removed 28 of 37,654 top-ranked emission dots and moved the off-catalogue instrument by -1.0e-5 DTI (95% CI crossing 0). The scarplet channel set itself PASSED the holdout gain clause (0.048007 vs 0.032862 mass-matched random, off-range-front 0.040739), but not by enough to promote over a field that already scored 0.2778 live. Per protocol rule 6, promotion to a real slot is the selector's step.",
+  "new_tiff_created_in_this_review": true,
+  "submission_slots_used_in_this_review": 0,
+  "recommended_competition_submission": null,
+  "research_artifact": {
+    "path": "docs/downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+    "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
+    "zip_sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
+    "nan_variant_sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
+    "submission_name": "GEMSDOE66-H66-1-LIDAR-SCARPLET-VETO-37654",
+    "note": "H66-1 LiDAR scarplet channels + cultural veto, 37654 dots >=300m off catalogue; HOLDOUT-DTI 0.048 vs 0.033 random; veto NEGATIVE",
+    "note_chars": 128,
+    "download_ok": true,
+    "download_rationale": "Format-validated, unique, reproducible; safe to upload (will not trigger the [0,1] error).",
+    "submit_to_competition": false,
+    "submit_rationale": "Negative-result lane; every LiDAR-scarp emission this family has uploaded scored 0.0430-0.1589 against a standing 0.2778. Not promoted.",
+    "format_validation": "All local checks passed: single-band float32 EPSG:32611, 3730x3292, transform/bounds identical to sample_submission.tif, 37,654 in-footprint positives, values finite in [0,1], no nodata tag, 0 positive pixels on the mapped catalogue.",
+    "validator_receipt": "evidence/h66_verify.json",
+    "run_card": "registry/run_card.json"
+  },
+  "gates": {
+    "G0_input_hash_pins": "PASS 12/12 checked, 0 mismatches (7 pinned by the family manifest, 5 by sibling receipts found verbatim)",
+    "G1_leakage_canary": "PASS max single-feature AUC 0.5762; deliberate positive control 1.0",
+    "G2_channel_gain_not_confined_to_range_fronts": "PASS 0.048007 vs 0.032862 random; off-front 0.040739 vs 0.031743",
+    "G3_cultural_veto": "FAIL (negative result, delivered)",
+    "G4_registered_holdout_submission_policy_arm": "0.0 by construction -> IR-66-GATE-01",
+    "G5_format": "PASS",
+    "G6_uniqueness": "PASS rho<=0.90 (0.0196), 3-px overlap<=0.70 (0.5099), excess-over-random 0.319, byte+pixel unique among 62 scanned rasters; corpus is NOT the complete family corpus"
+  },
+  "leaderboard_snapshot": "registry/leaderboard_snapshot_2026-10-11.json",
+  "leaderboard_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ read through the Arena fetcher this session; no authenticated request, no scraping of the private test set"
+}
