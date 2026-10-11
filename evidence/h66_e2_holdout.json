@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-11T20:33:20Z",
+  "generated_utc": "2026-10-11T21:18:02Z",
   "evidence_class": "HOLDOUT-DTI",
   "evaluator": "gems57-pooled-hide-v2 (4 spatial quadrants x 2 seeds x {all,detached}, whole-segment withholding, visible faults masked pixel-exactly, alpha=0.2 beta=0.8, 300 m triangular)",
   "withheld_positive_pixels": 45260,

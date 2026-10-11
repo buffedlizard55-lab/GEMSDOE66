@@ -13,6 +13,55 @@
 > `docs/executive-summary.html` (five-step how-to-submit incl. why the old `[0, 1]` rejection cannot recur).
 
 
+## Standing Project Prompt and Charter
+
+> **Read this prompt every time we work on the project as a starting point** to make sure we are building what we are aiming for and have a strong base to continue building and improving on making something useful for everyday use. It solves the problem of having to manually check everything ourselves and maintains an up-to-date current feed.
+
+```text
+Review the repo. 
+
+THE FOLLOWING IS THE HIGHEST URGENCY AND MUST BE FOLLOWED!
+
+MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION. DO NOT COPY A PREVIOUS SUBMISSION UNLESS IT'S FOR LEARNING AND EDUCATION. BUT WE MUST GENERATE A UNIQUE TIF SUBMISSION. IT MUST BE OBVIOUS WHETHER IT IS OK TO DOWNLOAD AND SUBMIT THE GENERATED TIF SUBMISSION.
+
+There should be an easy to download submission tif file as described by the prompt. Read the entire prompt.
+
+Native-resolution lidar scarp channels. The 100 m stack discards the subtle scarps visible in the 1 m GeoDAWN lidar, which plausibly is evidence geologists use to add faults. On high-prior tiles first, compute two sets of features. (i) scarplet template matching (Sare & Hilley, JOSS 2018, doi:10.21105/joss.01066), which returns amplitude, relative age, orientation and SNR from a GeoTIFF DEM, extended with slope-aware scarp templates (AGU 2015 poster T31A-2838, tested in Surprise Valley). (ii) Steger sub-pixel ridge/valley lines (IEEE TPAMI 20(2):113–125, 1998) and Frangi multiscale Hessian line measures (MICCAI 1998, LNCS 1496:130–137) at 2–20 m scales on a slope-detrended surface. Aggregate to 100 m cells as scarp-pixel fraction, SNR-weighted amplitude, structure-tensor orientation coherence and dominant strike. Mask roads, canals and field edges with the existing cultural-feature mask, then retrain under spatial CV. Gate: DTI gain on lidar-covered holdout blocks that is not confined to range fronts. Finish: normalize to [0,1]; write a float32 EPSG:32611 100 m GeoTIFF (NaN only outside the footprint); pass validate_submission.py; run a hash/pixel-agreement check against all prior rasters; offer the download only if the gate is met, else log the negative result.
+
+PARALLEL-RUN PROTOCOL — read first. This session is one of several running from this same prompt.
+
+1. LANE. Your lane is the single method paragraph below. Stay inside it. If your raster's rank-correlation with any registry raster exceeds [0.90], or more than [70%] of your dots fall within 3 px of one registry raster's dots, you have drifted into another lane: log it as a duplicate and stop. Check this on the surface before placement AND on the final dots.
+
+2. REUSE, DON'T REBUILD. Use the template's cached feature stack, evaluate_holdout.py and submission_writer.py. Holdout = hide-and-recover: withhold whole fault segments with a buffer, derive every catalogue-based feature only from the visible faults, mask visible faults pixel-exactly, score pooled DTI (alpha 0.2, beta 0.8, 300 m triangular kernel). If a shared tool is wrong, fix it once in the template and report it; never keep a private fork.
+
+3. LABEL EVERY NUMBER as HOLDOUT-DTI (evaluator version, number of withheld positives, 95% CI) or ORGANIZER-CONFIRMED (copied from a submission-page receipt). A projection is never written as a score.
+
+4. LEAKAGE CANARY. Test each feature alone on the holdout before trusting any result. AUC above [0.90] means leakage until proven otherwise.
+
+5. RUN CARD. End with one JSON card: hypothesis; mechanism; the named non-fault process that could mimic it; holdout DTI + CI; correlation/overlap vs registry; raster sha256; validator output (no NaN inside the footprint, values in [0,1], CRS/shape/transform match); submission name + note of at most 140 characters; verdict promote / negative. Negative results are deliverables.
+
+6. BUDGET. Stop after [3] experiments or [2] hours. Do not pick submissions: promotion to a real slot is a separate selector step, within the weekly cap shown on the submission page.
+
+The following sites should serve as a starting point for understanding how to generate TIF submissions. These websites are researched, and tested and have generated TIF submissions. But we need to generate high scoring submissions.
+
+Current competition leaderboard GEMSDOE high score: 0.3774 / 0.3195
+Highest score from GEMDOE site where submission TIF is downloaded from:
+https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html
+h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros: 0.2778
+
+Before implementing, generate 3–5 candidate geological hypotheses we haven't tried yet, each naming: the specific layer(s) involved, the physical signature being targeted (e.g., an edge-detection or curvature transform), why it should catch a fault missing from the USGS/INGENIOUS catalogue rather than one already in it, and how it differs from anything already implemented in this repo. Rank them by expected DTI improvement and implementation cost. Validate the top candidate on our spatially-blocked holdout set before touching a weekly submission slot.
+
+Core Values:
+- Maximize P(Win)
+- Own the Outcome
+
+Portal Submission Requirements:
+- Format: Single-band GeoTIFF (.tif) or .zip containing single GeoTIFF.
+- Range: Predicted values must be in range [0, 1].
+- Bounds: EPSG:32611, 3730x3292, transform matching sample_submission.tif.
+- Note: At most 140 characters.
+```
+
 ## Mission and lane boundary
 
 Develop an auditable method for predicting geological faults that may indicate geothermal resources in the GeoDAWN region. The competition target is fault prediction, not direct detection of geothermal vents; a lidar-only method detects possible surface expression and cannot establish geothermal productivity or find every buried fault.
@@ -147,11 +196,12 @@ TP=3.00/FP=1.89/FN=2.00→0.60, read this session) and `60GEMSDOE/docs/research/
 
 ```bash
 python -m venv venv && . venv/bin/activate && pip install -r requirements.txt
-bash scripts/fetch_inputs.sh                    # hash-pinned inputs, fails closed
+bash scripts/download_competition_data.sh       # fetches & reassembles competition rasters + external stacks
+python scripts/prepare_data.py                  # verifies SHA-256, CRS, shapes, band counts & generates manifest
 python scripts/run_h66.py s0 s1 s2 s3 s4 s4b s5  # ~4 min, 3 GB RAM, no GPU
 python scripts/verify66.py --candidate docs/downloads/<file>.tif
-python scripts/write_run_card.py && python scripts/build_site66.py
-python -m pytest tests -q                        # 8 passed
+python scripts/write_run_card.py && python scripts/build_site.py && python scripts/build_site66.py
+pytest tests/ -q                                # 70 passed
 ```
 
 ## 5 · Remaining work / limitations (owned, not deferred)

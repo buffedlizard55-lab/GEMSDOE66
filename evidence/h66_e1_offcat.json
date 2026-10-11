@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-11T20:30:20Z",
+  "generated_utc": "2026-10-11T21:13:40Z",
   "evidence_class": "HOLDOUT-DTI (population-matched instrument)",
   "instrument": "pooled DTI + credit/dot of a binary emission against USGS SGMC mapped faults that lie >300 m from the competition catalogue, inside the lidar-covered footprint, catalogue cells excluded from scoring (gems57)",
   "truth_pixels_off_catalogue": 39846,

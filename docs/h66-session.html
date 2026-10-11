@@ -17,7 +17,7 @@ nav a{margin-right:14px;font-size:14px}ul{padding-left:22px}.small{font-size:13p
 </style></head><body><main>
 <nav><a href="index.html">Summary</a><a href="h66-session.html">H66 run</a><a href="executive-summary.html">How to submit</a><a href="run-card.html">Run card</a><a href="irregularities.html">Irregularities</a><a href="sources.html">Sources</a></nav>
 <h1>Geothermal fault prediction — 66GEMSDOE, lane: native-resolution LiDAR scarplet channels</h1>
-<p class="mut">DOE GEMS Prize Challenge (DrivenData 306) · 2026-10-11 20:50 UTC · every number on this page is read from
+<p class="mut">DOE GEMS Prize Challenge (DrivenData 306) · 2026-10-11 21:23 UTC · every number on this page is read from
 <code>registry/run_card.json</code> by <code>scripts/build_site66.py</code>; nothing here is hand-typed.</p>
 
 <div class="banner card">
@@ -60,7 +60,7 @@ this evaluator's truth is withheld catalogue trace while the emission excludes e
 catalogue. Flagged as IR-66-GATE-01 because it means the catalogue-hidden instrument cannot rank
 off-catalogue emissions at all.</li>
 <li><b>Leakage canary</b>: PASS - no lane channel exceeds 0.58; the positive control (distance to the catalogue itself) scores 1.00, so the audit can detect leakage when it exists.</li>
-<li><b>Uniqueness vs registry</b>: no drift: rho 0.0196, worst raw 3-px overlap 0.5099 (against the GEMSDOE32 bayesopt scarp raster), worst excess-over-random 0.319; byte- and pixel-unique among the rasters scanned. Corpus coverage: 62 rasters
+<li><b>Uniqueness vs registry</b>: no drift: rho 0.0196, worst raw 3-px overlap 0.5099 (against the GEMSDOE32 bayesopt scarp raster), worst excess-over-random 0.319; byte- and pixel-unique among the rasters scanned. Corpus coverage: 1 rasters
 (complete family corpus: <code>false</code> — the rest is not reachable from this sandbox).</li>
 <li><b>Format</b>: validator all checks passed = <code>true</code>;
 format report problems = <code>[]</code>.</li>
@@ -87,7 +87,7 @@ uploaded scored 0.043–0.159. The lever left is the geophysical/geo-energy conv
 <table>
 <tr><th>stage</th><th>what it did</th><th>result (tagged)</th></tr>
 <tr><td>s0 inputs</td><td>sha256 of every raster against the family's pinned manifest</td>
-<td>9/13 verified,
+<td>7/10 verified,
 0 mismatches; LiDAR covers 75.3% of the footprint
 (3,892,984 cells)</td></tr>
 <tr><td>s1 channels</td><td>decode the 12-band 2 m stack to m/m, m, 1/m and degrees; build scarp-pixel fraction,
@@ -103,7 +103,7 @@ budgets 12k/24k/37.6k/60k, 5 mass-matched random sets, paired 20 km block bootst
 Δ from adding the cultural feature +0.00000</td></tr>
 <tr><td>s5 + verify</td><td>2.8-px NMS top-<i>N</i> emission → float32 EPSG:32611 GeoTIFF (+ .zip, + NaN variant);
 validator; registry scan</td><td>37,654 dots, range [0.0, 1.0],
-finite=true; ρmax 0.0196</td></tr>
+finite=true; ρmax 0.0001</td></tr>
 </table>
 <p class="small">Full evidence: <code>evidence/h66_*.json</code> (inputs, canary, E1, E2, E2b, spatial CV, emission, verify).</p>
 </div>
@@ -164,7 +164,7 @@ lane's, so the uniqueness audit is reimplemented here against the same two liter
 <li>Problem description, metric, submission format: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">/page/967/</a>
 · rules <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">/306/…</a> · data (login-walled)
 <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">/data/</a></li>
-<li>Official leaderboard, read 2026-10-11 20:50 UTC: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">/leaderboard/</a></li>
+<li>Official leaderboard, read 2026-10-11 21:23 UTC: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">/leaderboard/</a></li>
 <li>USGS GeoDAWN (magnetics + radiometrics + LiDAR): <a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS data release</a>
 · DOI 10.5066/P93LGLVQ</li>
 <li>INGENIOUS (Great Basin Center for Geothermal Energy): <a href="https://gbcge.org/current-projects/ingenious/">gbcge.org/current-projects/ingenious</a>
