@@ -93,7 +93,12 @@ def main() -> int:
     pred[dots] = 1.0
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     tag = f"gems66-h66-2-concordance-scarp-{int(dots.sum())}-{stamp}"
-    path = ROOT / "docs" / "downloads" / f"{tag}-allfinite.tif"
+    # IR-66-RELEASE-01: the site's download gate (2026-10-11 audit) forbids publishing an
+    # artifact before the full gate chain passes, so the emission lands in a research directory
+    # that no site page links to. Do not upload anything from artifacts/ without a cleared card.
+    outdir = ROOT / "artifacts" / "h66-2"
+    outdir.mkdir(parents=True, exist_ok=True)
+    path = outdir / f"{tag}-allfinite.tif"
     rec = SW.write_submission(path, pred, ROOT / "data/bridge/sample_submission.tif", foot,
                               note=NOTE, name=NAME, catalogue=cat,
                               metadata=dict(lane="H66-2 native-resolution lidar scarp channels",

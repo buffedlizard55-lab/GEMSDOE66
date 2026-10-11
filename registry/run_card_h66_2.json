@@ -1,7 +1,7 @@
 {
   "schema": "gems-run-card/1",
   "hypothesis_id": "H66-2",
-  "generated_utc": "2026-10-11T21:37:53Z",
+  "generated_utc": "2026-10-11T21:42:23Z",
   "repo": "buffedlizard55-lab/GEMSDOE66",
   "lane": "native-resolution LiDAR scarplet channels (H66 lane, candidate H66-2)",
   "hypothesis": "Does a concordance (conjunction) of independent 2 m LiDAR scarp attributes -- the 10-vs-50 m slope break (step_max), the dip-sense of the band-passed step (facing = (downface-upface)/(downface+upface)), and crest/toe sharpness (sqrt(lapneg*lappos)) -- rank the off-catalogue fault population better than H66-1's weighted rank-average of the four named aggregates, at equal emitted mass?",
@@ -532,7 +532,7 @@
     "note_limit_chars": 140,
     "file": "gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
     "sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
-    "clearance": "AUDIT-ONLY - download YES (format-valid, unique); weekly slot NO - the proxy does not transfer and the basin stratum is not improved"
+    "clearance": "NOT CLEARED - do not submit. The bytes live in artifacts/h66-2/ (research directory, no site page links to it) because the 2026-10-11 release gate requires a valid buffered whole-segment HOLDOUT-DTI with CI, a complete registry and two independent reviews before publication; this candidate has none of those and its own verdict is negative."
   },
   "verdict": "NEGATIVE-NOT-PROMOTED",
   "verdict_detail": {
@@ -573,7 +573,7 @@
     "rule": "3 experiments or 2 hours, whichever comes first; exhausted, so no holdout re-run"
   },
   "files": {
-    "artifact": "docs/downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+    "artifact": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
     "emission": "evidence/h66b_emission.json",
     "uniqueness": "evidence/h66b_uniqueness.json",
     "strata": "evidence/h66b_e2_strata.json",

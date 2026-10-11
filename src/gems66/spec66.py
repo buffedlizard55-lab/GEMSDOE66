@@ -1,37 +1,31 @@
-"""Physical decode of the owner-pinned 2 m LiDAR scarp stack (band semantics, units).
+"""Decoder for an owner-described 2 m LiDAR stack; provenance is unverified here.
 
-Authoritative band definitions are **not** guessed here: they are read verbatim from
-``data/external/lidar_scarp_features.json``, which is the sidecar the build workflow
-published next to the raster
-(https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features.json;
-workflow run https://github.com/buffedlizard55-lab/7GEMSDOE/actions/runs/36266555805).
+The legacy band names, quantization rule, work resolution, tile totals, caveats, and
+physical-unit table below mirror an owner-supplied sidecar description referenced by
+the historical manifest. The raster and sidecar are not present in this checkout, and
+the manifest does not authenticate organizer origin, tile completeness, or the full
+processing lineage. A future use must acquire authorized inputs, preserve hashes, and
+re-verify the sidecar against the source workflow before interpreting any channel.
 
-The sidecar states, verbatim:
+Inverse-quantizing a byte band only recovers a value under the stated quantization
+assumption; it does not turn a proxy into a measured scarp attribute. In particular,
+Scarplet amplitude/SNR/morphologic-age outputs require the actual template method and
+cannot be inferred from a slope ratio or robust z-score.
 
-    "quantisation_rule": "q = 1 + round(254 * t(clip(x/xmax,0,1))), t in {sqrt, linear}; 0 = no lidar"
-    "work_resolution_m": 2.0, "tiles_total": 716, "tile_status": {"ok": 706, "failed": 10}
-    "caveats": ["uncalibrated terrain descriptors, not fault detections",
-                "roads, channels, terrace risers, paleo-shorelines, landslides and mines also create steps"]
+Owner-described band definitions (not independently verified in this checkout):
+  ex_max       max 2 m slope excess over 30 m regional slope                    [m/m]
+  ex_mean      mean slope excess                                                [m/m]
+  step_max     max difference between 10 m and 50 m slope scales                [m/m]
+  lapneg_max   max crest convexity response                                     [1/m]
+  lappos_max   max base concavity response                                      [1/m]
+  downface_max / upface_max / cross_max  directional band-passed gradients     [m/m]
+  relief       local elevation range                                            [m]
+  coh100       structure-tensor orientation coherence at 100 m                  [-]
+  strike       dominant scarp-strike proxy                                     [deg]
+  valid        valid-LiDAR sample fraction per cell                             [-]
 
-The second caveat is the exact failure mode this lane targets (see ``cultural66``).
-Every prior LiDAR arm in this family consumed the *quantised* bands as dimensionless
-weights (``u8 / 255`` -- e.g. ``GEMSDOE32/src/gems32/h33.py:153``); none decoded them
-back to metres / (m/m) / (1/m). Decoding is what makes an SNR and a relative-age index
-well defined, so it is done here and nowhere else in the family.
-
-Units per band (from the sidecar ``channels_2m`` table, xmax per ``quantisation``):
-  ex_max      max 2 m slope in excess of the 30 m regional slope            [m/m]  xmax 1.5, sqrt
-  ex_mean     mean slope excess (short-wavelength steepness)                 [m/m]  xmax 0.3, sqrt
-  step_max    max (10 m-scale slope - 50 m-scale slope)                      [m/m]  xmax 1.0, sqrt
-  lapneg_max  max crest convexity -LoG(6 m) of the 50 m band-passed surface  [1/m]  xmax 0.05, sqrt
-  lappos_max  max base concavity +LoG(6 m) of the 50 m band-passed surface   [1/m]  xmax 0.05, sqrt
-  downface_max max band-passed step gradient along the regional upslope dir  [m/m]  xmax 1.0, sqrt
-  upface_max  max band-passed step gradient against the regional slope       [m/m]  xmax 1.0, sqrt
-  cross_max   max band-passed gradient across the regional slope             [m/m]  xmax 1.0, sqrt
-  relief      local relief (zmax-zmin over the cell)                         [m]    xmax 300, sqrt
-  coh100      structure-tensor orientation coherence at 100 m               [-]    xmax 1, linear
-  strike      dominant scarp strike                                          [deg]  xmax 180, linear
-  valid       fraction of valid lidar samples in the cell                    [-]    xmax 1, linear
+``read_bands`` requires the adjacent sidecar at runtime and must fail closed when it
+is absent. No data download or full-footprint processing is performed by this module.
 """
 from __future__ import annotations
 

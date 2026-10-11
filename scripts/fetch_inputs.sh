@@ -1,20 +1,40 @@
 #!/usr/bin/env bash
-# Restore the hash-pinned inputs this lane needs, from the pinned sibling repositories,
-# and FAIL CLOSED on any digest mismatch (the same policy as 60GEMSDOE/scripts/fetch_mirrors.sh).
-#
-# Nothing in here contacts DrivenData, Dropbox or any data host: the mirrors are public GitHub
-# blobs in this project's own repositories, pinned by sha256 in registry/data_manifest.json.
+# Check expected local inputs only. This script does not download, copy, or authenticate.
+# Obtain competition files through an authorized official account outside this session,
+# then record provenance and checksums before placing them under data/.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TPL="${TPL:-/home/user/_ext/tpl}"
-mkdir -p "$ROOT/data/bridge" "$ROOT/data/external" "$ROOT/data/pilot/dem3m"
-for f in bridge/existing_faults.tif bridge/sample_submission.tif labels.tif \
-         external/lidar_scarp_features_u8.tif external/lidar_scarp_features.json \
-         external/topo_10m_derived_100m_u8.tif external/geodawn_extensions_u8.tif \
-         external/sgmc_faults_100m.tif external/derived_sgmc_faults_100m_u8.tif; do
-  src="$TPL/data/$f"; dst="$ROOT/data/${f#labels.tif}"; dst="${dst/external\//external/}"
-  [ "$(basename "$f")" = "labels.tif" ] && dst="$ROOT/data/bridge/labels.tif"
-  [ -f "$dst" ] || { echo "missing $dst -- copy from the pinned mirror:"; echo "  gh api repos/buffedlizard55-lab/60GEMSDOE/contents/data/$f -H 'Accept: application/vnd.github.raw' > $dst"; exit 1; }
+DATA_ROOT="${DATA_ROOT:-$ROOT/data}"
+
+core=(
+  "bridge/training_features.tif"
+  "bridge/labels.tif"
+  "bridge/existing_faults.tif"
+  "bridge/sample_submission.tif"
+  "bridge/1m_DEM_links.csv"
+)
+cache=(
+  "external/lidar_scarp_features_u8.tif"
+  "external/lidar_scarp_features.json"
+  "external/topo_10m_derived_100m_u8.tif"
+)
+missing=()
+for rel in "${core[@]}" "${cache[@]}"; do
+  if [[ ! -f "$DATA_ROOT/$rel" ]]; then
+    missing+=("$rel")
+  fi
 done
-python3 "$ROOT/scripts/run_h66.py" s0
-echo "inputs restored and verified (see evidence/h66_inputs.json)"
+
+if ((${#missing[@]})); then
+  echo "Input preflight: BLOCKED. Missing ${#missing[@]} required local files:"
+  printf '  - %s\n' "${missing[@]}"
+  echo ""
+  echo "This script is check-only; it will not contact DrivenData, GitHub mirrors, or data hosts."
+  echo "The competition data tab requires an authorized login. No credentials are requested or stored."
+  echo "See README.md and docs/data/sources.json for official source and provenance requirements."
+  exit 2
+fi
+
+echo "Input preflight: all listed files are present under $DATA_ROOT."
+echo "Presence alone does not verify organizer origin, hashes, license, tile completeness, or grid alignment."
+echo "Do not run the legacy H66 candidate pipeline; see docs/review/2026-10-11-audit.md."

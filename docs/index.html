@@ -1,66 +1,31 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Executive summary · GEMS Prize workbench</title>
-<link rel="stylesheet" href="assets/site.css">
-</head>
-<body>
-<header class="site">
-  <div class="brand">GEMS Prize (DrivenData #306) · workbench</div>
-  <nav><a href="index.html" class="active">Summary</a><a href="submission-guide.html" class="">How to submit</a><a href="analysis.html" class="">H33 attribution</a><a href="hypotheses.html" class="">Hypotheses</a><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" class="">Official leaderboard ↗</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
-</header>
-<main>
-<h1>GEMS Prize (DrivenData #306): executive summary</h1>
-<p class="sub">Research status on 2026-10-11 (UTC). Scope: native-resolution lidar scarp channels only.</p>
-
-<div class="banner warn"><strong class="big">Two downloadable files — one glance tells you whether to submit them</strong>
-<table><thead><tr><th>File (click to download)</th><th>What it is and how it measured</th><th>Safe to download?</th><th>Submit this week?</th></tr></thead><tbody>
-<tr><td><a href="downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif">gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif</a> · <a href="downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip">.zip</a><br>
-<span class="mut">sha256 44d6dccbc27ce2e6…</span></td>
-<td>H66-1 LiDAR scarplet channels + cultural veto, 37,654 dots. HOLDOUT-DTI 0.04800722761599403 vs 0.032862
-mass-matched random (45260 withheld positives), off-range-front 0.040739.</td>
-<td><b>YES</b> — byte-complete, validator passed against the official grid, unique among the
-62 rasters scanned.</td>
-<td><b>NO</b> — its headline mechanism (the cultural-feature veto) measured negative; promotion is the
-selector's separate step.</td></tr>
-<tr><td><a href="downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif">gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif</a> · <a href="downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.zip">.zip</a><br><span class="mut">sha256 66a8c3afad6a5685…</span></td><td>H66-2 concordance of three independent 2 m LiDAR scarp attributes (10-vs-50 m step, dip-sense, crest/toe sharpness), 37,654 dots, no cultural veto. Off-catalogue proxy DTI 0.1465; upland ×1.20 over an in-stratum random control; no dots in the basin stratum (19 of 37,654).</td><td><b>YES</b> — same validated writer: single-band float32, EPSG:32611, 0 NaN, all values in [0,1], unique against every raster present.</td><td><b>NO</b> — NEGATIVE-NOT-PROMOTED: the off-catalogue proxy does not order the live board at comparable mass (rho=+0.46, p=0.29, 35,000-70,000 dots (the band every candidate here would be emitted in)), and the field emits 19 of its 37,654 dots in the basin stratum.</td></tr>
-</tbody></table>
-<p class="small">Neither file is a verified competition result and no score is projected for either. Both open in
-QGIS/ArcGIS or any GeoTIFF reader; both contain a single float32 band with values in [0, 1] and no NaN, which is
-exactly what the portal's value check requires. Full narrative: <a href="h66-session.html">H66 session page</a> ·
-machine-readable receipts: <a href="run-card.html">run card</a>, <a href="downloads/">downloads</a>.</p></div>
-
-<div class="card">
-<h3>Clearance rule</h3>
-<p>A download is offered only after a spatially blocked, whole-segment holdout shows a positive pooled HOLDOUT-DTI gain on lidar-covered blocks, with evaluator version, withheld-positive count, and 95% CI; every feature-alone leakage canary and both pre/post registry checks pass; and the shared validator passes on the official grid. Slot selection remains separate.</p>
-<p class="note">Full sequence: <a href="submission-guide.html">submission guidance</a>.</p>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Auditable native-resolution LiDAR scarp-channel research; no candidate is currently cleared for submission.">
+<title>GEMSDOE66 overview · GEMSDOE66</title><style>
+:root{color-scheme:light;--ink:#15283a;--muted:#566a7b;--paper:#f3f6f8;--card:#fff;--line:#d9e2e8;--blue:#175d83;--red:#9d302d;--redbg:#fff0ee;--amber:#845318;--amberbg:#fff7e7;--green:#276047;--greenbg:#edf8f0}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.58 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}main{max-width:1120px;margin:0 auto;padding:24px clamp(16px,4vw,48px) 64px}nav{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 28px;padding:0 0 16px;border-bottom:1px solid var(--line)}nav a{padding:6px 10px;border-radius:8px;color:var(--blue);text-decoration:none;font-size:.91rem}nav a:hover,nav a.active{background:#e4eef4;color:#123e58}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.035em;margin:.35em 0 .45em}h2{font-size:1.34rem;margin:1.45em 0 .45em}h3{font-size:1.05rem;margin:1.2em 0 .35em}p{margin:.55em 0 1em}.muted,.small{color:var(--muted)}.small{font-size:.92rem}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;font-weight:750;color:var(--blue)}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin:16px 0;box-shadow:0 4px 18px rgba(18,50,73,.035)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:12px;background:#fbfcfd}.stat b{display:block;margin-bottom:5px}.tag{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.77rem;font-weight:750;letter-spacing:.02em}.red{color:var(--red);background:var(--redbg)}.amber{color:var(--amber);background:var(--amberbg)}.green{color:var(--green);background:var(--greenbg)}.blue{color:#1d5773;background:#e8f2f7}.banner{border:1px solid #e3aaa6;background:var(--redbg);border-radius:16px;padding:18px 22px;margin:18px 0}.banner h2{margin-top:0}.banner.warn{border-color:#e5ca93;background:var(--amberbg)}.banner.ok{border-color:#a9cdb8;background:var(--greenbg)}.mono,code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{overflow-wrap:anywhere;background:#f0f3f5;padding:.12em .35em;border-radius:5px;font-size:.91em}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#101f2d;color:#e4edf4;border-radius:12px;padding:16px;overflow:auto}a{color:var(--blue)}.button{display:inline-block;border-radius:9px;padding:9px 13px;background:var(--blue);color:white;text-decoration:none;font-weight:650}.button.disabled{background:#71808b;cursor:not-allowed}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:9px 10px}th{background:#eef3f6}.item{border-left:4px solid #a7bac7;padding:3px 0 4px 15px;margin:20px 0}.item.critical,.item.high{border-color:#b74943}.item.medium{border-color:#d5a242}.item.info,.item.low{border-color:#6f9eb4}.footer{border-top:1px solid var(--line);margin-top:34px;padding-top:14px;color:var(--muted);font-size:.85rem}.kicker{font-size:.9rem;color:var(--muted)}.nowrap{white-space:nowrap}
+@media(max-width:640px){main{padding-top:14px}nav{gap:2px}nav a{font-size:.83rem;padding:5px 7px}table{display:block;overflow-x:auto}.card{padding:17px}}
+</style></head>
+<body><main><nav aria-label="Primary"><a href="index.html" class="active">Overview</a><a href="feed.html" class="">Project feed</a><a href="submission-guide.html" class="">Submission workflow</a><a href="hypotheses.html" class="">Ranked hypotheses</a><a href="analysis.html" class="">H33 attribution</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Audit findings</a><a href="sources.html" class="">Sources</a><a href="executive-summary.html" class="">Executive summary</a><a href="h66-session.html" class="">H66 archive</a></nav><div class="eyebrow">Native-resolution LiDAR scarp channels · current gate</div>
+<h1>No submission-ready GeoTIFF</h1>
+<p class="kicker">As of 2026-10-11, no candidate passed the complete science, provenance, uniqueness, and exact-footprint gates. This is an explicit stop state, not a missing download button.</p>
+<div class="banner"><h2>Download status: NOT AVAILABLE</h2><p><strong>There is no current TIFF or ZIP cleared for submission.</strong> Do not upload a historical H66 artifact. The old binaries were removed from the published downloads directory because required checks were unverified and the legacy holdout claim fails the leakage/protocol audit.</p></div>
+<div class="grid">
+<div class="stat"><b>Authorized inputs</b><span class="tag red">BLOCKED</span><p class="small">BLOCKED — official data tab redirected to login; no credentials used</p></div>
+<div class="stat"><b>HOLDOUT-DTI</b><span class="tag red">NONE QUALIFIED</span><p class="small">NO QUALIFIED RESULT — no new holdout was run; the legacy H66 holdout claim is disqualified by the audit.</p></div>
+<div class="stat"><b>Registry uniqueness</b><span class="tag red">BLOCKED</span><p class="small">The prior repository scan covered only a partial raster corpus. Full uniqueness and all byte/pixel checks remain unverified; a partial registry is not a pass.</p></div>
+<div class="stat"><b>Validator</b><span class="tag red">NOT PASSED</span><p class="small">passed=false; basic metadata/range checks ran, but reference-grid and footprint checks were skipped because official reference/features rasters were not supplied. Skipped means unverified, not pass.</p></div>
+<div class="stat"><b>GeoTIFF download</b><span class="tag red">NOT AVAILABLE</span><p class="small">NO DOWNLOAD — no file is cleared or offered</p></div>
+<div class="stat"><b>Independent scientific leads</b><span class="tag amber">OUTSTANDING</span><p class="small">OUTSTANDING — this repository audit is not an independent scientific-lead review</p></div>
 </div>
-
-<h2>Findings</h2>
-<ol class="steps">
-<li><strong>H33 attribution is unresolved.</strong> The prompt's 0.2778 association is user-supplied/owner-reported, not organizer-confirmed here. The GEMSDOE32 page describes H33-2-B2 as unscored and says no organizer score exists for its artifacts; no receipt tied to the exact raster bytes/hash is present. A plausible pruning mechanism is only an inference. See <a href="analysis.html">the evidence assessment</a>.</li>
-<li><strong>Four ranked, same-lane hypotheses.</strong> All use native-resolution lidar scarp morphology, feature scales of 2–20 m, and 100 m aggregation. The top proposal combines slope-aware templates with Steger/Frangi line evidence. Their DTI potential is qualitative and unmeasured. See <a href="hypotheses.html">hypotheses</a>.</li>
-<li><strong>Shared tooling is present and was reused, not forked.</strong> This branch carries a DTI implementation, holdout splitters, writer, validator and lane-check utility, and additionally vendors <code>src/gems57</code> byte-identically from the shared template (23/23 sha256, <code>registry/template_provenance.json</code>) — the end-to-end pooled evaluator, grid and gates the gate needed. The cached lidar stack, cultural inputs and raster registry are restored by <code>scripts/fetch_inputs.sh</code> from hash-pinned mirrors and are deliberately not committed.</li>
-<li><strong>Data and coverage remain blockers.</strong> The competition data tab is login-gated; the exact 1 m DEM tiles and footprint/alignment have not been acquired or checked. No external mirror was used.</li>
-<li><strong>One lane gate measured positive, the other negative; no slot was spent.</strong> Three experiments were run against a 2-hour budget (overrun, disclosed). Scarplet-channel HOLDOUT-DTI 0.04800722761599403 vs 0.032862 for five mass-matched random dot sets on identical registered folds (45260 withheld positives), off-range-front 0.040739 — the clause that the gain must not be confined to range fronts is MET. The cultural veto is NEGATIVE (−1.0e-5 DTI, paired 20 km block bootstrap CI crossing 0). A negative result is a deliverable; promotion to a real slot remains the selector's step.</li>
-</ol>
-
-<h2>Score labels</h2>
-<table><thead><tr><th>Label</th><th>Meaning</th><th>Present</th></tr></thead><tbody>
-<tr><td><span class="tag green">ORGANIZER-CONFIRMED</span></td><td>Exact submission score copied from an organizer receipt and tied to the artifact.</td><td>No organizer-confirmed value</td></tr>
-<tr><td><span class="tag red">HOLDOUT-DTI</span></td><td>Our pooled blocked-holdout measurement with evaluator version, withheld positives, and 95% CI.</td><td>HOLDOUT-DTI 0.04800722761599403 (H66-1 detector arm, 45260 withheld positives, gems57.holdout.evaluate (pooled), vendored byte-identical from 60GEMSDOE (registry/template_provenance.json, 23/23 sha256)); level CI not claimed for one pooled run, contrast is a 5-draw mass-matched random mean of 0.032862. No HOLDOUT-DTI exists for H66-2.</td></tr>
-<tr><td><span class="tag amber">OWNER-REPORTED / USER-SUPPLIED</span></td><td>Contextual attribution or claim without an organizer receipt; not a score here.</td><td>H33 attribution claim only</td></tr>
-<tr><td><span class="tag grey">PROJECTION</span></td><td>Model estimate; never treated as a score.</td><td>No projection adopted</td></tr>
-</tbody></table>
-
-<h2>Review links</h2>
-<p><a href="submission-guide.html">How submission is gated</a> · <a href="analysis.html">H33 attribution</a> · <a href="hypotheses.html">Ranked lidar hypotheses</a> · <a href="run-card.html">Negative run card</a> · <a href="irregularities.html">Irregularities</a> · <a href="sources.html">Sources register</a> · <a href="research/metric-derivation.md">Metric derivation</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">official live leaderboard</a></p>
-<p class="note">No leaderboard snapshot, table, or automated monitoring is provided. Open the official page directly.</p>
-<p class="note">Repository: <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">github.com/buffedlizard55-lab/GEMSDOE66</a>. Official competition: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a>. Rules: <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules PDF</a>.</p>
-
-</main>
-<footer>Generated by scripts/build_site.py from docs/data/*.json · last updated 2026-10-11 (UTC) · not affiliated with DrivenData or DOE.</footer>
-</body>
-</html>
+<section class="card"><h2>Why the project is blocked</h2><ul>
+<li>The official competition data tab redirected this unauthenticated session to login. No credentials were used; no official training rasters, labels, sample submission, or DEM-link inventory are present.</li>
+<li>The historical H66 runner uses full-catalogue distance when choosing candidate cells before hide-and-recover scoring. That lets withheld labels influence placement, so its old scalar is not a qualified HOLDOUT-DTI result.</li>
+<li>The required complete raster registry, whole-geologic-segment buffered holdout, LiDAR-covered evaluation mask, 95% CI, and independent scientific reviews are not available.</li>
+<li>The official output contract requires NaN outside the exact reference footprint. The canonical shared <code>gems.submission_writer</code> supports that contract, but the historical H66 path still calls older all-finite <code>gems57</code> helpers. It remains disabled until it is rewired to the shared writer and the exact reference grid is available.</li>
+</ul></section>
+<section class="card"><h2>What is ready</h2><p>Four distinct same-lane hypotheses are ranked before implementation. The lead is a method-faithful slope-aware scarp-template plus scale-persistent Steger/Frangi field. Its expected gain is qualitative only; it has not been implemented or tested.</p><p><a class="button" href="hypotheses.html">Review the ranked hypotheses</a> <a class="button" href="feed.html">Open the dated project feed</a></p></section>
+<section class="card"><h2>Historical file disposition</h2><p>The prior all-finite raster is retained by identity only, not as a public download. SHA-256 <code>44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1</code>. Its exact official transform/footprint was not verified. See the <a href="h66-session.html">H66 archive note</a> and the <a href="review/2026-10-11-audit.md">technical audit</a>.</p></section>
+<p><a href="submission-guide.html">Submission workflow</a> · <a href="analysis.html">H33 attribution</a> · <a href="run-card.html">Current JSON run card</a> · <a href="irregularities.html">Audit findings</a> · <a href="sources.html">Source register</a> · <a href="research/metric-derivation.md">Metric derivation</a></p>
+<footer class="footer">GEMSDOE66 · Maximize P(Win) · Own the Outcome · Status is repository state, not organizer acceptance. No leaderboard values are mirrored.</footer>
+</main></body></html>

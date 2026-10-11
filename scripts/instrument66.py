@@ -26,7 +26,7 @@ Reported per candidate
   published catalogue, as a leakage/drift check (a field that only ever scores
   high here is reciting the catalogue).
 
-Usage:  python scripts/instrument66.py [--json evidence/h66_offcat_instrument.json] RASTER...
+Usage:  python scripts/instrument66.py [--json evidence/instrument66_offcat.json] RASTER...
 """
 from __future__ import annotations
 

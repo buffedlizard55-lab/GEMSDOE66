@@ -1,7 +1,7 @@
 {
   "hypothesis_id": "H66-2",
-  "generated_utc": "2026-10-11T21:37:11Z",
-  "seconds": 84.0,
+  "generated_utc": "2026-10-11T21:42:17Z",
+  "seconds": 83.1,
   "instrument": "pooled DTI (alpha .2, beta .8, 300 m triangular) vs USGS SGMC state-map faults >300 m off catalogue inside the LiDAR-covered footprint; PROXY truth",
   "corrections": [
     "IR-66-BASE-01 fixed: per-stratum random baselines are uniform in-stratum draws; the earlier corner-sample baselines and every x-ratio derived from them are superseded."
@@ -434,7 +434,7 @@
     "rule": "3 experiments or 2 hours, whichever comes first; exhausted, so no holdout re-run"
   },
   "files": {
-    "artifact": "docs/downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+    "artifact": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
     "emission": "evidence/h66b_emission.json",
     "uniqueness": "evidence/h66b_uniqueness.json",
     "strata": "evidence/h66b_e2_strata.json",

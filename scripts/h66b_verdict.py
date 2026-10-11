@@ -42,7 +42,7 @@ N_RANDOM = 5
 SEED = 66262
 ALPHA = 0.2
 CHAMP = ROOT / "registry/rasters/GEMSDOE32__h33-2-b2-zeros.tif"
-MINE = ROOT / "docs/downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif"
+MINE = ROOT / "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif"
 EMISSION = ROOT / "evidence/h66b_emission.json"
 UNIQUENESS = ROOT / "evidence/h66b_uniqueness.json"
 # owner-reported live scores, used ONLY as transfer evidence, never as our own score

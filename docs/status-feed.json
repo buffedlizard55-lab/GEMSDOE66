@@ -1,0 +1,70 @@
+{
+  "schema": "gems-project-status-feed/1",
+  "generated_utc": "2026-10-11",
+  "status": "BLOCKED — no candidate cleared for download or submission",
+  "scope": "Project-state feed only. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages.",
+  "external_monitoring": "Disabled. DrivenData Terms of Use restrict automated access and manual monitoring/copying without prior written consent. No leaderboard values are stored.",
+  "entries": [
+    {
+      "date": "2026-10-11",
+      "kind": "repository-audit",
+      "status": "BLOCKED",
+      "summary": "Audited the legacy H66 path. Full-catalogue distance affects candidate eligibility before holdout scoring; the holdout is not the required buffered whole-geologic-segment/LiDAR-only protocol; the writer path conflicts with the official NaN-outside contract. Legacy H66 scores are not qualified HOLDOUT-DTI.",
+      "links": [
+        "review/2026-10-11-audit.md",
+        "run-card.html",
+        "irregularities.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "competition-data-access",
+      "status": "BLOCKED",
+      "summary": "The official data tab redirected to login. No credentials were used and no competition rasters or sample grid are in this checkout.",
+      "source_id": "S05",
+      "links": []
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "free-official-dem-source",
+      "status": "AVAILABLE IN PRINCIPLE; EXACT TILE COVERAGE UNVERIFIED",
+      "summary": "USGS 3DEP lists public-domain 1 m bare-earth DEMs and The National Map access. This does not verify exact competition tile coverage, alignment, or completeness.",
+      "source_id": "S07",
+      "links": []
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "candidate-download",
+      "status": "NOT AVAILABLE",
+      "summary": "Historical H66 TIFF/ZIP binaries were removed from docs/downloads. Hashes and withdrawal reasons remain in the run card and evidence disposition. No new GeoTIFF was generated.",
+      "links": [
+        "downloads/README.md",
+        "data/run-card.json"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "hypothesis-ranking",
+      "status": "READY FOR INDEPENDENT REVIEW",
+      "summary": "Four distinct same-lane LiDAR scarp-channel hypotheses are ranked before implementation. None is claimed as novel against the incomplete registry or as a measured gain.",
+      "links": [
+        "hypotheses.html",
+        "data/hypotheses.json"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "test-suite",
+      "status": "PASS — 72 offline tests",
+      "summary": "The final local offline suite passed 72 tests. This verifies repository-level behavior only; it does not validate competition inputs, a spatial holdout, registry completeness, official-grid alignment, or organizer acceptance.",
+      "links": []
+    }
+  ],
+  "next_actions": [
+    "Obtain authorized competition inputs through the official account outside this unauthenticated session; record provenance and hashes.",
+    "Inventory official 1 m DEM tiles and verify exact study-area overlap, CRS, datum, alignment, public-domain terms, and shareability.",
+    "Request or land the required fixes once in the shared template: whole vector-segment holdout with a spatial buffer, a LiDAR-valid pooled evaluator with 95% spatial-block CI, and a writer/validator path matching NaN outside the exact official footprint.",
+    "Obtain two independent scientific-lead reviews, then test the ranked lead only within the experiment/time budget.",
+    "Run leakage canaries, range-front stratification, complete-registry surface/dot checks, and exact official-grid validation before enabling any download."
+  ]
+}

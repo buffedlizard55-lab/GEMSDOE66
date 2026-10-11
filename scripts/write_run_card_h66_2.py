@@ -124,8 +124,11 @@ def main() -> int:
             "note_limit_chars": 140,
             "file": art.name,
             "sha256": digest,
-            "clearance": ("AUDIT-ONLY - download YES (format-valid, unique); weekly slot NO - the proxy does "
-                          "not transfer and the basin stratum is not improved"),
+            "clearance": ("NOT CLEARED - do not submit. The bytes live in artifacts/h66-2/ (research "
+                          "directory, no site page links to it) because the 2026-10-11 release gate "
+                          "requires a valid buffered whole-segment HOLDOUT-DTI with CI, a complete "
+                          "registry and two independent reviews before publication; this candidate has "
+                          "none of those and its own verdict is negative."),
         },
         "verdict": ver["verdict"],
         "verdict_detail": {
