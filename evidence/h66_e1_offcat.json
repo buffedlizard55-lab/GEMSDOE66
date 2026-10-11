@@ -1,6 +1,5 @@
 {
   "generated_utc": "2026-10-11T20:30:20Z",
-  "evidence_class": "HOLDOUT-DTI (population-matched instrument)",
   "instrument": "pooled DTI + credit/dot of a binary emission against USGS SGMC mapped faults that lie >300 m from the competition catalogue, inside the lidar-covered footprint, catalogue cells excluded from scoring (gems57)",
   "truth_pixels_off_catalogue": 39846,
   "eligibility_cells": 3541556,
@@ -190,5 +189,20 @@
       "union_overlap_pct": 99.8,
       "veto_removed_from_unvetoed": 119
     }
-  }
+  },
+  "evidence_disposition": {
+    "status": "UNQUALIFIED LEGACY EXPLORATORY EVIDENCE — NOT A CURRENT HOLDOUT-DTI OR ORGANIZER-CONFIRMED SCORE",
+    "evaluator_version": null,
+    "withheld_positive_count": null,
+    "ci95": null,
+    "reasons": [
+      "Legacy H66 used full-catalogue distance during candidate eligibility before holdout scoring.",
+      "The evaluation did not use the required buffered whole-segment protocol with a LiDAR-only valid mask.",
+      "No valid pooled 95% spatial-block confidence interval was established for these values.",
+      "These records are preserved for audit/negative-result traceability only; do not report their numeric fields as HOLDOUT-DTI or organizer-confirmed scores."
+    ],
+    "canonical_review": "docs/review/2026-10-11-audit.md"
+  },
+  "legacy_evidence_class": "HOLDOUT-DTI (population-matched instrument)",
+  "evidence_class": "UNQUALIFIED_LEGACY_EXPLORATORY_PROXY_NOT_HOLDOUT_DTI"
 }

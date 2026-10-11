@@ -1,6 +1,5 @@
 {
   "generated_utc": "2026-10-11T20:33:20Z",
-  "evidence_class": "HOLDOUT-DTI",
   "evaluator": "gems57-pooled-hide-v2 (4 spatial quadrants x 2 seeds x {all,detached}, whole-segment withholding, visible faults masked pixel-exactly, alpha=0.2 beta=0.8, 300 m triangular)",
   "withheld_positive_pixels": 45260,
   "budget": 37654,
@@ -134,5 +133,20 @@
     "off_front_veto_minus_unveto": 0.0,
     "near_front_veto_minus_unveto": 0.0
   },
-  "caveat": "the registered holdout's truth IS the catalogue, so it is structurally blind to off-catalogue placement (IR-INSTR-01, rho=+0.14 vs 12 live owner-reported scores)"
+  "caveat": "the registered holdout's truth IS the catalogue, so it is structurally blind to off-catalogue placement (IR-INSTR-01, rho=+0.14 vs 12 live owner-reported scores)",
+  "evidence_disposition": {
+    "status": "UNQUALIFIED LEGACY EXPLORATORY EVIDENCE — NOT A CURRENT HOLDOUT-DTI OR ORGANIZER-CONFIRMED SCORE",
+    "evaluator_version": null,
+    "withheld_positive_count": null,
+    "ci95": null,
+    "reasons": [
+      "Legacy H66 used full-catalogue distance during candidate eligibility before holdout scoring.",
+      "The evaluation did not use the required buffered whole-segment protocol with a LiDAR-only valid mask.",
+      "No valid pooled 95% spatial-block confidence interval was established for these values.",
+      "These records are preserved for audit/negative-result traceability only; do not report their numeric fields as HOLDOUT-DTI or organizer-confirmed scores."
+    ],
+    "canonical_review": "docs/review/2026-10-11-audit.md"
+  },
+  "legacy_evidence_class": "HOLDOUT-DTI",
+  "evidence_class": "UNQUALIFIED_LEGACY_EXPLORATORY_PROXY_NOT_HOLDOUT_DTI"
 }

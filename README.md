@@ -1,176 +1,89 @@
+# GEMSDOE66 — Maximize P(Win), Own the Outcome
 
-# GEMSDOE66 — native-resolution lidar-scarp research
+**One lane:** native-resolution LiDAR scarp channels. **One standard:** a scientific, reproducible result that survives the holdout, registry, format, provenance, and rules gates. **One current status:** blocked; no candidate is cleared for download or submission.
 
-> **Read this file before each session.** It is the standing project charter, protocol, and safety gate.
->
-> **Current decision (2026-10-11 UTC): NEGATIVE ON THE HEADLINE MECHANISM — artifact delivered for audit, not promoted.**
-> A measured run now exists in this branch: the lane's scarplet-channel gate **passed** on the registered holdout
-> (HOLDOUT-DTI 0.048007 vs 0.032862 mass-matched random; 45,260 withheld positives; off-range-front 0.040739) and its
-> cultural-veto gate **failed** (−1.0e-5 DTI, paired block-bootstrap CI crossing 0). One format-validated, registry-unique
-> TIFF is therefore offered **for download and audit only** — `docs/downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif`,
-> sha256 `44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1`. **Zero submission slots used; no score projected.**
-> Site: <https://buffedlizard55-lab.github.io/GEMSDOE66/> → `docs/index.html` (summary), `docs/h66-session.html` (this run),
-> `docs/executive-summary.html` (five-step how-to-submit incl. why the old `[0, 1]` rejection cannot recur).
+> **Current as of 2026-10-11:** the official competition data tab redirected this unauthenticated session to the DrivenData login page. No competition credentials were used. The checkout has no authorized training rasters, sample submission, native-resolution DEM tiles, or cached feature stack. No new model experiment or GeoTIFF was produced. Historical H66 files have been withdrawn from `docs/downloads`; their hashes and audit disposition remain recorded. Do not upload a historical artifact.
 
+## Project charter
 
-## Mission and lane boundary
+“Maximize P(Win)” means optimize for discoveries likely to generalize to newly mapped faults, not for a leaderboard anecdote or a proxy that reuses the public catalogue as test truth. “Own the Outcome” means preserve provenance, code, negative results, uncertainty, and clear stop conditions. Neither phrase licenses skipping validation.
 
-Develop an auditable method for predicting geological faults that may indicate geothermal resources in the GeoDAWN region. The competition target is fault prediction, not direct detection of geothermal vents; a lidar-only method detects possible surface expression and cannot establish geothermal productivity or find every buried fault.
+### Standing execution rules
 
-This branch stays in one experimental lane: **native-resolution lidar scarp channels**. Do not substitute satellite, thermal, radiometric, drainage, shoreline, or unrelated feature lanes. Candidate signals are computed at **2–20 m** scales and aggregated to the competition's **100 m** grid. The currently leading proposal is a slope-aware scarp-template field combined with Steger ridge/valley and Frangi multiscale line evidence. It is a hypothesis only—not a result or score.
+1. **Stay in the lane.** Work only on native-resolution LiDAR scarp channels. Reuse the template's cached feature stack, shared holdout evaluator, and submission writer. If a shared tool is wrong, propose and land one fix in the template; do not silently maintain a private fork here.
+2. **Rank before implementing.** Keep three to five distinct, same-lane hypotheses in `docs/data/hypotheses.json`. Each must state its layers, physical signature, reason it could recover off-catalogue faults, difference from this repository, named non-fault mimic, implementation cost, and input availability. Ranking is qualitative until a valid holdout exists; do not invent a DTI projection.
+3. **Use a valid holdout.** Withhold whole geologic fault segments, with a spatial buffer. Derive every catalogue-based feature from visible faults only, and pixel-exactly mask visible faults from scoring. Restrict held-out truth and predictions to LiDAR-covered holdout blocks. Pool the official distance-weighted Tversky terms with α=0.2, β=0.8, and a 300 m triangular kernel; separately report whether a gain survives away from range fronts.
+4. **Label scores exactly.** A research score must be `HOLDOUT-DTI` and include the evaluator version, withheld-positive count, and a 95% confidence interval. A competition score may be `ORGANIZER-CONFIRMED` only when copied from a receipt tied to the exact submitted artifact. A public leaderboard row, owner statement, proxy, or projection is not an artifact receipt. Never call the owner-reported H33-2-B2 attribution organizer-confirmed.
+5. **Test leakage feature by feature.** Evaluate every proposed feature alone on the spatially blocked holdout. AUC above 0.90 is leakage until disproven. Never use hidden/withheld catalogue pixels to make an eligibility, distance, feature, threshold, or placement decision.
+6. **Check uniqueness twice.** Compare the continuous pre-placement surface and final dots against the complete raster registry. Correlation above 0.90 or more than 70% of candidate dots within 3 pixels of a registry raster is a duplicate/lane-drift stop. A partial registry is **not** a pass. Hash and pixel checks are required.
+7. **Respect the budget.** At most three experiments or two hours, whichever comes first. Do not use a competition submission slot unless the candidate beats the current best valid holdout under the same protocol. A negative result is a deliverable. Offer a download only after all scientific, uniqueness, provenance, validator, and rule gates pass.
+8. **Ship only the official grid.** A cleared output must be a normalized float32 GeoTIFF in EPSG:32611 on the exact official grid, with values in [0,1] inside the valid study area and NaN outside it. Verify shape, transform, CRS, footprint, nodata, SHA-256, and pixels against official reference files. Make download status unmistakable.
+9. **Cite and disclose.** Verify paper titles, authors, venue, DOI, and agency provenance. The September 2026 official rules require a narrative disclosure of generative-AI use and how it contributed, if applicable. Any submission narrative must be truthful and specific.
+10. **Review independently.** Obtain two independent scientific-lead reviews before promotion. Preserve reviewer comments and disagreements. A code review by the same agent is not an independent scientific review.
 
-## Frozen experiment protocol
+## Current gate status
 
-Use the existing shared feature stack, masks, evaluator, writer, and validator if present. Fix a shared-tool defect in place; do not privately fork or silently replace a missing shared component.
+| Gate | Current status |
+| --- | --- |
+| Authorized competition inputs | **Blocked** — official data page requires login; no files in `data/` |
+| Exact 1 m DEM tiles and LiDAR footprint | **Unverified** — the USGS 3DEP 1 m project collection is public-domain, but exact tile overlap/alignment is not established here |
+| Ranked same-lane hypotheses | **Ready for review** — see [hypotheses](docs/hypotheses.html) |
+| New implementation/experiment | **Not started** — no candidate is implemented or scored in this review |
+| Valid `HOLDOUT-DTI` with 95% CI | **None** — the historical H66 holdout claim is unqualified after audit |
+| Complete uniqueness registry | **Blocked** — the available registry is incomplete |
+| Current submission file/download | **None** — no file is cleared; do not use a historical artifact |
+| Independent scientific-lead sign-offs | **Outstanding** |
 
-1. **Input and features:** use the official competition tiles/manifest and shared cached lidar stack when available. Compute slope-aware scarp-template channels and 2–20 m Steger/Frangi line evidence; aggregate to 100 m. Apply the existing cultural-feature mask. Do not invent a replacement mask or silently substitute DEM coverage.
-2. **Holdout:** assign whole fault segments to spatially blocked folds, with a buffer. Derive all catalogue-based features only from visible faults and pixel-exactly mask visible faults. Evaluate only lidar-covered held-out blocks; report performance separately for range-front and non-range-front strata. A catalogue-fault holdout is a proxy for the competition's *new-fault* labels, not a test-score estimate.
-3. **Metric:** use pooled distance-weighted Tversky (DTI), with **α = 0.2**, **β = 0.8**, and a **300 m triangular kernel**. A score must be labeled `HOLDOUT-DTI` and include evaluator version, withheld-positive count, and 95% CI. Do not call projections or owner-reported claims scores.
-4. **Leakage canary:** test each feature alone. A holdout AUC **> 0.90** is leakage until disproven.
-5. **Uniqueness:** compare the continuous pre-placement surface against every registry raster; compare final emitted dots against every registry raster. Correlation **> 0.90** or **>70%** of candidate dots within **3 px** means duplicate/lane drift: stop. Record hashes and exact pixel agreement where applicable. A missing or incomplete registry is not a pass.
-6. **Output:** only after the science, leakage, and uniqueness gates pass, use the shared `submission_writer.py` and `validate_submission.py`. Reopen the output and verify float32, one band, EPSG:32611, exact reference shape/transform/bounds, finite in-footprint values in `[0,1]`, and NaN only outside the footprint. Record SHA-256, validator output, and pixel agreement.
-7. **Run card and release:** finish each experiment with `docs/data/run-card.json` (hypothesis, mechanism, named non-fault mimic, holdout/CI, registry checks, raster hash, validator, submission name/note, verdict). A note must be at most **140 characters**. Offer a one-click file only when the gate is met; otherwise keep the status negative. Slot selection is a separate manual decision.
-8. **Budget:** stop after **3 experiments or 2 hours**, whichever comes first. Do not use a submission slot unless the candidate beats the frozen best holdout. The organizer's weekly feedback cap is separate from this research budget.
+See the [dated project-status feed](docs/feed.html), [run card](docs/run-card.html), [technical audit](docs/review/2026-10-11-audit.md), and [irregularity register](docs/irregularities.html) for details.
 
-These values are protocol thresholds or published competition specifications, not measured results. Freeze parameters before any experiment. Every unknown or unrun field stays explicitly unknown/null in the run card.
+## Scientific focus
 
-## H33 attribution: evidence boundary
+The lead hypothesis is a **native-resolution, slope-aware scarp-template field combined with scale-persistent Steger ridge/valley and Frangi Hessian-line evidence**, then aggregated to the official 100 m grid. Scarplet's published template outputs include best-fit amplitude, morphologic age, orientation, and template SNR; these are not interchangeable with a slope ratio, a robust z-score, or a heuristic height proxy. The actual algorithms must be run from the authorized native DEM, with per-feature leakage tests and named geomorphic mimics (including terrace risers, natural channel banks, and landslide scarps).
 
-The user-supplied `0.2778` attribution to GEMSDOE32's H33-2-B2 artifact is **not organizer-confirmed in this checkout**. The GEMSDOE32 project page describes the artifact as unscored, distinguishes a model projection from an organizer score, and says it has no organizer score for its artifacts. A sibling page's association is owner-reported. No organizer receipt matched to the exact TIFF bytes/hash is present here, so neither attribution nor causation is established.
+The official DrivenData problem description explains that the public fault compilation is incomplete and that test faults were newly identified by experts. The official metric is distance-weighted Tversky; it downweights location error with a 300 m triangular support and uses α=0.2 and β=0.8. The task therefore rewards useful proximity to new faults, not simply rediscovery of the mapped catalogue. See `docs/data/sources.json` for the exact source paths and provenance notes.
 
-A possible mechanism—not a finding—is that H33-2-B2's described removal of predictions near mapped catalogue faults reduced unsupported false-positive mass while preserving credit for new faults. It could also remove useful nearby predictions. No local controlled comparison exists, so we cannot explain why H33 received any organizer result or claim that it did. The live official leaderboard is linked directly for manual review; this repository does **not** scrape or mirror it.
+### Current attribution finding
 
-## Current inventory and blockers
+The H33-2-B2 score attribution in the previous project material is **unverified**. The owner-maintained GEMSDOE32 page describes its artifact as unscored and says no organizer score exists for those artifacts; no submission receipt tied to that exact TIFF or its SHA-256 is present here. Therefore, this repository cannot establish why that file allegedly earned the reported value. The metric's false-positive/false-negative trade-off can be explained from the official formula, but no causal explanation for that H33 artifact is justified without a receipt, exact bytes, and controlled comparisons.
 
-The synchronized repository now contains shared project primitives:
+## Data access and provenance
 
-- `src/gems/metric.py`: DTI implementation and formula-level tests; its distance/nodata/epsilon assumptions are documented in `docs/research/metric-derivation.md`.
-- `src/gems/holdout.py`: fault-component and spatial-block splitters.
-- `src/gems/submission_writer.py` and `src/gems/validate_submission.py`.
-- `scripts/lane_check.py`: registry correlation and emitted-dot overlap checks.
-- `scripts/verify_competition_data.py`: reports whether official inputs exist; it does not download them.
-- `scripts/build_site.py`: builds the static Pages site from `docs/data/*.json`.
+- The DrivenData data tab redirected to a login page during this review. No credentials, authenticated session, or hidden test data were accessed.
+- The public USGS Science Data Catalog lists the 1 m 3DEP bare-earth DEM collection as public domain and directs users to The National Map. This establishes a plausible free official source, **not** that the specific competition tiles are all available, aligned, or covered.
+- The competition-provided `1m_DEM_links.csv`, training features, labels, and sample submission are absent. Owner-maintained GitHub mirrors and cached derivatives are not organizer-authenticated merely because a hash matches a mirror manifest.
+- Do not download competition data from unofficial sources or put private competition rasters in Git. Record source, license, acquisition date, file hashes, and exact processing lineage for every external input.
 
-Still unavailable in this repository: official competition rasters and 1 m DEM-link CSV; the template's cached lidar feature stack; the existing cultural-feature mask; an end-to-end `evaluate_holdout.py`/confidence-interval runner; range-front masks; and the complete prior-raster registry. The shared metric and splitters are **not** a substitute for the missing evaluator, features, labels, or registry. The official data tab is login-gated. The 3DEP 1 m product is publicly listed in principle, but the exact required tiles, coverage, alignment, and bytes have not been obtained or verified. No external mirror is used. For any future external input, use only free official public sources and verify the exact files/coverage are obtainable before proposing them as runnable; competition-only materials must come through authorized organizer access.
+`bash scripts/fetch_inputs.sh` is now a **local presence check only**. It does not download or copy data and exits nonzero if required inputs are missing. It never asks for or stores competition credentials.
 
-The holdout, canary, uniqueness checks, competition-raster validation, and submission writer have not been run on a candidate. No holdout experiment or submission slot was used. This is a **blocked negative result**, not evidence that the proposed method has failed on measured DTI. No TIFF is offered.
+## Reproduction and checks
 
-## Sources and current site
-
-- [Executive summary](docs/index.html)
-- [Submission guidance](docs/submission-guide.html)
-- [H33 attribution analysis](docs/analysis.html)
-- [Ranked lidar hypotheses](docs/hypotheses.html)
-- [Run card](docs/run-card.html) and [machine-readable card](docs/data/run-card.json)
-- [Sources register](docs/sources.html), [irregularities](docs/irregularities.html), and [metric derivation](docs/research/metric-derivation.md)
-- [Official live leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) — direct link only; no copied table or monitoring.
-
-The Pages source is currently `main` at the repository root. Root `index.html` redirects to `docs/index.html`; `.nojekyll` leaves the generated static pages untouched. The site is generated by `python scripts/build_site.py` and checked by CI. Do not claim a newly changed site is live until the Pages deployment is verified.
-
-## Local checks
-
-The current synthetic/unit and site suite reports **62 passed**; these tests do not evaluate competition features or labels. The data checker reports all official raster roles missing and exits **2**, as expected for this login-gated checkout. No end-to-end holdout or candidate validator run is claimed.
+Install the project and test dependencies:
 
 ```bash
-python -m pip install -e ".[test]"
-pytest -q
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -e '.[test]'
+```
+
+Run offline tests and rebuild the static documentation:
+
+```bash
+python -m pytest -q
 python scripts/build_site.py
-python scripts/verify_competition_data.py   # expected exit 2 while required files are absent
 ```
 
-Competition data and generated model artifacts stay out of git (`data/`, `outputs/`, `runs/`, `*.tif`, and model/array files are ignored). Never ask for, store, or bypass competition credentials.
+The current H66 runner is historical and disabled for experiments and artifact emission pending authorized inputs and a validated shared-tool path. Do not run it as a candidate pipeline. The canonical shared `src/gems/holdout.py`, `src/gems/submission_writer.py`, and `src/gems/validate_submission.py` already provide buffered whole-component splits, reference-grid writing, and NaN-only outside-footprint checks. The older H66 path still calls `src/gems57/` helpers that do not satisfy this contract; rewire or fix those tools once in the shared template, then consume the shared implementation unchanged here. Do not maintain a private fork or treat a fallback 8-connected component split as authoritative geological segment IDs.
 
-## Core values
+## Submission workflow
 
-**Maximize P(Win).** Weigh evidence, expected value, risk, and scarce submission opportunities. No lottery-ticket uploads, stale-board chasing, or unsupported projections.
+There is no current submission file. When — and only when — the run card says every release gate has passed:
 
-**Own the Outcome.** Report blockers, tool defects, negative results, and uncertainty end to end. Reuse shared tools and fix them in place when demonstrably wrong. Preserve a reproducible record of every correction.
+1. Generate the final prediction with the shared template writer on the official sample grid; do not patch values or infer the footprint from a guessed extent.
+2. Run the official-format validator with the official reference and features rasters supplied. A skipped transform or footprint check is unverified, not a pass.
+3. Run both registry checks on the continuous surface and final dots. Stop on a threshold breach or incomplete registry.
+4. Record the run card, input manifest, reviewer sign-offs, validator report, SHA-256, and pixel-level checks. Only then publish a one-click TIFF download.
+5. Navigate to the GEMS Prize on DrivenData manually. The official rules allow up to three feedback submissions per week and require choosing one final submission. Do not automate or mirror the platform's pages; the site's Terms of Use restrict automated and manual monitoring/copying without written consent.
+6. Use a unique method/date/hash-derived submission name and a concise note of at most 140 characters, then follow the current portal form.
+7. Include the required generative-AI disclosure in the submission narrative, describing actual use across all submission elements. Edit any draft to match the facts; do not copy a template blindly.
 
----
-
-# Session H66-1 (this run) — measurements, artifact, reproduction
-
-## 1 · What this repository is
-
-
-A self-contained, re-runnable experiment lane for the GEMS Prize, built on the shared template
-(`60GEMSDOE`) without forking it:
-
-| path | role |
-|---|---|
-| `src/gems57/` | vendored **byte-identical** (23/23 files, hash-verified) — official grid, DTI metric, hide-and-recover holdout, validator, gates, uniqueness, emit |
-| `src/gems66/spec66.py` | decode of the 12-band 2 m LiDAR stack back to **physical units** using the build sidecar's quantisation rule |
-| `src/gems66/channels66.py` | the lane's four named aggregates + scarplet SNR + relative age + the cultural-feature veto |
-| `scripts/run_h66.py` | stages `s0…s5` (verify → channels → E1 → spatial CV → holdout → artifact) |
-| `scripts/verify66.py` | on-disk validator + registry scan (ρ, 3-px overlap, mass-matched-random correction) |
-| `scripts/write_run_card.py` → `registry/run_card.json` | the rule-5 card; the site renders **from** it, so no number is hand-typed |
-| `scripts/build_site66.py` → `docs/` | the GitHub Pages site |
-| `evidence/h66_*.json` | every measurement, written before the next stage starts |
-
-`docs/` and the small receipts are committed; `data/` and `registry/rasters/` are **not** (100 MB GitHub cap) —
-restore them with `bash scripts/fetch_inputs.sh`, which fails closed on any digest mismatch.
-
-## 2 · Result of this session (one paragraph, all numbers tagged)
-
-The scarplet channel set **passed** the lane's holdout clause — HOLDOUT-DTI **0.048007** vs **0.032862** for five
-mass-matched uniform-random dot sets on the identical registered protocol (single pooled run of gems57
-hide-and-recover; 45,260 withheld positive pixels; no CI claimed for the level because no replicate arms were run),
-and **0.040739** restricted to cells off the range-front proxy, so the gain is not confined to range fronts
-**[measured-here]**. On the population-matched off-catalogue instrument (USGS SGMC faults >300 m from the
-catalogue inside the LiDAR-covered footprint) the emission reaches DTI **0.18796** with **0.0764** credit/dot vs
-**0.09028** for mass-matched random — a 2.08× concentration of real, unmapped fault trace **[measured-here]**.
-The lane's *headline* mechanism, the cultural-feature veto, is a clean **negative**: it removed 28 of 37,654
-top-ranked dots, moved the instrument by **−1.0e-5** DTI (paired 20 km block bootstrap CI
-[−1.5e-5, +6.5e-6], P(positive)=0.129), added **0.00000** AUC to the spatial-CV retrain, and received a
-**positive** logistic coefficient (1.39, 1.59 in the two usable folds) — valley-floor cultural scarps co-locate
-with range-front faults instead of diluting them. Uniqueness vs the 62 rasters physically present:
-|ρ|max **0.0196**, worst 3-px overlap **0.5099** (excess over mass-matched random **0.319**), byte- and
-pixel-unique **[measured-here, incomplete corpus]**. Format: float32, EPSG:32611, 3730×3292, transform and bounds
-identical to `sample_submission.tif`, 37,654 positive pixels, finite values in [0,1], **no NaN anywhere**, 0 dots
-on the catalogue **[measured-here]**. No organizer-confirmed score exists for this file; none is projected.
-
-## 3 · Answers to the two questions the brief asks
-
-**Why did `h33-h33-2-b2` score 0.2778 (the family's best)?** Not because its field was good, but because its
-*mass* was near-minimal on a well-ranked field: a five-rung pruning ladder (121,131 → 60,069 → 44,090 → 40,199 →
-37,654 dots; 0.1922 → 0.2477 → 0.2600 → 0.2708 → 0.2778, all owner-reported) in which every deletion of dots
-*raised* the score, and the two deletions that were measured removed dots sitting exactly 1 px and 2 px from the
-published catalogue. Under the official metric `DTI = TP_w/(TP_w + 0.2·FP_w + 0.8·FN_w)` with a 300 m triangular
-kernel, emitted mass costs `0.2·p(x)·(1−k)`, so a dot pays only if its kernel credit exceeds `0.2·DTI` ≈ 0.056.
-The 0.2778 artifact has 0 dots on the catalogue, its nearest dot exactly 3.00 px (300 m) away, and a median dot
-1.97 km from it: it is a wide-field emission whose merit is that it stops wasting mass where the answer is provably
-not. Source for the algebra and the ladder: the official
-[problem page](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) (metric + worked example
-TP=3.00/FP=1.89/FN=2.00→0.60, read this session) and `60GEMSDOE/docs/research/why-02778-and-what-beats-it-2026-10-11.md`.
-
-## 4 · Reproduce
-
-```bash
-python -m venv venv && . venv/bin/activate && pip install -r requirements.txt
-bash scripts/fetch_inputs.sh                    # hash-pinned inputs, fails closed
-python scripts/run_h66.py s0 s1 s2 s3 s4 s4b s5  # ~4 min, 3 GB RAM, no GPU
-python scripts/verify66.py --candidate docs/downloads/<file>.tif
-python scripts/write_run_card.py && python scripts/build_site66.py
-python -m pytest tests -q                        # 8 passed
-```
-
-## 5 · Remaining work / limitations (owned, not deferred)
-
-1. **Governance wall #1 (owner decision).** The registered holdout's truth *is* catalogue trace, so an emission that
-   excludes everything within 300 m of the catalogue scores exactly 0.0 there — including a file that scored 0.2778
-   live (measured: 0.004729 for the champion, 0.0 for ours). Any rule of the form "must beat the current holdout
-   best before a slot" cannot promote off-catalogue work. Flag: `IR-66-GATE-01`.
-2. **Governance wall #2 (inherited).** The literal "≤70 % of dots within 3 px of any registry raster" clause is
-   unsatisfiable against space-filling comparators (60GEMSDOE measured 99.87 %). We report both the literal number
-   (0.5099, passes) and the excess over mass-matched random (0.319, passes), plus the corpus coverage, instead of
-   quietly redefining the rule.
-3. **Native resolution is blocked by data, not by ideas.** Steger sub-pixel lines and a 2–20 m Frangi sweep on 1 m
-   pixels cannot be run footprint-wide here. The fix is one GitHub-Actions bridge job (pattern already exists in
-   `60GEMSDOE/.github/workflows/dem10-chi.yml`) that fetches the pinned 3DEP 1 m tiles listed by the competition
-   DEM-links PDF, computes the lane's two feature sets at 1 m, and uploads a 100 m aggregate with its own manifest
-   — then this lane's E1/E2 re-run on real native data. Flag: `IR-66-RES-01`.
-4. **Untried this session (budget spent):** H66-4 pluvial-shoreline veto; E0 native check on the two committed 3 m
-   pilot tiles (`src/gemsdoe48/scarp3m.py` vendored for it, hashes pinned in `data/pilot/dem3m/dem_pilot_receipt.json`);
-   H66-5 geo-energy convergence.
-5. **The 0.2778 anchor is owner-reported**: no organizer receipt links it to the exact bytes; every inversion of it
-   inherits that caveat.
+A current stop/no-download state is also a valid project result. Do not turn it into a speculative GeoTIFF merely to satisfy a file-shaped deliverable.

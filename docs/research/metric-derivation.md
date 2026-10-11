@@ -3,7 +3,7 @@
 Status: derived from the official problem page and checked numerically in `tests/test_metric.py`.
 No competition raster has been scored, so **no HOLDOUT-DTI value exists** for this project.
 
-Sources: DrivenData problem page https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/ (metric section, chunk 0 of 2 read).
+Source: official DrivenData GEMS Prize problem description (metric section, reviewed for this audit; exact subpage path recorded as non-clickable text in `docs/data/sources.json`). This page is derived from the published metric formula; the example below is an official worked example, not a project score or `HOLDOUT-DTI` result.
 
 ## 1. Official definition (as published)
 

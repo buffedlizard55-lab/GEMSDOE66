@@ -10,10 +10,12 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
-PAGES = ["index.html", "submission-guide.html", "analysis.html", "hypotheses.html",
+PAGES = ["index.html", "feed.html", "submission-guide.html", "analysis.html", "hypotheses.html",
          "run-card.html", "irregularities.html", "sources.html", "h66-session.html",
          "executive-summary.html"]
+OFFICIAL_HOME = "https://www.drivendata.org/"
 OFFICIAL_LEADERBOARD = "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
+HISTORICAL_STEM = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -36,90 +38,135 @@ class _Links(HTMLParser):
                 self.hrefs.append(href)
 
 
+def _links(path):
+    parser = _Links()
+    parser.feed(path.read_text(encoding="utf-8"))
+    return parser.hrefs
+
+
 def test_pages_exist_and_are_well_formed():
     for name in PAGES:
         text = (DOCS / name).read_text(encoding="utf-8")
         assert text.startswith("<!doctype html>")
         assert text.count("<main>") == 1 and text.count("</main>") == 1
-        assert "None" not in re.sub(r"<[^>]+>", "", text)
+        assert not re.search(r">\s*None\s*<", text)
         parser = HTMLParser()
         parser.feed(text)
         parser.close()
 
 
-def test_summary_download_gate_states_both_clearances():
-    """The summary page must state, at the top, that the file is downloadable AND not slot-cleared."""
+def test_download_gate_is_explicit_and_no_historical_file_is_linked():
     text = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert "Submission download: AVAILABLE FOR AUDIT" in text
-    assert "not cleared for a weekly slot" in text
-    assert "downloads/gems66-h66-1-scarplet-veto-37654" in text   # the actual bytes are linked
-    assert "verified competition result" in text                    # and no score is implied
-    assert OFFICIAL_LEADERBOARD in text
+    assert "Download status: NOT AVAILABLE" in text
+    assert "There is no current TIFF or ZIP cleared for submission" in text
+    assert "Do not upload a historical H66 artifact" in text
+    assert "AVAILABLE FOR AUDIT" not in text
+    for name in PAGES:
+        links = _links(DOCS / name)
+        assert not any(HISTORICAL_STEM in href for href in links), name
+        assert not any(urlsplit(href).path.lower().endswith((".tif", ".tiff", ".zip"))
+                       for href in links), name
+    assert sorted(p.name for p in (DOCS / "downloads").iterdir()) == ["README.md"]
 
 
-def test_run_card_is_measured_and_still_unpromoted():
-    """Every gate number must carry its label, protocol version, denominator and uncertainty clause."""
+def test_run_card_is_blocked_and_has_no_unqualified_score():
     rc = json.loads((DOCS / "data" / "run-card.json").read_text(encoding="utf-8"))
     hd = rc["holdout_dti"]
     assert hd["label"] == "HOLDOUT-DTI"
-    assert isinstance(hd["value"], float) and 0.0 < hd["value"] < 1.0
-    assert hd["withheld_positives"] > 1000 and hd["evaluator_version"] and "not claimed" in hd["ci95"]
-    assert rc["leakage_canary"]["status"] == "PASS" and rc["leakage_canary"]["threshold_auc"] in (0.9, "0.9")
-    assert rc["registry_checks"]["pre_placement_surface"]["status"].startswith("PASS")
-    assert rc["registry_checks"]["post_placement_final_dots"]["status"].startswith("PASS")
-    assert "incomplete corpus" in rc["registry_checks"]["post_placement_final_dots"]["status"]
-    assert rc["registry_checks"]["post_placement_final_dots"]["correlation_limit"] == 0.9
+    assert hd["value"] is None
+    assert hd["evaluator_version"] is None
+    assert hd["withheld_positive_count"] is None
+    assert hd["ci95"] is None
+    assert "NO QUALIFIED RESULT" in hd["status"]
+    assert rc["leakage_canary"]["status"] == "NOT VALIDATED"
+    assert rc["leakage_canary"]["threshold_auc"] == 0.9
+    assert rc["registry_checks"]["pre_placement_surface"]["complete_registry"] is False
+    assert rc["registry_checks"]["post_placement_final_dots"]["complete_registry"] is False
+    assert rc["registry_checks"]["pre_placement_surface"]["status"].startswith("BLOCKED")
+    assert rc["registry_checks"]["post_placement_final_dots"]["status"].startswith("BLOCKED")
+    assert rc["registry_checks"]["pre_placement_surface"]["correlation_limit"] == 0.9
     assert rc["registry_checks"]["post_placement_final_dots"]["overlap_limit"] == 0.7
-    assert len(rc["raster"]["sha256"]) == 64 and (DOCS / "downloads" / rc["raster"]["file"]).exists()
-    assert rc["validator"]["status"].startswith("PASS")
-    assert rc["submission"]["note_limit_chars"] == 140 and rc["submission"]["note_chars"] <= 140
-    assert rc["submission"]["clearance"].startswith("PARTIAL")
-    assert "slot NO" in rc["submission"]["clearance"] or "not" in rc["submission"]["clearance"].lower()
+    assert rc["raster"]["file"] is None and rc["raster"]["sha256"] is None
+    assert rc["validator"]["status"].startswith("NOT PASSED")
+    assert rc["submission"]["name"] is None and rc["submission"]["note"] is None
+    assert rc["submission"]["note_limit_chars"] == 140
+    assert rc["submission"]["download_status"].startswith("NO DOWNLOAD")
+    assert rc["budget"]["new_experiments_used"] == 0
     assert rc["budget"]["submission_slots_used"] == 0
-    assert rc["budget"]["holdout_experiments_used"] <= rc["budget"]["max_holdout_experiments"]
-    assert "negative" in rc["verdict"]
+    assert rc["independent_reviews"]["completed"] == 0
+    assert "negative" in rc["verdict"].lower()
 
 
-def test_hypotheses_are_ranked_and_stay_in_one_lane():
+def test_hypotheses_are_ranked_and_meet_same_lane_review_fields():
     d = json.loads((DOCS / "data" / "hypotheses.json").read_text(encoding="utf-8"))
     assert len(d["items"]) == 4
     assert [h["rank"] for h in d["items"]] == [1, 2, 3, 4]
-    assert all(h["lane"] == "native-resolution lidar scarp channels" for h in d["items"])
+    assert {h["lane"] for h in d["items"]} == {"native-resolution LiDAR scarp channels"}
     assert d["protocol"]["feature_scales_m"] == [2, 20]
     assert d["protocol"]["aggregation_m"] == 100
-    assert all("unknown" in h["expected_gain"].lower() or "unquantified" in h["expected_gain"].lower()
-               or "unmeasured" in h["expected_gain"].lower() for h in d["items"])
-    assert all(h["named_mimic"] for h in d["items"])
+    required = ("layers", "signature", "why_off_catalogue", "named_mimic", "differs_from_repo",
+                "cost", "data_status", "validation")
+    assert all(all(h.get(field) for field in required) for h in d["items"])
+    assert all(any(word in h["expected_gain"].lower() for word in ("unknown", "unquantified", "unmeasured"))
+               for h in d["items"])
+    assert all("blocked" in h["data_status"].lower() for h in d["items"])
 
 
-def test_no_leaderboard_snapshot_or_local_table_remains():
+def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():
     assert not (DOCS / "data" / "leaderboard-2026-10-11.json").exists()
     assert not (DOCS / "leaderboard.html").exists()
     sources = json.loads((DOCS / "data" / "sources.json").read_text(encoding="utf-8"))
     s03 = next(s for s in sources["sources"] if s["id"] == "S03")
     assert s03["url"] == OFFICIAL_LEADERBOARD
-    assert s03["status"].startswith("LINK ONLY")
+    assert "NO VALUES MIRRORED" in s03["status"]
+    assert "NO ONGOING MONITORING" in s03["status"]
     claims = json.loads((DOCS / "data" / "claims.json").read_text(encoding="utf-8"))
-    assert "leaderboard" not in json.dumps(claims["claims"]).lower()
-    for page in PAGES:
-        text = (DOCS / page).read_text(encoding="utf-8").lower()
-        assert "leaderboard-2026-10-11" not in text
-        assert "top 50 rendered" not in text.lower()
-        assert "participant" not in text.lower()
+    assert "leaderboard" in json.dumps(claims["claims"]).lower()  # attribution caveat is explicit
+    numeric_claim_values = [value for claim in claims["claims"] for value in claim.values()
+                            if isinstance(value, (int, float)) and not isinstance(value, bool)]
+    assert not numeric_claim_values  # no owner-reported value is promoted as a score
+    for name in PAGES:
+        for href in _links(DOCS / name):
+            assert "drivendata.org/competitions/" not in href, f"deep link in {name}: {href}"
+    assert OFFICIAL_HOME in _links(DOCS / "sources.html")
 
 
 def test_no_organizer_confirmed_numeric_score_is_claimed():
     for name in PAGES:
         text = (DOCS / name).read_text(encoding="utf-8")
         assert not re.search(r"ORGANIZER-CONFIRMED\W+0\.\d", text)
+        assert "HOLDOUT-DTI 0." not in text
+
+
+def test_historical_evidence_is_quarantined_and_sgmc_source_is_internal():
+    for path in (ROOT / "evidence").glob("h66_*.json"):
+        d = json.loads(path.read_text(encoding="utf-8"))
+        assert d["evidence_disposition"]["status"].startswith("UNQUALIFIED LEGACY")
+        if d.get("evidence_class", "").startswith("HOLDOUT-DTI"):
+            pytest.fail(f"legacy evidence still exposes a qualified score class: {path}")
+    irr = json.loads((DOCS / "data" / "irregularities.json").read_text(encoding="utf-8"))
+    ir13 = next(x for x in irr["items"] if x["id"] == "IR-13-H66-NEGATIVE-RESULT")
+    assert ir13["source_ids"] == []
+    assert "evidence/h66_e1_offcat.json" in ir13["internal_evidence"]
+    assert "GeoDAWN" in ir13["detail"]
+    assert "S08" not in ir13["detail"]
+
+
+def test_canonical_and_legacy_mirrors_are_synchronized():
+    pairs = [
+        (DOCS / "data" / "hypotheses.json", ROOT / "registry" / "hypotheses.json"),
+        (DOCS / "data" / "irregularities.json", ROOT / "registry" / "irregularities.json"),
+        (DOCS / "data" / "run-card.json", ROOT / "registry" / "run_card.json"),
+        (DOCS / "data" / "run-card.json", DOCS / "runcard.json"),
+    ]
+    for canonical, mirror in pairs:
+        assert json.loads(canonical.read_text(encoding="utf-8")) == json.loads(mirror.read_text(encoding="utf-8"))
 
 
 def test_all_local_links_resolve():
     for name in PAGES:
         path = DOCS / name
-        parser = _Links()
-        parser.feed(path.read_text(encoding="utf-8"))
-        for href in parser.hrefs:
+        for href in _links(path):
             parsed = urlsplit(href)
             if parsed.scheme or href.startswith("#"):
                 continue

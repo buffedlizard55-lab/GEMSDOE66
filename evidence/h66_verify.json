@@ -681,5 +681,18 @@
     "overlap_le_0p70_IR60_CORRECTED_EXCESS_ONLY": true,
     "pixel_unique": true,
     "byte_unique": true
+  },
+  "evidence_disposition": {
+    "status": "UNQUALIFIED LEGACY EXPLORATORY EVIDENCE — NOT A CURRENT HOLDOUT-DTI OR ORGANIZER-CONFIRMED SCORE",
+    "evaluator_version": null,
+    "withheld_positive_count": null,
+    "ci95": null,
+    "reasons": [
+      "Legacy H66 used full-catalogue distance during candidate eligibility before holdout scoring.",
+      "The evaluation did not use the required buffered whole-segment protocol with a LiDAR-only valid mask.",
+      "No valid pooled 95% spatial-block confidence interval was established for these values.",
+      "These records are preserved for audit/negative-result traceability only; do not report their numeric fields as HOLDOUT-DTI or organizer-confirmed scores."
+    ],
+    "canonical_review": "docs/review/2026-10-11-audit.md"
   }
 }
