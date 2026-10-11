@@ -1,0 +1,15 @@
+{
+  "hypothesis_id": "H66-2",
+  "record": "first-test verdict for the preregistered H66-2 comparison (registry/preregistration-h66-2.json)",
+  "verdict": "PROCEED",
+  "verdict_scope": "licenses the emission/format/uniqueness experiment only; not a promotion decision",
+  "evidence": ["evidence/h66b_e1_ablation.json", "evidence/h66b_e2_strata.json"],
+  "rule": "candidate must beat the H66-1 blend by >= 5 % relative credit-per-dot at mass 37654 on both the full off-catalogue domain and the off-range-front subdomain",
+  "measured": {
+    "concordance_step_face": {"full": 0.2253, "off_front": 0.2191},
+    "h66_1_blend": {"full": 0.2019, "off_front": 0.1785},
+    "gain_full": 0.116,
+    "gain_off_front": 0.227
+  },
+  "generated_utc": "2026-10-11T21:22:00Z"
+}

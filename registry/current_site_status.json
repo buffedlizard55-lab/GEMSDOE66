@@ -1,0 +1,45 @@
+{
+  "schema": "gems-project-site-status/2",
+  "review_date": "2026-10-11",
+  "active_run": null,
+  "active_lane": "native-resolution LiDAR scarp channels",
+  "status": "BLOCKED — no current candidate cleared",
+  "stop_reason": "The unauthenticated official data page redirected to login; authorized competition rasters and the cached LiDAR stack are absent. The historical H66 holdout claim is disqualified because full-catalogue distance affected candidate eligibility, scoring was not restricted to LiDAR-covered held-out blocks, and the required buffered whole-segment protocol/95% CI were not established. The complete raster registry and exact official footprint validation are also unavailable. No new experiment or candidate was produced.",
+  "new_tiff_created_in_this_review": false,
+  "historical_download_files_removed": true,
+  "current_candidate": null,
+  "submission_slots_used_in_this_review": 0,
+  "recommended_competition_submission": null,
+  "download_status": "NO DOWNLOAD — no current file is cleared or offered",
+  "historical_artifacts": [
+    {
+      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+      "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
+      "status": "WITHDRAWN; file not retained in docs/downloads"
+    },
+    {
+      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
+      "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
+      "status": "WITHDRAWN; file not retained in docs/downloads"
+    },
+    {
+      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
+      "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
+      "status": "WITHDRAWN; file not retained in docs/downloads"
+    }
+  ],
+  "gates": {
+    "authorized_inputs": "BLOCKED — official data tab requires login; no credentials used",
+    "hypotheses": "FOUR RANKED SAME-LANE PROPOSALS — NOT YET INDEPENDENTLY REVIEWED",
+    "new_holdout": "NONE — no qualified HOLDOUT-DTI value, evaluator/count/95% CI unavailable",
+    "feature_leakage_canaries": "NOT RUN on the required holdout",
+    "range_front_analysis": "NOT RUN on the required holdout",
+    "registry_uniqueness": "BLOCKED — complete family corpus unavailable; no pass claimed",
+    "official_grid_validator": "NOT PASSED — official reference/features rasters are unavailable",
+    "independent_scientific_reviews": "0 of 2 complete",
+    "submission_slot": "NONE USED"
+  },
+  "feed_policy": "Repository-state only; no leaderboard values copied, stored, refreshed, or monitored. No DrivenData subpage is deep-linked from the site absent written authorization.",
+  "canonical_run_card": "docs/data/run-card.json",
+  "technical_audit": "docs/review/2026-10-11-audit.md"
+}

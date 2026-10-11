@@ -1,0 +1,126 @@
+{
+  "generated_utc": "2026-10-11T21:12:09Z",
+  "lidar_covered_cells": 3892984,
+  "lidar_fraction_of_footprint": 0.7534,
+  "positive_control": {
+    "name": "distance-to-catalogue itself",
+    "auc": 1.0,
+    "note": "deliberate positive control, not a lane input"
+  },
+  "canary": {
+    "amp_snr": {
+      "auc": 0.5538,
+      "auc_reflected": 0.5538,
+      "verdict": "ok"
+    },
+    "snr": {
+      "auc": 0.5507,
+      "auc_reflected": 0.5507,
+      "verdict": "ok"
+    },
+    "frac": {
+      "auc": 0.505,
+      "auc_reflected": 0.505,
+      "verdict": "ok"
+    },
+    "coh100": {
+      "auc": 0.4869,
+      "auc_reflected": 0.5131,
+      "verdict": "ok"
+    },
+    "rel_age": {
+      "auc": 0.5245,
+      "auc_reflected": 0.5245,
+      "verdict": "ok"
+    },
+    "facing": {
+      "auc": 0.4972,
+      "auc_reflected": 0.5028,
+      "verdict": "ok"
+    },
+    "sharp": {
+      "auc": 0.5762,
+      "auc_reflected": 0.5762,
+      "verdict": "ok"
+    },
+    "step": {
+      "auc": 0.5664,
+      "auc_reflected": 0.5664,
+      "verdict": "ok"
+    },
+    "height_m": {
+      "auc": 0.5664,
+      "auc_reflected": 0.5664,
+      "verdict": "ok"
+    },
+    "relief_m": {
+      "auc": 0.5717,
+      "auc_reflected": 0.5717,
+      "verdict": "ok"
+    },
+    "cultural": {
+      "auc": 0.4577,
+      "auc_reflected": 0.5423,
+      "verdict": "ok"
+    }
+  },
+  "cultural": {
+    "threshold_pct": 97.0,
+    "threshold": 0.8106265664100647,
+    "veto_cells": 108468,
+    "veto_fraction_of_covered": 0.027862431492140734,
+    "indicator_pctl": {
+      "straight": [
+        0.4088,
+        0.825,
+        0.9285,
+        0.9714
+      ],
+      "constancy": [
+        0.3564,
+        0.5799,
+        0.6637,
+        0.7885
+      ],
+      "flat": [
+        0.6772,
+        0.9361,
+        0.9788,
+        0.9898
+      ],
+      "mag_absent": [
+        0.4932,
+        0.8589,
+        0.934,
+        0.934
+      ]
+    }
+  },
+  "score": {
+    "rank_components": {
+      "amp_snr": 0.5848767757415771,
+      "frac": 0.5004827976226807,
+      "coh": 0.5025456547737122,
+      "rel_age": 0.5155309438705444
+    },
+    "n_scored": 3784516,
+    "vetoed_score_mass": 50274.82421875,
+    "total_score_mass_kept": 2023882.25
+  },
+  "n_label_pos": 36361,
+  "evidence_disposition": {
+    "status": "UNQUALIFIED LEGACY EXPLORATORY EVIDENCE — NOT A CURRENT HOLDOUT-DTI OR ORGANIZER-CONFIRMED SCORE",
+    "evaluator_version": null,
+    "withheld_positive_count": null,
+    "ci95": null,
+    "reasons": [
+      "The historical H66 runner used full-catalogue distance during candidate eligibility before holdout scoring.",
+      "The evaluation did not use the required buffered whole-segment protocol with a LiDAR-only valid mask.",
+      "No valid pooled 95% spatial-block confidence interval was established for these values.",
+      "These files are preserved for audit/negative-result traceability only; their metric-like fields are not current HOLDOUT-DTI or organizer-confirmed scores."
+    ],
+    "canonical_review": "docs/review/2026-10-11-audit.md"
+  },
+  "legacy_evidence_class": "HOLDOUT-DTI-instrument-audit",
+  "evidence_class": "UNQUALIFIED_LEGACY_EXPLORATORY_PROXY_NOT_HOLDOUT_DTI"
+}

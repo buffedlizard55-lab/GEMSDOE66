@@ -1,0 +1,71 @@
+{
+  "n_folds_used": 2,
+  "generated_utc": "2026-10-11T21:15:31Z",
+  "label": "cell within 100 m of a mapped catalogue fault, lidar-covered footprint",
+  "cv": "4 disjoint 20 km spatial blocks (train off-block, score on-block)",
+  "auc": {
+    "channels_only": {
+      "mean": 0.7513427044776038,
+      "ci95": [
+        0.6008040348833366,
+        0.901881374071871
+      ],
+      "folds": [
+        0.6745,
+        0.8281
+      ]
+    },
+    "channels_plus_cultural": {
+      "mean": 0.7513427044776038,
+      "ci95": [
+        0.6008040348833366,
+        0.901881374071871
+      ],
+      "folds": [
+        0.6745,
+        0.8281
+      ]
+    }
+  },
+  "delta_auc_channels_plus_cultural_minus_channels_only": 0.0,
+  "fold_coefficients": {
+    "0": {
+      "coef_cultural": 1.593831181526184,
+      "coef": {
+        "amp_snr": -3.7699,
+        "frac": -2.6488,
+        "coh100": 0.4314,
+        "rel_age": 0.8682,
+        "facing": 0.0581,
+        "sharp": 10.1921,
+        "cultural_index": 1.5938
+      }
+    },
+    "2": {
+      "coef_cultural": 1.3949873447418213,
+      "coef": {
+        "amp_snr": -4.0579,
+        "frac": -2.665,
+        "coh100": 0.3744,
+        "rel_age": 1.0734,
+        "facing": 0.1224,
+        "sharp": 10.2239,
+        "cultural_index": 1.395
+      }
+    }
+  },
+  "leakage_note": "label is the public catalogue; the lane field itself is catalogue-free, so this CV measures channel informativeness about mapped faults, not about the hidden panel",
+  "evidence_disposition": {
+    "status": "UNQUALIFIED LEGACY EXPLORATORY EVIDENCE — NOT A CURRENT HOLDOUT-DTI OR ORGANIZER-CONFIRMED SCORE",
+    "evaluator_version": null,
+    "withheld_positive_count": null,
+    "ci95": null,
+    "reasons": [
+      "The historical H66 runner used full-catalogue distance during candidate eligibility before holdout scoring.",
+      "The evaluation did not use the required buffered whole-segment protocol with a LiDAR-only valid mask.",
+      "No valid pooled 95% spatial-block confidence interval was established for these values.",
+      "These files are preserved for audit/negative-result traceability only; their metric-like fields are not current HOLDOUT-DTI or organizer-confirmed scores."
+    ],
+    "canonical_review": "docs/review/2026-10-11-audit.md"
+  }
+}

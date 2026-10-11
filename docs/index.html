@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Overview · GEMSDOE66</title>
@@ -6,15 +6,50 @@
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
 <nav class="main"><a href="index.html" class="on">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
-<main class="wrap">
+<main>
+<div class="wrap">
 
 <h2>What this is</h2>
 <p>An auditable pipeline that produces one GeoTIFF of fault-probability predictions for the
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DOE GEMS Prize</a>.
+<a href="https://www.drivendata.org/">DOE GEMS Prize</a>.
 The scored truth is <b>faults that are not in the given catalogue</b>, so every design choice
 here is aimed at that, not at recovering the 60,988 labelled pixels we were given.</p>
 
-<div class="bad">No submission has been built yet.</div>
+
+<div class="stop">
+  <h2>Download status: NOT AVAILABLE</h2>
+  <p><b>There is no current TIFF or ZIP cleared for submission.</b>
+  Do not upload a historical H66 artifact — including the lidar-lane GeoTIFF described on
+  this site, which is retained for audit only.</p>
+  <p class="small">A GeoTIFF was built and passes every <i>format</i> rule, but the
+  scientific gate is <b>NOT MET</b>, so it is not published as a download. A late
+  de-confounding test showed the lane's measured advantage over the incumbent is
+  <b>entirely an artifact of the holdout truth's own relief bias</b> — see
+  <a href="results.html">results</a> and the
+  <a href="executive-summary.html">executive summary</a>. Uploading a file that our own
+  evidence cannot distinguish from the incumbent would spend a weekly slot on a coin
+  toss. The bytes are kept in
+  <code>artifacts/lidar_lane/</code> for audit and for a future cleared release.</p>
+  <table>
+    <tr><th>sha256</th><td class="mono">bf06995f94d3f8a661772a023d447b559c57c676c86ddb7a3cb51efe92da73f5</td></tr>
+    <tr><th>size</th><td>463,666 bytes</td></tr>
+    <tr><th>emitted pixels</th><td>37,654 &nbsp;
+        (0.729% of the 5,167,373-px footprint)</td></tr>
+    <tr><th>dots within 200 m of a known fault</th><td>0</td></tr>
+    <tr><th>format validator (re-read from disk)</th>
+        <td><span class="pill ok">PASS</span> 12/
+        12 checks</td></tr>
+    <tr><th>duplicate gate vs 60 registry rasters</th>
+        <td><span class="pill bad">DUPLICATE_OVERLAP</span>
+        max |ρ| = 0.277</td></tr>
+    <tr><th>submission note (paste into the form, 128/140 chars)</th>
+        <td class="mono">GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN lidar, 37,654 dots, 0 within 200 m of the catalogue.</td></tr>
+  </table>
+  <p class="small">Is it OK to download and submit? <b>No — not yet.</b> The
+  <a href="executive-summary.html">executive summary</a> states the gate, the measurement
+  that failed it, and exactly what would have to be true for this file to be worth a slot.</p>
+</div>
+
 
 <h2>The one idea that matters</h2>
 <p>The metric is a <b>budget</b>. With <code>T = TP<sub>w</sub></code>, <code>S = Σp</code>,
@@ -61,10 +96,11 @@ channel and is logged as one.</div>
    <p class="small">max |ρ| vs 60 registry rasters: 0.28 (dots), 0.08 (surface)</p></div>
 </div>
 
+</div>
 </main>
 <footer><div class="wrap">
 GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
-competition <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a>.
+competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
 Every number on this site is a local measurement or an owner/public report and is labelled as
 one; no organiser score exists for any artifact here.
 </div></footer></body></html>

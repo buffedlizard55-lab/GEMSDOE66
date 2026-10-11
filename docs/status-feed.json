@@ -1,0 +1,82 @@
+{
+  "schema": "gems-project-status-feed/1",
+  "generated_utc": "2026-10-11",
+  "status": "BLOCKED — no candidate cleared for download or submission",
+  "scope": "Project-state feed only. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages.",
+  "external_monitoring": "Disabled. DrivenData Terms of Use restrict automated access and manual monitoring/copying without prior written consent. No leaderboard values are stored.",
+  "entries": [
+    {
+      "date": "2026-10-11",
+      "kind": "experiment-h66-2",
+      "status": "NEGATIVE-NOT-PROMOTED",
+      "summary": "Ran one preregistered H66-2 experiment (concordance of 10-vs-50 m step, dip-sense and crest-toe sharpness on the pinned 2 m LiDAR stack). Emitted and validated a 37,654-dot raster (float32, EPSG:32611, 0 NaN, values in [0,1], unique among the 21 rasters present). Verdict negative: the mass-matched terrain-only control is within 1.9x pooled, 99.95% of the mass is upland while the live-best incumbent's edge is in the basin, and the off-catalogue proxy does not order the live board at comparable mass (rho=+0.46, p=0.29 over the 35k-70k band). Bytes kept in artifacts/h66-2/ for audit; not published on the site; no slot used. Two corrections recorded: IR-66-BASE-01 (the first strata run's random control was an index-ordered corner sample; the advertised x16 upland ratio is x1.20) and IR-66-GUARD-02 (the stop guard hard-coded a foreign lane name).",
+      "links": [
+        "review/2026-10-11-h66-2-verdict.md",
+        "run-card.html",
+        "irregularities.html",
+        "feed.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "repository-audit",
+      "status": "BLOCKED",
+      "summary": "Audited the legacy H66 path. Full-catalogue distance affects candidate eligibility before holdout scoring; the holdout is not the required buffered whole-geologic-segment/LiDAR-only protocol; the writer path conflicts with the official NaN-outside contract. Legacy H66 scores are not qualified HOLDOUT-DTI.",
+      "links": [
+        "review/2026-10-11-audit.md",
+        "run-card.html",
+        "irregularities.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "competition-data-access",
+      "status": "BLOCKED",
+      "summary": "The official data tab redirected to login. No credentials were used and no competition rasters or sample grid are in this checkout.",
+      "source_id": "S05",
+      "links": []
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "free-official-dem-source",
+      "status": "AVAILABLE IN PRINCIPLE; EXACT TILE COVERAGE UNVERIFIED",
+      "summary": "USGS 3DEP lists public-domain 1 m bare-earth DEMs and The National Map access. This does not verify exact competition tile coverage, alignment, or completeness.",
+      "source_id": "S07",
+      "links": []
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "candidate-download",
+      "status": "NOT AVAILABLE",
+      "summary": "Historical H66 TIFF/ZIP binaries were removed from docs/downloads. Hashes and withdrawal reasons remain in the run card and evidence disposition. No new GeoTIFF was generated.",
+      "links": [
+        "downloads/README.md",
+        "data/run-card.json"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "hypothesis-ranking",
+      "status": "READY FOR INDEPENDENT REVIEW",
+      "summary": "Four distinct same-lane LiDAR scarp-channel hypotheses are ranked before implementation. None is claimed as novel against the incomplete registry or as a measured gain.",
+      "links": [
+        "hypotheses.html",
+        "data/hypotheses.json"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "test-suite",
+      "status": "PASS — 72 offline tests",
+      "summary": "The final local offline suite passed 72 tests. This verifies repository-level behavior only; it does not validate competition inputs, a spatial holdout, registry completeness, official-grid alignment, or organizer acceptance.",
+      "links": []
+    }
+  ],
+  "next_actions": [
+    "Register and preregister the union candidate (live-best incumbent dots plus the H66-2 complement) and run it against a sealed buffered whole-segment holdout before any slot.",
+    "Fix the shared writer/holdout once in the template (NaN-outside contract plus LiDAR-valid pooled evaluator with 95% spatial-block CI) as the audit requires; do not publish from the legacy gems57 path.",
+    "Settle IR-66-RELEASE-01 with an organizer receipt if one can be lawfully obtained, or keep every artifact unpublished.",
+    "Answer the standalone question of what field beats the owner-reported 0.2778: per-dot credit on a proxy does not order the live board at comparable mass, so only an identification upload or a genuinely new signal can decide it.",
+    "Obtain two independent scientific-lead reviews, then test the ranked lead only within the experiment/time budget."
+  ]
+}

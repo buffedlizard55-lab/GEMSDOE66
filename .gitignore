@@ -1,34 +1,46 @@
-# Python & build artifacts
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-.pytest_cache/
-.ruff_cache/
-.mypy_cache/
-*.egg-info/
-.cache/
+# Competition data is login-gated and must never be committed.
+/data/
+/cache/
+/.cache/
+*.tif
+*.tiff
+*.zip
 
-# Competition rasters, external derivatives and regenerable caches.
-# Everything here is restorable byte-for-byte by
-#     python3 scripts/fetch_mirrors.py     (23/23 sha256-pinned mirrors)
-#     python3 -m gemsdoe66.features        (the 59-layer footprint stack)
-# Keeping them out of git is deliberate: the pin, not a committed copy, is the guarantee.
-data/raw/
-!data/raw/.gitkeep
-data/processed/
-!data/processed/.gitkeep
+# Generated/model outputs stay local.
+/outputs/
+/runs/
+/checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
 *.npy
 *.npz
-*.partial
-*.assembling
-data/restore_receipt.json
 
-# Keep audited submission deliverables and their verification sidecars
-!docs/downloads/*.tif
-!docs/downloads/*.zip
-!docs/downloads/*.json
+# Local environments, credentials and caches.
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+.pytest_cache/
+*.egg-info/
+build/
+dist/
 
+# --- from the lane session (arena/7d2c4a3b) ---
+# The registry rasters and audited artifacts are INTENTIONALLY tracked: they are the
+# duplicate-gate corpus and the audit trail. They are already in the index, so these
+# patterns only stop NEW stray rasters from being added by accident.
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+.cache/
+# Python build/env extras
+profile_output/
+.coverage
+htmlcov/
 # OS / editor
 .vscode/
 .idea/

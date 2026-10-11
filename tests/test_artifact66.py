@@ -1,0 +1,31 @@
+"""Withdrawal checks for historical H66 artifacts; never promotion/score evidence."""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+DOCS = ROOT / "docs"
+CARD_PATH = DOCS / "data" / "run-card.json"
+HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
+
+
+def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
+    card = json.loads(CARD_PATH.read_text(encoding="utf-8"))
+    historical = card["raster"]["historical_artifacts"]
+    assert len(historical) == 3
+    for item in historical:
+        assert item["file"].startswith(HISTORICAL_PREFIX)
+        assert len(item["sha256"]) == 64
+        assert "WITHDRAWN" in item["status"]
+        assert not (DOCS / "downloads" / item["file"]).exists()
+    assert sorted(path.name for path in (DOCS / "downloads").iterdir()) == ["README.md"]
+
+
+def test_current_run_card_cannot_clear_a_historical_artifact():
+    card = json.loads(CARD_PATH.read_text(encoding="utf-8"))
+    assert card["raster"]["file"] is None
+    assert card["raster"]["sha256"] is None
+    assert card["submission"]["download_status"].startswith("NO DOWNLOAD")
+    assert card["submission"]["organizer_confirmed_receipt"] is None
+    assert card["budget"]["submission_slots_used"] == 0
+    assert card["holdout_dti"]["value"] is None
+    assert card["holdout_dti"]["ci95"] is None

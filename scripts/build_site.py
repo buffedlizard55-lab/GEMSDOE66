@@ -30,7 +30,7 @@ def page(title: str, body: str, active: str) -> str:
     nav = "".join(
         f'<a href="{h}" class="{"on" if h == active else ""}">{esc(t)}</a>'
         for h, t in NAV)
-    return f"""<!DOCTYPE html>
+    return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)} · GEMSDOE66</title>
@@ -38,12 +38,14 @@ def page(title: str, body: str, active: str) -> str:
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
 <nav class="main">{nav}</nav></div></header>
-<main class="wrap">
+<main>
+<div class="wrap">
 {body}
+</div>
 </main>
 <footer><div class="wrap">
 GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
-competition <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a>.
+competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
 Every number on this site is a local measurement or an owner/public report and is labelled as
 one; no organiser score exists for any artifact here.
 </div></footer></body></html>
@@ -65,14 +67,15 @@ def pill(ok: bool, text: str = None) -> str:
 # ------------------------------------------------------------------------------------------
 def submission_block() -> str:
     """The one-click download block.  Reads the newest build manifest."""
-    mans = sorted(DL.glob("*.manifest.json"))
-    if not mans:
-        return '<div class="bad">No submission has been built yet.</div>'
-    m = load(mans[-1], {})
+    # The audited raster lives outside docs/ on purpose: with a NEGATIVE verdict it must not
+    # be publishable.  The banner is rendered either way, and it says so.
+    ART = ROOT / "artifacts" / "lidar_lane"
+    mans = sorted(ART.glob("*.manifest.json"))
+    m = load(mans[-1], {}) if mans else load(next(iter(DL.glob("*.manifest.json")), ""), {})
     slug = m.get("slug", "")
     nan = DL / f"{slug}-nan.tif"
     zro = DL / f"{slug}-zeros.tif"
-    chk = load(DL / f"checks-{slug}-nan.tif.json", {})
+    chk = load(ART / f"checks-{slug}-nan.tif.json", {})
     uni = m.get("uniqueness", {})
     ok = bool(chk.get("ok"))
     note = (f"GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN "
@@ -80,7 +83,10 @@ def submission_block() -> str:
     note = note[:140]
     return f"""
 <div class="stop">
-  <h2>⛔ Nothing is cleared to submit</h2>
+  <h2>Download status: NOT AVAILABLE</h2>
+  <p><b>There is no current TIFF or ZIP cleared for submission.</b>
+  Do not upload a historical H66 artifact — including the lidar-lane GeoTIFF described on
+  this site, which is retained for audit only.</p>
   <p class="small">A GeoTIFF was built and passes every <i>format</i> rule, but the
   scientific gate is <b>NOT MET</b>, so it is not published as a download. A late
   de-confounding test showed the lane's measured advantage over the incumbent is
@@ -127,7 +133,7 @@ def index_page() -> str:
     return page("Overview", f"""
 <h2>What this is</h2>
 <p>An auditable pipeline that produces one GeoTIFF of fault-probability predictions for the
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DOE GEMS Prize</a>.
+<a href="https://www.drivendata.org/">DOE GEMS Prize</a>.
 The scored truth is <b>faults that are not in the given catalogue</b>, so every design choice
 here is aimed at that, not at recovering the 60,988 labelled pixels we were given.</p>
 
@@ -217,7 +223,7 @@ headline — in other words, all of it.</p>
 
 <h2>2 · Upload</h2>
 <ol>
-<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the submission page</a>.</li>
+<li>Open <a href="https://www.drivendata.org/">the submission page</a>.</li>
 <li><b>File to submit</b> → <b>Choose file</b> → pick the <code>.tif</code> you just saved.</li>
 <li><b>Note (optional)</b> → paste the line below (it is already ≤ 140 characters):</li>
 </ol>
@@ -376,7 +382,7 @@ def research_page() -> str:
 
 <h3>1 · The metric, re-derived</h3>
 <p>Transcribed line by line from the
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem
+<a href="https://www.drivendata.org/">problem
 page</a> and verified against a brute-force O(N·|G|) implementation to 1e-9
 (<code>tests/test_metric.py</code>). <code>FN<sub>w</sub> = |G| − TP<sub>w</sub></code>
 exactly, which collapses the score to
@@ -508,9 +514,9 @@ USGS primary sources; <b>[literature]</b> items are peer-reviewed or conference 
 <tr><th>source</th><th>what we took from it</th><th>link</th></tr>
 <tr><td>Competition problem page</td><td>metric definition, α/β/R, submission format, the
  statement that the test set is faults <i>not</i> in the USGS database</td>
- <td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">page 967</a></td></tr>
+ <td><a href="https://www.drivendata.org/">page 967</a></td></tr>
 <tr><td>Competition leaderboard</td><td>the live public board (0.4133 at #1 on 2026-10-11)</td>
- <td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a></td></tr>
+ <td><a href="https://www.drivendata.org/">leaderboard</a></td></tr>
 <tr><td>Competition rules</td><td>submission caps and prize-round structure</td>
  <td><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">96647.pdf</a></td></tr>
 <tr><td>Reference solution</td><td>baseline architecture and the α = 0.2 / β = 0.8 convention</td>
