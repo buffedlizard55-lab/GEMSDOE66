@@ -1,198 +1,190 @@
 {
-  "schema": 1,
-  "verified_on": "2026-10-11",
+  "schema": 2,
+  "verified_on": "2026-10-11 (source statuses inherited from the saved research record; not a fresh fetch in this continuation)",
   "sources": [
     {
       "id": "S01",
-      "title": "DrivenData - competition overview (end date, prize pool, rules links)",
+      "title": "DrivenData — GEMS Prize competition overview",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
-      "supports": "Competition overview page; links to the problem page, leaderboard, rules and data tab",
-      "status": "VERIFIED",
-      "how": "fetch tool, 2026-10-11 (competition links from S02)"
+      "supports": "Competition overview and official links to the problem description, rules and data tab.",
+      "status": "VERIFIED in prior source review",
+      "how": "Official page link from the saved source register; not freshly fetched in this continuation."
     },
     {
       "id": "S02",
-      "title": "DrivenData - problem description (metric, submission format, data description)",
+      "title": "DrivenData — GEMS Prize problem description",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-      "supports": "Distance-weighted Tversky index; alpha=0.2, beta=0.8, R=300 m triangular kernel; EPSG 32611, 100 m, float32 in [0,1], NaN outside bounds; test faults are NEW faults not in the USGS database; two prize rounds with a single submission scored across both",
-      "status": "VERIFIED (chunk 0 of 2 read; chunk 1 not read)",
-      "how": "fetch tool, 2026-10-11"
+      "supports": "Published metric parameters and raster contract; task description says test faults are new relative to the USGS database. The prior review read only chunk 0 of 2.",
+      "status": "PARTIAL — chunk 0 read previously; chunk 1 not read",
+      "how": "Official page; source content/status inherited from the saved research record."
     },
     {
       "id": "S03",
-      "title": "DrivenData - public leaderboard",
+      "title": "DrivenData — official live leaderboard (direct link only)",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
-      "supports": "Public DW-Tversky scores by participant (top 50 rows rendered)",
-      "status": "VERIFIED (partial: 50 rows; 'Loading...' marker seen)",
-      "how": "fetch tool, 2026-10-11; snapshot in docs/data/leaderboard-2026-10-11.json"
+      "supports": "Official live standings for a registered/manual viewer. This repository publishes no rows or values and performs no monitoring.",
+      "status": "LINK ONLY — NOT REPRODUCED OR REFRESHED",
+      "how": "Direct URL from the project brief. A previously committed snapshot was removed from the current tree; no leaderboard fetch was made in this continuation."
     },
     {
       "id": "S04",
-      "title": "GEMS Prize Official Rules (NLR-hosted PDF)",
+      "title": "GEMS Prize official rules (NLR-hosted PDF)",
       "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
-      "supports": "Three submissions per week (sections 3.2, 3.4); one final submission (3.4); data sources (3.3); originality warranty (A.5.1); public-element license (A.4); generative-AI disclosure",
-      "status": "VERIFIED (chunks 0-5 of 7 read; chunk 6 not read)",
-      "how": "fetch tool, 2026-10-11"
+      "supports": "Submission cap, originality, and cited data-source/rules provisions. The prior review read chunks 0–5 of 7; the remaining data-license chunk was not read.",
+      "status": "PARTIAL — full rules/data-license review remains open",
+      "how": "Official PDF; status inherited from the saved research record."
     },
     {
       "id": "S05",
-      "title": "DrivenData data download tab",
+      "title": "DrivenData — competition data tab",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
-      "supports": "Official training_features.tif, labels, sample submission, 1m_DEM_links.csv",
-      "status": "BLOCKED - redirects to DrivenData login page (confirmed)",
-      "how": "fetch tool, 2026-10-11"
+      "supports": "Official training data and 1 m DEM-link manifest entry point.",
+      "status": "BLOCKED — resolves to login page in the prior review",
+      "how": "Official URL; no files were downloaded."
     },
     {
       "id": "S06",
-      "title": "gems-prize-reference-solution (GitHub, commit aebe92f, 2026-06-16)",
+      "title": "DrivenData reference solution repository",
       "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
-      "supports": "Notebook: 3292 x 3730 grid at 100 m, EPSG:32611; 19 feature bands; label nodata -1; float32 writer; Tversky training loss alpha 0.2 beta 0.8 (training loss, not the metric)",
-      "status": "VERIFIED (git clone)",
-      "how": "git clone --depth 1, 2026-10-11 (commit aebe92f7c8a990f0e3443451b7a825d9afd6336b)"
+      "supports": "Reference notebook conventions and feature-file naming noted in the prior source review; not the shared cached lidar stack requested for this lane.",
+      "status": "REPOSITORY REVIEWED PREVIOUSLY; not organizer evaluator code",
+      "how": "Prior local shallow clone noted in the saved source register."
     },
     {
       "id": "S07",
-      "title": "USGS - GeoDAWN airborne magnetic and radiometric surveys (DOI 10.5066/P93LGLVQ)",
+      "title": "USGS — GeoDAWN airborne magnetic and radiometric surveys",
       "url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
-      "supports": "GeoDAWN = airborne magnetic and radiometric surveys; 149,030 line-km over 51,857 sq km; separate lidar programmes are described in the same USGS report; ScienceBase licence: public domain (usa.gov label 1.0)",
-      "status": "VERIFIED (linked from S02; figures from USGS data-release record and USGS report)",
-      "how": "web search of the USGS catalogue, 2026-10-11"
+      "supports": "GeoDAWN is a magnetic/radiometric survey; its description distinguishes lidar programs. It does not by itself establish the required lidar tile coverage.",
+      "status": "VERIFIED in prior USGS source review; exact study overlap not checked",
+      "how": "Saved source register cites USGS data-release/report review."
     },
     {
       "id": "S08",
-      "title": "USGS - 3D Elevation Program (3DEP)",
+      "title": "USGS — 3D Elevation Program (3DEP)",
       "url": "https://www.usgs.gov/3d-elevation-program",
-      "supports": "'All 3DEP products are available free of charge and without use restrictions.' (quoted on the 3DEP page); S1M 1-metre DEM listed as a new product",
-      "status": "VERIFIED (quote confirmed; tile download not tested)",
-      "how": "web search of usgs.gov, 2026-10-11"
-    },
-    {
-      "id": "S09",
-      "title": "USGS - Landsat Collection 2 Level-2 science products",
-      "url": "https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products",
-      "supports": "Landsat C2 L2 surface reflectance and surface temperature products. Quote: 'There are no restrictions on the use of Landsat products.' Public domain per the USGS citation page. Citation DOI 10.5066/P9OGBGM6",
-      "status": "VERIFIED (quote and citation confirmed; download not tested)",
-      "how": "web search of usgs.gov, 2026-10-11"
+      "supports": "USGS lists free 3DEP products, including a 1 m DEM product. Public listing does not prove the competition's exact tile coverage, alignment, or run readiness.",
+      "status": "VERIFIED IN PRINCIPLE; tile download/coverage not verified",
+      "how": "Saved source register cites the official 3DEP page; no tiles were acquired."
     },
     {
       "id": "S10",
-      "title": "EPSG.io - EPSG:32611 WGS 84 / UTM zone 11N",
+      "title": "EPSG.io — EPSG:32611",
       "url": "https://epsg.io/32611",
-      "supports": "Central meridian -117, false easting 500000, unit metre",
-      "status": "VERIFIED",
-      "how": "fetch tool, 2026-10-11"
+      "supports": "CRS identity for WGS 84 / UTM zone 11N; the official reference raster is still required for exact transform/bounds.",
+      "status": "VERIFIED in prior source review",
+      "how": "Saved source register."
     },
     {
       "id": "S11",
-      "title": "Sare & Hilley (2018) Scarplet, Journal of Open Source Software 3(31):1066",
+      "title": "Sare & Hilley — Scarplet, Journal of Open Source Software",
       "url": "https://doi.org/10.21105/joss.01066",
-      "supports": "Scarplet template matching / diffusion dating package; DOI 10.21105/joss.01066",
-      "status": "VERIFIED (citation metadata only; method details not read)",
-      "how": "fetch tool (JOSS record), 2026-10-11; the DOI is the stable link"
+      "supports": "Citation metadata for a scarp-template/diffusion-dating package; not evidence of performance on this competition.",
+      "status": "CITATION METADATA REVIEWED; method details not fully audited here",
+      "how": "Prior DOI record review noted in the saved source register."
     },
     {
       "id": "S12",
-      "title": "Steger (1998) An unbiased detector of curvilinear structures, IEEE TPAMI 20(2):113-125",
+      "title": "Steger (1998) — An unbiased detector of curvilinear structures",
       "url": "https://dblp.uni-trier.de/rec/journals/pami/Steger98.html",
-      "supports": "Citation: IEEE TPAMI 20(2):113-125 (1998); DOI 10.1109/34.659930",
-      "status": "VERIFIED (DBLP record)",
-      "how": "web search, 2026-10-11"
+      "supports": "Citation metadata for sub-pixel curvilinear line detection; does not establish a result in this project.",
+      "status": "CITATION RECORD VERIFIED previously",
+      "how": "Saved bibliographic record."
     },
     {
       "id": "S13",
-      "title": "Frangi, Niessen, Vincken, Viergever (1998) Multiscale vessel enhancement filtering, MICCAI 1998, LNCS 1496:130-137",
+      "title": "Frangi et al. (1998) — Multiscale vessel enhancement filtering",
       "url": "https://doi.org/10.1007/bfb0056195",
-      "supports": "Citation details; DOI 10.1007/bfb0056195",
-      "status": "VERIFIED via repository record (earlier session); DOI link not re-fetched",
-      "how": "earlier session web search"
+      "supports": "Citation metadata for multiscale Hessian line enhancement; does not establish a result in this project.",
+      "status": "CITATION METADATA from earlier repository record; DOI not freshly resolved",
+      "how": "Prior source register."
     },
     {
       "id": "S14",
-      "title": "AGU 2015 Fall Meeting - session T31A (session 8436, posters)",
-      "url": "https://studio.m-anage.com/agu/fm15/webprogram/Session8436.html",
-      "supports": "Session T31A (session 8436), 2015 AGU Fall Meeting, lists 'Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis (70055)' by Sare & Hilley. The identifier 'T31A-2838' does not appear in the listing read.",
-      "status": "PARTIAL - T31A-2838 and 'tested in Surprise Valley' NOT verified",
-      "how": "web search and earlier fetch, 2026-10-11"
-    },
-    {
-      "id": "S15",
-      "title": "Tversky index (Wikipedia)",
-      "url": "https://en.wikipedia.org/wiki/Tversky_index",
-      "supports": "Background only; the official metric is a distance-weighted variant (S02)",
-      "status": "NOT FETCHED",
-      "how": "linked from brief"
+      "title": "AGU 2015 abstract — Sare & Hilley scarp-template work (poster 70055)",
+      "url": "https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html",
+      "supports": "The abstract describes slope-aware scarp templates and DEM analysis; it is prior-method context, not evidence for this branch's performance. The prompt's separate identifier T31A-2838 is not verified by the linked poster record.",
+      "status": "PARTIAL — abstract method reviewed; prompt identifier T31A-2838 not verified",
+      "how": "Prior direct abstract-page review recorded in the saved source register."
     },
     {
       "id": "S16",
-      "title": "INGENIOUS - Great Basin Regional Dataset Compilation, DOI 10.15121/1881483",
+      "title": "INGENIOUS — Great Basin Regional Dataset Compilation",
       "url": "https://gbcge.org/current-projects/ingenious/",
-      "supports": "INGENIOUS project: named as a label source on the competition page (S02) and in rules section 3.3; DOI 10.15121/1881483 cited in rules",
-      "status": "CITED - project page linked from S02; not fetched",
-      "how": "linked from S02"
+      "supports": "Named regional dataset source cited by the competition page/rules; detailed coverage/provenance not audited in this review.",
+      "status": "CITED BY OFFICIAL MATERIAL; project page not fully reviewed",
+      "how": "Link inherited from the saved source register."
     },
     {
       "id": "S17",
-      "title": "GEMSDOE32 owner repository (GitHub, buffedlizard55-lab)",
+      "title": "GEMSDOE32 owner repository",
       "url": "https://github.com/buffedlizard55-lab/GEMSDOE32",
-      "supports": "Owner registry: hashes of training_features / labels / sample_submission; claimed grid transform; claims ledger; 'OWNER REPORT' labels; IR-32-DATA-01 (public mirrors)",
-      "status": "OWNER-REPORTED - read, not organiser-verified",
-      "how": "git clone --depth 1, 2026-10-11"
+      "supports": "Owner-maintained registry and artifact records, including H33-2-B2 references; these are owner reports, not organizer receipts.",
+      "status": "OWNER-REPORTED — repository reviewed previously; not organizer-verified",
+      "how": "Saved source register records a prior local clone/review."
     },
     {
       "id": "S18",
-      "title": "GEMSDOE32 site (GitHub Pages)",
+      "title": "GEMSDOE32 owner-maintained project site",
       "url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html",
-      "supports": "Claims file h33-h33-2-b2 has 37,654 dots; states 'NO ORGANISER SCORE EXISTS' for its artifacts; shows projected DTI 0.2747 with status UNSCORED",
-      "status": "THIRD-PARTY CLAIM - read via fetch tool earlier and grep of the owner repository",
-      "how": "fetch tool, 2026-10-11"
+      "supports": "The site describes H33-2-B2 as unscored, distinguishes a model projection from a score, and states that no organizer score exists for its artifacts.",
+      "status": "THIRD-PARTY / OWNER-REPORTED — not an organizer receipt",
+      "how": "Saved source register records a prior page review; not freshly fetched here."
     },
     {
       "id": "S19",
-      "title": "Label sources (USGS Quaternary fault maps and INGENIOUS), as stated on the problem page",
+      "title": "Official problem page — label-source statement",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-      "supports": "Labels are 'from the USGS quaternary fault maps and from INGENIOUS' (S02)",
-      "status": "VERIFIED as a statement on S02",
-      "how": "not attempted"
-    },
-    {
-      "id": "S20",
-      "title": "Dropbox links from the brief (example_submission.tif, existing_faults.tif, numerical-features.tif, DEM links PDF)",
-      "url": "https://www.dropbox.com/",
-      "supports": "Mirrors of the official files as supplied in the brief",
-      "status": "NOT ACCESSIBLE - Dropbox returns no content to the sandbox",
-      "how": "fetch tool, 2026-10-11: dl=1 link returned empty content"
-    },
-    {
-      "id": "S21",
-      "title": "OpenEI GDR submission 1391 (cited in brief)",
-      "url": "https://gdr.openei.org/submissions/1391",
-      "supports": "Brief cites this submission as a data source. Page reads 'No submission found.' The GeoDAWN data entry in the GDR is at /submissions/1591 (web search); 1391 may be a typo",
-      "status": "BROKEN (1391) - 1591 found on web search, not fetched",
-      "how": "fetch tool and web search, 2026-10-11"
-    },
-    {
-      "id": "S22",
-      "title": "GEMS Prize home page (gems.drivendata.org)",
-      "url": "https://gems.drivendata.org/",
-      "supports": "Competition ends Dec. 3, 2026 11:59 p.m. UTC. Pool $300k: initial round $50k (top 5, private set); final round $250k (top 5, expanded labels)",
-      "status": "VERIFIED (fetch tool, earlier session)",
-      "how": "fetch tool (earlier session)"
+      "supports": "Problem-page statement naming label sources; rules wording differs and remains flagged in IR-07.",
+      "status": "VERIFIED AS A STATEMENT ON S02; provenance discrepancy open",
+      "how": "Prior review of the official problem page."
     },
     {
       "id": "S23",
-      "title": "DrivenData Terms of Use (last modified August 7, 2014)",
+      "title": "DrivenData Terms of Use",
       "url": "https://www.drivendata.org/termsofuse/",
-      "supports": "Intellectual Property: 'personal, non-commercial use only'; no reproduction, distribution, download or storage of website material except the listed exceptions. Competition data sits behind the website login, so the ToU applies to it; the competition rules may set a separate data licence (not checked)",
-      "status": "VERIFIED (chunk 0 of 4 read; chunks 1-3 not read)",
-      "how": "fetch tool, 2026-10-11"
+      "supports": "Terms relevant to permitted use and redistribution. The prior review read only part of the document; do not treat this entry as legal advice or a complete review.",
+      "status": "PARTIAL — remaining sections/data-license interaction not checked",
+      "how": "Saved source register records chunks 0 of 4 read previously."
     },
     {
       "id": "S24",
-      "title": "DrivenData login page for the data tab (redirect target)",
+      "title": "DrivenData login page reached from the data tab",
       "url": "https://www.drivendata.org/accounts/login/?next=/competitions/306/competition-doe-gems/data/",
-      "supports": "Confirms the data tab requires an account",
-      "status": "VERIFIED",
-      "how": "fetch tool, 2026-10-11"
+      "supports": "The official data page is login-gated in the prior environment check; no authentication was attempted.",
+      "status": "VERIFIED REDIRECT IN PRIOR CHECK",
+      "how": "Prior fetch result saved in the project record."
+    },
+    {
+      "id": "S25",
+      "title": "7GEMSDOE owner-maintained lidar report",
+      "url": "https://buffedlizard55-lab.github.io/7GEMSDOE/",
+      "supports": "Prior-method context describing lidar scarp descriptors and ridge-thinned emissions; not an organizer score or validation for this branch.",
+      "status": "OWNER-MAINTAINED METHOD REPORT; details not re-audited in this continuation",
+      "how": "URL and summary inherited from the earlier branch research note."
+    },
+    {
+      "id": "S26",
+      "title": "GEMSDOE47 owner-maintained H60/H71/H74 reports",
+      "url": "https://buffedlizard55-lab.github.io/GEMSDOE47/docs/h60.html",
+      "supports": "Prior-method context describing metre-scale scarp channels and consensus variants; not a uniqueness check or organizer result.",
+      "status": "OWNER-MAINTAINED METHOD REPORT; registry rasters not compared",
+      "how": "URL and summary inherited from the earlier branch research note."
+    },
+    {
+      "id": "S27",
+      "title": "GEMSDOE46 owner-maintained R11F report",
+      "url": "https://buffedlizard55-lab.github.io/GEMSDOE46/",
+      "supports": "Prior method context combining lidar scarp and radiometric evidence; the radiometric lane is excluded from this branch.",
+      "status": "OWNER-MAINTAINED METHOD REPORT; details not re-audited here",
+      "how": "URL and summary inherited from the earlier branch research note."
+    },
+    {
+      "id": "S28",
+      "title": "59GEMSDOE sibling project page",
+      "url": "https://buffedlizard55-lab.github.io/59GEMSDOE/docs/index.html",
+      "supports": "Owner-reported association between H33 context and a leaderboard value; not a submission receipt, hash match, or causal explanation.",
+      "status": "OWNER-REPORTED ASSOCIATION ONLY — unverified",
+      "how": "Prior page review recorded in the saved project notes; not freshly fetched here."
     }
   ]
 }

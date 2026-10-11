@@ -3,44 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Why 0.2778? · GEMS Prize workbench</title>
+<title>H33 attribution · GEMS Prize workbench</title>
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 <header class="site">
   <div class="brand">GEMS Prize (DrivenData #306) · workbench</div>
-  <nav><a href="index.html" class="">Summary</a><a href="submission-guide.html" class="">How to submit</a><a href="analysis.html" class="active">Why 0.2778?</a><a href="hypotheses.html" class="">Hypotheses</a><a href="leaderboard.html" class="">Leaderboard &amp; claims</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
+  <nav><a href="index.html" class="">Summary</a><a href="submission-guide.html" class="">How to submit</a><a href="analysis.html" class="active">H33 attribution</a><a href="hypotheses.html" class="">Hypotheses</a><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" class="">Official leaderboard ↗</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Irregularities</a><a href="sources.html" class="">Sources</a><a href="research/metric-derivation.md" class="">Metric derivation</a></nav>
 </header>
 <main>
-<h1>Why did 0.2778 score highest?</h1>
-<p class="sub">Answer: the premise does not hold on the evidence we have. The reasons are below, with the metric mechanism that would matter if a result were confirmed.</p>
+<h1>H33-2-B2: attribution and mechanism</h1>
+<p class="sub">Question reviewed: what supports the prompt's 0.2778 attribution, and can this project demonstrate a better result? No leaderboard values are copied here.</p>
 
-<h2>1. What the evidence says</h2>
-<table><thead><tr><th>Question</th><th>Finding</th></tr></thead><tbody>
-<tr><td>Is 0.2778 the highest score?</td><td>No. The public board (2026-10-11) has #1 xiaofanhu at 0.4133. 0.2778 appears at rank #23 for participant extradr19, who is not linked to the GEMSDOE32 file.</td></tr>
-<tr><td>Does GEMSDOE32 record 0.2778?</td><td>No (repository grep). Its site says "NO ORGANISER SCORE EXISTS" for its artifacts.</td></tr>
-<tr><td>Does the brief's 0.3195 hold?</td><td>No. 0.3195 is rank #9 (DARD).</td></tr>
-<tr><td>Does 0.3774 appear?</td><td>Not on the board or in the repository we read.</td></tr>
+<h2>What is supported</h2>
+<table><thead><tr><th>Evidence item</th><th>What it supports</th><th>What it does not support</th></tr></thead><tbody>
+<tr><td>User-supplied prompt</td><td>An attribution claim associates 0.2778 with the H33-2-B2 artifact.</td><td>It is not an organizer receipt and does not establish that the exact raster earned that value.</td></tr>
+<tr><td>GEMSDOE32 project record and page (S17–S18)</td><td>The owner describes H33-2-B2 as unscored, distinguishes a model projection from an organizer score, and states that no organizer score exists for its artifacts.</td><td>It does not independently verify the prompt's attribution or explain any organizer result.</td></tr>
+<tr><td>Sibling-page association</td><td>An owner-reported association exists in project-family material.</td><td>It is not an organizer receipt, exact-hash match, or causal comparison.</td></tr>
+<tr><td>This checkout</td><td>No receipt, artifact bytes, matching hash, or controlled rerun is present.</td><td>No score can be labeled `ORGANIZER-CONFIRMED`; no causal attribution is possible.</td></tr>
 </tbody></table>
-<p>Full table: <a href="leaderboard.html">leaderboard and claims</a>. Source IDs: S03, S17, S18.</p>
 
-<h2>2. Mechanism (metric algebra, not a score)</h2>
-<p>From the identity <code>DTI = T / (0.2 (T + S − M) + 0.8 |G|)</code> (see <a href="research/metric-derivation.md">the derivation</a>), an extra dot raises DTI only when its credit <em>k</em> to an uncovered truth cell satisfies <code>k &gt; 0.2 · DTI</code>. At DTI 0.2778 that bar is k = 0.0556, a distance of about 283 m. Dots farther than that from any truth cell lower the score.</p>
-<p>The official problem page says the scored test faults are <strong>new faults not in the USGS database</strong>. So a dot placed on a catalogue fault earns no credit unless a new fault lies within about 283 m of it. That makes the owner's catalogue-flank removal rule a plausible mechanism. It has <strong>not</strong> been tested, and nothing in the owner's registry shows that the new faults lie more than 283 m from catalogue faults.</p>
+<div class="banner warn"><strong class="big">Conclusion: attribution is unresolved.</strong>The 0.2778 value is an owner/user-reported attribution claim, not a score verified here. The evidence does not support saying that H33-2-B2 received it, much less why.</div>
 
-<h2>3. What would confirm or refute it</h2>
-<ol class="steps">
-<li>Obtain the official files (manual step).</li>
-<li><strong>Holdout caveat.</strong> The scored faults are new, so a holdout drawn from catalogue faults is only a proxy for the test distribution. The gate must say so, and a holdout result must not be presented as a test-set estimate.</li>
-<li>Recompute HOLDOUT-DTI for the candidate rule and a no-removal control on the same spatially blocked holdout, with a 95% CI.</li>
-<li>If the rule does not beat the control on the holdout, record a negative result.</li>
-</ol>
+<h2>Conditional mechanism—not a result</h2>
+<p>Owner material describes H33-2-B2 as a post-processing/pruning variant that removes predictions near mapped catalogue faults. Under the published distance-weighted Tversky objective, removing unsupported emissions could reduce false-positive mass; removing predictions near a genuinely new labeled fault could instead reduce true-positive credit. Which effect dominates depends on the withheld labels and exact raster. No controlled experiment in this checkout tests that mechanism.</p>
+<p>The scoring specification uses α=0.2, β=0.8, and a 300 m triangular distance kernel (S02). These are metric parameters, not an H33 score. The metric derivation documents assumptions in the local implementation; it does not recover the organizer's hidden labels.</p>
 
-<h2>4. Not established</h2>
-<ul>
-<li>Whether 0.2778 was ever a submission score for any file. No receipt is in the record.</li>
-<li>The organiser's evaluator, beyond the published formula (see the metric derivation, section 2).</li>
-</ul>
+<h2>Can a better result be demonstrated?</h2>
+<p><strong>Not with the current evidence.</strong> The leading native-lidar hypothesis is a slope-aware scarp-template field joined with Steger ridge/valley and Frangi multiscale line evidence at 2–20 m, aggregated to 100 m. It has not been computed. Required competition rasters, cached feature stack, cultural mask, complete registry, and end-to-end blocked-holdout evaluator/CI runner are absent. Therefore there is no `HOLDOUT-DTI`, no confidence interval, and no basis for a submission file or slot.</p>
+<p>A future demonstration would require: (1) the exact H33 submission receipt and byte-matched artifact to resolve attribution; and separately (2) the shared inputs/evaluator, preregistered segment-aware spatial holdout, leakage canaries, range-front check, and pre-/post-placement registry comparison for the new lidar candidate. Any measured score must be labeled `HOLDOUT-DTI` with evaluator version, withheld-positive count, and 95% CI. Only an organizer receipt tied to the exact output hash can support `ORGANIZER-CONFIRMED`.</p>
+<p>Source IDs: S02, S17, S18, S28. Open the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">official live leaderboard</a> directly; this project does not copy or monitor it.</p>
 
 </main>
 <footer>Generated by scripts/build_site.py from docs/data/*.json · last updated 2026-10-11 (UTC) · not affiliated with DrivenData or DOE.</footer>

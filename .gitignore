@@ -1,15 +1,30 @@
-# Competition data is login-gated and must never be committed (see README).
-# Anchored to the root so docs/data/*.json (the site registers) stays tracked.
+# Competition data is login-gated and must never be committed.
 /data/
+/cache/
+/.cache/
 *.tif
 *.tiff
 *.zip
-# Local environments and caches
+
+# Generated/model outputs stay local.
+/outputs/
+/runs/
+/checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.npy
+*.npz
+
+# Local environments, credentials and caches.
 .venv/
+venv/
+.env
+.env.*
+!.env.example
 __pycache__/
 .pytest_cache/
 *.egg-info/
 build/
 dist/
-# Generated outputs stay out of git; keep receipts only when intentionally promoted.
-outputs/

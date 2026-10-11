@@ -1,159 +1,159 @@
 {
-  "schema": 1,
+  "schema": 2,
   "items": [
     {
       "id": "IR-01",
       "severity": "high",
-      "statement": "Brief says 0.3195 is the highest score. The official board shows 0.3195 at rank #9 (DARD); rank #1 is xiaofanhu at 0.4133.",
-      "status": "CONTRADICTED",
-      "source": "S03"
+      "statement": "The user-supplied source material gives incompatible score-like figures and calls different ones current/high. These are claims, not verified score records; no leaderboard values are reproduced here.",
+      "status": "OPEN — no exact organizer receipts or artifact/hash mapping",
+      "source": "user-supplied brief; S17, S18"
     },
     {
       "id": "IR-02",
       "severity": "high",
-      "statement": "Brief lists a '0.3774 GEMSDOE high score'. No such row appears on the official board, and no GEMSDOE32 record contains 0.3774.",
-      "status": "UNVERIFIED",
-      "source": "S03, S17"
+      "statement": "The prompt attributes 0.2778 to GEMSDOE32 H33-2-B2, while GEMSDOE32's own page describes the artifact as unscored and states that no organizer score exists for its artifacts.",
+      "status": "UNATTRIBUTED — no organizer receipt tied to exact bytes/hash",
+      "source": "user-supplied brief; S17, S18, S28"
     },
     {
       "id": "IR-03",
-      "severity": "high",
-      "statement": "Brief attributes 0.2778 to GEMSDOE32 file h33-h33-2-b2. The GEMSDOE32 repository never records 0.2778, and its site says 'NO ORGANISER SCORE EXISTS'. The official board shows 0.2778 at rank #23 for participant extradr19, which cannot be linked to the file.",
-      "status": "UNATTRIBUTED",
-      "source": "S03, S17, S18"
+      "severity": "medium",
+      "statement": "A sibling-page association between H33-2-B2 and a leaderboard value is owner-reported. A page association is not a receipt, byte match, or causal explanation.",
+      "status": "OWNER-REPORTED ONLY",
+      "source": "S28"
     },
     {
       "id": "IR-04",
       "severity": "medium",
-      "statement": "Brief describes the '1 m GeoDAWN lidar'. The USGS record describes GeoDAWN as magnetic and radiometric; the lidar is a separate USGS 3DEP product over a similar extent.",
-      "status": "CORRECTED",
+      "statement": "The phrase 'GeoDAWN lidar' conflates datasets: GeoDAWN is described as an airborne magnetic/radiometric survey; lidar is a separate elevation product/program. Do not assume matching footprint or tiles.",
+      "status": "CORRECTED; exact lidar coverage still unverified",
       "source": "S07, S08"
     },
     {
       "id": "IR-05",
       "severity": "medium",
-      "statement": "Brief cites 'AGU 2015 poster T31A-2838, tested in Surprise Valley' for slope-aware scarp templates. Session T31A lists no such identifier. The Sare & Hilley AGU poster is 70055, 'Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis'.",
-      "status": "UNVERIFIED",
+      "statement": "The linked AGU abstract (poster 70055) describes slope-aware templates and DEM analysis, but it does not verify the prompt's separate T31A-2838 identifier. It is prior-method context only, not a reproduced result.",
+      "status": "PARTIAL — method precedent only; cited identifier unresolved",
       "source": "S14"
     },
     {
       "id": "IR-06",
-      "severity": "medium",
-      "statement": "Feature raster name differs by source: problem page 'training_features.tif'; reference notebook 'data/numeric_features.tif'. The verifier accepts both.",
-      "status": "OPEN",
+      "severity": "low",
+      "statement": "The training raster name differs between the official problem description and the reference notebook. The shared data checker accepts the two recorded names; actual files are absent.",
+      "status": "OPEN — confirm names against the lawfully obtained official files",
       "source": "S02, S06"
     },
     {
       "id": "IR-07",
       "severity": "low",
-      "statement": "Label source differs: rules section 3.3 names only INGENIOUS; problem page names USGS Quaternary Fault and Fold plus INGENIOUS.",
+      "statement": "Label-source wording differs between the problem page and competition rules. Preserve this discrepancy and do not infer a single catalogue provenance without reviewing both documents.",
       "status": "OPEN",
       "source": "S02, S04"
     },
     {
       "id": "IR-08",
-      "severity": "low",
-      "statement": "Owner registry shows labels.tif and existing_faults.tif with the same sha256 (7ba308cc...), i.e. one file under two names.",
-      "status": "OPEN",
-      "source": "S17"
+      "severity": "high",
+      "statement": "Competition rasters are absent; the data tab redirects to a login page. The shared checker does not download files. No credentials were requested or used.",
+      "status": "BLOCKER — no official feature/label/example rasters or 1 m DEM-link CSV",
+      "source": "S05, S24"
     },
     {
       "id": "IR-09",
       "severity": "high",
-      "statement": "Owner repositories publicly mirror competition rasters (GEMSDOE32 registry, IR-32-DATA-01; GEMSDOE24 suspected). DrivenData's Terms of Use (S23) allow personal, non-commercial use only and prohibit redistributing site material except listed exceptions. A public copy of the competition data may therefore conflict with the terms. This project does not mirror or commit competition data; manual terms review is pending.",
-      "status": "NEEDS MANUAL TERMS REVIEW (ToU read; rules data licence not checked)",
-      "source": "S17, S23, S04"
+      "statement": "DrivenData's published Terms of Use restrict redistribution and automated/manual copying or monitoring absent written consent. This project uses no public competition-data mirror and does not copy or monitor the leaderboard. The complete data-license terms still need qualified review before any public redistribution.",
+      "status": "POLICY HOLD — no copying/mirroring; full terms review incomplete",
+      "source": "S04, S23"
     },
     {
       "id": "IR-10",
-      "severity": "low",
-      "statement": "Footprint count disagreement: owner computes 5,165,852 finite cells; owner's own record says 5,167,373 (IR-32-DATA-02).",
-      "status": "OPEN",
+      "severity": "medium",
+      "statement": "An owner-maintained data manifest reports inconsistent finite-footprint counts for two names of the same labels file. This project has no bytes with which to resolve the discrepancy.",
+      "status": "OWNER-REPORTED; NOT RECOMPUTED",
       "source": "S17"
     },
     {
       "id": "IR-11",
       "severity": "high",
-      "statement": "Rules A.5(1) require each submission to be an original work by the competitor. Submitting a TIF copied from another team's site would conflict with that warranty.",
-      "status": "POLICY - enforced in this repo's guide",
+      "statement": "The competition rules require original submitted work. Reusing another team's raster or public mirror would not establish an original candidate and is not permitted by this workflow.",
+      "status": "POLICY — enforced; no prior raster is copied",
       "source": "S04"
     },
     {
       "id": "IR-12",
-      "severity": "medium",
-      "statement": "Public leaderboard scores may differ from final private scores (rules 3.2). Comparisons here use the public board and say so.",
-      "status": "NOTED",
-      "source": "S04, S02"
+      "severity": "low",
+      "statement": "The official metric page leaves implementation details such as epsilon, exact distance convention and NaN handling unspecified. The shared metric documents these as interpretation choices; it is not asserted to be organizer source code.",
+      "status": "ASSUMPTIONS DOCUMENTED; organizer evaluator not available",
+      "source": "S02; docs/research/metric-derivation.md"
     },
     {
       "id": "IR-13",
-      "severity": "low",
-      "statement": "The official metric page does not publish epsilon, the distance convention (pixel centres assumed), or NaN handling. Our implementation states these assumptions.",
-      "status": "ASSUMPTION - see docs/research/metric-derivation.md",
-      "source": "S02"
+      "severity": "high",
+      "statement": "The synchronized branch contains shared metric, holdout splitters, writer, validator and lane checker, but no cached lidar stack, cultural mask, complete raster registry, range-front masks, or end-to-end evaluate_holdout.py/CI runner. The shared primitives must not be represented as a complete evaluator.",
+      "status": "BLOCKER — components only; no experiment can run",
+      "source": "repository inventory after origin/main synchronization"
     },
     {
       "id": "IR-14",
-      "severity": "low",
-      "statement": "Owner site cites a 200-character limit for the submission note. The official form is behind the login and was not checked. Keep notes short.",
-      "status": "UNVERIFIED",
-      "source": "S17, S18"
+      "severity": "medium",
+      "statement": "Native-resolution lidar scarp work is already described in the owner registry/sibling reports (including H33-C and H61-5). This branch makes no broad novelty claim; candidate surfaces and final dots must be compared with the complete registry.",
+      "status": "PRIOR-METHOD OVERLAP; UNIQUENESS UNVERIFIED",
+      "source": "S17, S25, S26, S27"
     },
     {
       "id": "IR-15",
-      "severity": "high",
-      "statement": "Brief refers to files that did not exist in this repository at start: validate_submission.py, evaluate_holdout.py, submission_writer.py, a cached feature stack, and a cultural-feature mask. The repo contained only a one-line README. Markdown autolinks in the brief also corrupted these names. This repo now provides validate_submission, submission_writer and holdout; the feature stack and cultural mask are not present.",
-      "status": "OPEN",
-      "source": "repo state"
+      "severity": "medium",
+      "statement": "The exact 1 m DEM tiles, footprint coverage, horizontal/vertical alignment and overlap with the competition grid have not been acquired or verified. Public listing of a 3DEP product does not prove run-ready coverage.",
+      "status": "OPEN — data availability in principle only",
+      "source": "S05, S08"
     },
     {
       "id": "IR-16",
       "severity": "high",
-      "statement": "Competition data (features, labels, sample submission, DEM links) is behind a DrivenData login. The data tab redirects to the login page (S05, S24). Not accessible from this environment; only the user can complete this step.",
-      "status": "BLOCKER",
-      "source": "S05, S04"
+      "statement": "No candidate raster can be written or validated against the official footprint: inputs, feature stack, mask, holdout evaluator and registry are missing. No download or submission is cleared.",
+      "status": "BLOCKED — negative run card",
+      "source": "IR-08, IR-13, IR-15"
     },
     {
       "id": "IR-17",
-      "severity": "low",
-      "statement": "Brief cites gdr.openei.org/submissions/1391 as a data source. It returns 'No submission found.' The GeoDAWN GDR entry found by search is /submissions/1591, so 1391 may be a typo. Not verified.",
-      "status": "BROKEN LINK (likely typo)",
-      "source": "S21"
+      "severity": "medium",
+      "statement": "The initial shared spatial-block splitter could leave distant pixels from a connected fault component visible when another part entered a held block. It was updated to withhold the whole identified/connected segment and buffer visible faults; synthetic tests cover this safeguard. Component connectivity remains only a proxy if no authoritative segment IDs are supplied.",
+      "status": "SHARED TOOL DEFECT FIXED; segment-ID provenance remains an input limitation",
+      "source": "src/gems/holdout.py; tests/test_holdout.py"
     },
     {
       "id": "IR-18",
       "severity": "medium",
-      "statement": "The lidar-scarp lane is already in the owner's registry as H33-C and H61-5 (and H60-5 for drainage). The brief asks for ideas 'we haven't tried', so this lane is not new.",
-      "status": "NOTED - lane overlap",
-      "source": "GEMSDOE32 registry/hypotheses.json"
+      "statement": "The original lane checker applied emitted-dot overlap logic to any raster, which is not an appropriate pre-placement continuous-surface audit. It now distinguishes surface-correlation and final-emitted-dot stages; neither stage has run on a candidate.",
+      "status": "SHARED TOOL EXTENDED; BOTH CHECKS NOT RUN",
+      "source": "scripts/lane_check.py; tests/test_lane_check.py"
     },
     {
       "id": "IR-19",
-      "severity": "info",
-      "statement": "Leaderboard snapshots drift quickly. The owner's 2026-10-04 snapshot had #1 at 0.3262; today's board has #1 at 0.4133. Any score must carry its read date.",
-      "status": "NOTED",
-      "source": "S03, S17"
+      "severity": "medium",
+      "statement": "The validator previously reported finite values outside the footprint as WARN, which could leave its aggregate result passing. The check now fails closed; aligned synthetic tests cover it. No competition raster has been validated.",
+      "status": "SHARED VALIDATOR DEFECT FIXED; competition check NOT RUN",
+      "source": "src/gems/validate_submission.py; tests/test_submission.py"
     },
     {
       "id": "IR-20",
-      "severity": "medium",
-      "statement": "Brief asks for 'a unique TIF submission' now. No validated file can be produced from this environment (no features, no labels, no official grid), so none is offered. Producing an unverified file would fail the gate and the format checks.",
-      "status": "BLOCKED",
-      "source": "IR-16"
+      "severity": "low",
+      "statement": "A 140-character submission-note limit is specified by the project brief and enforced by the shared writer; the account-gated live form was not inspected in this review.",
+      "status": "USER-PROTOCOL VALUE; live form limit UNVERIFIED",
+      "source": "user-supplied brief; src/gems/submission_writer.py"
     },
     {
       "id": "IR-21",
-      "severity": "low",
-      "statement": "The leaderboard page rendered 50 rows followed by 'Loading...'. Rows beyond #50 were not observed.",
-      "status": "OPEN",
-      "source": "S03"
+      "severity": "medium",
+      "statement": "The official rules PDF and Terms of Use were only partially reviewed in the source record; the rules' remaining data-license section and the remaining Terms sections have not been independently checked in this branch.",
+      "status": "OPEN — legal/data-license review incomplete",
+      "source": "S04, S23"
     },
     {
       "id": "IR-22",
       "severity": "medium",
-      "statement": "Terms-of-use date: DrivenData ToU shows 'Last Modified: August 7, 2014' while the competition is from 2026. Whether a newer data licence applies is unverified.",
-      "status": "OPEN",
-      "source": "S23"
+      "statement": "A previously merged branch had captured leaderboard rows in a JSON snapshot and generated page. This branch removes the snapshot and copied table from the current site, retaining only a direct link. Existing Git history is not rewritten; no further capture or monitoring is performed.",
+      "status": "REMOVED FROM CURRENT TREE; HISTORICAL COMMIT REMAINS",
+      "source": "prior merged repository revision; user instruction; S03"
     }
   ]
 }

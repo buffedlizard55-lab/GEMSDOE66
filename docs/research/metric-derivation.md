@@ -55,11 +55,11 @@ So `DTI' > DTI` iff `(T + p k)/(D + 0.2 p) > T/D`, which reduces to
 
     k > 0.2 · DTI          (independent of p)
 
-Worked numbers:
-- Base example: one of two truth cells covered at credit 1, the other uncovered. `T = 1`, `FN = 1`, `DTI0 = 1/(1 + 0.8) = 0.5556`. Break-even credit = 0.1111, i.e. distance `300 (1 − 0.1111) = 266.7 m`. A dot closer than that raises DTI; a dot farther lowers it. Verified against the metric in `test_marginal_break_even_rule`.
-- At DTI = 0.2778 the break-even credit is 0.0556, i.e. about 283 m. A dot must sit within about 283 m of an uncovered truth cell to help.
+Synthetic worked example: with one of two truth cells covered at credit 1 and the other uncovered, `T = 1`, `FN = 1`, and `DTI0 = 1/(1 + 0.8) = 0.5556`. Break-even credit is 0.1111, i.e. distance `300 (1 − 0.1111) = 266.7 m`. This is a toy calculation, not a competition or H33 result. It is verified against the metric in `test_marginal_break_even_rule`.
 
-Implication: at low DTI the optimum is nearly binary (emit only where confident, nothing elsewhere), and extra low-confidence dots mostly add false-positive mass. The rule is a prediction of the metric, not a score.
+In general, for a measured DTI value the break-even distance is `R × (1 − α × DTI)` for an emission that becomes the nearest prediction to a previously uncovered truth cell. Do not substitute an unverified H33 attribution into this formula or present the result as a score.
+
+Implication: extra low-confidence emissions can add false-positive mass. The rule is a mathematical consequence of the stated metric, not a score or projection.
 
 ## 5. What is not verified
 

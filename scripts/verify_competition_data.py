@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Check whether the GEMS competition files are present in data/ and report their metadata.
 
-This script does NOT download anything. The DrivenData data tab requires a login, and the
-other links are not reachable from every environment. Put the files in data/ yourself
-(see docs/submission-guide.html, step 2), then run this script.
+This script does NOT download anything. The official data tab is login-gated. It only
+reports on files that are already available locally to an authorized user; do not send
+credentials or competition files in chat. Missing files are a blocker, not permission to
+use an unofficial mirror. See README.md and docs/submission-guide.html for the gate.
 
 Exit codes: 0 = core files present; 2 = core files missing.
 """
@@ -88,8 +89,8 @@ def main(argv=None) -> int:
     report["core_ready"] = not core_missing
     print(json.dumps(report, indent=2))
     if core_missing:
-        print("\nCore files missing. Place the official files in data/ and re-run. "
-              "See docs/submission-guide.html (step 2).", file=sys.stderr)
+        print("\nCore files missing (expected while the official data tab is login-gated). "
+              "This script does not download. See docs/submission-guide.html.", file=sys.stderr)
         return 2
     return 0
 

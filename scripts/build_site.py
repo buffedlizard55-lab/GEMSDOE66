@@ -42,18 +42,23 @@ def tag(status: str) -> str:
     return f'<span class="tag {cls}">{e(status)}</span>'
 
 
+OFFICIAL_LEADERBOARD_URL = "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
 NAV = [("index.html", "Summary"), ("submission-guide.html", "How to submit"),
-       ("analysis.html", "Why 0.2778?"), ("hypotheses.html", "Hypotheses"),
-       ("leaderboard.html", "Leaderboard & claims"), ("run-card.html", "Run card"),
+       ("analysis.html", "H33 attribution"), ("hypotheses.html", "Hypotheses"),
+       (OFFICIAL_LEADERBOARD_URL, "Official leaderboard ↗"), ("run-card.html", "Run card"),
        ("irregularities.html", "Irregularities"), ("sources.html", "Sources"),
        ("research/metric-derivation.md", "Metric derivation")]
 
 
+def _nav_href(href: str, prefix: str) -> str:
+    return href if href.startswith(("https://", "http://")) else prefix + href
+
+
 def page(filename: str, title: str, body: str, active: str) -> None:
-    nav = "".join(
-        f'<a href="{"../" if "/" in filename else ""}{href}" class="{"active" if href == active else ""}">{e(label)}</a>'
-        for href, label in NAV)
     prefix = "../" if "/" in filename else ""
+    nav = "".join(
+        f'<a href="{_nav_href(href, prefix)}" class="{"active" if href == active else ""}">{e(label)}</a>'
+        for href, label in NAV)
     doc = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -126,57 +131,44 @@ def hypotheses_page():
 <div>Validation</div><div>{e(h['validation'])}</div>
 </div></div>""")
     body = f"""<h1>Hypotheses, ranked</h1>
-<p class="sub">Ranked by an ordinal prior: novelty against the owner registry, mimic risk, and cost. <strong>No expected DTI gain is a number.</strong> Each one must be measured on a lidar-covered, spatially blocked holdout before any slot is spent. Leakage canary: any single feature with holdout AUC above 0.90 counts as leakage until proven otherwise.</p>
+<p class="sub">All four stay in the native-resolution lidar scarp lane: operators at 2–20 m, aggregated to 100 m. {e(d['ranking_basis'])} <strong>No expected DTI gain is a number.</strong> Each candidate must be tested alone on the frozen lidar-covered, segment-aware spatial holdout before any slot is considered. Leakage canary: single-feature AUC &gt;0.90 is leakage until disproven.</p>
 {''.join(cards)}
-<p class="note">Machine-readable: <a href="data/hypotheses.json">data/hypotheses.json</a>. Lane overlap with the owner's registry is recorded in IR-18.</p>"""
+<p class="note">Machine-readable: <a href="data/hypotheses.json">data/hypotheses.json</a>. Prior-method overlap and uniqueness limits are in IR-14; registry comparison is not run.</p>"""
     page("hypotheses.html", "Hypotheses", body, "hypotheses.html")
-
-
-def leaderboard_page():
-    lb = load("leaderboard-2026-10-11.json")
-    cl = load("claims.json")
-    rows = "".join(
-        f"<tr><td class=\"num\">{r['rank']}</td><td>{e(r['participant'])}</td><td class=\"num\">{r['public_dti']:.4f}</td>"
-        f"<td class=\"num\">{r['submissions']}</td><td class=\"note\">{e(r['last_activity_as_printed'])}</td></tr>"
-        for r in lb["rows"])
-    crow_parts = []
-    for c in cl["claims"]:
-        value = "" if c["value"] is None else f"{c['value']:.4f}"
-        crow_parts.append(f"<tr><td>{e(c['claim'])}</td><td class=\"num\">{value}</td>"
-                          f"<td>{e(c['official_status'])}</td><td>{tag(c['verdict'])}</td></tr>")
-    crow = "".join(crow_parts)
-    body = f"""<h1>Leaderboard and claims</h1>
-<div class="banner warn"><strong class="big">The top score is 0.4133, not 0.3195 and not 0.3774.</strong>
-Public board read {lb['observed_by_agent']}. These are <strong>PUBLIC BOARD</strong> numbers, not organiser receipts. Private scores may differ (rules 3.2).</div>
-<h2>Official public board (top 50 rendered)</h2>
-<p class="note">{e(lb['caveat'])} Source: <a href="{e(lb['source_url'])}">{e(lb['source_url'])}</a></p>
-<table><thead><tr><th class="num">Rank</th><th>Participant</th><th class="num">Public DW-Tversky</th><th class="num">Submissions</th><th>Last activity (as printed)</th></tr></thead><tbody>{rows}</tbody></table>
-<h2>Claimed scores checked against the board</h2>
-<p class="note">{e(cl.get('note',''))} Owner scores were not organiser-confirmed. A score cannot be linked to a file from a participant name alone.</p>
-<table><thead><tr><th>Claim</th><th class="num">Value</th><th>What the official board shows</th><th>Verdict</th></tr></thead><tbody>{crow}</tbody></table>"""
-    page("leaderboard.html", "Leaderboard and claims", body, "leaderboard.html")
 
 
 def run_card_page():
     rc = load("run-card.json")
     h = rc["holdout_dti"]
+    pre = rc["registry_checks"]["pre_placement_surface"]
+    post = rc["registry_checks"]["post_placement_final_dots"]
+    sub = rc["submission"]
+    note = sub["note"]
+    note_display = e(note) if note is not None else '<span class="tag grey">none; no candidate cleared</span>'
+    ci = h["ci95"]
+    ci_display = "unknown / not run" if ci is None else e(ci)
+    budget = e(json.dumps(rc["budget"], sort_keys=True))
     body = f"""<h1>Run card · {e(rc['run_id'])}</h1>
-<p class="sub">One card per experiment, written at the end of the run. Negative results are written up in full. Machine-readable: <a href="data/run-card.json">data/run-card.json</a>.</p>
+<p class="sub">One card per experiment. Unknown and unrun fields remain explicit. Machine-readable: <a href="data/run-card.json">data/run-card.json</a>.</p>
 <div class="banner stop"><strong class="big">Verdict: {e(rc['verdict'])}</strong>No file is offered for download or submission from this run.</div>
 <div class="card"><div class="kv">
 <div>Date (UTC)</div><div>{e(rc['date_utc'])}</div>
 <div>Lane</div><div>{e(rc['lane'])}</div>
+<div>Top candidate</div><div>{e(rc['top_candidate'])}</div>
 <div>Hypothesis</div><div>{e(rc['hypothesis'])}</div>
 <div>Mechanism</div><div>{e(rc['mechanism'])}</div>
 <div>Named non-fault mimic</div><div>{e(rc['non_fault_mimic'])}</div>
-<div>Holdout DTI ({e(h['label'])})</div><div>{tag(h['status'])} value: {nz(h['value'])}; evaluator: {e(h['evaluator_version'])}; withheld positives: {nz(h['withheld_positives'])}; 95% CI: {nz(h['ci95'])}</div>
-<div>Leakage canary</div><div>{tag(rc['leakage_canary']['status'])} {e(rc['leakage_canary']['reason'])}</div>
-<div>Overlap vs registry</div><div>{tag(rc['correlation_overlap_vs_registry']['status'])} {e(rc['correlation_overlap_vs_registry']['reason'])}</div>
-<div>Raster sha256</div><div>{e(rc['raster']['sha256']) if rc['raster']['sha256'] else '<span class="tag grey">none produced</span>'}</div>
-<div>Validator</div><div>{tag(rc['validator']['status'])} {e(rc['validator']['synthetic_checks'])}</div>
-<div>Submission name / note</div><div>{e(rc['submission']['name']) if rc['submission']['name'] else '<span class="tag grey">none</span>'}</div>
-<div>Budget</div><div>{e(rc['budget'])}</div>
-<div>Projection policy</div><div>{e(rc['projection_policy'])}</div>
+<div>Frozen metric parameters</div><div>α={e(rc['protocol']['alpha'])}; β={e(rc['protocol']['beta'])}; {e(rc['protocol']['kernel'])}; feature scales {e(rc['protocol']['feature_scales_m'])} m; aggregate to {e(rc['protocol']['aggregation_m'])} m</div>
+<div>Holdout DTI ({e(h['label'])})</div><div>{tag(h['status'])}; value: {nz(h['value'])}; evaluator version: {e(h['evaluator_version'])}; withheld positives: {nz(h['withheld_positives'])}; 95% CI: {e(ci_display)}</div>
+<div>Leakage canary</div><div>{tag(rc['leakage_canary']['status'])}; threshold AUC &gt; {e(rc['leakage_canary']['threshold_auc'])}; {e(rc['leakage_canary']['reason'])}</div>
+<div>Pre-placement surface check</div><div>{tag(pre['status'])}; surface correlation limit {e(pre['correlation_limit'])}; registry rasters checked: {nz(pre['registry_count'])}; {e(pre['reason'])}</div>
+<div>Post-placement final-raster check</div><div>{tag(post['status'])}; surface correlation limit {e(post['correlation_limit'])}; dot-overlap limit {e(post['overlap_limit'])}; radius {e(post['radius_px'])} px; registry rasters checked: {nz(post['registry_count'])}; {e(post['reason'])}</div>
+<div>Raster file / SHA-256</div><div>{e(rc['raster']['file']) if rc['raster']['file'] else '<span class="tag grey">none produced</span>'} / {e(rc['raster']['sha256']) if rc['raster']['sha256'] else 'unknown'}</div>
+<div>Validator</div><div>{tag(rc['validator']['status'])}; {e(rc['validator']['reason'])}</div>
+<div>Submission name</div><div>{e(sub['name']) if sub['name'] else '<span class="tag grey">none</span>'}</div>
+<div>Submission note</div><div>{note_display}; characters: {nz(sub['note_chars'])}; maximum: {e(sub['note_limit_chars'])}</div>
+<div>Download / submit clearance</div><div>{tag(sub['clearance'])}</div>
+<div>Budget</div><div><code>{budget}</code></div>
 <div>Open irregularities</div><div>{e(', '.join(rc['open_irregularities']))}</div>
 </div></div>"""
     page("run-card.html", "Run card", body, "run-card.html")
@@ -185,153 +177,129 @@ def run_card_page():
 # ---------------------------------------------------------------- hand-written pages
 
 def index_page():
-    body = """<h1>GEMS Prize (DrivenData #306): executive summary</h1>
-<p class="sub">Status on 2026-10-11 (UTC). Competition ends Dec. 3, 2026 11:59 p.m. UTC (<a href="https://gems.drivendata.org/">gems.drivendata.org</a>).</p>
+    body = f"""<h1>GEMS Prize (DrivenData #306): executive summary</h1>
+<p class="sub">Research status on {UPDATED} (UTC). Scope: native-resolution lidar scarp channels only.</p>
 
 <div class="banner stop"><strong class="big">Submission download: NOT AVAILABLE</strong>
-There is no submission file to download. The holdout gate has not been measured, because the competition data sits behind DrivenData's login and is not in this environment. Nothing on this site is a score, a verified result, or a file you should submit.</div>
+No TIFF exists, no holdout has been measured, and no candidate has passed the leakage or registry gates. Shared metric/format tools are present, but the official rasters, cached lidar stack, cultural mask, complete registry, and end-to-end holdout evaluator are not. Nothing on this site is a submission file or a verified competition result.</div>
 
 <div class="card">
-<h3>When a file may be offered (all four must hold)</h3>
-<ol class="steps">
-<li>The file was generated by this repository's pipeline, not copied from another team. Rules A.5(1) require original work.</li>
-<li><code>validate_submission</code> passes against the official <code>labels.tif</code> grid, with the SHA-256 recorded.</li>
-<li>The run card records the gate as <strong>met</strong>: HOLDOUT-DTI gain on lidar-covered, spatially blocked holdout blocks, not only on range fronts, with its 95% CI.</li>
-<li>The file is inside the three-per-week cap, and a separate selector step picks it.</li>
-</ol>
-<p class="note">Full steps: <a href="submission-guide.html">how to submit</a>.</p>
+<h3>Clearance rule</h3>
+<p>A download is offered only after a spatially blocked, whole-segment holdout shows a positive pooled HOLDOUT-DTI gain on lidar-covered blocks, with evaluator version, withheld-positive count, and 95% CI; every feature-alone leakage canary and both pre/post registry checks pass; and the shared validator passes on the official grid. Slot selection remains separate.</p>
+<p class="note">Full sequence: <a href="submission-guide.html">submission guidance</a>.</p>
 </div>
 
-<h2>Executive summary</h2>
+<h2>Findings</h2>
 <ol class="steps">
-<li><strong>The premise that GEMSDOE32's 0.2778 entry scored highest is not supported.</strong> The official public board (read 2026-10-11) has #1 xiaofanhu at 0.4133. The 0.2778 on the board is rank #23, participant extradr19, which cannot be linked to the GEMSDOE32 file. The GEMSDOE32 repository never records 0.2778, and its own site says "NO ORGANISER SCORE EXISTS". See <a href="analysis.html">the analysis</a>.</li>
-<li><strong>Two other figures in the brief are also wrong or unverified.</strong> 0.3195 is rank #9 (DARD). 0.3774 is on no board we read. Full table: <a href="leaderboard.html">leaderboard and claims</a>.</li>
-<li><strong>The metric has a sharp break-even rule.</strong> Adding a dot raises DTI only if its distance to an uncovered truth cell is less than 300·(1 − 0.2·DTI) m. At DTI 0.2778 that is about 283 m. The algebra is checked in unit tests against a brute-force reference. Extra low-confidence dots mostly cost score.</li>
-<li><strong>Four ranked hypotheses, none measured.</strong> (A) thermal-infrared lineaments from Landsat (new, public domain); (B) shoreline and terrace rejection (cheap, removal-only); (C) vegetation and moisture lineaments with a cultural mask; (D) the metre-scale scarp lane, already in the owner's registry and very costly. No expected gain is written as a number. See <a href="hypotheses.html">hypotheses</a>.</li>
-<li><strong>Tooling built and tested without competition data:</strong> the metric (checked against the official worked example and a brute-force reference, full-size runtime about 2.6 s), a validator with rejection cases, a writer that refuses to guess the grid, a spatial-block holdout splitter, a data checker, and CI.</li>
-<li><strong>Blockers, in order:</strong> (1) the competition files need your DrivenData login; (2) no model has been trained; (3) the public-mirror and terms-of-use question is open (DrivenData's terms allow personal, non-commercial use; public copies may breach them, so none are made here); (4) the holdout gate has not been run.</li>
+<li><strong>H33 attribution is unresolved.</strong> The prompt's 0.2778 association is user-supplied/owner-reported, not organizer-confirmed here. The GEMSDOE32 page describes H33-2-B2 as unscored and says no organizer score exists for its artifacts; no receipt tied to the exact raster bytes/hash is present. A plausible pruning mechanism is only an inference. See <a href="analysis.html">the evidence assessment</a>.</li>
+<li><strong>Four ranked, same-lane hypotheses.</strong> All use native-resolution lidar scarp morphology, feature scales of 2–20 m, and 100 m aggregation. The top proposal combines slope-aware templates with Steger/Frangi line evidence. Their DTI potential is qualitative and unmeasured. See <a href="hypotheses.html">hypotheses</a>.</li>
+<li><strong>Shared tooling is partially available.</strong> The repository now contains a DTI implementation, holdout splitters, writer, validator, and lane-check utility. It does not contain the cached feature stack, mask, full raster registry, or end-to-end evaluator/CI runner needed to execute the gate.</li>
+<li><strong>Data and coverage remain blockers.</strong> The competition data tab is login-gated; the exact 1 m DEM tiles and footprint/alignment have not been acquired or checked. No external mirror was used.</li>
+<li><strong>No score improvement can be demonstrated.</strong> Zero lidar experiments and zero submission slots were used. This is a blocked negative result, not evidence that the proposed method loses on measured DTI.</li>
 </ol>
 
-<h2>Labels used on this site</h2>
-<table>
-<thead><tr><th>Label</th><th>Meaning</th><th>Values present today</th></tr></thead>
-<tbody>
-<tr><td><span class="tag green">ORGANIZER-CONFIRMED</span></td><td>Copied from a submission-page receipt</td><td class="num">none</td></tr>
-<tr><td><span class="tag red">HOLDOUT-DTI</span></td><td>Our holdout result, with evaluator version, withheld positives and 95% CI</td><td class="num">none (not measured)</td></tr>
-<tr><td><span class="tag blue">PUBLIC BOARD</span></td><td>Shown on the public leaderboard; not a receipt, and may change</td><td class="num">50 rows (2026-10-11)</td></tr>
-<tr><td><span class="tag amber">OWNER-REPORTED</span></td><td>Claimed by another repository or site; not checked by the organiser</td><td class="num">many, unverified</td></tr>
+<h2>Score labels</h2>
+<table><thead><tr><th>Label</th><th>Meaning</th><th>Present</th></tr></thead><tbody>
+<tr><td><span class="tag green">ORGANIZER-CONFIRMED</span></td><td>Exact submission score copied from an organizer receipt and tied to the artifact.</td><td>No organizer-confirmed value</td></tr>
+<tr><td><span class="tag red">HOLDOUT-DTI</span></td><td>Our pooled blocked-holdout measurement with evaluator version, withheld positives, and 95% CI.</td><td>Not run; no HOLDOUT-DTI value</td></tr>
+<tr><td><span class="tag amber">OWNER-REPORTED / USER-SUPPLIED</span></td><td>Contextual attribution or claim without an organizer receipt; not a score here.</td><td>H33 attribution claim only</td></tr>
+<tr><td><span class="tag grey">PROJECTION</span></td><td>Model estimate; never treated as a score.</td><td>No projection adopted</td></tr>
 </tbody></table>
 
-<h2>What you need to do (you, not the agent)</h2>
-<ol class="steps">
-<li>Sign in to DrivenData, accept the rules, and download <code>training_features.tif</code>, <code>labels.tif</code>, <code>sample_submission.tif</code> and <code>1m_DEM_links.csv</code> into <code>data/</code> in this repository. The data is git-ignored and must not be committed.</li>
-<li>Read DrivenData's terms of use and the rules on data licence before any public use of the data. Flag anything you find for review.</li>
-<li>Tell the agent when the files are in place. The next step is then the holdout gate.</li>
-</ol>
-
-<h2>Read next</h2>
-<p><a href="submission-guide.html">How to submit</a> · <a href="analysis.html">Why 0.2778?</a> · <a href="hypotheses.html">Hypotheses</a> · <a href="leaderboard.html">Leaderboard and claims</a> · <a href="run-card.html">Run card</a> · <a href="irregularities.html">Irregularities</a> · <a href="sources.html">Sources</a> · <a href="research/metric-derivation.md">Metric derivation</a></p>
-<p class="note">Repository: <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">github.com/buffedlizard55-lab/GEMSDOE66</a>. Competition: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">drivendata.org/competitions/306</a>. Rules: <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules PDF</a>.</p>
+<h2>Review links</h2>
+<p><a href="submission-guide.html">How submission is gated</a> · <a href="analysis.html">H33 attribution</a> · <a href="hypotheses.html">Ranked lidar hypotheses</a> · <a href="run-card.html">Negative run card</a> · <a href="irregularities.html">Irregularities</a> · <a href="sources.html">Sources register</a> · <a href="research/metric-derivation.md">Metric derivation</a> · <a href="{OFFICIAL_LEADERBOARD_URL}">official live leaderboard</a></p>
+<p class="note">No leaderboard snapshot, table, or automated monitoring is provided. Open the official page directly.</p>
+<p class="note">Repository: <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">github.com/buffedlizard55-lab/GEMSDOE66</a>. Official competition: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a>. Rules: <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules PDF</a>.</p>
 """
     page("index.html", "Executive summary", body, "index.html")
 
 
 def submission_guide_page():
-    body = """<h1>How to submit</h1>
-<p class="sub">Nothing in this guide is a file you can submit today. It describes the steps that apply once the holdout gate has been met.</p>
+    body = f"""<h1>How to submit</h1>
+<p class="sub">This is procedural guidance only. There is no cleared file, and the form was not inspected because it requires an account login.</p>
 
-<div class="banner stop"><strong class="big">Today: no file is offered.</strong>The holdout gate has not been run. Competition data is not in this environment.</div>
+<div class="banner stop"><strong class="big">Today: do not download or submit.</strong>The run card is negative: no candidate TIFF, no measured holdout, no registry pass, and no validator result on competition data.</div>
 
-<h2>1. Format (from the official problem page)</h2>
-<table><thead><tr><th>Property</th><th>Requirement</th><th>Status</th></tr></thead><tbody>
-<tr><td>Type</td><td>Single-band GeoTIFF, float32</td><td><span class="tag green">VERIFIED</span> (problem page: values in [0, 1])</td></tr>
-<tr><td>CRS</td><td>EPSG:32611 (WGS 84 / UTM zone 11N)</td><td><span class="tag green">VERIFIED</span> (problem page)</td></tr>
-<tr><td>Resolution and grid</td><td>100 m, same grid as the training features (3730 × 3292 in our notes)</td><td><span class="tag amber">OWNER-REPORTED</span> grid size; check against the official file</td></tr>
-<tr><td>Values</td><td>Finite in [0, 1] inside the footprint; NaN outside it</td><td><span class="tag green">VERIFIED</span> (problem page: NaN outside bounds)</td></tr>
-<tr><td>Name and note</td><td>Unique name; note of at most 140 characters</td><td><span class="tag amber">UNVERIFIED</span> against the live form. The 140-character limit is the brief's requirement, enforced by the writer.</td></tr>
-<tr><td>Count</td><td>Three submissions per week; one final choice across both rounds</td><td><span class="tag green">VERIFIED</span> (rules 3.2, 3.4; problem page)</td></tr>
+<h2>1. Expected file contract</h2>
+<table><thead><tr><th>Property</th><th>Project requirement</th><th>Evidence/status</th></tr></thead><tbody>
+<tr><td>Raster</td><td>Single-band GeoTIFF, float32</td><td>Official problem-page description; validate against the provided reference file.</td></tr>
+<tr><td>Grid</td><td>EPSG:32611, 100 m, exact shape/transform/bounds of the official reference</td><td>CRS/resolution are published; do not trust an assumed shape or transform without the official raster.</td></tr>
+<tr><td>Values</td><td>Finite in [0, 1] inside the footprint; NaN only outside</td><td>Checked by the shared validator when both reference and features are supplied.</td></tr>
+<tr><td>Name and note</td><td>Unique name; note ≤140 characters</td><td>140 characters is the project brief's limit, enforced by the writer; live form was not checked.</td></tr>
 </tbody></table>
 
-<h2>2. Checks before any upload</h2>
-<pre><code># Place the official files in data/ first (manual download), then:
-python scripts/verify_competition_data.py          # exit 0 = required files present
+<h2>2. Required scientific gate before writing a candidate</h2>
+<ol class="steps">
+<li>Use the shared cached lidar stack, existing mask, segment-aware spatial holdout, and pooled DTI evaluator. Those inputs and the end-to-end evaluator are not currently in this checkout; do not replace them with a private implementation.</li>
+<li>Derive catalogue features from visible faults only and mask visible fault pixels exactly. Score only held-out lidar-covered spatial blocks; report range-front and non-range-front results.</li>
+<li>Run each feature alone as a leakage canary. AUC &gt;0.90 is leakage until disproven.</li>
+<li>Compare the continuous surface to every registry raster before placement; compare final emitted dots to every registry raster after placement. Pearson correlation &gt;0.90 or &gt;70% of dots within 3 px means duplicate/stop. An absent registry is not a pass.</li>
+<li>Record `HOLDOUT-DTI` only with evaluator version, withheld-positive count, and 95% CI. No score or projection is inferred from the public leaderboard.</li>
+</ol>
 
-# Validate the candidate file against the official grid and footprint
-python -m gems.validate_submission outputs/candidate.tif \\
+<h2>3. Local format checks (only after the science gate)</h2>
+<pre><code>python scripts/verify_competition_data.py
+python -m gems.validate_submission outputs/candidate.tif \
     --reference data/labels.tif --features data/training_features.tif
-# exit 0 = all required checks PASS (SKIPPED checks are reported, not passed)</code></pre>
-<p class="note">The validator refuses values outside [0, 1], NaN inside the footprint, a finite nodata tag, a wrong CRS, a wrong transform, and a wrong shape. The writer refuses to write without a reference raster.</p>
+python scripts/lane_check.py --stage surface candidate_surface.tif registry_a.tif registry_b.tif
+python scripts/lane_check.py --stage emitted candidate.tif registry_a.tif registry_b.tif</code></pre>
+<p class="note">The data checker does not download files. The validator's exit code 0 is a format pass only; a skipped check is not a pass. The lane tool requires the complete registry and aligned rasters. A successful format check alone never clears the download gate.</p>
 
-<h2>3. Gate (required)</h2>
+<h2>4. Manual upload—only after a future clearance</h2>
 <ol class="steps">
-<li>Measure HOLDOUT-DTI on spatially blocked holdout blocks that are lidar-covered, not confined to range fronts.</li>
-<li>Record the evaluator version, withheld positive count and 95% CI in the run card.</li>
-<li>Run the leakage canary: any single feature with holdout AUC above 0.90 is leakage until proven otherwise.</li>
-<li>Check overlap with the registry rasters (<code>python scripts/lane_check.py candidate.tif registry.tif</code>; exit 2 = drift, exit 3 = inconclusive). Correlation above 0.90, or more than 70% of dots within 3 px of one registry raster's dots, means lane drift: log it as a duplicate and stop.</li>
-<li>Only if all of the above pass does the run card say <em>promote</em>.</li>
+<li>Confirm the run card says the candidate beat the frozen holdout best and all leakage, uniqueness, and format gates passed.</li>
+<li>Use the shared `submission_writer.py` to write a unique name and note of at most 140 characters. Record the exact file SHA-256 and validator output.</li>
+<li>Open the official submission form while signed in, check the live field labels and upload limits, then submit manually only if separately selected within the weekly cap.</li>
+<li>Record an organizer score only from the submission receipt and tie that receipt to the exact raster hash; label it `ORGANIZER-CONFIRMED`.</li>
 </ol>
-
-<h2>4. Upload (manual, after the gate)</h2>
-<ol class="steps">
-<li>Log in to DrivenData and open the submission page for competition 306.</li>
-<li>Choose the file, a unique name and a note of at most 140 characters. The writer embeds the name and note as GeoTIFF tags (<code>GEMS_NAME</code>, <code>GEMS_NOTE</code>) and in its receipt.</li>
-<li>Record the exact file name, SHA-256 and the receipt text. Copy the organiser's score only from the receipt, and label it ORGANIZER-CONFIRMED.</li>
-</ol>
-<p class="note">The submission form was not inspected (login required). Steps 1–3 are from the brief and the official rules; check the live form.</p>
 
 <h2>5. Do not</h2>
 <ul>
-<li>Do not submit a TIF copied from another team, a mirror, or an earlier submission. Rules A.5(1) require original work.</li>
-<li>Do not commit competition data (<code>data/</code>, <code>*.tif</code>) to git. DrivenData's terms of use restrict redistribution.</li>
-<li>Do not write a projection or a model estimate as a score.</li>
+<li>Do not upload or provide a file while the run card is negative.</li>
+<li>Do not copy a raster from another team or publicly mirror competition data.</li>
+<li>Do not scrape, monitor, or reproduce leaderboard values; use the <a href="{OFFICIAL_LEADERBOARD_URL}">official live page</a> directly.</li>
+<li>Do not report projections as scores or spend a slot without a holdout win.</li>
 </ul>
 """
     page("submission-guide.html", "How to submit", body, "submission-guide.html")
 
 
 def analysis_page():
-    body = """<h1>Why did 0.2778 score highest?</h1>
-<p class="sub">Answer: the premise does not hold on the evidence we have. The reasons are below, with the metric mechanism that would matter if a result were confirmed.</p>
+    body = f"""<h1>H33-2-B2: attribution and mechanism</h1>
+<p class="sub">Question reviewed: what supports the prompt's 0.2778 attribution, and can this project demonstrate a better result? No leaderboard values are copied here.</p>
 
-<h2>1. What the evidence says</h2>
-<table><thead><tr><th>Question</th><th>Finding</th></tr></thead><tbody>
-<tr><td>Is 0.2778 the highest score?</td><td>No. The public board (2026-10-11) has #1 xiaofanhu at 0.4133. 0.2778 appears at rank #23 for participant extradr19, who is not linked to the GEMSDOE32 file.</td></tr>
-<tr><td>Does GEMSDOE32 record 0.2778?</td><td>No (repository grep). Its site says "NO ORGANISER SCORE EXISTS" for its artifacts.</td></tr>
-<tr><td>Does the brief's 0.3195 hold?</td><td>No. 0.3195 is rank #9 (DARD).</td></tr>
-<tr><td>Does 0.3774 appear?</td><td>Not on the board or in the repository we read.</td></tr>
+<h2>What is supported</h2>
+<table><thead><tr><th>Evidence item</th><th>What it supports</th><th>What it does not support</th></tr></thead><tbody>
+<tr><td>User-supplied prompt</td><td>An attribution claim associates 0.2778 with the H33-2-B2 artifact.</td><td>It is not an organizer receipt and does not establish that the exact raster earned that value.</td></tr>
+<tr><td>GEMSDOE32 project record and page (S17–S18)</td><td>The owner describes H33-2-B2 as unscored, distinguishes a model projection from an organizer score, and states that no organizer score exists for its artifacts.</td><td>It does not independently verify the prompt's attribution or explain any organizer result.</td></tr>
+<tr><td>Sibling-page association</td><td>An owner-reported association exists in project-family material.</td><td>It is not an organizer receipt, exact-hash match, or causal comparison.</td></tr>
+<tr><td>This checkout</td><td>No receipt, artifact bytes, matching hash, or controlled rerun is present.</td><td>No score can be labeled `ORGANIZER-CONFIRMED`; no causal attribution is possible.</td></tr>
 </tbody></table>
-<p>Full table: <a href="leaderboard.html">leaderboard and claims</a>. Source IDs: S03, S17, S18.</p>
 
-<h2>2. Mechanism (metric algebra, not a score)</h2>
-<p>From the identity <code>DTI = T / (0.2 (T + S − M) + 0.8 |G|)</code> (see <a href="research/metric-derivation.md">the derivation</a>), an extra dot raises DTI only when its credit <em>k</em> to an uncovered truth cell satisfies <code>k &gt; 0.2 · DTI</code>. At DTI 0.2778 that bar is k = 0.0556, a distance of about 283 m. Dots farther than that from any truth cell lower the score.</p>
-<p>The official problem page says the scored test faults are <strong>new faults not in the USGS database</strong>. So a dot placed on a catalogue fault earns no credit unless a new fault lies within about 283 m of it. That makes the owner's catalogue-flank removal rule a plausible mechanism. It has <strong>not</strong> been tested, and nothing in the owner's registry shows that the new faults lie more than 283 m from catalogue faults.</p>
+<div class="banner warn"><strong class="big">Conclusion: attribution is unresolved.</strong>The 0.2778 value is an owner/user-reported attribution claim, not a score verified here. The evidence does not support saying that H33-2-B2 received it, much less why.</div>
 
-<h2>3. What would confirm or refute it</h2>
-<ol class="steps">
-<li>Obtain the official files (manual step).</li>
-<li><strong>Holdout caveat.</strong> The scored faults are new, so a holdout drawn from catalogue faults is only a proxy for the test distribution. The gate must say so, and a holdout result must not be presented as a test-set estimate.</li>
-<li>Recompute HOLDOUT-DTI for the candidate rule and a no-removal control on the same spatially blocked holdout, with a 95% CI.</li>
-<li>If the rule does not beat the control on the holdout, record a negative result.</li>
-</ol>
+<h2>Conditional mechanism—not a result</h2>
+<p>Owner material describes H33-2-B2 as a post-processing/pruning variant that removes predictions near mapped catalogue faults. Under the published distance-weighted Tversky objective, removing unsupported emissions could reduce false-positive mass; removing predictions near a genuinely new labeled fault could instead reduce true-positive credit. Which effect dominates depends on the withheld labels and exact raster. No controlled experiment in this checkout tests that mechanism.</p>
+<p>The scoring specification uses α=0.2, β=0.8, and a 300 m triangular distance kernel (S02). These are metric parameters, not an H33 score. The metric derivation documents assumptions in the local implementation; it does not recover the organizer's hidden labels.</p>
 
-<h2>4. Not established</h2>
-<ul>
-<li>Whether 0.2778 was ever a submission score for any file. No receipt is in the record.</li>
-<li>The organiser's evaluator, beyond the published formula (see the metric derivation, section 2).</li>
-</ul>
+<h2>Can a better result be demonstrated?</h2>
+<p><strong>Not with the current evidence.</strong> The leading native-lidar hypothesis is a slope-aware scarp-template field joined with Steger ridge/valley and Frangi multiscale line evidence at 2–20 m, aggregated to 100 m. It has not been computed. Required competition rasters, cached feature stack, cultural mask, complete registry, and end-to-end blocked-holdout evaluator/CI runner are absent. Therefore there is no `HOLDOUT-DTI`, no confidence interval, and no basis for a submission file or slot.</p>
+<p>A future demonstration would require: (1) the exact H33 submission receipt and byte-matched artifact to resolve attribution; and separately (2) the shared inputs/evaluator, preregistered segment-aware spatial holdout, leakage canaries, range-front check, and pre-/post-placement registry comparison for the new lidar candidate. Any measured score must be labeled `HOLDOUT-DTI` with evaluator version, withheld-positive count, and 95% CI. Only an organizer receipt tied to the exact output hash can support `ORGANIZER-CONFIRMED`.</p>
+<p>Source IDs: S02, S17, S18, S28. Open the <a href="{OFFICIAL_LEADERBOARD_URL}">official live leaderboard</a> directly; this project does not copy or monitor it.</p>
 """
-    page("analysis.html", "Why 0.2778?", body, "analysis.html")
+    page("analysis.html", "H33 attribution", body, "analysis.html")
 
 
 def main():
     sources_page()
     irregularities_page()
     hypotheses_page()
-    leaderboard_page()
     run_card_page()
     index_page()
     submission_guide_page()
     analysis_page()
+    # Do not retain a stale copied leaderboard page or snapshot.
+    (DOCS / "leaderboard.html").unlink(missing_ok=True)
     print("built", len(list(DOCS.glob("*.html"))), "pages")
 
 

@@ -1,8 +1,7 @@
-"""GEMS Prize workbench: metric, submission validation/writing, holdout splits.
+"""GEMS Prize workbench: metric, submission validation/writing, and holdout splits.
 
-Everything here is verified against the official competition page
-(https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
-and the official rules PDF (https://docs.nlr.gov/docs/fy26osti/96647.pdf).
+Published format/metric parameters are sourced from the official competition page and rules.
+Implementation choices not specified there are documented in docs/research/metric-derivation.md.
 No competition data is bundled; see docs/sources.html.
 """
 

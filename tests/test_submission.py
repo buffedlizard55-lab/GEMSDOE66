@@ -5,13 +5,13 @@ import json
 import numpy as np
 import pytest
 import rasterio
-from rasterio.transform import from_origin
+from affine import Affine
 
 from gems.submission_writer import write_submission
 from gems.validate_submission import validate
 
 H, W = 12, 15
-TF = from_origin(500000.0, 4500000.0, 100.0, 100.0)
+TF = Affine(100.0, 0.0, 500000.0, 0.0, -100.0, 4500000.0)
 
 
 @pytest.fixture()
@@ -26,7 +26,7 @@ def reference(tmp_path):
 
 @pytest.fixture()
 def features(tmp_path, footprint):
-    """A features raster whose first band is finite inside the footprint and the nodata sentinel outside."""
+    """A features raster whose first band is finite inside and nodata outside the footprint."""
     p = tmp_path / "features.tif"
     band = np.where(footprint, 1.0, -3.4028234663852886e38).astype(np.float32)
     with rasterio.open(p, "w", driver="GTiff", height=H, width=W, count=1, dtype="float32",
@@ -56,7 +56,6 @@ def test_writer_output_passes_validator(tmp_path, reference, footprint, features
     with rasterio.open(out) as src:
         assert src.tags()["GEMS_NAME"] == "gems_test_01"
         assert src.tags()["GEMS_NOTE"].startswith("synthetic grid test")
-    with rasterio.open(out) as src:
         assert src.dtypes[0] == "float32"
         assert src.nodata is None
         assert src.crs.to_string() == "EPSG:32611"
@@ -65,7 +64,6 @@ def test_writer_output_passes_validator(tmp_path, reference, footprint, features
     assert np.isnan(arr[~footprint]).all()
     assert np.isfinite(arr[footprint]).all()
     assert arr[footprint].min() >= 0 and arr[footprint].max() <= 1
-    # receipt file is written next to the submission
     assert json.loads((tmp_path / "sub.tif.receipt.json").read_text())["sha256"] == receipt["sha256"]
 
 
@@ -95,7 +93,7 @@ def test_skipped_checks_do_not_pass(tmp_path, reference, footprint):
     pred = np.zeros((H, W))
     out = tmp_path / "s.tif"
     write_submission(out, pred, footprint, reference)
-    rep = validate(out, reference_path=reference)  # no features raster
+    rep = validate(out, reference_path=reference)
     assert rep["skipped_checks_mean_unverified"]
     assert rep["passed"] is False
     assert rep["has_failures"] is False
@@ -118,6 +116,37 @@ def test_validator_rejects_out_of_range_values(tmp_path, reference):
     rep = validate(out, reference_path=reference)
     assert not rep["passed"]
     assert any(c["check"] == "values within [0, 1]" and c["status"] == "FAIL" for c in rep["checks"])
+
+
+def test_validator_rejects_finite_values_outside_footprint(tmp_path, reference, features, footprint):
+    out = tmp_path / "finite-outside.tif"
+    arr = np.full((H, W), 0.2, dtype=np.float32)
+    arr[~footprint] = np.nan
+    arr[0, -1] = 0.3
+    with rasterio.open(out, "w", driver="GTiff", height=H, width=W, count=1, dtype="float32",
+                       crs="EPSG:32611", transform=TF, nodata=None) as dst:
+        dst.write(arr, 1)
+    rep = validate(out, reference_path=reference, features_path=features)
+    assert not rep["passed"]
+    check = next(c for c in rep["checks"] if c["check"] == "NaN-only outside footprint")
+    assert check["status"] == "FAIL"
+    assert "finite_outside=1" in check["detail"]
+
+
+def test_validator_rejects_misaligned_features_grid(tmp_path, reference, footprint):
+    out = tmp_path / "valid-output.tif"
+    write_submission(out, np.full((H, W), 0.2), footprint, reference)
+    shifted_features = tmp_path / "shifted-features.tif"
+    band = np.where(footprint, 1.0, -3.4028234663852886e38).astype(np.float32)
+    shifted_tf = Affine(100.0, 0.0, 500100.0, 0.0, -100.0, 4500000.0)
+    with rasterio.open(shifted_features, "w", driver="GTiff", height=H, width=W, count=1,
+                       dtype="float32", crs="EPSG:32611", transform=shifted_tf,
+                       nodata=-3.4028234663852886e38) as dst:
+        dst.write(band, 1)
+    rep = validate(out, reference_path=reference, features_path=shifted_features)
+    assert not rep["passed"]
+    assert any(c["check"] == "features transform matches reference grid" and c["status"] == "FAIL"
+               for c in rep["checks"])
 
 
 def test_validator_rejects_large_negative_nodata_sentinel(tmp_path, reference):
@@ -161,5 +190,6 @@ def test_skipped_checks_are_reported_not_passed(tmp_path):
     rep = validate(out)
     statuses = {c["check"]: c["status"] for c in rep["checks"]}
     assert statuses["transform matches reference"] == "SKIPPED"
+    assert statuses["CRS matches reference"] == "SKIPPED"
     assert rep["skipped_checks_mean_unverified"] is True
     assert rep["passed"] is False
