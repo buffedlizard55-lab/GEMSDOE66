@@ -1,0 +1,457 @@
+{
+  "generated_utc": "2026-10-11T21:31:01Z",
+  "evidence_class": "OFF-CATALOGUE-PROXY (stratum split; never a score)",
+  "instrument": "pooled DTI (alpha .2, beta .8, 300 m triangular kernel) against USGS SGMC fault pixels >300 m from the published catalogue, within one stratum",
+  "slope_split_rule": "eligible (LiDAR-reachable, >=300 m off catalogue) cells split at the median 10 m slope_p90; median=0.149020",
+  "strata": {
+    "basin": {
+      "cells": 2361145,
+      "truth_pixels": 5434
+    },
+    "upland": {
+      "cells": 2361434,
+      "truth_pixels": 56230
+    }
+  },
+  "budget": 37654,
+  "seed": 66301,
+  "baseline_correction": "IR-66-BASE-01: per-stratum random baselines are uniform draws inside the stratum. The 2026-10-11 first run's baselines were index-ordered corner cells and are superseded.",
+  "arms": {
+    "basin": {
+      "random_mass_matched": {
+        "credit_per_dot_mean": 0.013595022182713364,
+        "credit_per_dot_sd": 0.0003790550382004497,
+        "dti_mean": 0.042908909153546525,
+        "n": 3
+      },
+      "champion_h33_2_b2_own_dots": {
+        "n_dots": 2596,
+        "t": 129.92653769881247,
+        "f": 2523.7516147313986,
+        "fn": 5304.073462301188,
+        "n_truth": 5434,
+        "dti": 0.02663555806001204,
+        "coverage": 0.023909925965920585,
+        "credit_per_dot": 0.050048743335443936,
+        "note": "the incumbent's own dots inside this stratum (its natural mass), not a re-emission",
+        "ratio_over_stratum_random": 3.681402109007442
+      },
+      "amp_snr_only": {
+        "n_dots": 37654,
+        "t": 728.8681490196352,
+        "f": 37228.53252224252,
+        "fn": 4705.131850980365,
+        "n_truth": 5434,
+        "dti": 0.06105098225460371,
+        "coverage": 0.13413105429143085,
+        "credit_per_dot": 0.01935699126306993,
+        "ratio_over_stratum_random": 1.423829325389638
+      },
+      "frac_only": {
+        "n_dots": 37654,
+        "t": 445.96508331465304,
+        "f": 37429.15840356708,
+        "fn": 4988.034916685347,
+        "n_truth": 5434,
+        "dti": 0.037406196799226056,
+        "coverage": 0.0820693933225346,
+        "credit_per_dot": 0.011843763831589022,
+        "ratio_over_stratum_random": 0.8711838548265747
+      },
+      "coh_only": {
+        "n_dots": 37654,
+        "t": 504.88921963230575,
+        "f": 37383.019701038764,
+        "fn": 4929.110780367694,
+        "n_truth": 5434,
+        "dti": 0.04233949339886915,
+        "coverage": 0.09291299588375151,
+        "credit_per_dot": 0.013408647677067662,
+        "ratio_over_stratum_random": 0.9862909745095757
+      },
+      "age_only": {
+        "n_dots": 37654,
+        "t": 714.8494728962868,
+        "f": 37282.45154531955,
+        "fn": 4719.150527103713,
+        "n_truth": 5434,
+        "dti": 0.05983676280323862,
+        "coverage": 0.13155124639239726,
+        "credit_per_dot": 0.0189846888218061,
+        "ratio_over_stratum_random": 1.396444122463141
+      },
+      "face_only": {
+        "n_dots": 37654,
+        "t": 729.969192129374,
+        "f": 37283.69167433391,
+        "fn": 4704.030807870626,
+        "n_truth": 5434,
+        "dti": 0.06108563475873184,
+        "coverage": 0.13433367540106259,
+        "credit_per_dot": 0.019386232329350776,
+        "ratio_over_stratum_random": 1.425980191043835
+      },
+      "antiface_only": {
+        "n_dots": 37654,
+        "t": 835.2388516897606,
+        "f": 37176.25419236382,
+        "fn": 4598.761148310239,
+        "n_truth": 5434,
+        "dti": 0.0698973972911227,
+        "coverage": 0.15370608238677966,
+        "credit_per_dot": 0.022181942202415695,
+        "ratio_over_stratum_random": 1.6316223617951104
+      },
+      "sharp_only": {
+        "n_dots": 37654,
+        "t": 795.2933170980408,
+        "f": 37162.73216959424,
+        "fn": 4638.7066829019595,
+        "n_truth": 5434,
+        "dti": 0.06661414694468352,
+        "coverage": 0.14635504547258757,
+        "credit_per_dot": 0.021121084535455484,
+        "ratio_over_stratum_random": 1.553589560325383
+      },
+      "height_only": {
+        "n_dots": 37654,
+        "t": 713.0769706488186,
+        "f": 37207.8596969303,
+        "fn": 4720.923029351181,
+        "n_truth": 5434,
+        "dti": 0.05976479940817544,
+        "coverage": 0.13122505900787976,
+        "credit_per_dot": 0.01893761541001802,
+        "ratio_over_stratum_random": 1.3929815748368537
+      },
+      "relief_only": {
+        "n_dots": 37654,
+        "t": 1010.613825781694,
+        "f": 36957.03073855805,
+        "fn": 4423.386174218306,
+        "n_truth": 5434,
+        "dti": 0.08463585708679844,
+        "coverage": 0.18597972502423518,
+        "credit_per_dot": 0.026839481217976684,
+        "ratio_over_stratum_random": 1.9742138598423327
+      },
+      "strikecoh_only": {
+        "n_dots": 37654,
+        "t": 187.323437912906,
+        "f": 37543.70401891336,
+        "fn": 5246.676562087094,
+        "n_truth": 5434,
+        "dti": 0.01575019350419902,
+        "coverage": 0.03447247661260692,
+        "credit_per_dot": 0.004974861579457853,
+        "ratio_over_stratum_random": 0.36593258272013685
+      },
+      "h66_1_blend": {
+        "n_dots": 37654,
+        "t": 737.4083371545753,
+        "f": 37281.79614713964,
+        "fn": 4696.591662845425,
+        "n_truth": 5434,
+        "dti": 0.06170243609059961,
+        "coverage": 0.13570267522167379,
+        "credit_per_dot": 0.019583798192876596,
+        "ratio_over_stratum_random": 1.4405124117986516
+      },
+      "blend_plus_face": {
+        "n_dots": 37654,
+        "t": 708.392262599083,
+        "f": 37289.891635656335,
+        "fn": 4725.607737400917,
+        "n_truth": 5434,
+        "dti": 0.059295283744062094,
+        "coverage": 0.1303629485828272,
+        "credit_per_dot": 0.018813200791392228,
+        "ratio_over_stratum_random": 1.383830091525264
+      },
+      "blend_plus_antiface": {
+        "n_dots": 37654,
+        "t": 747.42367687644,
+        "f": 37266.1145582146,
+        "fn": 4686.57632312356,
+        "n_truth": 5434,
+        "dti": 0.06254639775922789,
+        "coverage": 0.13754576313515643,
+        "credit_per_dot": 0.01984978161354544,
+        "ratio_over_stratum_random": 1.4600771772763463
+      },
+      "concordance_geo": {
+        "n_dots": 37654,
+        "t": 707.145343598318,
+        "f": 37280.515622958315,
+        "fn": 4726.8546564016815,
+        "n_truth": 5434,
+        "dti": 0.059201439777301745,
+        "coverage": 0.1301334824435624,
+        "credit_per_dot": 0.018780085611045785,
+        "ratio_over_stratum_random": 1.3813942602407405
+      },
+      "concordance_step_face": {
+        "n_dots": 37654,
+        "t": 873.9168869365286,
+        "f": 37130.430878479696,
+        "fn": 4560.0831130634715,
+        "n_truth": 5434,
+        "dti": 0.07314293602442336,
+        "coverage": 0.1608238658330012,
+        "credit_per_dot": 0.023209138124409855,
+        "ratio_over_stratum_random": 1.7071791286902966
+      },
+      "amp_x_antiface_coh": {
+        "n_dots": 37654,
+        "t": 830.937149910576,
+        "f": 37185.5671694286,
+        "fn": 4603.062850089424,
+        "n_truth": 5434,
+        "dti": 0.06953157523488428,
+        "coverage": 0.15291445526510414,
+        "credit_per_dot": 0.022067699312438942,
+        "ratio_over_stratum_random": 1.6232190735590664
+      },
+      "control_toposlope_p90": {
+        "n_dots": 37654,
+        "t": 980.6581784927554,
+        "f": 36975.19678412861,
+        "fn": 4453.341821507244,
+        "n_truth": 5434,
+        "dti": 0.08214338280380437,
+        "coverage": 0.18046709210392994,
+        "credit_per_dot": 0.02604393101643266,
+        "ratio_over_stratum_random": 1.9156961030595892
+      },
+      "control_topo_relief_local": {
+        "n_dots": 37654,
+        "t": 1283.216545683722,
+        "f": 36811.78098711496,
+        "fn": 4150.783454316278,
+        "n_truth": 5434,
+        "dti": 0.10723676677630828,
+        "coverage": 0.2361458494081196,
+        "credit_per_dot": 0.034079156150308654,
+        "ratio_over_stratum_random": 2.506737811258721
+      }
+    },
+    "upland": {
+      "random_mass_matched": {
+        "credit_per_dot_mean": 0.1884917485198487,
+        "credit_per_dot_sd": 0.003991569433607596,
+        "dti_mean": 0.13298413834597886,
+        "n": 3
+      },
+      "champion_h33_2_b2_own_dots": {
+        "n_dots": 32887,
+        "t": 4769.6232544132035,
+        "f": 30773.00786486308,
+        "fn": 51460.37674558679,
+        "n_truth": 56230,
+        "dti": 0.09156060571754344,
+        "coverage": 0.08482346175374718,
+        "credit_per_dot": 0.14503065814495708,
+        "note": "the incumbent's own dots inside this stratum (its natural mass), not a re-emission",
+        "ratio_over_stratum_random": 0.7694270931424085
+      },
+      "amp_snr_only": {
+        "n_dots": 37654,
+        "t": 6569.871238356216,
+        "f": 33596.64596566178,
+        "fn": 49660.128761643784,
+        "n_truth": 56230,
+        "dti": 0.12391937748572589,
+        "coverage": 0.11683925374988824,
+        "credit_per_dot": 0.17448003501238157,
+        "ratio_over_stratum_random": 0.9256640483337037
+      },
+      "frac_only": {
+        "n_dots": 37654,
+        "t": 7069.044482766447,
+        "f": 34953.881087189504,
+        "fn": 49160.95551723355,
+        "n_truth": 56230,
+        "dti": 0.13240741382587995,
+        "coverage": 0.12571660115181305,
+        "credit_per_dot": 0.18773688008621786,
+        "ratio_over_stratum_random": 0.9959952176179672
+      },
+      "coh_only": {
+        "n_dots": 37654,
+        "t": 5132.926839157515,
+        "f": 35566.67169568801,
+        "fn": 51097.07316084248,
+        "n_truth": 56230,
+        "dti": 0.09662176412189985,
+        "coverage": 0.09128448940347707,
+        "credit_per_dot": 0.13631823549045294,
+        "ratio_over_stratum_random": 0.7232053209803943
+      },
+      "age_only": {
+        "n_dots": 37654,
+        "t": 6053.55311659685,
+        "f": 35285.394674007664,
+        "fn": 50176.44688340315,
+        "n_truth": 56230,
+        "dti": 0.11367792832557835,
+        "coverage": 0.10765700011731905,
+        "credit_per_dot": 0.16076786308484756,
+        "ratio_over_stratum_random": 0.8529172462311699
+      },
+      "face_only": {
+        "n_dots": 37654,
+        "t": 6753.647631468415,
+        "f": 35046.24740805323,
+        "fn": 49476.35236853159,
+        "n_truth": 56230,
+        "dti": 0.12660562179787305,
+        "coverage": 0.12010755168892788,
+        "credit_per_dot": 0.17936069558263174,
+        "ratio_over_stratum_random": 0.9515572803111036
+      },
+      "antiface_only": {
+        "n_dots": 37654,
+        "t": 6658.2321791132545,
+        "f": 35091.39436343637,
+        "fn": 49571.767820886744,
+        "n_truth": 56230,
+        "dti": 0.12484046768728782,
+        "coverage": 0.11841067364597643,
+        "credit_per_dot": 0.17682668983675717,
+        "ratio_over_stratum_random": 0.9381136905212423
+      },
+      "sharp_only": {
+        "n_dots": 37654,
+        "t": 8315.093551930153,
+        "f": 34275.70688205863,
+        "fn": 47914.90644806984,
+        "n_truth": 56230,
+        "dti": 0.15541603438889925,
+        "coverage": 0.14787646366583945,
+        "credit_per_dot": 0.22082895713417308,
+        "ratio_over_stratum_random": 1.1715576881654275
+      },
+      "height_only": {
+        "n_dots": 37654,
+        "t": 7841.085388784419,
+        "f": 34311.64289771438,
+        "fn": 48388.91461121558,
+        "n_truth": 56230,
+        "dti": 0.1467968189618559,
+        "coverage": 0.13944665461114028,
+        "credit_per_dot": 0.20824043630914163,
+        "ratio_over_stratum_random": 1.1047721608206809
+      },
+      "relief_only": {
+        "n_dots": 37654,
+        "t": 8272.324540847223,
+        "f": 34393.91809817713,
+        "fn": 47957.67545915278,
+        "n_truth": 56230,
+        "dti": 0.1545730538921361,
+        "coverage": 0.14711585525248486,
+        "credit_per_dot": 0.21969311469823188,
+        "ratio_over_stratum_random": 1.1655317350674244
+      },
+      "strikecoh_only": {
+        "n_dots": 36888,
+        "t": 4017.1055305397745,
+        "f": 35317.78549404185,
+        "fn": 52212.894469460225,
+        "n_truth": 56230,
+        "dti": 0.07600815854277024,
+        "coverage": 0.0714406105377872,
+        "credit_per_dot": 0.10890006317880542,
+        "ratio_over_stratum_random": 0.5777444584919744
+      },
+      "h66_1_blend": {
+        "n_dots": 37654,
+        "t": 7537.479370153515,
+        "f": 34782.725902840466,
+        "fn": 48692.520629846484,
+        "n_truth": 56230,
+        "dti": 0.14102442711518184,
+        "coverage": 0.13404729450744293,
+        "credit_per_dot": 0.2001773880637785,
+        "ratio_over_stratum_random": 1.0619954965439735
+      },
+      "blend_plus_face": {
+        "n_dots": 37654,
+        "t": 7331.788352187594,
+        "f": 34845.7404144342,
+        "fn": 48898.21164781241,
+        "n_truth": 56230,
+        "dti": 0.137249273440373,
+        "coverage": 0.13038926466632747,
+        "credit_per_dot": 0.19471472757708594,
+        "ratio_over_stratum_random": 1.0330145966924484
+      },
+      "blend_plus_antiface": {
+        "n_dots": 37654,
+        "t": 7307.637553044386,
+        "f": 34871.73374163122,
+        "fn": 48922.362446955616,
+        "n_truth": 56230,
+        "dti": 0.13679623275829955,
+        "coverage": 0.12995976441480322,
+        "credit_per_dot": 0.19407334023063647,
+        "ratio_over_stratum_random": 1.0296118623473856
+      },
+      "concordance_geo": {
+        "n_dots": 37654,
+        "t": 8069.462091078425,
+        "f": 34596.02281554801,
+        "fn": 48160.53790892157,
+        "n_truth": 56230,
+        "dti": 0.15078288147606836,
+        "coverage": 0.14350812895391118,
+        "credit_per_dot": 0.2143055742040268,
+        "ratio_over_stratum_random": 1.1369493672104156
+      },
+      "concordance_step_face": {
+        "n_dots": 37654,
+        "t": 8430.81096432032,
+        "f": 34445.33191816496,
+        "fn": 47799.18903567968,
+        "n_truth": 56230,
+        "dti": 0.15741098571423304,
+        "coverage": 0.14993439381682946,
+        "credit_per_dot": 0.22390213428374994,
+        "ratio_over_stratum_random": 1.1878617289189846
+      },
+      "amp_x_antiface_coh": {
+        "n_dots": 37654,
+        "t": 7458.2396347137155,
+        "f": 34774.341440500335,
+        "fn": 48771.76036528628,
+        "n_truth": 56230,
+        "dti": 0.13958763948108602,
+        "coverage": 0.13263808704808314,
+        "credit_per_dot": 0.19807297059312995,
+        "ratio_over_stratum_random": 1.050830989412103
+      },
+      "control_toposlope_p90": {
+        "n_dots": 37654,
+        "t": 6763.144726940794,
+        "f": 33524.97594210412,
+        "fn": 49466.855273059206,
+        "n_truth": 56230,
+        "dti": 0.12750636575304133,
+        "coverage": 0.12027644899414536,
+        "credit_per_dot": 0.1796129156780367,
+        "ratio_over_stratum_random": 0.9528953765269091
+      },
+      "control_topo_relief_local": {
+        "n_dots": 37654,
+        "t": 6675.329334943681,
+        "f": 33817.51749641355,
+        "fn": 49554.67066505632,
+        "n_truth": 56230,
+        "dti": 0.12575369682811868,
+        "coverage": 0.11871473119231159,
+        "credit_per_dot": 0.1772807493212854,
+        "ratio_over_stratum_random": 0.9405225996013149
+      }
+    }
+  }
+}

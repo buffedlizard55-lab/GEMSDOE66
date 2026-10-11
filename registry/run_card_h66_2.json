@@ -1,0 +1,586 @@
+{
+  "schema": "gems-run-card/1",
+  "hypothesis_id": "H66-2",
+  "generated_utc": "2026-10-11T21:37:53Z",
+  "repo": "buffedlizard55-lab/GEMSDOE66",
+  "lane": "native-resolution LiDAR scarplet channels (H66 lane, candidate H66-2)",
+  "hypothesis": "Does a concordance (conjunction) of independent 2 m LiDAR scarp attributes -- the 10-vs-50 m slope break (step_max), the dip-sense of the band-passed step (facing = (downface-upface)/(downface+upface)), and crest/toe sharpness (sqrt(lapneg*lappos)) -- rank the off-catalogue fault population better than H66-1's weighted rank-average of the four named aggregates, at equal emitted mass?",
+  "mechanism": "A real fault scarp must fire three independent observables at once: a slope break at the right scale, a step that faces consistently against the regional slope (the hanging wall dropped), and a sharp crest-toe pair (young, unrounded). Channel banks fire the slope break but are cross-slope in the paired sense, terrace risers and paleo-shorelines fire the break without the dip-sense, and rounded old scarps fire the break without sharpness. A geometric-mean conjunction therefore suppresses single-channel mimics without a fitted weight vector.",
+  "named_non_fault_mimic": "Alluvial channel banks and terrace risers, which are strike-coherent steps at the same 2-20 m scales; the controls are the terrain-only steepness/relief ranks, which contain no LiDAR texture information at all.",
+  "preregistration": "registry/preregistration-h66-2.json",
+  "holdout_dti": {
+    "evidence_class": "NOT RUN - no HOLDOUT-DTI value",
+    "why_not_run": "experiment budget (3 experiments or 2 hours) was spent on the ablation, the strata/terrain audit and the emission; every number below is an OFF-CATALOGUE-PROXY measurement and is labelled as one",
+    "proxy_instrument": "pooled DTI (alpha .2, beta .8, 300 m triangular) vs USGS SGMC state-map faults >300 m from the published catalogue; PROXY truth, never a score",
+    "proxy_global": {
+      "n_dots": 37654,
+      "t": 8484.774243414484,
+      "f": 34440.628827473076,
+      "fn": 53179.22575658552,
+      "n_truth": 61664,
+      "dti": 0.14650067568975533,
+      "coverage": 0.13759688381250784,
+      "credit_per_dot": 0.22533526965035544
+    },
+    "proxy_basin": {
+      "n_dots": 19,
+      "t": 0.0,
+      "f": 19.0,
+      "fn": 5434.0,
+      "n_truth": 5434,
+      "dti": 0.0,
+      "coverage": 0.0,
+      "credit_per_dot": 0.0
+    },
+    "proxy_upland": {
+      "n_dots": 37635,
+      "t": 8429.361058166945,
+      "f": 34427.25322883912,
+      "fn": 47800.63894183305,
+      "n_truth": 56230,
+      "dti": 0.15739539243580583,
+      "coverage": 0.14990860853933746,
+      "credit_per_dot": 0.22397664562686184
+    },
+    "organizer_confirmed": null,
+    "not_a_leaderboard_score": true
+  },
+  "e1_ablation": {
+    "n_arms": 16,
+    "winner": "concordance_step_face",
+    "winner_row": {
+      "n_dots": 37654,
+      "mass": 37654.0,
+      "t": 8484.774243414484,
+      "f": 34440.628827473076,
+      "fn": 53179.22575658552,
+      "n_truth": 61664,
+      "dti": 0.14650067568975533,
+      "coverage": 0.13759688381250784,
+      "credit_per_dot": 0.22533526965035544,
+      "excess_over_random": 0.11320698183660086,
+      "ratio_over_random": 2.0096201774224713
+    },
+    "h66_1_blend_row": {
+      "n_dots": 37654,
+      "mass": 37654.0,
+      "t": 7601.052124955927,
+      "f": 34777.29238181388,
+      "fn": 54062.947875044076,
+      "n_truth": 61664,
+      "dti": 0.13149046591551153,
+      "coverage": 0.1232656351348587,
+      "credit_per_dot": 0.20186572807552788,
+      "excess_over_random": 0.0897374402617733,
+      "ratio_over_random": 1.8003104480720107
+    },
+    "random_mass_matched": {
+      "n": 5,
+      "dti_mean": 0.07356553630831832,
+      "dti_sd": 0.0009371018450658039,
+      "credit_per_dot_mean": 0.11212828781375458,
+      "credit_per_dot_sd": 0.0014430612129108361
+    },
+    "truth_pixels": 61664,
+    "eligibility_cells": 4722579,
+    "detail": "evidence/h66b_e1_ablation.json"
+  },
+  "strata_and_controls": {
+    "source": "evidence/h66b_e2_strata.json + evidence/h66b_verdict.json",
+    "upland": {
+      "cells": 2361434,
+      "truth_pixels": 56230,
+      "champion": {
+        "n_dots": 32887,
+        "tp": 4769.6232544132035,
+        "fp": 30773.00786486308,
+        "fn": 51460.37674558679,
+        "n_truth": 56230,
+        "dti": 0.09156060571754344,
+        "coverage": 0.08482346175374718,
+        "credit_per_dot": 0.14503065814495708
+      },
+      "h66_2": {
+        "n_dots": 37635,
+        "tp": 8429.361058166945,
+        "fp": 34427.25322883912,
+        "fn": 47800.63894183305,
+        "n_truth": 56230,
+        "dti": 0.15739539243580583,
+        "coverage": 0.14990860853933746,
+        "credit_per_dot": 0.22397664562686184
+      },
+      "complement": {
+        "n_dots": 29727,
+        "tp": 6949.186422741095,
+        "fp": 27108.40439652975,
+        "fn": 49280.8135772589,
+        "n_truth": 56230,
+        "dti": 0.13416578632841306,
+        "coverage": 0.12358503330501681,
+        "credit_per_dot": 0.2337668255370907
+      },
+      "union": {
+        "n_dots": 70068,
+        "tp": 12143.502383016465,
+        "fp": 64777.30805817938,
+        "fn": 44086.497616983535,
+        "n_truth": 56230,
+        "dti": 0.20115739759091064,
+        "coverage": 0.21596127303959567,
+        "credit_per_dot": 0.17331024694605904
+      },
+      "terrain_control_at_h66_2_mass": {
+        "n_dots": 37635,
+        "tp": 4543.187415867913,
+        "fp": 33438.838481768005,
+        "fn": 51686.81258413209,
+        "n_truth": 56230,
+        "dti": 0.08640457220434006,
+        "coverage": 0.08079650392793727,
+        "credit_per_dot": 0.12071708292461573
+      },
+      "terrain_control_at_union_mass": {
+        "n_dots": 70068,
+        "tp": 7229.763864375781,
+        "fp": 62494.44569708964,
+        "fn": 49000.23613562422,
+        "n_truth": 56230,
+        "dti": 0.12268633880734023,
+        "coverage": 0.12857485086921183,
+        "credit_per_dot": 0.10318210687297741
+      },
+      "random_at_champion_mass": {
+        "n_per_draw": 32887,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.19255158124113814,
+        "credit_per_dot_sd": 0.0026114626402609577,
+        "dti_mean": 0.12099807989612651
+      },
+      "random_at_h66_2_mass": {
+        "n_per_draw": 37635,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.18702933988081244,
+        "credit_per_dot_sd": 0.0031454200383158972,
+        "dti_mean": 0.13190792761761308
+      },
+      "random_at_union_mass": {
+        "n_per_draw": 70068,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.17266781276303655,
+        "credit_per_dot_sd": 0.001300410678236925,
+        "dti_mean": 0.20041183646975042
+      },
+      "ratio_vs_own_mass_random": {
+        "champion": 0.7532041918852426,
+        "h66_2": 1.1975481802459158,
+        "complement": 1.2498938705876976,
+        "union": 1.00372063659545,
+        "terrain_control": 0.6454446291771372
+      }
+    },
+    "basin": {
+      "cells": 2361145,
+      "truth_pixels": 5434,
+      "champion": {
+        "n_dots": 2596,
+        "tp": 129.92653769881247,
+        "fp": 2523.7516147313986,
+        "fn": 5304.073462301188,
+        "n_truth": 5434,
+        "dti": 0.02663555806001204,
+        "coverage": 0.023909925965920585,
+        "credit_per_dot": 0.050048743335443936
+      },
+      "h66_2": {
+        "n_dots": 19,
+        "tp": 0.0,
+        "fp": 19.0,
+        "fn": 5434.0,
+        "n_truth": 5434,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "complement": {
+        "n_dots": 10,
+        "tp": 0.0,
+        "fp": 10.0,
+        "fn": 5434.0,
+        "n_truth": 5434,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "union": {
+        "n_dots": 2615,
+        "tp": 129.92653769881247,
+        "fp": 2542.7516147313986,
+        "fn": 5304.073462301188,
+        "n_truth": 5434,
+        "dti": 0.026614824630697278,
+        "coverage": 0.023909925965920585,
+        "credit_per_dot": 0.04968510045843689
+      },
+      "terrain_control_at_h66_2_mass": {
+        "n_dots": 19,
+        "tp": 0.0,
+        "fp": 19.0,
+        "fn": 5434.0,
+        "n_truth": 5434,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "terrain_control_at_union_mass": {
+        "n_dots": 2615,
+        "tp": 78.53538546562001,
+        "fp": 2566.781462647571,
+        "fn": 5355.46461453438,
+        "n_truth": 5434,
+        "dti": 0.016105648836538877,
+        "coverage": 0.014452592098936328,
+        "credit_per_dot": 0.030032652185705548
+      },
+      "random_at_champion_mass": {
+        "n_per_draw": 2596,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.014463690052404332,
+        "credit_per_dot_sd": 0.004461582452536961,
+        "dti_mean": 0.007708485646538756
+      },
+      "random_at_h66_2_mass": {
+        "n_per_draw": 19,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.0,
+        "credit_per_dot_sd": 0.0,
+        "dti_mean": 0.0
+      },
+      "random_at_union_mass": {
+        "n_per_draw": 2615,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.014618489177208274,
+        "credit_per_dot_sd": 0.0009134603244390507,
+        "dti_mean": 0.00784245516611724
+      },
+      "ratio_vs_own_mass_random": {
+        "champion": 3.4603025337316473,
+        "h66_2": null,
+        "complement": null,
+        "union": 3.398784912458742,
+        "terrain_control": null
+      }
+    },
+    "pooled": {
+      "cells": 4722579,
+      "truth_pixels": 61664,
+      "champion": {
+        "n_dots": 35483,
+        "tp": 5266.030956827501,
+        "fp": 33206.387089980315,
+        "fn": 56397.9690431725,
+        "n_truth": 61664,
+        "dti": 0.09234489836020146,
+        "coverage": 0.08539878951783052,
+        "credit_per_dot": 0.14840996975530538
+      },
+      "h66_2": {
+        "n_dots": 37654,
+        "tp": 8484.774243414484,
+        "fp": 34440.628827473076,
+        "fn": 53179.22575658552,
+        "n_truth": 61664,
+        "dti": 0.14650067568975533,
+        "coverage": 0.13759688381250784,
+        "credit_per_dot": 0.22533526965035544
+      },
+      "complement": {
+        "n_dots": 29737,
+        "tp": 6985.400064129694,
+        "fp": 27115.72280420529,
+        "fn": 54678.599935870305,
+        "n_truth": 61664,
+        "dti": 0.12440290014308196,
+        "coverage": 0.11328165646292317,
+        "credit_per_dot": 0.23490601150518528
+      },
+      "union": {
+        "n_dots": 72683,
+        "tp": 12680.111723498978,
+        "fp": 67224.06288193056,
+        "fn": 48983.88827650102,
+        "n_truth": 61664,
+        "dti": 0.19414663375318014,
+        "coverage": 0.20563232556271047,
+        "credit_per_dot": 0.17445773734572015
+      },
+      "terrain_control_at_h66_2_mass": {
+        "n_dots": 37654,
+        "tp": 4558.760053486882,
+        "fp": 33447.82971815518,
+        "fn": 57105.23994651312,
+        "n_truth": 61664,
+        "dti": 0.08007304467271137,
+        "coverage": 0.07392903563646344,
+        "credit_per_dot": 0.12106974168712173
+      },
+      "terrain_control_at_union_mass": {
+        "n_dots": 72683,
+        "tp": 7442.823363420849,
+        "fp": 64819.29016808211,
+        "fn": 54221.17663657915,
+        "n_truth": 61664,
+        "dti": 0.11668862707426057,
+        "coverage": 0.12069965236476468,
+        "credit_per_dot": 0.10240115795193992
+      },
+      "random_at_champion_mass": {
+        "n_per_draw": 35483,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.11488793191010219,
+        "credit_per_dot_sd": 0.001549923831087628,
+        "dti_mean": 0.07159461117931883
+      },
+      "random_at_h66_2_mass": {
+        "n_per_draw": 37654,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.1119876804251898,
+        "credit_per_dot_sd": 0.0009697633989825123,
+        "dti_mean": 0.07347471053605589
+      },
+      "random_at_union_mass": {
+        "n_per_draw": 72683,
+        "draws": 5,
+        "seeds": 66262,
+        "credit_per_dot_mean": 0.10727743543124599,
+        "credit_per_dot_sd": 0.0007819063856161704,
+        "dti_mean": 0.12030218053292116
+      },
+      "ratio_vs_own_mass_random": {
+        "champion": 1.2917803226837925,
+        "h66_2": 2.0121433785824707,
+        "complement": 2.097605831403103,
+        "union": 1.6262295667715692,
+        "terrain_control": 1.0810987532508
+      }
+    },
+    "correction": [
+      "IR-66-BASE-01 fixed: per-stratum random baselines are uniform in-stratum draws; the earlier corner-sample baselines and every x-ratio derived from them are superseded."
+    ]
+  },
+  "transfer_check": {
+    "question": "does a higher off-catalogue credit-per-dot predict a higher live score?",
+    "mass_matched_pairs": [
+      {
+        "arm": "GEMSDOE24__d1-5-nan.tif",
+        "dots": 60069,
+        "off_catalogue_credit_per_dot": 0.10138086752783974,
+        "owner_reported_live": 0.2477,
+        "source": "GEMSDOE24 h25-1-dotted-h19-5-d1-5",
+        "cpd_rank": 5,
+        "live_rank": 4
+      },
+      {
+        "arm": "GEMSDOE24__d2-8-nan.tif",
+        "dots": 44090,
+        "off_catalogue_credit_per_dot": 0.12357465849703818,
+        "owner_reported_live": 0.26,
+        "source": "GEMSDOE24/25 h25-1-dotted-h19-5-d2-8",
+        "cpd_rank": 4,
+        "live_rank": 3
+      },
+      {
+        "arm": "GEMSDOE27__tgc-v2-nan.tif",
+        "dots": 61328,
+        "off_catalogue_credit_per_dot": 0.10096909991941243,
+        "owner_reported_live": 0.2449,
+        "source": "GEMSDOE27 topo-gap-closure-t-v2-on-d1-5",
+        "cpd_rank": 6,
+        "live_rank": 5
+      },
+      {
+        "arm": "GEMSDOE32__h33-2-b2-zeros.tif",
+        "dots": 37654,
+        "off_catalogue_credit_per_dot": 0.14340528475190986,
+        "owner_reported_live": 0.2778,
+        "source": "GEMSDOE32 h33-h33-2-b2-zeros",
+        "cpd_rank": 2,
+        "live_rank": 1
+      },
+      {
+        "arm": "GEMSDOE33__h33d-tip-stepover.tif",
+        "dots": 41865,
+        "off_catalogue_credit_per_dot": 0.13127286668098243,
+        "owner_reported_live": 0.2632,
+        "source": "GEMSDOE33 h33d-analog-tip-stepover-r30",
+        "cpd_rank": 3,
+        "live_rank": 2
+      },
+      {
+        "arm": "GEMSDOE49__gate-ortho.tif",
+        "dots": 40000,
+        "off_catalogue_credit_per_dot": 0.19325602853506463,
+        "owner_reported_live": 0.2376,
+        "source": "GEMSDOE49 gate_ortho_w0.25-40k",
+        "cpd_rank": 1,
+        "live_rank": 6
+      },
+      {
+        "arm": "GEMSDOE10__h28-dotted-ridge.tif",
+        "dots": 65236,
+        "off_catalogue_credit_per_dot": 0.08615838216511457,
+        "owner_reported_live": 0.1839,
+        "source": "GEMSDOE10 h28-dotted-ridge",
+        "cpd_rank": 7,
+        "live_rank": 7
+      }
+    ],
+    "mass_band": "35,000-70,000 dots (the band every candidate here would be emitted in)",
+    "spearman_in_band": 0.4642857142857144,
+    "p_value_in_band": 0.29393410760025196,
+    "best_cpd_row_still_loses": {
+      "arm": "GEMSDOE49__gate-ortho.tif",
+      "dots": 40000,
+      "off_catalogue_credit_per_dot": 0.19325602853506463,
+      "owner_reported_live": 0.2376,
+      "source": "GEMSDOE49 gate_ortho_w0.25-40k",
+      "cpd_rank": 1,
+      "live_rank": 6
+    },
+    "counter_precedent": "the band's best credit-per-dot submission (GEMSDOE49 gate-ortho, +35 % over the incumbent) scored below the incumbent live (0.2376 vs 0.2778)",
+    "wide_range_note": "across all 14 owner-reported pairs spanning 4k-205k dots the correlation is rho=+0.749 p=0.002, but it is carried by the mass range; inside the comparable-mass band it is not significant",
+    "conclusion": "no local instrument is validated as a predictor at the precision needed to spend a slot"
+  },
+  "leakage_canary": {
+    "domain": "LiDAR-covered footprint cells (the field's own domain)",
+    "label": "cell within 100 m of a mapped catalogue fault (positive) vs the rest",
+    "auc_field": 0.5701,
+    "n_eval": 972206,
+    "n_positive": 36041,
+    "emitted_dots_on_catalogue": 0,
+    "dots_within_300m_of_catalogue": 0,
+    "verdict": "ok"
+  },
+  "uniqueness_vs_registry": {
+    "corpus": "every GeoTIFF physically present in this checkout",
+    "registry_rasters_checked": 21,
+    "complete_accessible_scan": false,
+    "pinned_corpus_note": "evidence/registry_full_index.json pins 655 rasters; they live in .cache/registry, which is not in git, so they were NOT rescanned this session. Coverage is therefore partial and is reported as such (limitation L-66-01).",
+    "max_abs_spearman_rho": 0.1174442696439086,
+    "max_frac_dots_within_3px": 0.9976629308971159,
+    "worst_overlap_is_a_dense_prior": [
+      {
+        "path": "registry/rasters/GEMSDOE13__lattice-s5.tif",
+        "their_dots": 206895,
+        "overlap": 0.9976629308971159,
+        "random_control_mean": 0.6763212407712328,
+        "excess_over_random": 0.3213416901258831
+      }
+    ],
+    "sparse_rows_tripping_a_gate": 0,
+    "byte_unique": true,
+    "pixel_unique": true,
+    "verdict": "PASS vs the sparse submission-like corpus; the single tripping row is a dense prior whose 3 px dilation covers most of the footprint for any dot set (IR-60-GATE-01)"
+  },
+  "validator_output": {
+    "all_checks_passed": true,
+    "template_ok": true,
+    "sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
+    "bytes": 142873,
+    "reread": {
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "dtype": "float32",
+      "nodata": null,
+      "vmin": 0.0,
+      "vmax": 1.0,
+      "n_nan": 0,
+      "n_positive": 37654
+    },
+    "portal_range_check": {
+      "file": "gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+      "dtype": "float32",
+      "n_nan": 0,
+      "n_inf": 0,
+      "vmin": 0.0,
+      "vmax": 1.0,
+      "all_values_finite": true,
+      "all_values_in_0_1": true,
+      "note": "the earlier portal error 'Predicted values must be in range [0, 1]' cannot be raised by this file: it contains no NaN and no value outside [0,1] anywhere on the grid"
+    }
+  },
+  "inputs_verified": {
+    "truth_proxy": "data/external/sgmc_faults_100m.tif (USGS SGMC state map, public domain)",
+    "grid_and_nan_policy": "data/bridge/labels.tif + data/bridge/sample_submission.tif",
+    "channels": "evidence/h66b_fields.npz (15 float32 arms, built from the pinned 2 m LiDAR stack)"
+  },
+  "submission": {
+    "name": "GEMSDOE66-H66-2-LIDAR-SCARP-CONCORDANCE-37654",
+    "note": "H66-2 lidar scarp concordance (step x antislope x sharpness), 37654 dots >=300 m off catalogue; proxy-validated field, no organizer score",
+    "note_chars": 137,
+    "note_limit_chars": 140,
+    "file": "gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+    "sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
+    "clearance": "AUDIT-ONLY - download YES (format-valid, unique); weekly slot NO - the proxy does not transfer and the basin stratum is not improved"
+  },
+  "verdict": "NEGATIVE-NOT-PROMOTED",
+  "verdict_detail": {
+    "primary": "PASSED (0.2253 vs 0.2019 pooled, +11.6 %; off-range-front +22.7 %)",
+    "secondary": "PASSED (0.5701)",
+    "tertiary": "PASSED vs the 14 sparse submission-like rows; the only tripping row is a DENSE prior whose 3 px dilation covers 0.676 of five random dot sets and whose rank correlation with the candidate is -0.0007 (co-location without rank similarity, IR-60-GATE-01)",
+    "promotion": "NEGATIVE",
+    "what_is_true": [
+      "the concordance field has the best pooled credit-per-dot of any H66-1/H66-2 arm at equal mass",
+      "inside the upland stratum it beats the mass-matched terrain-only control (pooled and upland rows carry the ratios)",
+      "in the basin stratum the field is behind the incumbent and behind the terrain control",
+      "IR-66-BASE-01: the previously advertised x16 upland ratio came from a broken baseline and is void"
+    ],
+    "what_is_not_claimed": [
+      "no HOLDOUT-DTI: the blocked whole-segment holdout was not re-run for H66-2",
+      "no projected competition score; 0.2778 and 0.2376 etc. are OWNER-REPORTED context",
+      "no promotion: nothing here licenses spending a weekly slot"
+    ],
+    "next_candidate": {
+      "name": "H72-union (incumbent dots + H66-2 complement)",
+      "proxy_promise": "union proxy DTI 0.19415 vs incumbent 0.09234",
+      "proxy_promise_basis": "mass-unequal union vs incumbent in the same instrument",
+      "blockers": [
+        "contains the incumbent's own 37,654 pixels, so it must be declared as a stacking artifact and its uniqueness row will trip the 3 px gate against the incumbent raster (50 % of its dots) even though rank correlation is low",
+        "the terrain-only control at union mass must be beaten on the same proxy before the union is worth a slot",
+        "needs its own preregistration and a sealed holdout run (budget was spent)"
+      ],
+      "status": "registered as the next experiment, NOT built and NOT promoted"
+    }
+  },
+  "budget": {
+    "experiments": [
+      "E1 ablation",
+      "strata + terrain control",
+      "emission+validator+uniqueness"
+    ],
+    "spent_minutes": 6.0,
+    "rule": "3 experiments or 2 hours, whichever comes first; exhausted, so no holdout re-run"
+  },
+  "files": {
+    "artifact": "docs/downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+    "emission": "evidence/h66b_emission.json",
+    "uniqueness": "evidence/h66b_uniqueness.json",
+    "strata": "evidence/h66b_e2_strata.json",
+    "ablation": "evidence/h66b_e1_ablation.json",
+    "preregistration": "registry/preregistration-h66-2.json",
+    "artifact_sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
+    "run_card": "registry/run_card_h66_2.json",
+    "verdict": "evidence/h66b_verdict.json"
+  }
+}

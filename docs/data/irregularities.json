@@ -203,6 +203,20 @@
       "statement": "IR-66-NEG-01 \u2014 Cultural-feature veto does not help this lane. Conjunction veto (long-corridor coherence p97 x along-strike amplitude constancy x flat setting x no aeromagnetic gradient, mag_rank<p50) removed 108,468 of 3,892,984 LiDAR-covered cells but only 28 of the top 37,654 emission cells; paired 20 km block bootstrap of the off-catalogue DTI: -1.0e-5 [-1.5e-5, +6.5e-6], P(delta>0)=0.129. Spatial-CV logistic regression assigned a POSITIVE coefficient (1.39-1.59) to the cultural index against catalogue proximity: basin-floor cultural scarps co-locate with range-front faults, so a blanket veto would delete real evidence at the most faulted locations. Mechanistic read: the anthropogenic contamination of the LiDAR scarp channel lives in the middle of the ranking, where this emission policy never goes, and the 100 m aggregation also destroys the discriminator (a canal's double-edged profile) that a 1 m run could see.",
       "status": "DELIVERED-NEGATIVE-RESULT",
       "source": "evidence/h66_e1_offcat.json, evidence/h66_spatial_cv.json, evidence/h66_e2b_detector_holdout.json"
+    },
+    {
+      "id": "IR-66-BASE-01",
+      "severity": "high",
+      "statement": "The first run of scripts/h66b_strata.py drew its per-stratum random baseline with pick(np.ones(...)), whose argsort on a constant field returns cells in raster order (the top-left corner of the stratum), not a random sample. Every 'x N random' ratio from that run was inflated by roughly an order of magnitude; the advertised x16 upland advantage of the H66-2 field is really x1.20 against a uniform in-stratum baseline.",
+      "status": "FIXED 2026-10-11 \u2014 scripts/h66b_strata.py now draws a true uniform sample inside each stratum; evidence/h66b_verdict.json carries the corrected numbers and evidence/h66b_e2_strata.json is regenerated",
+      "source": "evidence/h66b_verdict.json; evidence/h66b_e2_strata.json; scripts/h66b_verdict.py"
+    },
+    {
+      "id": "IR-66-GUARD-02",
+      "severity": "medium",
+      "statement": "scripts/stop_guard.py hard-coded the lane name 'channel-steepness' from a sibling checkout, so in this repository (registered active_lane: native-resolution LiDAR scarplet channels) it failed closed on every runner that used it, including the measurement-only uniqueness audit. It also had no way to register the H66-2 lane, so a candidate with a passed first test could not be audited at all.",
+      "status": "FIXED 2026-10-11 \u2014 the guard is lane-scoped (lane=... callers are blocked only by their own lane record; legacy callers keep the fail-closed default) and the H66-2 lane is registered in registry/current_site_status.json with registry/preregistration-h66-2.json and evidence/h66b_first_test.json",
+      "source": "scripts/stop_guard.py; registry/current_site_status.json; registry/preregistration-h66-2.json"
     }
   ]
 }

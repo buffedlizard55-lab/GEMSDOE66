@@ -41,6 +41,15 @@ def build() -> int:
     det, sub, off = h["detector_arm"], h["submission_policy_arm"], h["off_catalogue_instrument_37654"]
     uni, val, can = c["uniqueness_vs_registry"], c["validator_output"], c["leakage_canary"]
     f = c["submission"]
+    c2 = json.loads((ROOT / "registry/run_card_h66_2.json").read_text())
+    st2 = c2["strata_and_controls"]
+    def row(stratum, arm):
+        r = st2[stratum][arm]
+        key = "terrain_control" if arm.startswith("terrain_control") else arm
+        rr = st2[stratum]["ratio_vs_own_mass_random"].get(key)
+        ratio = "n/a" if rr is None else f"x{rr:.2f}"
+        return (f"{r['n_dots']:,} dots | credit/dot {r['credit_per_dot']:.5f} | "
+                f"proxy DTI {r['dti']:.5f} | {ratio} vs same-mass in-stratum random")
     stamp = time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
 
     index = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -210,6 +219,35 @@ lane's, so the uniqueness audit is reimplemented here against the same two liter
 · build run <a href="https://github.com/buffedlizard55-lab/7GEMSDOE/actions/runs/36266555805">7GEMSDOE/actions/runs/36266555805</a></li>
 </ul></div>
 
+<div class="card"><h2 style="margin-top:0;border:0">7b · H66-2 — concordance of three independent 2 m LiDAR scarp attributes</h2>
+<p>The second artifact in this lane (<a href="downloads/{c2["submission"]["file"]}">{c2["submission"]["file"]}</a>,
+sha256 <code>{c2["submission"]["sha256"][:16]}&hellip;</code>) is a conjunction, not a weighted blend: the geometric mean of
+rank(10-vs-50 m step), rank(1&nbsp;-&nbsp;dip-sense) and rank(crest-toe sharpness). A real scarp must fire all three at once;
+channel banks and terrace risers fire the slope break without the dip-sense, and rounded old scarps fire it without the
+sharpness. At equal emitted mass it beats the previous H66-1 blend (credit/dot {c2["e1_ablation"]["winner_row"]["credit_per_dot"]:.4f}
+vs {c2["e1_ablation"]["h66_1_blend_row"]["credit_per_dot"]:.4f}, +{100*(c2["e1_ablation"]["winner_row"]["credit_per_dot"]/c2["e1_ablation"]["h66_1_blend_row"]["credit_per_dot"]-1):.0f}%).</p>
+<table><thead><tr><th>Stratum</th><th>H66-2 field</th><th>Incumbent (GEMSDOE32 h33-2-b2)</th><th>Terrain-only control</th></tr></thead><tbody>
+<tr><td>upland (slope_p90 &ge; median)</td><td>{row("upland","h66_2")}</td><td>{row("upland","champion")}</td><td>{row("upland","terrain_control_at_h66_2_mass")}</td></tr>
+<tr><td>basin (slope_p90 &lt; median)</td><td>{row("basin","h66_2")}</td><td>{row("basin","champion")}</td><td>{row("basin","terrain_control_at_h66_2_mass")}</td></tr>
+<tr><td>pooled off-catalogue</td><td>{row("pooled","h66_2")}</td><td>{row("pooled","champion")}</td><td>{row("pooled","terrain_control_at_h66_2_mass")}</td></tr>
+</tbody></table>
+<p><b>Verdict: {c2["verdict"]}.</b> Three reasons, all measured here. (1) The terrain-only control — a field with no LiDAR
+input at all — sits inside a factor of {st2["pooled"]["terrain_control_at_h66_2_mass"]["credit_per_dot"]/st2["pooled"]["h66_2"]["credit_per_dot"]:.2f} of the
+candidate pooled, so most of the apparent signal is terrain, not scarps. (2) The field's mass is 99.95% upland: the incumbent's
+advantage lives in the basin (x{st2["basin"]["ratio_vs_own_mass_random"]["champion"]:.2f} over same-mass in-stratum random there,
+against no H66-2 dots). (3) The off-catalogue proxy does not order the live board at comparable mass —
+&rho;={c2["transfer_check"]["spearman_in_band"]:+.2f}, p={c2["transfer_check"]["p_value_in_band"]:.2f} on the
+{c2["transfer_check"]["mass_band"]}; inside that band the best credit-per-dot submission (gate-ortho, +35% over the incumbent)
+still scored below it live (0.2376 vs 0.2778). Download is offered because the file is format-valid and unique; promotion is not,
+and <code>scripts/h66b_verdict.py</code> reproduces every number in this table.</p>
+<p class="small"><b>Two corrections recorded this session.</b> <b>IR-66-BASE-01</b>: the first run of the stratum audit drew its
+&ldquo;random&rdquo; control with an index-ordered corner sample and advertised a x16 upland ratio; the corrected uniform in-stratum
+baseline makes the true ratio x{c2["strata_and_controls"]["upland"]["ratio_vs_own_mass_random"]["h66_2"]:.2f}. Every &ldquo;x N random&rdquo; number from
+that run is void. <b>IR-66-GUARD-02</b>: <code>scripts/stop_guard.py</code> hard-coded a lane name from a sibling checkout, so it failed
+closed on every runner in this repository; it is now lane-scoped, and the H66-2 lane is registered in
+<code>registry/current_site_status.json</code> with its own preregistration and first-test verdict.</p>
+</div>
+
 <div class="card"><h2 style="margin-top:0;border:0">8 · Next steps, owned end-to-end</h2>
 <ol class="small">
 <li>Owner decision on the two governance walls inherited from the template: the ≥300 m-off-catalogue rule vs the
@@ -292,7 +330,11 @@ EPSG:32611 · 100 m pixels · same bounds as the training data · see
     (DOCS / "downloads" / "README.md").write_text(
         "# Downloads\n\nFiles here are produced by `python scripts/run_h66.py s5` and validated by\n"
         "`python scripts/verify66.py`. The `.tif`/`.zip` pair is byte-identical inside the footprint; the `-allfinite`\n"
-        "variant is the one to upload (see `executive-summary.html`, step 3). Receipts (`*.json`) carry sha256.\n")
+        "variant is the one to upload (see `executive-summary.html`, step 3). Receipts (`*.json`) carry sha256.\n"
+        "\nSecond file: `gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif` (+ `.zip`),\n"
+        "sha256 `66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c`. Same validated writer,\n"
+        "same grid, same range guarantees. Its verdict is NEGATIVE-NOT-PROMOTED (see `h66-session.html`\n"
+        "section 7b); download for audit, and let the selector decide.\n")
     print("wrote docs/h66-session.html, docs/executive-summary.html")
     return 0
 

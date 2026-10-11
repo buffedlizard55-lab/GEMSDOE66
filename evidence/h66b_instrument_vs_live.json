@@ -1,0 +1,121 @@
+{
+  "note": "owner-reported scores only; unmatched/ambiguous ledger rows excluded",
+  "pairs": [
+    {
+      "file": "GEMSDOE19__h19-5-nan.tif",
+      "score": 0.1922,
+      "cpd": 0.059248657250283616,
+      "dti": 0.09752107258962564,
+      "n": 121131,
+      "src": "GEMSDOE19 h19-5-powerlaw-budget-multiline-corroborated"
+    },
+    {
+      "file": "GEMSDOE24__d1-5-nan.tif",
+      "score": 0.2477,
+      "cpd": 0.10138086752783974,
+      "dti": 0.09838854407962805,
+      "n": 60069,
+      "src": "GEMSDOE24 h25-1-dotted-h19-5-d1-5"
+    },
+    {
+      "file": "GEMSDOE24__d2-8-nan.tif",
+      "score": 0.26,
+      "cpd": 0.12357465849703818,
+      "dti": 0.09273846081357219,
+      "n": 44090,
+      "src": "GEMSDOE24/25 h25-1-dotted-h19-5-d2-8"
+    },
+    {
+      "file": "GEMSDOE27__tgc-v2-nan.tif",
+      "score": 0.2449,
+      "cpd": 0.10096909991941243,
+      "dti": 0.0996226832426806,
+      "n": 61328,
+      "src": "GEMSDOE27 topo-gap-closure-t-v2-on-d1-5"
+    },
+    {
+      "file": "GEMSDOE32__h33-2-b2-zeros.tif",
+      "score": 0.2778,
+      "cpd": 0.14340528475190986,
+      "dti": 0.09396541728952715,
+      "n": 37654,
+      "src": "GEMSDOE32 h33-h33-2-b2-zeros"
+    },
+    {
+      "file": "GEMSDOE33__h33d-tip-stepover.tif",
+      "score": 0.2632,
+      "cpd": 0.13127286668098243,
+      "dti": 0.09424537701961515,
+      "n": 41865,
+      "src": "GEMSDOE33 h33d-analog-tip-stepover-r30"
+    },
+    {
+      "file": "GEMSDOE49__gate-ortho.tif",
+      "score": 0.2376,
+      "cpd": 0.19325602853506463,
+      "dti": 0.13280506919613413,
+      "n": 40000,
+      "src": "GEMSDOE49 gate_ortho_w0.25-40k"
+    },
+    {
+      "file": "GEMSDOE10__h25-ctx-ridge.tif",
+      "score": 0.128,
+      "cpd": 0.04192703760313035,
+      "dti": 0.08282740153546503,
+      "n": 161366,
+      "src": "GEMSDOE10 h25-ctx-ridge"
+    },
+    {
+      "file": "GEMSDOE10__h28-dotted-ridge.tif",
+      "score": 0.1839,
+      "cpd": 0.08615838216511457,
+      "dti": 0.08920466509888601,
+      "n": 65236,
+      "src": "GEMSDOE10 h28-dotted-ridge"
+    },
+    {
+      "file": "GEMSDOE16__h16-1-nan.tif",
+      "score": 0.1855,
+      "cpd": 0.06575632539281927,
+      "dti": 0.10975973080318471,
+      "n": 123939,
+      "src": "GEMSDOE16 h16-1-topo-geophys-baseline-ridges"
+    },
+    {
+      "file": "GEMSDOE13__lattice-s5.tif",
+      "score": 0.0904,
+      "cpd": 0.11354840828743851,
+      "dti": 0.24907433292286824,
+      "n": 204504,
+      "src": "GEMSDOE13 20261001_r13-lattice-s5_v2_nan-outside"
+    },
+    {
+      "file": "GEMSDOE8__hedge-v2.tif",
+      "score": 0.1563,
+      "cpd": 0.050338558160045566,
+      "dti": 0.10146961152658518,
+      "n": 166519,
+      "src": "8GEMSDOE Hedge-v2_submission"
+    },
+    {
+      "file": "GEMSDOE__ens12.tif",
+      "score": 0.1563,
+      "cpd": 0.050338558160045566,
+      "dti": 0.10146961152658518,
+      "n": 166519,
+      "src": "GEMSDOE gems-submission...7f00890a / ens12"
+    },
+    {
+      "file": "GEMSDOE9__2314b599.tif",
+      "score": 0.0107,
+      "cpd": 0.018067278467648728,
+      "dti": 0.033756411464640014,
+      "n": 145610,
+      "src": "GEMSDOE9 2314b599"
+    }
+  ],
+  "rho_cpd": 0.7488986784140971,
+  "p_cpd": 0.0020544315108475828,
+  "rho_massband": 0.4642857142857144,
+  "p_massband": 0.29393410760025196
+}

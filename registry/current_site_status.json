@@ -33,5 +33,23 @@
     "G6_uniqueness": "PASS rho<=0.90 (0.0196), 3-px overlap<=0.70 (0.5099), excess-over-random 0.319, byte+pixel unique among 62 scanned rasters; corpus is NOT the complete family corpus"
   },
   "leaderboard_snapshot": "no snapshot captured in-tree (IR-22 policy); the live page is authoritative",
-  "leaderboard_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ read through the Arena fetcher this session; no authenticated request, no scraping of the private test set"
+  "leaderboard_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ read through the Arena fetcher this session; no authenticated request, no scraping of the private test set",
+  "lanes": {
+    "H66-2 native-resolution LiDAR scarp concordance (lidar)": {
+      "status": "ACTIVE",
+      "registered_utc": "2026-10-11T21:20:00Z",
+      "preregistration": "registry/preregistration-h66-2.json",
+      "latest_first_test": {
+        "decision": "PROCEED",
+        "result": "PROCEED",
+        "evidence": "evidence/h66b_first_test.json",
+        "note": "licenses the emission experiment only; promotion to a submission slot remains unlicensed (see h66_2_review below)"
+      },
+      "h66_2_review": {
+        "artifact": "docs/downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+        "submit_to_competition": false,
+        "submit_rationale": "No local instrument can be shown to transfer to the hidden population. On the only proxy correlated with the live board (credit-per-dot vs 14 owner-reported scores, Spearman rho=+0.749, p=0.002), the artifact measures +57 % over the live-best 0.2778 artifact at matched mass; but the same proxy shows a terrain-only control above every LiDAR arm off-range-front, and the incumbent is ~1.9x better per dot in the basin stratum, which is 99.95 % of this artifact's mass is NOT. Per the project protocol (no lottery-ticket uploads, promotion is a separate selector step) this artifact is offered for download and audit only."
+      }
+    }
+  }
 }

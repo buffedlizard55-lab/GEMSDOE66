@@ -179,16 +179,46 @@ def run_card_page():
 def index_page():
     rc = load("run-card.json")
     rf, sh, hd = rc["raster"]["file"], rc["raster"]["sha256"], rc["holdout_dti"]
+    try:
+        r2 = load("run-card-h66-2.json")
+    except FileNotFoundError:
+        r2 = None
+    if r2:
+        zip_link = (f' · <a href="downloads/{e(r2["file_zip"])}">.zip</a>'
+                    if r2.get("file_zip") else "")
+        row2 = (
+            f'<tr><td><a href="downloads/{e(r2["file"])}">{e(r2["file"])}</a>{zip_link}'
+            f'<br><span class="mut">sha256 {e(r2["sha256"][:16])}…</span></td>'
+            f'<td>{e(r2["hypothesis_id"])} concordance of three independent 2 m LiDAR scarp attributes '
+            f'(10-vs-50 m step, dip-sense, crest/toe sharpness), {r2["dots"]:,} dots, no cultural veto. '
+            f'Off-catalogue proxy DTI {r2["proxy_global_dti"]:.4f}; upland ×{r2["proxy_upland_ratio"]:.2f} '
+            f'over an in-stratum random control; {e(r2["basin"])}.</td>'
+            f'<td><b>YES</b> — same validated writer: single-band float32, EPSG:32611, 0 NaN, all values in '
+            f'[0,1], unique against every raster present.</td>'
+            f'<td><b>NO</b> — {e(r2["verdict"])}: the off-catalogue proxy does not order the live board at '
+            f'comparable mass (rho={r2["transfer"]["rho_in_band"]:+.2f}, p={r2["transfer"]["p_in_band"]:.2f}, '
+            f'{e(r2["transfer"]["band"])}), and the field emits 19 of its 37,654 dots in the basin stratum.</td></tr>')
+    else:
+        row2 = ""
     body = f"""<h1>GEMS Prize (DrivenData #306): executive summary</h1>
 <p class="sub">Research status on {UPDATED} (UTC). Scope: native-resolution lidar scarp channels only.</p>
 
-<div class="banner warn"><strong class="big">Submission download: AVAILABLE FOR AUDIT — not cleared for a weekly slot</strong>
-One artifact exists in this branch: <a href="downloads/{e(rf)}">{e(rf)}</a> · SHA-256 <code>{e(sh)}</code> ·
-<a href="h66-session.html">full H66 session page</a>. It is format-validated on the official grid, unique against every
-registry raster physically present ({e(rc["registry_checks"]["post_placement_final_dots"]["registry_count"])} scanned), and it passed the
-lane's channel gate ({hd["label"]} {e(hd["value"])} vs 0.032862 mass-matched random). Its headline mechanism — the cultural-feature
-veto — measured <strong>negative</strong>, so clearance is download-only: {e(rc["submission"]["clearance"])}. Nothing on this site is a
-verified competition result, and no score for this file is projected.</div>
+<div class="banner warn"><strong class="big">Two downloadable files — one glance tells you whether to submit them</strong>
+<table><thead><tr><th>File (click to download)</th><th>What it is and how it measured</th><th>Safe to download?</th><th>Submit this week?</th></tr></thead><tbody>
+<tr><td><a href="downloads/{e(rf)}">{e(rf)}</a> · <a href="downloads/{e(rf.replace('.tif', '.zip'))}">.zip</a><br>
+<span class="mut">sha256 {e(sh[:16])}…</span></td>
+<td>H66-1 LiDAR scarplet channels + cultural veto, 37,654 dots. {hd["label"]} {e(hd["value"])} vs 0.032862
+mass-matched random ({e(hd["withheld_positives"])} withheld positives), off-range-front 0.040739.</td>
+<td><b>YES</b> — byte-complete, validator passed against the official grid, unique among the
+{e(rc["registry_checks"]["post_placement_final_dots"]["registry_count"])} rasters scanned.</td>
+<td><b>NO</b> — its headline mechanism (the cultural-feature veto) measured negative; promotion is the
+selector's separate step.</td></tr>
+{row2}
+</tbody></table>
+<p class="small">Neither file is a verified competition result and no score is projected for either. Both open in
+QGIS/ArcGIS or any GeoTIFF reader; both contain a single float32 band with values in [0, 1] and no NaN, which is
+exactly what the portal's value check requires. Full narrative: <a href="h66-session.html">H66 session page</a> ·
+machine-readable receipts: <a href="run-card.html">run card</a>, <a href="downloads/">downloads</a>.</p></div>
 
 <div class="card">
 <h3>Clearance rule</h3>
@@ -208,7 +238,7 @@ verified competition result, and no score for this file is projected.</div>
 <h2>Score labels</h2>
 <table><thead><tr><th>Label</th><th>Meaning</th><th>Present</th></tr></thead><tbody>
 <tr><td><span class="tag green">ORGANIZER-CONFIRMED</span></td><td>Exact submission score copied from an organizer receipt and tied to the artifact.</td><td>No organizer-confirmed value</td></tr>
-<tr><td><span class="tag red">HOLDOUT-DTI</span></td><td>Our pooled blocked-holdout measurement with evaluator version, withheld positives, and 95% CI.</td><td>Not run; no HOLDOUT-DTI value</td></tr>
+<tr><td><span class="tag red">HOLDOUT-DTI</span></td><td>Our pooled blocked-holdout measurement with evaluator version, withheld positives, and 95% CI.</td><td>{e(hd["label"])} {e(hd["value"])} (H66-1 detector arm, {e(hd["withheld_positives"])} withheld positives, {e(hd["evaluator_version"])}); level CI not claimed for one pooled run, contrast is a 5-draw mass-matched random mean of 0.032862. No HOLDOUT-DTI exists for H66-2.</td></tr>
 <tr><td><span class="tag amber">OWNER-REPORTED / USER-SUPPLIED</span></td><td>Contextual attribution or claim without an organizer receipt; not a score here.</td><td>H33 attribution claim only</td></tr>
 <tr><td><span class="tag grey">PROJECTION</span></td><td>Model estimate; never treated as a score.</td><td>No projection adopted</td></tr>
 </tbody></table>

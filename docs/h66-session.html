@@ -17,7 +17,7 @@ nav a{margin-right:14px;font-size:14px}ul{padding-left:22px}.small{font-size:13p
 </style></head><body><main>
 <nav><a href="index.html">Summary</a><a href="h66-session.html">H66 run</a><a href="executive-summary.html">How to submit</a><a href="run-card.html">Run card</a><a href="irregularities.html">Irregularities</a><a href="sources.html">Sources</a></nav>
 <h1>Geothermal fault prediction — 66GEMSDOE, lane: native-resolution LiDAR scarplet channels</h1>
-<p class="mut">DOE GEMS Prize Challenge (DrivenData 306) · 2026-10-11 20:50 UTC · every number on this page is read from
+<p class="mut">DOE GEMS Prize Challenge (DrivenData 306) · 2026-10-11 21:38 UTC · every number on this page is read from
 <code>registry/run_card.json</code> by <code>scripts/build_site66.py</code>; nothing here is hand-typed.</p>
 
 <div class="banner card">
@@ -164,7 +164,7 @@ lane's, so the uniqueness audit is reimplemented here against the same two liter
 <li>Problem description, metric, submission format: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">/page/967/</a>
 · rules <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">/306/…</a> · data (login-walled)
 <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">/data/</a></li>
-<li>Official leaderboard, read 2026-10-11 20:50 UTC: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">/leaderboard/</a></li>
+<li>Official leaderboard, read 2026-10-11 21:38 UTC: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">/leaderboard/</a></li>
 <li>USGS GeoDAWN (magnetics + radiometrics + LiDAR): <a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS data release</a>
 · DOI 10.5066/P93LGLVQ</li>
 <li>INGENIOUS (Great Basin Center for Geothermal Energy): <a href="https://gbcge.org/current-projects/ingenious/">gbcge.org/current-projects/ingenious</a>
@@ -178,6 +178,35 @@ lane's, so the uniqueness audit is reimplemented here against the same two liter
 <li>LiDAR band semantics actually used: <a href="https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features.json">lidar_scarp_features.json</a>
 · build run <a href="https://github.com/buffedlizard55-lab/7GEMSDOE/actions/runs/36266555805">7GEMSDOE/actions/runs/36266555805</a></li>
 </ul></div>
+
+<div class="card"><h2 style="margin-top:0;border:0">7b · H66-2 — concordance of three independent 2 m LiDAR scarp attributes</h2>
+<p>The second artifact in this lane (<a href="downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif">gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif</a>,
+sha256 <code>66a8c3afad6a5685&hellip;</code>) is a conjunction, not a weighted blend: the geometric mean of
+rank(10-vs-50 m step), rank(1&nbsp;-&nbsp;dip-sense) and rank(crest-toe sharpness). A real scarp must fire all three at once;
+channel banks and terrace risers fire the slope break without the dip-sense, and rounded old scarps fire it without the
+sharpness. At equal emitted mass it beats the previous H66-1 blend (credit/dot 0.2253
+vs 0.2019, +12%).</p>
+<table><thead><tr><th>Stratum</th><th>H66-2 field</th><th>Incumbent (GEMSDOE32 h33-2-b2)</th><th>Terrain-only control</th></tr></thead><tbody>
+<tr><td>upland (slope_p90 &ge; median)</td><td>37,635 dots | credit/dot 0.22398 | proxy DTI 0.15740 | x1.20 vs same-mass in-stratum random</td><td>32,887 dots | credit/dot 0.14503 | proxy DTI 0.09156 | x0.75 vs same-mass in-stratum random</td><td>37,635 dots | credit/dot 0.12072 | proxy DTI 0.08640 | x0.65 vs same-mass in-stratum random</td></tr>
+<tr><td>basin (slope_p90 &lt; median)</td><td>19 dots | credit/dot 0.00000 | proxy DTI 0.00000 | n/a vs same-mass in-stratum random</td><td>2,596 dots | credit/dot 0.05005 | proxy DTI 0.02664 | x3.46 vs same-mass in-stratum random</td><td>19 dots | credit/dot 0.00000 | proxy DTI 0.00000 | n/a vs same-mass in-stratum random</td></tr>
+<tr><td>pooled off-catalogue</td><td>37,654 dots | credit/dot 0.22534 | proxy DTI 0.14650 | x2.01 vs same-mass in-stratum random</td><td>35,483 dots | credit/dot 0.14841 | proxy DTI 0.09234 | x1.29 vs same-mass in-stratum random</td><td>37,654 dots | credit/dot 0.12107 | proxy DTI 0.08007 | x1.08 vs same-mass in-stratum random</td></tr>
+</tbody></table>
+<p><b>Verdict: NEGATIVE-NOT-PROMOTED.</b> Three reasons, all measured here. (1) The terrain-only control — a field with no LiDAR
+input at all — sits inside a factor of 0.54 of the
+candidate pooled, so most of the apparent signal is terrain, not scarps. (2) The field's mass is 99.95% upland: the incumbent's
+advantage lives in the basin (x3.46 over same-mass in-stratum random there,
+against no H66-2 dots). (3) The off-catalogue proxy does not order the live board at comparable mass —
+&rho;=+0.46, p=0.29 on the
+35,000-70,000 dots (the band every candidate here would be emitted in); inside that band the best credit-per-dot submission (gate-ortho, +35% over the incumbent)
+still scored below it live (0.2376 vs 0.2778). Download is offered because the file is format-valid and unique; promotion is not,
+and <code>scripts/h66b_verdict.py</code> reproduces every number in this table.</p>
+<p class="small"><b>Two corrections recorded this session.</b> <b>IR-66-BASE-01</b>: the first run of the stratum audit drew its
+&ldquo;random&rdquo; control with an index-ordered corner sample and advertised a x16 upland ratio; the corrected uniform in-stratum
+baseline makes the true ratio x1.20. Every &ldquo;x N random&rdquo; number from
+that run is void. <b>IR-66-GUARD-02</b>: <code>scripts/stop_guard.py</code> hard-coded a lane name from a sibling checkout, so it failed
+closed on every runner in this repository; it is now lane-scoped, and the H66-2 lane is registered in
+<code>registry/current_site_status.json</code> with its own preregistration and first-test verdict.</p>
+</div>
 
 <div class="card"><h2 style="margin-top:0;border:0">8 · Next steps, owned end-to-end</h2>
 <ol class="small">

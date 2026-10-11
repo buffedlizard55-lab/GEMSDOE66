@@ -48,12 +48,22 @@ def test_pages_exist_and_are_well_formed():
 
 
 def test_summary_download_gate_states_both_clearances():
-    """The summary page must state, at the top, that the file is downloadable AND not slot-cleared."""
+    """The summary page must answer, at the top and per file, both questions: safe to download? submit?
+
+    The page carries one row per artifact with an explicit Download/Submit cell; the gate is that
+    every downloadable, format-valid file is offered and that no file is advertised as a slot pick
+    without a promoted verdict on its own run card.
+    """
     text = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert "Submission download: AVAILABLE FOR AUDIT" in text
-    assert "not cleared for a weekly slot" in text
-    assert "downloads/gems66-h66-1-scarplet-veto-37654" in text   # the actual bytes are linked
-    assert "verified competition result" in text                    # and no score is implied
+    assert "Two downloadable files" in text
+    assert "Safe to download?" in text and "Submit this week?" in text
+    for needle in ("gems66-h66-1-scarplet-veto-37654", "gems66-h66-2-concordance-scarp-37654"):
+        assert f"downloads/{needle}" in text, needle        # the actual bytes are linked
+    assert text.count("<b>YES</b>") == text.count("<b>NO</b>")  # one clearance pair per row
+    assert "verified competition result" in text                # and no score is implied
+    for feed in ("run-card.json", "run-card-h66-2.json"):
+        pre = "H66-1 " if feed == "run-card.json" else "H66-2 "
+        assert pre.strip() in text
     assert OFFICIAL_LEADERBOARD in text
 
 

@@ -3,12 +3,26 @@
 
 > **Read this file before each session.** It is the standing project charter, protocol, and safety gate.
 >
-> **Current decision (2026-10-11 UTC): NEGATIVE ON THE HEADLINE MECHANISM — artifact delivered for audit, not promoted.**
-> A measured run now exists in this branch: the lane's scarplet-channel gate **passed** on the registered holdout
-> (HOLDOUT-DTI 0.048007 vs 0.032862 mass-matched random; 45,260 withheld positives; off-range-front 0.040739) and its
-> cultural-veto gate **failed** (−1.0e-5 DTI, paired block-bootstrap CI crossing 0). One format-validated, registry-unique
-> TIFF is therefore offered **for download and audit only** — `docs/downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif`,
-> sha256 `44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1`. **Zero submission slots used; no score projected.**
+> **Current decision (2026-10-11 UTC): two files are downloadable; neither is promoted into a weekly slot.**
+> **H66-1** — scarplet channels + cultural veto, 37,654 dots. The lane's channel gate **passed** on the registered holdout
+> (HOLDOUT-DTI 0.048007 vs 0.032862 mass-matched random; 45,260 withheld positives; off-range-front 0.040739); its headline
+> mechanism, the cultural veto, **failed** (−1.0e-5 DTI, paired block-bootstrap CI crossing 0).
+> **H66-2** — concordance of three independent 2 m LiDAR scarp attributes (10-vs-50 m step, dip-sense, crest/toe sharpness),
+> 37,654 dots, no veto. It beats the H66-1 blend at equal mass (credit/dot 0.2253 vs 0.2019, +12 %) and beats the incumbent's
+> own dots on the upland stratum, but the off-catalogue proxy does **not** order the live board at comparable mass
+> (rho=+0.46, p=0.29, 35k–70k band; the band's best credit-per-dot submission still scored below the incumbent live),
+> and the field emits 19 of its 37,654 dots in the basin stratum where the incumbent's edge lives. Verdict
+> **NEGATIVE-NOT-PROMOTED**; `scripts/h66b_verdict.py` reproduces every number.
+> Both files are format-validated (single-band float32, EPSG:32611, 0 NaN, values in [0,1], unique against every raster
+> present). **Zero submission slots used; no score projected for either file.**
+> `docs/downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif` sha256
+> `44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1` ·
+> `docs/downloads/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif` sha256
+> `66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c`.
+> **Two corrections this session:** IR-66-BASE-01 (the stratum audit's first run used an index-ordered "random" control and
+> advertised an x16 upland ratio; true value x1.20 against a uniform in-stratum baseline — every x-N-random number from that
+> run is void) and IR-66-GUARD-02 (`scripts/stop_guard.py` hard-coded a foreign lane name and failed closed on every runner
+> here; it is now lane-scoped and the H66-2 lane is registered in `registry/current_site_status.json`).
 > Site: <https://buffedlizard55-lab.github.io/GEMSDOE66/> → `docs/index.html` (summary), `docs/h66-session.html` (this run),
 > `docs/executive-summary.html` (five-step how-to-submit incl. why the old `[0, 1]` rejection cannot recur).
 

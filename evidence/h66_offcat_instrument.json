@@ -1,0 +1,613 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-11T21:11:22Z",
+  "instrument": "pooled DTI (alpha 0.2, beta 0.8, 300 m triangular) against SGMC state-map fault pixels > 300 m from the published catalogue, footprint-restricted, catalogue cells excluded from prediction and truth",
+  "truth_source": "data/external/sgmc_faults_100m.tif (USGS SGMC 100 m raster, in-repo)",
+  "truth_source_sha256": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c",
+  "catalogue_source_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "cat_sep_px": 3.0,
+  "truth_pixels": 61664,
+  "footprint_pixels": 5167373,
+  "candidates": {
+    "registry/rasters/GEMSDOE10__h25-ctx-ridge.tif": {
+      "n_dots": 161366,
+      "mass": 161366.0,
+      "t": 6765.598349866732,
+      "f": 154993.86709062755,
+      "fn": 54898.401650133266,
+      "n_truth": 61664,
+      "dti": 0.08282740153546503,
+      "coverage": 0.10971715019892858,
+      "credit_per_dot": 0.04192703760313035,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "1381e784fb8b8340beffd0e735ac9eea89ad35d1a807f8a9bab5506e3fc8275e",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.18137516607980347,
+        "dti_sd": 0.0008433377987505415,
+        "credit_per_dot_mean": 0.09359706823252498
+      },
+      "excess_credit_per_dot": -0.051670030629394625
+    },
+    "registry/rasters/GEMSDOE10__h28-dotted-ridge.tif": {
+      "n_dots": 65236,
+      "mass": 65236.0,
+      "t": 5620.628218923413,
+      "f": 62764.530934175804,
+      "fn": 56043.37178107659,
+      "n_truth": 61664,
+      "dti": 0.08920466509888601,
+      "coverage": 0.09114926405882547,
+      "credit_per_dot": 0.08615838216511457,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "7637b72d4c6c3e10226bf46bd72a20272d62ccbe29743062632d10b158b49c58",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.11144621999836905,
+        "dti_sd": 0.0018710635897876797,
+        "credit_per_dot_mean": 0.10803811799448708
+      },
+      "excess_credit_per_dot": -0.021879735829372512
+    },
+    "registry/rasters/GEMSDOE13__lattice-s5.tif": {
+      "n_dots": 204504,
+      "mass": 204504.0,
+      "t": 23221.103688414325,
+      "f": 196270.9617488479,
+      "fn": 38442.896311585675,
+      "n_truth": 61664,
+      "dti": 0.24907433292286824,
+      "coverage": 0.37657472250282703,
+      "credit_per_dot": 0.11354840828743851,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.19656716452556408,
+        "dti_sd": 0.0006854647662947401,
+        "credit_per_dot_mean": 0.08855322331102854
+      },
+      "excess_credit_per_dot": 0.02499518497640997
+    },
+    "registry/rasters/GEMSDOE16__h16-1-nan.tif": {
+      "n_dots": 123939,
+      "mass": 123939.0,
+      "t": 8149.773212860628,
+      "f": 116449.38353831459,
+      "fn": 53514.22678713937,
+      "n_truth": 61664,
+      "dti": 0.10975973080318471,
+      "coverage": 0.1321641997415125,
+      "credit_per_dot": 0.06575632539281927,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "055309694ed499ca3d87e76b3f5e81c292aef6e39c418d33ff5a817aa1309bea",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.16279965979275884,
+        "dti_sd": 0.0006277417756528728,
+        "credit_per_dot_mean": 0.09921744888846842
+      },
+      "excess_credit_per_dot": -0.033461123495649156
+    },
+    "registry/rasters/GEMSDOE19__h19-5-nan.tif": {
+      "n_dots": 121131,
+      "mass": 121131.0,
+      "t": 7176.849101384105,
+      "f": 114131.16681878033,
+      "fn": 54487.150898615895,
+      "n_truth": 61664,
+      "dti": 0.09752107258962564,
+      "coverage": 0.11638636970329698,
+      "credit_per_dot": 0.059248657250283616,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.1600903170885043,
+        "dti_sd": 0.001407007152754805,
+        "credit_per_dot_mean": 0.09904321327181712
+      },
+      "excess_credit_per_dot": -0.0397945560215335
+    },
+    "registry/rasters/GEMSDOE24__d1-5-nan.tif": {
+      "n_dots": 60069,
+      "mass": 60069.0,
+      "t": 6089.847331529805,
+      "f": 56733.64484395944,
+      "fn": 55574.1526684702,
+      "n_truth": 61664,
+      "dti": 0.09838854407962805,
+      "coverage": 0.09875855169190784,
+      "credit_per_dot": 0.10138086752783974,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.1055555754026607,
+        "dti_sd": 0.001084428993199988,
+        "credit_per_dot_mean": 0.10921413443624302
+      },
+      "excess_credit_per_dot": -0.007833266908403275
+    },
+    "registry/rasters/GEMSDOE24__d2-8-nan.tif": {
+      "n_dots": 44090,
+      "mass": 44090.0,
+      "t": 5448.406693134413,
+      "f": 41646.7859262412,
+      "fn": 56215.59330686559,
+      "n_truth": 61664,
+      "dti": 0.09273846081357219,
+      "coverage": 0.08835636178539201,
+      "credit_per_dot": 0.12357465849703818,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.08369040167623437,
+        "dti_sd": 0.0013308352627052896,
+        "credit_per_dot_mean": 0.11154248108123173
+      },
+      "excess_credit_per_dot": 0.01203217741580645
+    },
+    "registry/rasters/GEMSDOE25__d2-8-zeros.tif": {
+      "n_dots": 44090,
+      "mass": 44090.0,
+      "t": 5448.406693134413,
+      "f": 41646.7859262412,
+      "fn": 56215.59330686559,
+      "n_truth": 61664,
+      "dti": 0.09273846081357219,
+      "coverage": 0.08835636178539201,
+      "credit_per_dot": 0.12357465849703818,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "3e78737f0da8dd2ca66cc6caac0ce8eeefcd6715707f8d1bd3091845cd9bcc30",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.08362512247109632,
+        "dti_sd": 0.0006406876278013929,
+        "credit_per_dot_mean": 0.11145598826030434
+      },
+      "excess_credit_per_dot": 0.012118670236733839
+    },
+    "registry/rasters/GEMSDOE27__tgc-v2-nan.tif": {
+      "n_dots": 61328,
+      "mass": 61328.0,
+      "t": 6192.232959857725,
+      "f": 57936.05623527774,
+      "fn": 55471.76704014227,
+      "n_truth": 61664,
+      "dti": 0.0996226832426806,
+      "coverage": 0.10041893097849192,
+      "credit_per_dot": 0.10096909991941243,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "33003374335d84bf885f2d8f5e9dd4c57044c8ec58fa6a0d7fa581e8bc41c11d",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.10699711051221503,
+        "dti_sd": 0.0014011539226935,
+        "credit_per_dot_mean": 0.10889502112799151
+      },
+      "excess_credit_per_dot": -0.007925921208579087
+    },
+    "registry/rasters/GEMSDOE30__d2-8-zeros.tif": {
+      "n_dots": 44090,
+      "mass": 44090.0,
+      "t": 5448.406693134413,
+      "f": 41646.7859262412,
+      "fn": 56215.59330686559,
+      "n_truth": 61664,
+      "dti": 0.09273846081357219,
+      "coverage": 0.08835636178539201,
+      "credit_per_dot": 0.12357465849703818,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "b00a6fb6cab70d0f957308e297695c4032ab97997a41a15ff1295add3df31a26",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.08431039518710268,
+        "dti_sd": 0.0013914267554328542,
+        "credit_per_dot_mean": 0.11237697223452543
+      },
+      "excess_credit_per_dot": 0.011197686262512746
+    },
+    "registry/rasters/GEMSDOE32__h33-2-b2-zeros.tif": {
+      "n_dots": 37654,
+      "mass": 37654.0,
+      "t": 5399.782592048414,
+      "f": 35272.40408595845,
+      "fn": 56264.21740795158,
+      "n_truth": 61664,
+      "dti": 0.09396541728952715,
+      "coverage": 0.08756782875013644,
+      "credit_per_dot": 0.14340528475190986,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.07463400884344865,
+        "dti_sd": 0.00117004326737819,
+        "credit_per_dot_mean": 0.11377143142936594
+      },
+      "excess_credit_per_dot": 0.029633853322543924
+    },
+    "registry/rasters/GEMSDOE33__h33d-tip-stepover.tif": {
+      "n_dots": 41865,
+      "mass": 41865.0,
+      "t": 5495.738563599329,
+      "f": 39413.68020784385,
+      "fn": 56168.26143640067,
+      "n_truth": 61664,
+      "dti": 0.09424537701961515,
+      "coverage": 0.08912393882328958,
+      "credit_per_dot": 0.13127286668098243,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "bc3af2a5fcb4b49bc5845a2d7dc3da23daf41ce75e4c64da3337c0c8c93cc12c",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.08163860167958471,
+        "dti_sd": 0.0010189646327604682,
+        "credit_per_dot_mean": 0.11368786886001611
+      },
+      "excess_credit_per_dot": 0.017584997820966314
+    },
+    "registry/rasters/GEMSDOE48__h52-lidar-scarp-additions.tif": {
+      "n_dots": 39654,
+      "mass": 39654.0,
+      "t": 5483.468365992592,
+      "f": 37235.36442562511,
+      "fn": 56180.531634007406,
+      "n_truth": 61664,
+      "dti": 0.09474680837122597,
+      "coverage": 0.0889249540411357,
+      "credit_per_dot": 0.13828285585294275,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "38029417f6cab01f9f56d4d3259a998affad6ae45a2a21a394682ee38b98e0c7",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.07670621454187304,
+        "dti_sd": 0.001589360332274047,
+        "credit_per_dot_mean": 0.11184016821346346
+      },
+      "excess_credit_per_dot": 0.026442687639479295
+    },
+    "registry/rasters/GEMSDOE49__gate-ortho.tif": {
+      "n_dots": 40000,
+      "mass": 40000.0,
+      "t": 7730.241141402585,
+      "f": 36650.88523462904,
+      "fn": 53933.758858597415,
+      "n_truth": 61664,
+      "dti": 0.13280506919613413,
+      "coverage": 0.12536068275497186,
+      "credit_per_dot": 0.19325602853506463,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "c58fe0551e120678fff190239146985d0b2f7255255535fb5fb637a05cb40af3",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.07813818138947086,
+        "dti_sd": 0.0010637528995339075,
+        "credit_per_dot_mean": 0.11309990531649046
+      },
+      "excess_credit_per_dot": 0.08015612321857417
+    },
+    "registry/rasters/GEMSDOE61__h61m-ribbon.tif": {
+      "n_dots": 54475,
+      "mass": 54475.0,
+      "t": 846.1875644274932,
+      "f": 52883.99745868466,
+      "fn": 60817.81243557251,
+      "n_truth": 61664,
+      "dti": 0.014084994693787035,
+      "coverage": 0.013722553911966353,
+      "credit_per_dot": 0.015533502788939755,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.09894762168897336,
+        "dti_sd": 0.0016907826897523378,
+        "credit_per_dot_mean": 0.11074603074877762
+      },
+      "excess_credit_per_dot": -0.09521252795983787
+    },
+    "registry/rasters/GEMSDOE8__hedge-v2.tif": {
+      "n_dots": 166519,
+      "mass": 166519.0,
+      "t": 8382.326366252628,
+      "f": 158007.8181957794,
+      "fn": 53281.67363374737,
+      "n_truth": 61664,
+      "dti": 0.10146961152658518,
+      "coverage": 0.1359354950417201,
+      "credit_per_dot": 0.050338558160045566,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "052688eafbc7a55d90caab72252a50304fe5caa8ecf973f8e791b4ae910f0792",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.18355163311895267,
+        "dti_sd": 0.0008903562387408965,
+        "credit_per_dot_mean": 0.0929553402600209
+      },
+      "excess_credit_per_dot": -0.04261678209997534
+    },
+    "registry/rasters/GEMSDOE9__2314b599.tif": {
+      "n_dots": 145610,
+      "mass": 145610.0,
+      "t": 2630.7764176743312,
+      "f": 140383.85258714168,
+      "fn": 59033.22358232567,
+      "n_truth": 61664,
+      "dti": 0.033756411464640014,
+      "coverage": 0.042663084095652754,
+      "credit_per_dot": 0.018067278467648728,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "2314b59920bfeeaf6a592d4868b25eca62212825620f9945723c2f6d0a2e5b22",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.17430500612498623,
+        "dti_sd": 0.0010633383428812263,
+        "credit_per_dot_mean": 0.09578689485576955
+      },
+      "excess_credit_per_dot": -0.07771961638812082
+    },
+    "registry/rasters/GEMSDOE__ens12.tif": {
+      "n_dots": 166519,
+      "mass": 166519.0,
+      "t": 8382.326366252628,
+      "f": 158007.8181957794,
+      "fn": 53281.67363374737,
+      "n_truth": 61664,
+      "dti": 0.10146961152658518,
+      "coverage": 0.1359354950417201,
+      "credit_per_dot": 0.050338558160045566,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.18346934634111273,
+        "dti_sd": 0.0014534404334002092,
+        "credit_per_dot_mean": 0.09291626959390169
+      },
+      "excess_credit_per_dot": -0.04257771143385612
+    },
+    "docs/downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif": {
+      "n_dots": 37654,
+      "mass": 37654.0,
+      "t": 7601.052124955927,
+      "f": 34777.29238181388,
+      "fn": 54062.947875044076,
+      "n_truth": 61664,
+      "dti": 0.13149046591551153,
+      "coverage": 0.1232656351348587,
+      "credit_per_dot": 0.20186572807552788,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.07330740883077021,
+        "dti_sd": 0.00090322711896173,
+        "credit_per_dot_mean": 0.11173016394019963
+      },
+      "excess_credit_per_dot": 0.09013556413532825
+    },
+    "docs/downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif": {
+      "n_dots": 37654,
+      "mass": 37654.0,
+      "t": 7601.052124955927,
+      "f": 34777.29238181388,
+      "fn": 54062.947875044076,
+      "n_truth": 61664,
+      "dti": 0.13149046591551153,
+      "coverage": 0.1232656351348587,
+      "credit_per_dot": 0.20186572807552788,
+      "catalogue_side": {
+        "n_dots": 0,
+        "mass": 0.0,
+        "t": 0.0,
+        "f": 0.0,
+        "fn": 60988.0,
+        "n_truth": 60988,
+        "dti": 0.0,
+        "coverage": 0.0,
+        "credit_per_dot": 0.0
+      },
+      "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
+      "random_mass_matched": {
+        "n": 5,
+        "dti_mean": 0.07320157263141276,
+        "dti_sd": 0.001402534477385157,
+        "credit_per_dot_mean": 0.11156673579779679
+      },
+      "excess_credit_per_dot": 0.0902989922777311
+    }
+  }
+}

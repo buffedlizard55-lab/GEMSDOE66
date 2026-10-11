@@ -1,0 +1,21 @@
+{
+  "schema": "gems-run-card-feed/1",
+  "hypothesis_id": "H66-2",
+  "file": "gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+  "file_zip": "gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.zip",
+  "sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
+  "name": "GEMSDOE66-H66-2-LIDAR-SCARP-CONCORDANCE-37654",
+  "note": "H66-2 lidar scarp concordance (step x antislope x sharpness), 37654 dots >=300 m off catalogue; proxy-validated field, no organizer score",
+  "note_chars": 137,
+  "dots": 37654,
+  "verdict": "NEGATIVE-NOT-PROMOTED",
+  "clearance": "AUDIT-ONLY - download YES (format-valid, unique); weekly slot NO - the proxy does not transfer and the basin stratum is not improved",
+  "proxy_global_dti": 0.14650067568975533,
+  "proxy_upland_ratio": 1.1975481802459158,
+  "basin": "no dots in the basin stratum (19 of 37,654)",
+  "transfer": {
+    "rho_in_band": 0.4642857142857144,
+    "p_in_band": 0.29393410760025196,
+    "band": "35,000-70,000 dots (the band every candidate here would be emitted in)"
+  }
+}
