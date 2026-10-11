@@ -1,6 +1,6 @@
 # GEMSDOE66 · GEMS Prize workbench (DrivenData competition 306)
 
-Live summary (GitHub Pages, from `docs/`): https://buffedlizard55-lab.github.io/GEMSDOE66/
+Live summary (GitHub Pages): https://buffedlizard55-lab.github.io/GEMSDOE66/ redirects to `docs/index.html`. Pages source is `main` at `/`; `index.html` and `.nojekyll` at the root serve `docs/`. (Changing the source to `/docs` needs repository admin rights.)
 
 > **Read this file at the start of every session.** It holds the brief the work is measured against.
 
