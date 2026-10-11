@@ -7,6 +7,18 @@
   "entries": [
     {
       "date": "2026-10-11",
+      "kind": "experiment-h66-2",
+      "status": "NEGATIVE-NOT-PROMOTED",
+      "summary": "Ran one preregistered H66-2 experiment (concordance of 10-vs-50 m step, dip-sense and crest-toe sharpness on the pinned 2 m LiDAR stack). Emitted and validated a 37,654-dot raster (float32, EPSG:32611, 0 NaN, values in [0,1], unique among the 21 rasters present). Verdict negative: the mass-matched terrain-only control is within 1.9x pooled, 99.95% of the mass is upland while the live-best incumbent's edge is in the basin, and the off-catalogue proxy does not order the live board at comparable mass (rho=+0.46, p=0.29 over the 35k-70k band). Bytes kept in artifacts/h66-2/ for audit; not published on the site; no slot used. Two corrections recorded: IR-66-BASE-01 (the first strata run's random control was an index-ordered corner sample; the advertised x16 upland ratio is x1.20) and IR-66-GUARD-02 (the stop guard hard-coded a foreign lane name).",
+      "links": [
+        "review/2026-10-11-h66-2-verdict.md",
+        "run-card.html",
+        "irregularities.html",
+        "feed.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
       "kind": "repository-audit",
       "status": "BLOCKED",
       "summary": "Audited the legacy H66 path. Full-catalogue distance affects candidate eligibility before holdout scoring; the holdout is not the required buffered whole-geologic-segment/LiDAR-only protocol; the writer path conflicts with the official NaN-outside contract. Legacy H66 scores are not qualified HOLDOUT-DTI.",
@@ -61,10 +73,10 @@
     }
   ],
   "next_actions": [
-    "Obtain authorized competition inputs through the official account outside this unauthenticated session; record provenance and hashes.",
-    "Inventory official 1 m DEM tiles and verify exact study-area overlap, CRS, datum, alignment, public-domain terms, and shareability.",
-    "Request or land the required fixes once in the shared template: whole vector-segment holdout with a spatial buffer, a LiDAR-valid pooled evaluator with 95% spatial-block CI, and a writer/validator path matching NaN outside the exact official footprint.",
-    "Obtain two independent scientific-lead reviews, then test the ranked lead only within the experiment/time budget.",
-    "Run leakage canaries, range-front stratification, complete-registry surface/dot checks, and exact official-grid validation before enabling any download."
+    "Register and preregister the union candidate (live-best incumbent dots plus the H66-2 complement) and run it against a sealed buffered whole-segment holdout before any slot.",
+    "Fix the shared writer/holdout once in the template (NaN-outside contract plus LiDAR-valid pooled evaluator with 95% spatial-block CI) as the audit requires; do not publish from the legacy gems57 path.",
+    "Settle IR-66-RELEASE-01 with an organizer receipt if one can be lawfully obtained, or keep every artifact unpublished.",
+    "Answer the standalone question of what field beats the owner-reported 0.2778: per-dot credit on a proxy does not order the live board at comparable mass, so only an identification upload or a genuinely new signal can decide it.",
+    "Obtain two independent scientific-lead reviews, then test the ranked lead only within the experiment/time budget."
   ]
 }
