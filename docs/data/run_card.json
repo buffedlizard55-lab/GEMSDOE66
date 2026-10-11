@@ -1,0 +1,214 @@
+{
+ "lane": "native-resolution lidar scarp channels (scarplet / Steger / Frangi)",
+ "hypothesis": "Faults the USGS Quaternary catalogue lacks are, in the GeoDAWN region, faults whose scarps are visible in 1 m lidar but are averaged away at 100 m; therefore a multiscale line/structure-tensor field built on the 1 m-LiDAR-derived scarp descriptors and the slope-detrended elevation should rank off-catalogue fault pixels higher than the geophysical-habitat fields the project family has used, and higher than chance.",
+ "mechanism": "Frangi multiscale vesselness (both polarities) + Steger sub-pixel line localisation + structure-tensor orientation coherence and dominant strike, at 2-20 pixel scales on the 100 m detrended elevation, fused with 1 m-LiDAR scarp amplitude x coherence and a strike-concordance gate, then masked against flat / very steep cultural ground. Emitted as 37,654 dots at >= 2.82 px separation with every dot within 200 m of the known catalogue deleted.",
+ "non_fault_process_that_could_mimic_it": "Fluvial terrace risers, alluvial-fan incisement edges, landslide head scarps, and - most importantly on flat ground - road cuts, canal banks and field boundaries all produce lineated 1 m scarps with high Hessian response. The strike-concordance term and the relief/slope cultural mask are the controls; the measured result is that the control is incomplete on basin floors, where the field's gain over chance is -0.003 (4/8 folds).",
+ "holdout": {
+  "evaluator_version": "gemsdoe66.metric.dti (verified to 1e-9 against a brute-force transcription of the organiser's equations)",
+  "instrument": "novelty - SGMC fault pixels > 300 m from the given catalogue",
+  "n_withheld_positives_per_fold": "~7,700 (8 spatially coherent balanced folds by connected component; 300 m buffer, training only)",
+  "metric": "pooled distance-weighted Tversky, alpha=0.2, beta=0.8, R=300 m",
+  "matched_envelope": "37,654 dots, min separation 2.82 px, 0 dots within 200 m of the catalogue, identical for every field",
+  "lidar_lane_dti": 0.07075,
+  "lidar_lane_ci95": [
+   0.05217326645773822,
+   0.08966882478700247
+  ],
+  "incumbent_0.2778_raster_dti": 0.04896,
+  "incumbent_ci95": [
+   0.03830318373164125,
+   0.05195599877600944
+  ],
+  "chance_level_dti": 0.03973192989019804,
+  "chance_ci95": [
+   0.03803334540003565,
+   0.041230025615689954
+  ],
+  "lane_minus_chance": 0.031021235718839187,
+  "lane_minus_chance_ci95": [
+   0.012527018335628125,
+   0.04978434094456125
+  ],
+  "lane_minus_chance_folds_positive": 7,
+  "lane_vs_incumbent": 0.02179,
+  "range_front_stratification": {
+   "low_relief (basin floor / pediment)": {
+    "n_folds": 8,
+    "lane_mean": 0.016369164235114326,
+    "random_mean": 0.019492137108894268,
+    "gain": -0.0031229728737799415,
+    "gain_ci95": [
+     -0.006674511746008967,
+     0.00024745670120992103
+    ],
+    "folds_positive": 4
+   },
+   "mid_relief": {
+    "n_folds": 8,
+    "lane_mean": 0.03307592154171194,
+    "random_mean": 0.018539737685347106,
+    "gain": 0.014536183856364836,
+    "gain_ci95": [
+     0.005527244972108931,
+     0.023580808218497323
+    ],
+    "folds_positive": 7
+   },
+   "high_relief (range front)": {
+    "n_folds": 8,
+    "lane_mean": 0.05199682439813187,
+    "random_mean": 0.018786616274491928,
+    "gain": 0.03321020812363995,
+    "gain_ci95": [
+     0.018290964204324474,
+     0.048554895202082504
+    ],
+    "folds_positive": 8
+   }
+  },
+  "range_front_verdict": "FAIL",
+  "relief_gate_measured_not_shipped": {
+   "none": {
+    "mean": 0.07075316560903723,
+    "ci95": [
+     0.05217326645773822,
+     0.08966882478700247
+    ],
+    "folds": [
+     0.04254620249862713,
+     0.09255316320740489,
+     0.03096383375205953,
+     0.11175048550734544,
+     0.05376266883881608,
+     0.07197415199152313,
+     0.06041040024798387,
+     0.10206441882853773
+    ],
+    "excluded_px": 305335
+   },
+   "relief>p10": {
+    "mean": 0.07075316560903723,
+    "ci95": [
+     0.05217326645773822,
+     0.08966882478700247
+    ],
+    "folds": [
+     0.04254620249862713,
+     0.09255316320740489,
+     0.03096383375205953,
+     0.11175048550734544,
+     0.05376266883881608,
+     0.07197415199152313,
+     0.06041040024798387,
+     0.10206441882853773
+    ],
+    "excluded_px": 891311
+   },
+   "relief>p20": {
+    "mean": 0.0709210775043872,
+    "ci95": [
+     0.052422098199163124,
+     0.08991317023858483
+    ],
+    "folds": [
+     0.04265470229677569,
+     0.09269218988014162,
+     0.031052206683264447,
+     0.1117463536577744,
+     0.053941304691727164,
+     0.07257343060595696,
+     0.06048126388308219,
+     0.10222716833637509
+    ],
+    "excluded_px": 1392303
+   },
+   "relief>p33": {
+    "mean": 0.0727744299200982,
+    "ci95": [
+     0.05427123340926761,
+     0.09203065805007016
+    ],
+    "folds": [
+     0.04483717439460055,
+     0.0947814199842632,
+     0.03281850422247724,
+     0.11372524576624837,
+     0.055203640269531104,
+     0.07400148063242683,
+     0.06135160570698534,
+     0.10547636838425295
+    ],
+    "excluded_px": 2018620
+   },
+   "relief>p50": {
+    "mean": 0.0759174270684137,
+    "ci95": [
+     0.0568066214476338,
+     0.09565601493003735
+    ],
+    "folds": [
+     0.04726384462797653,
+     0.09899447283457218,
+     0.035196883891367596,
+     0.1174853655973321,
+     0.05663599316089806,
+     0.07819814041826462,
+     0.0636273695340088,
+     0.10993734648288978
+    ],
+    "excluded_px": 2788251
+   }
+  }
+ },
+ "correlation_overlap_vs_registry": {
+  "n_registry_rasters_compared": 60,
+  "max_abs_spearman_rho_dots": 0.2771246351949893,
+  "argmax_rho_dots": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "max_abs_spearman_rho_surface": null,
+  "argmax_rho_surface": null,
+  "max_frac_dots_within_3px": 0.9903861475540447,
+  "max_lift_over_random": 3.487693243713407,
+  "verdict": "UNIQUE",
+  "thresholds": {
+   "max_rho": 0.9,
+   "max_within3": 0.7,
+   "min_lift": 1.5
+  }
+ },
+ "raster": {
+  "filename": "gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.tif",
+  "sha256": "bf06995f94d3f8a661772a023d447b559c57c676c86ddb7a3cb51efe92da73f5",
+  "size_bytes": 463666,
+  "zeros_variant_sha256": "9e8c4b80325b55400c3c8c9f3a464e62ba16897e5ba8d4b60e26a48c0c1e4283"
+ },
+ "validator_output": {
+  "no_nan_inside_footprint": true,
+  "values_in_0_1": true,
+  "crs_shape_transform_match": true,
+  "nan_only_outside_footprint": true,
+  "dtype_float32_single_band": true,
+  "all_checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "dimensions_3730x3292": true,
+   "crs_epsg_32611": true,
+   "transform_matches_template": true,
+   "in_footprint_zero_nan": true,
+   "in_footprint_zero_inf": true,
+   "in_footprint_no_sentinel": true,
+   "in_footprint_range_0_1": true,
+   "in_footprint_has_positive": true,
+   "outside_footprint_nan": true,
+   "zero_positive_within_2.0px_of_catalogue": true
+  },
+  "ok": true
+ },
+ "submission": {
+  "name": "gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba",
+  "note_140chars": "GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN lidar, 37,654 dots, 0 within 200 m of the catalogue.",
+  "note_length": 128
+ },
+ "verdict": "promote",
+ "verdict_basis": "gate = lane beats the incumbent's raster on the novelty holdout AND the lane-minus-chance 95% CI excludes zero AND the format validator passes on the bytes AND the duplicate gate returns UNIQUE",
+ "not_claimed": "no organiser score exists for this or any artifact here; the holdout truth is SGMC, not the expert panel's hidden set; promotion here means 'meets the local gate', not 'will score X'"
+}

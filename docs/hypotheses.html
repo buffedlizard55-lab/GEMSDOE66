@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hypotheses · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="on">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<main class="wrap">
+
+<h2>Candidate hypotheses, ranked before measurement</h2>
+<p>Each names the layers, the physical signature, why it should catch a fault the catalogue
+lacks, and how it differs from everything already in the project family.</p>
+<table>
+<tr><th>#</th><th>hypothesis</th><th>layers</th><th>signature</th><th>why it finds a
+<i>missing</i> fault</th><th>cost</th><th>result</th></tr>
+<tr><td><b>H1</b><br><span class="tag">tested</span></td>
+ <td>Native-resolution lidar scarp lane</td>
+ <td>1 m-LiDAR descriptors <code>L_ex_max, L_step_max, L_coh100, L_strike</code>;
+     100 m <code>det_elev</code>; 10 m <code>slope_p90, relief_local, aspect_coherence</code></td>
+ <td>Frangi multiscale vesselness + Steger sub-pixel line localisation + structure-tensor
+     coherence/strike, at 2–20 px scales, fused with scarp amplitude × coherence and a
+     strike-concordance term</td>
+ <td>The INGENIOUS mappers identified faults from 1 m GeoDAWN lidar hillshades
+     (Giddens et al., Stanford Geothermal Workshop 2025). A fault they could add is one whose
+     scarp is visible at 1 m and absent from the Quaternary catalogue; the 100 m stack
+     averages that scarp away.</td>
+ <td>low</td>
+ <td><span class="pill ok">PROMOTED</span><br>+0.031 over chance</td></tr>
+
+<tr><td><b>H2</b><br><span class="tag">tested</span></td>
+ <td>SGMC off-catalogue supervised field</td>
+ <td>all 53 non-inventory layers</td>
+ <td>gradient boosting, positives = 61,664 SGMC fault pixels &gt; 300 m from the catalogue</td>
+ <td>SGMC is the only large inventory of <i>real</i> faults the given catalogue lacks, so it is
+     the closest analogue of the hidden set. Prior sessions used SGMC only as an evaluation
+     instrument, never as a training target.</td>
+ <td>low</td>
+ <td><span class="pill bad">REFUTED</span><br>−0.035 vs incumbent</td></tr>
+
+<tr><td><b>H3</b><br><span class="tag">tested</span></td>
+ <td>Catalogue habitat (the family's implicit method)</td>
+ <td>all 53 non-inventory layers</td>
+ <td>gradient boosting on the 60,988 given labels</td>
+ <td>control: measures what a catalogue-trained detector achieves on off-catalogue truth</td>
+ <td>low</td>
+ <td><span class="pill warn">CONTROL</span><br>−0.014 vs incumbent</td></tr>
+
+<tr><td><b>H4</b><br><span class="tag">tested</span></td>
+ <td>Novelty × lane fusion</td>
+ <td>H1 + H2</td><td>rank fusion 0.6·H2 + 0.4·H1</td>
+ <td>corroboration: two independent channels must agree</td>
+ <td>low</td>
+ <td><span class="pill bad">REFUTED</span><br>−0.026 vs incumbent</td></tr>
+
+<tr><td><b>H5</b><br><span class="tag">not run</span></td>
+ <td>Relief-gated emission</td>
+ <td>H1 + <code>T_relief_local</code></td>
+ <td>refuse to emit below a relief percentile</td>
+ <td>a scarp cannot survive basin-floor aggradation, so mass there is pure cost</td>
+ <td>low</td>
+ <td><span class="pill warn">MEASURED, NOT SHIPPED</span><br>+0.005 local, unmeasurable
+     live risk</td></tr>
+</table>
+
+<h3>Results at a glance (novelty instrument, 8 folds, matched envelope)</h3>
+<table><tr><th>field</th><th>mean DTI</th><th>vs incumbent</th></tr>
+<tr><td class='mono'>catalogue_habitat</td><td>0.03505</td><td>-0.01391</td></tr><tr><td class='mono'>fusion</td><td>0.02343</td><td>-0.02553</td></tr><tr><td class='mono'>incumbent</td><td>0.04896</td><td>+0.00000</td></tr><tr><td class='mono'>lidar_lane</td><td>0.07075</td><td>+0.02179</td></tr><tr><td class='mono'>sgmc_novel</td><td>0.01363</td><td>-0.03533</td></tr>
+<tr><td class="mono"><b>random (chance)</b></td>
+    <td><b>0.03973</b><td>—</td></tr></table>
+
+<div class="bad"><b>Why H2 failed, and why that is the most useful result of the session.</b>
+A model trained on off-catalogue SGMC faults scores 0.014 on held-out SGMC faults — worse than
+random. It has learned the <i>regional geology</i> of the training clusters, not the fault
+signal: when a whole spatial cluster is withheld, nothing transfers. Any proposal to "train on
+the faults the catalogue is missing" has to survive that test, and this one did not.</div>
+
+</main>
+<footer><div class="wrap">
+GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
+competition <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a>.
+Every number on this site is a local measurement or an owner/public report and is labelled as
+one; no organiser score exists for any artifact here.
+</div></footer></body></html>

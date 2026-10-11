@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sources · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="sources.html" class="on">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<main class="wrap">
+
+<h2>Sources</h2>
+<p>Every link below was read for this session. Items marked <b>[official]</b> are organiser or
+USGS primary sources; <b>[literature]</b> items are peer-reviewed or conference proceedings.</p>
+<table>
+<tr><th>source</th><th>what we took from it</th><th>link</th></tr>
+<tr><td>Competition problem page</td><td>metric definition, α/β/R, submission format, the
+ statement that the test set is faults <i>not</i> in the USGS database</td>
+ <td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">page 967</a></td></tr>
+<tr><td>Competition leaderboard</td><td>the live public board (0.4133 at #1 on 2026-10-11)</td>
+ <td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a></td></tr>
+<tr><td>Competition rules</td><td>submission caps and prize-round structure</td>
+ <td><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">96647.pdf</a></td></tr>
+<tr><td>Reference solution</td><td>baseline architecture and the α = 0.2 / β = 0.8 convention</td>
+ <td><a href="https://github.com/drivendataorg/gems-prize-reference-solution">github</a></td></tr>
+<tr><td>USGS GeoDAWN data release</td><td>the survey the challenge region is defined by</td>
+ <td><a href="https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7">ScienceBase</a></td></tr>
+<tr><td>USGS 3DEP</td><td>1 m and 10 m DEMs behind the lidar scarp and topography channels</td>
+ <td><a href="https://www.usgs.gov/3d-elevation-program">3DEP</a></td></tr>
+<tr><td>GBCGE INGENIOUS</td><td>the project whose fault compilation supplies the labels</td>
+ <td><a href="https://gbcge.org/current-projects/ingenious/">gbcge.org</a></td></tr>
+<tr><td>GDR submission 1391</td><td>wells/springs, Quaternary fault traces, volcanic vents (CC BY 4.0)</td>
+ <td><a href="https://gdr.openei.org/submissions/1391">gdr.openei.org</a></td></tr>
+<tr><td>Giddens et al. 2025, Stanford Geothermal Workshop</td>
+ <td>"LiDAR and hillshades were utilized to identify the extent and location of Quaternary
+ faults"; 1 m GeoDAWN lidar supplied by USGS; gravity most useful for fault geometry;
+ step-overs the dominant favourable setting</td>
+ <td><a href="https://pangea.stanford.edu/ERE/pdf/IGAstandard/SGW/2025/Giddens.pdf">PDF</a></td></tr>
+<tr><td>Sare &amp; Hilley 2018</td><td>scarplet template matching: amplitude, relative age,
+ orientation, SNR</td>
+ <td><a href="https://doi.org/10.21105/joss.01066">doi:10.21105/joss.01066</a></td></tr>
+<tr><td>Steger 1998</td><td>sub-pixel line extraction from the Hessian eigenvector</td>
+ <td><a href="https://doi.org/10.1109/34.659930">doi:10.1109/34.659930</a></td></tr>
+<tr><td>Frangi et al. 1998</td><td>multiscale Hessian vesselness</td>
+ <td><a href="https://doi.org/10.1007/BFb0056195">doi:10.1007/BFb0056195</a></td></tr>
+<tr><td>EPSG:32611</td><td>the required CRS</td>
+ <td><a href="https://epsg.io/32611">epsg.io</a></td></tr>
+</table>
+<div class="note"><b>Data provenance caveat.</b> The competition rasters are login-walled at
+drivendata.org. The bytes used here are <b>owner-supplied GitHub mirrors</b>, pinned by sha256
+in <code>registry/data_manifest.json</code> and verified on fetch (23/23). A pin proves mirror
+consistency; it does <b>not</b> prove organiser authentication.</div>
+
+</main>
+<footer><div class="wrap">
+GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
+competition <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a>.
+Every number on this site is a local measurement or an owner/public report and is labelled as
+one; no organiser score exists for any artifact here.
+</div></footer></body></html>

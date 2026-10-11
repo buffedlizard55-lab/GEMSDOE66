@@ -1,0 +1,133 @@
+{
+ "slug": "gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba",
+ "field": "lidar_lane",
+ "n_dots": 37654,
+ "min_sep_px": 2.82,
+ "catalogue_prune_px": 2.0,
+ "scatter_sigma": null,
+ "generated_utc": "20261011T214803Z",
+ "modes": {
+  "nan": {
+   "write": {
+    "path": "/home/user/GEMSDOE66/docs/downloads/gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.tif",
+    "filename": "gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.tif",
+    "size_bytes": 463666,
+    "sha256": "bf06995f94d3f8a661772a023d447b559c57c676c86ddb7a3cb51efe92da73f5",
+    "mode": "nan",
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ]
+   },
+   "validate": {
+    "ok": true,
+    "checks": {
+     "single_band": true,
+     "dtype_float32": true,
+     "dimensions_3730x3292": true,
+     "crs_epsg_32611": true,
+     "transform_matches_template": true,
+     "in_footprint_zero_nan": true,
+     "in_footprint_zero_inf": true,
+     "in_footprint_no_sentinel": true,
+     "in_footprint_range_0_1": true,
+     "in_footprint_has_positive": true,
+     "outside_footprint_nan": true,
+     "zero_positive_within_2.0px_of_catalogue": true,
+     "emitted_count_matches_budget": true
+    },
+    "stats": {
+     "in_footprint_pixels": 5167373,
+     "in_footprint_finite": 5167373,
+     "in_footprint_min": 0.0,
+     "in_footprint_max": 1.0,
+     "in_footprint_mean": 0.0072868745774030685,
+     "positive_pixels": 37654,
+     "outside_footprint_pixels": 7111787,
+     "positive_within_catalogue_buffer": 0,
+     "emitted_count": 37654,
+     "expected_count": 37654
+    },
+    "filename": "gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.tif",
+    "size_bytes": 463666,
+    "sha256": "bf06995f94d3f8a661772a023d447b559c57c676c86ddb7a3cb51efe92da73f5"
+   }
+  },
+  "zeros": {
+   "write": {
+    "path": "/home/user/GEMSDOE66/docs/downloads/gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-zeros.tif",
+    "filename": "gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-zeros.tif",
+    "size_bytes": 389282,
+    "sha256": "9e8c4b80325b55400c3c8c9f3a464e62ba16897e5ba8d4b60e26a48c0c1e4283",
+    "mode": "zeros",
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ]
+   },
+   "validate": {
+    "ok": true,
+    "checks": {
+     "single_band": true,
+     "dtype_float32": true,
+     "dimensions_3730x3292": true,
+     "crs_epsg_32611": true,
+     "transform_matches_template": true,
+     "in_footprint_zero_nan": true,
+     "in_footprint_zero_inf": true,
+     "in_footprint_no_sentinel": true,
+     "in_footprint_range_0_1": true,
+     "in_footprint_has_positive": true,
+     "outside_footprint_zero": true,
+     "zero_positive_within_2.0px_of_catalogue": true,
+     "emitted_count_matches_budget": true
+    },
+    "stats": {
+     "in_footprint_pixels": 5167373,
+     "in_footprint_finite": 5167373,
+     "in_footprint_min": 0.0,
+     "in_footprint_max": 1.0,
+     "in_footprint_mean": 0.0072868745774030685,
+     "positive_pixels": 37654,
+     "outside_footprint_pixels": 7111787,
+     "positive_within_catalogue_buffer": 0,
+     "emitted_count": 37654,
+     "expected_count": 37654
+    },
+    "filename": "gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-zeros.tif",
+    "size_bytes": 389282,
+    "sha256": "9e8c4b80325b55400c3c8c9f3a464e62ba16897e5ba8d4b60e26a48c0c1e4283"
+   }
+  }
+ },
+ "uniqueness": {
+  "verdict": "DUPLICATE_OVERLAP",
+  "max_abs_spearman_rho": 0.2771246351949893,
+  "argmax_rho": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "max_frac_dots_within_3px": 0.9903861475540447,
+  "argmax_within3": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "identical_to": [],
+  "n_compared": 60
+ },
+ "runtime_s": 184.0
+}

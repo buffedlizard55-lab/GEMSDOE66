@@ -1,0 +1,36 @@
+# Python & build artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+.cache/
+
+# Competition rasters, external derivatives and regenerable caches.
+# Everything here is restorable byte-for-byte by
+#     python3 scripts/fetch_mirrors.py     (23/23 sha256-pinned mirrors)
+#     python3 -m gemsdoe66.features        (the 59-layer footprint stack)
+# Keeping them out of git is deliberate: the pin, not a committed copy, is the guarantee.
+data/raw/
+!data/raw/.gitkeep
+data/processed/
+!data/processed/.gitkeep
+*.npy
+*.npz
+*.partial
+*.assembling
+data/restore_receipt.json
+
+# Keep audited submission deliverables and their verification sidecars
+!docs/downloads/*.tif
+!docs/downloads/*.zip
+!docs/downloads/*.json
+
+# OS / editor
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Irregularities · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="on">Irregularities</a></nav></div></header>
+<main class="wrap">
+
+<h2>Irregularities</h2>
+<table>
+<tr><th>id</th><th>what</th><th>status</th></tr>
+<tr><td><b>IR-66-SCORE-01</b></td>
+ <td>The task brief states "0.3195 is the highest score right now". The live public
+ leaderboard on 2026-10-11 shows <b>0.4133 at #1</b> and 0.3195 (DARD) at <b>rank 9</b>. The
+ brief's target is a stale snapshot.</td>
+ <td><span class="pill warn">OPEN</span></td></tr>
+<tr><td><b>IR-66-DATA-01</b></td>
+ <td>The sandbox reaches only github.com, api.github.com, pypi.org and their CDNs.
+ <code>prd-tnm.s3.amazonaws.com</code>, <code>earthquake.usgs.gov</code>,
+ <code>gdr.openei.org</code>, <code>sciencebase.gov</code> and <code>dropbox.com</code> all
+ return HTTP 000. The raw 1 m GeoDAWN lidar and 10 m 3DEP tiles are therefore unobtainable
+ here, and the scarplet template matcher cannot be run on native-resolution data.</td>
+ <td><span class="pill warn">OPEN</span></td></tr>
+<tr><td><b>IR-66-DATA-02</b></td>
+ <td>The 10 m-DEM channel-steepness product covers <b>25 of 36 blocks</b>.</td>
+ <td><span class="pill warn">OPEN</span></td></tr>
+<tr><td><b>IR-66-PROXY-01</b></td>
+ <td>Layer dot-means correlate with owner-reported live scores at |ρ| up to 0.98, but also with
+ the emitted dot count at |ρ| = 0.5–0.9. The lidar scarp channels flip sign under nuisance
+ control. The live anchor is a lane-choice prior, not evidence.</td>
+ <td><span class="pill warn">OPEN</span></td></tr>
+<tr><td><b>IR-66-GATE-01</b></td>
+ <td>The protocol's "70 % of dots within 3 px" duplicate test trips on any registry raster that
+ is much denser than the candidate: against a 311,617-dot file, ~83 % of <i>random</i>
+ locations are already within 3 px. The gate was made density-aware (overlap must exceed 70 %
+ <b>and</b> 1.5× the random-placement rate).</td>
+ <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-66-BUG-01</b></td>
+ <td>The first holdout run excluded the held-out truth's 300 m buffer from <i>emission</i> as
+ well as training, forcing TP<sub>w</sub> = 0 for every candidate. The buffer is
+ training-only.</td>
+ <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-66-BUG-02</b></td>
+ <td>The greedy packer suppressed neighbours only across blocks, so two dots accepted inside
+ the same block could sit closer than the minimum separation. Each accepted pixel now stamps
+ its exclusion disc.</td>
+ <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-66-BUG-03</b></td>
+ <td><code>folds_by_quadrant</code> assigned background (label 0) to fold 0 and produced folds
+ of 2,307 vs 23,044 px. Replaced by balanced spatial clustering of connected components.</td>
+ <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-66-H2-01</b></td>
+ <td>A supervised field trained on off-catalogue SGMC faults scores <b>below chance</b> on
+ held-out SGMC faults: it learns regional geology, not the fault signal.</td>
+ <td><span class="pill bad">NEGATIVE RESULT</span></td></tr>
+</table>
+
+</main>
+<footer><div class="wrap">
+GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
+competition <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a>.
+Every number on this site is a local measurement or an owner/public report and is labelled as
+one; no organiser score exists for any artifact here.
+</div></footer></body></html>
