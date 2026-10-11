@@ -152,6 +152,19 @@ def test_historical_evidence_is_quarantined_and_sgmc_source_is_internal():
     assert "S08" not in ir13["detail"]
 
 
+def test_legacy_data_ingress_entrypoints_are_check_only():
+    downloader = (ROOT / "scripts" / "download_competition_data.sh").read_text(encoding="utf-8")
+    preflight = (ROOT / "scripts" / "fetch_inputs.sh").read_text(encoding="utf-8")
+    prepare = (ROOT / "scripts" / "prepare_data.py").read_text(encoding="utf-8")
+    for text in (downloader, preflight):
+        assert "gh api" not in text
+        assert "curl " not in text
+        assert "wget " not in text
+    assert "exec bash" in downloader
+    assert "disabled" in prepare.lower()
+    assert "download" in prepare.lower()
+
+
 def test_canonical_and_legacy_mirrors_are_synchronized():
     pairs = [
         (DOCS / "data" / "hypotheses.json", ROOT / "registry" / "hypotheses.json"),

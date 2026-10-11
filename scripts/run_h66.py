@@ -420,7 +420,8 @@ def s5_emit(st) -> dict:
     n = int(dots.sum())
     pred = np.zeros(dots.shape, np.float32)
     pred[dots] = 1.0
-    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    import os
+    stamp = os.getenv("GEMS_STAMP", "20261011T203224Z")
     tag = f"gems66-h66-1-scarplet-veto-{n}-{stamp}"
     dl = ROOT / "docs/downloads"
     dl.mkdir(parents=True, exist_ok=True)
@@ -482,7 +483,6 @@ def s4b_detector_holdout(st) -> dict:
     front = dom & (slope >= np.quantile(slope[dom], 0.90)) & (rel >= np.quantile(rel[dom], 0.80))
     off = dom & ~front
     arms = {"vetoed": _pick(score, elig, N), "unvetoed": _pick(unvet, elig, N),
-            "champion_h33_2_b2": None,
             "random_mass_matched": _random_dots(dom, elig, N, 909)}
     cp = ROOT / "registry/rasters/GEMSDOE32__h33-2-b2-zeros.tif"
     if cp.exists():

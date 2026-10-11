@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-11T20:32:24Z",
+  "generated_utc": "2026-10-11T21:22:37Z",
   "tag": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z",
   "dots": 37654,
   "budget_requested": 37654,
@@ -38,7 +38,7 @@
   "sha256": {
     "allfinite": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
     "nan": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
-    "zip": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a"
+    "zip": "d1c9d78af61a00d0f09ee96552631d7bd697fec9927ca6ed72a5a736579c3b29"
   },
   "evidence_disposition": {
     "status": "UNQUALIFIED LEGACY EXPLORATORY EVIDENCE — NOT A CURRENT HOLDOUT-DTI OR ORGANIZER-CONFIRMED SCORE",
@@ -46,10 +46,10 @@
     "withheld_positive_count": null,
     "ci95": null,
     "reasons": [
-      "Legacy H66 used full-catalogue distance during candidate eligibility before holdout scoring.",
+      "The historical H66 runner used full-catalogue distance during candidate eligibility before holdout scoring.",
       "The evaluation did not use the required buffered whole-segment protocol with a LiDAR-only valid mask.",
       "No valid pooled 95% spatial-block confidence interval was established for these values.",
-      "These records are preserved for audit/negative-result traceability only; do not report their numeric fields as HOLDOUT-DTI or organizer-confirmed scores."
+      "These files are preserved for audit/negative-result traceability only; their metric-like fields are not current HOLDOUT-DTI or organizer-confirmed scores."
     ],
     "canonical_review": "docs/review/2026-10-11-audit.md"
   }

@@ -6,4 +6,6 @@ The evidence JSON files include a top-level `evidence_disposition` that records 
 
 The exploratory negative cultural-veto/proxy comparison is retained in `h66_e1_offcat.json` for traceability. It used an SGMC-derived proxy, not organizer labels or GeoDAWN data; it is unqualified and cannot be generalized to the competition test set.
 
+`data_verification.json` is an older owner-mirror integrity record imported from the updated base branch. Its file-level disposition states that it is not organizer authentication, current input provenance, LiDAR coverage certification, a holdout result, or release clearance. Its listed raster bytes are not present in the current checkout.
+
 No `HOLDOUT-DTI` measurement from this review exists. A future result must include the exact evaluator version, withheld-positive count, and a 95% spatial-block confidence interval. An organizer value may be called `ORGANIZER-CONFIRMED` only when copied from a submission receipt tied to the exact artifact SHA-256. No credentials or hidden labels were used in this review.

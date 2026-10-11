@@ -53,7 +53,7 @@ The H33-2-B2 score attribution in the previous project material is **unverified*
 - The competition-provided `1m_DEM_links.csv`, training features, labels, and sample submission are absent. Owner-maintained GitHub mirrors and cached derivatives are not organizer-authenticated merely because a hash matches a mirror manifest.
 - Do not download competition data from unofficial sources or put private competition rasters in Git. Record source, license, acquisition date, file hashes, and exact processing lineage for every external input.
 
-`bash scripts/fetch_inputs.sh` is now a **local presence check only**. It does not download or copy data and exits nonzero if required inputs are missing. It never asks for or stores competition credentials.
+`bash scripts/fetch_inputs.sh` is a **local presence check only**. It does not download or copy data and exits nonzero if required inputs are missing. The historical `scripts/download_competition_data.sh` name is retained only as a check-only wrapper; `scripts/prepare_data.py` is disabled. Neither contacts mirrors or hosts. No script asks for or stores competition credentials.
 
 ## Reproduction and checks
 

@@ -55,8 +55,8 @@
     {
       "date": "2026-10-11",
       "kind": "test-suite",
-      "status": "PASS — 71 offline tests",
-      "summary": "The final local offline suite passed 71 tests. This verifies repository-level behavior only; it does not validate competition inputs, a spatial holdout, registry completeness, official-grid alignment, or organizer acceptance.",
+      "status": "PASS — 72 offline tests",
+      "summary": "The final local offline suite passed 72 tests. This verifies repository-level behavior only; it does not validate competition inputs, a spatial holdout, registry completeness, official-grid alignment, or organizer acceptance.",
       "links": []
     }
   ],
