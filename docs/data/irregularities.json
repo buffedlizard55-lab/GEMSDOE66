@@ -205,7 +205,7 @@
     {
       "id": "IR-72-MAIN-MERGE-CONFLICTS",
       "severity": "medium",
-      "status": "RESOLVED — site regenerated; 113 passed, 5 skipped; GitHub checks pending",
+      "status": "RESOLVED — conflicting paths reconciled and affected site pages regenerated",
       "title": "Incoming main conflicts overlapped PR #12's no-download site and audit changes",
       "detail": "Merging origin/main commit 8f522351 from merge-base 5970770b produced content conflicts in docs/downloads/README.md, docs/index.html, docs/irregularities.html, and scripts/build_site.py. The resolution preserves the no-download/audit-only state, combines the PR #12 provenance and raw-overlap disclosures with the current site generator, and regenerates affected HTML from repository data. This is a merge-process irregularity, not evidence that any scientific release gate passed.",
       "source_ids": [],
