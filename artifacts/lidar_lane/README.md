@@ -1,111 +1,85 @@
-# lidar_lane artifact — NOT CLEARED, do not submit
+# Inherited `lidar_lane` artifact — NOT CLEARED; do not submit
 
-| File | sha256 | Bytes |
-|---|---|---|
+This PR #13 artifact is retained **for audit only**. It is not a candidate for the current
+LIDAR-01 hypothesis, and its result is not evidence of organizer-confirmed competition
+performance. No submission slot was used for this artifact in this reconciliation.
+
+## Recorded files
+
+| File | SHA-256 | Bytes |
+|---|---|---:|
 | `gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.tif` | `bf06995f94d3f8a661772a023d447b559c57c676c86ddb7a3cb51efe92da73f5` | 463,666 |
-| `gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.zip` | (zip of the above) | 355,264 |
+| `gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.zip` | ZIP of the TIFF above | 355,264 |
 | `gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-zeros.tif` | `9e8c4b80325b55400c3c8c9f3a464e62ba16897e5ba8d4b60e26a48c0c1e4283` | 389,282 |
-| `gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-zeros.zip` | (zip of the above) | 279,456 |
+| `gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-zeros.zip` | ZIP of the TIFF above | 279,456 |
 
-**Status: NEGATIVE — NOT PROMOTED.** The file is format-valid and unique; it is not
-submission-cleared, because our own evidence cannot distinguish it from the incumbent.
+The historical field used 100 m-derived inputs and 2–20-pixel line scales on that grid
+(200–2,000 m), so it is **scale-deviating** from the requested native-resolution 2–20 m
+scarplet-template/Steger/Frangi method. Exact authorized 1 m input tiles were not available
+for this run. The raster hashes identify these local files only; they do not establish any
+submission receipt or external acceptance.
 
-## Why
+## Internal holdout measurements — not organizer results
 
-The pooled holdout said promote: lane **0.07075** vs incumbent **0.04896** vs chance
-**0.04019** (HOLDOUT-DTI, novelty instrument, 8 blocked folds, 37,654 dots, α 0.2 / β 0.8,
-300 m kernel). That comparison is confounded.
+Every metric value in this section is labelled **HOLDOUT-DTI**. These are inherited internal
+SGMC off-catalogue proxy measurements, not measurements on the organizer's hidden test faults,
+and they do not establish the performance of the requested native-resolution method. No
+`ORGANIZER-CONFIRMED` score or receipt tied to these file hashes is present.
 
-The novelty truth (SGMC faults > 300 m from the given catalogue) is not distributed like the
-terrain:
+- Evaluator: `gemsdoe66.metric.dti` (the run record says its formula was checked to 1e-9 against
+a transcription of the organizer's equations).
+- Instrument: SGMC fault pixels more than 300 m from the given catalogue; 8 spatially coherent
+folds, with an approximately 300 m training buffer and approximately 7,700 withheld positives
+per fold. The recorded method was component-based and is not the requested authoritative
+whole-fault-segment/LiDAR-covered-block protocol.
+- Scoring: pooled distance-weighted Tversky, α=0.2, β=0.8, 300 m kernel. The pooled artifact
+budget was 37,654 dots.
 
-| stratum | share of **footprint** | share of **truth** | enrichment |
-|---|---|---|---|
-| basin (relief ≤ 2.54 m) | 23.7 % | 1.3 % | 0.06× |
-| mid relief | 51.1 % | 39.4 % | 0.77× |
-| range front (relief ≥ 25.37 m) | 25.2 % | 59.3 % | **2.4×** |
+| Instrument | Label | Lane HOLDOUT-DTI mean [95% CI] | Incumbent HOLDOUT-DTI mean [95% CI] |
+|---|---|---:|---:|
+| Pooled SGMC novelty proxy | **HOLDOUT-DTI** | 0.07075 [0.05217, 0.08967] | 0.04896 [0.04191, 0.05669] |
+| Relief-matched SGMC novelty proxy | **HOLDOUT-DTI** | 0.02638 [0.02087, 0.03183] | 0.02727 [0.02421, 0.03049] |
 
-Mapped faults concentrate on range fronts because scarps are *visible* there, not because
-faults are. Any scarp field therefore beats a uniform field on a mapped-fault truth simply by
-matching the truth's relief prior — which is the failure mode the task warns about in another
-guise. The lane puts 64.3 % of its dots on range fronts (the incumbent: 17.2 %), so it matches
-the truth's prior almost exactly.
+For the relief-matched instrument, the **HOLDOUT-DTI paired lane-minus-incumbent difference**
+was −0.00089 [95% CI −0.00836, 0.00664], positive in 3 of 8 folds. The **HOLDOUT-DTI**
+relief-matched random-placement control was 0.02612 [95% CI 0.02436, 0.02741]; lane minus
+random was +0.00026 [95% CI −0.00552, 0.00601], positive in 4 of 8 folds. The lane advantage
+did not survive relief matching; the confidence intervals do not establish improvement over
+the incumbent or random control. These values are historical diagnostics, not a score projection.
 
-`scripts/check_relief_matched.py` removes the confound: the 37,654-pixel budget is allocated
-across relief strata **in proportion to footprint area**, each stratum is scored with the same
-pooled DTI, and the strata are averaged with footprint weights.
+The recorded novelty truth is relief-imbalanced: range-front terrain is 59.3% of that proxy
+truth but 25.2% of the footprint. Relief matching reallocates the fixed dot budget in proportion
+to footprint area before comparing strata. This is a diagnostic against terrain-prior matching,
+not proof about organizer labels.
 
-| instrument | lane | incumbent | uniform random |
-|---|---|---|---|
-| pooled (confounded) | **0.07075** | 0.04896 | 0.04019 |
-| **relief-matched (de-confounded)** | 0.02638 | **0.02727** | 0.02612 |
+## Uniqueness, provenance, and local validation
 
-* lane − incumbent = **−0.00089**, 95 % CI [−0.0084, +0.0066], positive in **3/8** folds
-* lane − random = **+0.00026**, 95 % CI [−0.0055, +0.0060], positive in **4/8** folds
-* **confound size = +0.02268** — i.e. the entire +0.0218 headline gain
+The recorded **raw final-dot overlap** is 0.990386 of candidate dots within 3 pixels of one
+accessible registry raster, above the 0.70 stop threshold. The maximum absolute Spearman ρ
+against registry rasters on emitted dots was 0.277125 (below 0.90), but the continuous pre-placement surface comparison was
+**not reported**. A density-adjusted diagnostic labels the scan `UNIQUE`; that label does not
+override the raw-overlap stop. Only 60 accessible rasters were compared, registry completeness
+is not certified, and a full-registry hash/pixel-agreement pass is not established. The artifact
+is **not considered unique or release-cleared**.
 
-Per stratum (footprint-weighted average of these three rows is the relief-matched score):
+The historical sidecars record local raster-format checks for the generated variants, including
+float32, EPSG:32611, dimensions 3730×3292, [0,1] range, and the applicable outside-footprint
+encoding. Those local checks do not certify alignment to the official submission grid or
+organizer acceptance. The official sample grid and authorized input set are not verified in this
+reconciliation.
 
-| stratum | share | lane | incumbent | random |
-|---|---|---|---|---|
-| basin | 23.7 % | 0.00090 | 0.00087 | 0.00274 |
-| mid relief | 51.1 % | 0.02630 | **0.03948** | 0.02585 |
-| range front | 25.2 % | **0.05054** | 0.02737 | 0.04867 |
+## Decision and audit trail
 
-Two things stand out. In mid relief — half the board — the incumbent wins clearly. On range
-fronts the lane's 0.0505 is barely above *random placement*'s 0.0487 at the same budget: most
-of the apparent range-front skill was the budget-concentration effect, not detection.
+**Verdict: negative; `promote: false`; status: audit only; do not submit.** The raw overlap gate
+trips, full registry access is uncertified, the surface check is missing, and the relief-matched
+comparison does not show a gain. The historical submission name/note are not cleared for use;
+no slot was used. Do not run emission or submission commands to reproduce this artifact.
 
-The pooled numbers reproduce the published run exactly (0.07075 / 0.04896), so the
-relief-matched instrument is calibrated; only the de-confounding is new.
+Supporting records:
 
-### Independent corroboration
-
-The parallel session's H66-2 experiment (`../h66-2/`, "concordance of three independent 2 m
-LiDAR scarp attributes") reached a **negative** verdict by a different route: its mass-matched
-terrain-only control came within 1.9× of the field pooled. Two independent scarp-lane
-experiments, two different controls, the same conclusion: the apparent edge is terrain
-matching, not fault detection.
-
-Note a correction to one of H66-2's premises: it reports that "the live-best incumbent's edge
-lives in the basin". For the 0.2778 incumbent this is not so — that raster is **0.0 % basin**
-and 17.2 % range front. Across the 20 registry rasters carrying owner scores, live score vs
-basin fraction is ρ = +0.05 (p = 0.83); vs range-front fraction ρ = +0.48 (p = 0.031);
-vs dot count ρ = **−0.85** (p < 0.001). Budget dominates. The range-front term survives at
-ρ = +0.33 but not significantly after controlling for dot count (p = 0.15), and the lane's
-64 % sits 3.7× outside the family's 17 % operating point, so it is an extrapolation.
-
-## What the bytes still are
-
-Verified on the exact bytes by re-reading the written file
-(`docs/downloads/checks-…-nan.tif.json`, 12/12 checks):
-
-* single-band float32, 3730 × 3292, EPSG:32611, transform `[100, 0, 243350, 0, -100, 4508550]`
-* 37,654 pixels = 1.0, every other in-footprint cell 0.0
-* no NaN, no inf, no sentinel inside the footprint; **NaN outside** the footprint
-* every finite value in **[0, 1]** — the `Predicted values must be in range [0, 1]` rule
-* 0 positive pixels within 200 m of the mapped catalogue
-* duplicate gate vs 60 registry rasters: **UNIQUE** (max |ρ| 0.28 on the dots, 0.08 on the
-  surface, threshold 0.90)
-
-## What would clear it
-
-1. **A relief-unbiased truth set** — score against faults that are not surface-visible (well
-   intersections, seismic/reflection picks, geophysically-inferred structures). If the lane
-   still wins there, the confound argument dies. This is the single most valuable experiment.
-2. **One live score at a moderate range-front fraction** (~30 %). If it beats 0.2778, the live
-   board rewards relief concentration and a 64 % field becomes defensible.
-3. **A hybrid** taking mid relief from the incumbent and range fronts from the lane — testable
-   on the existing relief-matched instrument, no new data needed.
-
-## Rebuild
-
-```bash
-python3 scripts/build_submission.py          # emit + write
-python3 scripts/check_submission.py          # 12 format checks + duplicate gate
-python3 scripts/check_relief_matched.py      # the de-confounding instrument
-python3 scripts/run_card.py                  # verdict
-```
-
-Evidence: `evidence/relief_matched.json`, `evidence/range_front_stratification.json`,
-`evidence/relief_gate.json`, `evidence/run_card_gems66-lidar_lane-….json`.
+- `evidence/run_card_gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba.json`
+- `evidence/relief_matched.json`
+- `evidence/uniqueness_gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba.json`
+- `evidence/uniqueness_gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.json`
+- `docs/review/2026-10-11-pr12-reconciliation.md`
+- `docs/irregularities.html` and `IR-71-LIDAR-RAW-OVERLAP`

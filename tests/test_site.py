@@ -1,5 +1,6 @@
 """Fail-closed static-site checks for the evidence-gated research project."""
 
+import hashlib
 import json
 import re
 from html.parser import HTMLParser
@@ -88,13 +89,39 @@ def test_run_card_is_blocked_and_has_no_unqualified_score():
     assert rc["registry_checks"]["post_placement_final_dots"]["overlap_limit"] == 0.7
     assert rc["raster"]["file"] is None and rc["raster"]["sha256"] is None
     assert rc["validator"]["status"].startswith("NOT PASSED")
-    assert rc["submission"]["name"] is None and rc["submission"]["note"] is None
-    assert rc["submission"]["note_limit_chars"] == 140
+    assert rc["validator"]["current_candidate_result"]["status"].startswith("NOT RUN")
+    assert "NaN-only" in rc["validator"]["current_candidate_result"]["footprint_nan_status"]
+    h66_2_validation = rc["validator"]["historical_h66_2_local_preflight"]
+    assert "NOT COMPLIANT" in h66_2_validation["footprint_nan"]
+    assert h66_2_validation["range_0_1"].startswith("Local checks passed")
+    assert h66_2_validation["crs"].startswith("EPSG:32611")
+    assert h66_2_validation["shape"] == [3730, 3292]
+    assert rc["submission"]["name"] and rc["submission"]["name_status"].startswith("PROPOSED ONLY")
+    assert rc["submission"]["note"] and rc["submission"]["note_chars"] == len(rc["submission"]["note"])
+    assert rc["submission"]["note_chars"] <= rc["submission"]["note_limit_chars"] == 140
+    assert rc["submission"]["note_status"].startswith("PROPOSED ONLY")
     assert rc["submission"]["download_status"].startswith("NO DOWNLOAD")
+    assert rc["promote"] is False and rc["promotion_decision"] == "negative"
+    assert rc["data_access"]["strict_premerge_s0_review"]["missing_role_count"] == 9
+    assert rc["data_access"]["strict_premerge_s0_review"]["experiment_or_data_load_followed"] is False
+    assert all(item["archive_file"].startswith("evidence/archives/h66-1/")
+               for item in rc["raster"]["historical_artifacts"])
     assert rc["budget"]["new_experiments_used"] == 0
     assert rc["budget"]["submission_slots_used"] == 0
     assert rc["independent_reviews"]["completed"] == 0
     assert "negative" in rc["verdict"].lower()
+
+
+def test_h66_2_card_is_historical_proxy_not_score_or_clearance():
+    card = json.loads((DOCS / "data" / "run-card-h66-2.json").read_text(encoding="utf-8"))
+    assert card["verdict"] == "NEGATIVE-NOT-PROMOTED"
+    assert "PROXY ONLY" in card["measurement_class"]
+    assert "HOLDOUT-DTI" in card["measurement_class"]
+    assert "ORGANIZER-CONFIRMED" in card["measurement_class"]
+    assert card["holdout_dti"] is None
+    assert card["organizer_confirmed_score"] is None
+    assert "NOT CLEARED" in card["clearance"]
+    assert card["note_chars"] <= 140
 
 
 def test_hypotheses_are_ranked_and_meet_same_lane_review_fields():
@@ -174,6 +201,20 @@ def test_canonical_and_legacy_mirrors_are_synchronized():
     ]
     for canonical, mirror in pairs:
         assert json.loads(canonical.read_text(encoding="utf-8")) == json.loads(mirror.read_text(encoding="utf-8"))
+
+
+def test_template_provenance_matches_local_sources_and_discloses_upstream_limit():
+    provenance = json.loads((ROOT / "registry" / "template_provenance.json").read_text(encoding="utf-8"))
+    assert provenance["n_files"] == len(provenance["files"]) == 23
+    assert provenance["n_identical"] == sum(bool(row["identical"]) for row in provenance["files"].values()) == 19
+    for name, row in provenance["files"].items():
+        path = ROOT / "src" / "gems57" / name
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        assert row["sha256"] == digest
+        assert row["bytes"] == path.stat().st_size
+        assert row["identical"] is (digest == row["template_sha256"])
+    assert "registry/template_pin.json" in provenance["comparison_limitations"]
+    assert "not submitted or merged" in provenance["local_shared_source_patch"]["upstream_status"]
 
 
 def test_all_local_links_resolve():

@@ -56,6 +56,8 @@ def main() -> int:
         "mechanism": pre["mechanism"],
         "named_non_fault_mimic": pre["named_non_fault_mimic"],
         "preregistration": "registry/preregistration-h66-2.json",
+        "measurement_class": "OFF-CATALOGUE-PROXY ONLY — not HOLDOUT-DTI and not ORGANIZER-CONFIRMED",
+        "organizer_confirmed_score": None,
         "holdout_dti": {
             "evidence_class": "NOT RUN - no HOLDOUT-DTI value",
             "why_not_run": ("experiment budget (3 experiments or 2 hours) was spent on the ablation, the "
@@ -140,6 +142,8 @@ def main() -> int:
             "what_is_not_claimed": ver["what_is_not_claimed"],
             "next_candidate": ver["next_candidate"],
         },
+        "future_action_caveat": ("Any historical next-candidate proposal is not authorized for execution without a new approved "
+                                  "budget, authorized input provenance, independent reviews, and validated shared tooling."),
         "budget": ver["budget"],
         "files": dict(ver["files"], artifact_sha256=digest,
                       run_card="registry/run_card_h66_2.json",
@@ -158,6 +162,10 @@ def main() -> int:
         "dots": int(ver["strata"]["pooled"]["h66_2"]["n_dots"]),
         "verdict": ver["verdict"],
         "clearance": card["submission"]["clearance"],
+        "measurement_class": "OFF-CATALOGUE-PROXY ONLY — not HOLDOUT-DTI and not ORGANIZER-CONFIRMED",
+        "holdout_dti": None,
+        "organizer_confirmed_score": None,
+        "followup_status": "HISTORICAL PROPOSAL ONLY — not authorized without a new budget, input provenance, reviews, and shared-tool validation",
         "proxy_global_dti": emi["instrument"]["global_off_catalogue"]["dti"],
         "proxy_upland_ratio": ver["strata"]["upland"]["ratio_vs_own_mass_random"]["h66_2"],
         "basin": "no dots in the basin stratum (19 of 37,654)",

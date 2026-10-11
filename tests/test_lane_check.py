@@ -69,7 +69,7 @@ def test_surface_stage_detects_high_correlation_without_dot_overlap(tmp_path):
     rep = lane_check(_write(tmp_path / "surface.tif", a),
                      [_write(tmp_path / "registry.tif", b)], stage="surface")
     row = rep["comparisons"][0]
-    assert row["pearson_r"] > 0.99
+    assert row["spearman_rho"] > 0.99
     assert row["drift"] is True
     assert rep["candidate_dots"] is None
     assert row["candidate_dots_within_3px"] is None
@@ -94,7 +94,7 @@ def test_empty_candidate_is_inconclusive_and_json_safe(tmp_path):
     rep = lane_check(_write(tmp_path / "candidate.tif", empty),
                      [_write(tmp_path / "registry.tif", _dots(6))], stage="emitted")
     assert rep["verdict"].startswith("INCONCLUSIVE")
-    assert rep["comparisons"][0]["pearson_r"] is None
+    assert rep["comparisons"][0]["spearman_rho"] is None
     json.dumps(rep, allow_nan=False)
 
 

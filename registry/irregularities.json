@@ -78,7 +78,7 @@
       "severity": "high",
       "status": "FIXED — no candidate file or download link is published",
       "title": "Historical pages advertised artifacts despite incomplete release gates",
-      "detail": "Both site generators previously emitted direct TIFF/ZIP links and claimed download safety even though required reference/footprint checks were skipped and the registry was incomplete. The historical binaries have been removed from docs/downloads; hashes and the withdrawal decision are retained in the run card and audit record.",
+      "detail": "Both site generators previously emitted direct TIFF/ZIP links and claimed download safety even though required reference/footprint checks were skipped and the registry was incomplete. The historical binaries remain removed from docs/downloads; byte-identical H66-1 copies are now preserved only in evidence/archives/h66-1/, outside the Pages document root and without site links. The withdrawal decision and hashes remain in the run card and audit record.",
       "source_ids": [
         "S02"
       ]
@@ -156,6 +156,62 @@
       "title": "The portal's value check and the audit's NaN-outside contract disagree",
       "detail": "The audit's release gate requires NaN only outside the official footprint; the user-reported portal rejection 'Predicted values must be in range [0, 1]' indicates the form rejects NaN-valued cells. The H66-2 artifact is therefore all-finite (0.0 outside the emitting cells, no nodata tag) and is reported as an all-finite variant. A NaN-outside twin can be produced only after the writer is rewired to the canonical shared writer, which the audit requires anyway. No artifact is published from either reading until the conflict is settled by an organizer receipt.",
       "source_ids": []
+    },
+    {
+      "id": "IR-67-H66-1-ARCHIVE",
+      "severity": "medium",
+      "status": "FIXED — audit-only bytes retained outside the Pages document root",
+      "title": "Withdrawn H66-1 binaries are archived but remain unavailable for download",
+      "detail": "The three historical TIFF/ZIP files were restored by identity under evidence/archives/h66-1/ after the newer main branch had removed them. SHA-256 hashes match the run card. The archive is not linked by the public site, does not restore release clearance, and does not change the known 62-of-655 registry limitation or unknown cause of the earlier portal range rejection.",
+      "source_ids": []
+    },
+    {
+      "id": "IR-68-PREMERGE-S0-SNAPSHOT",
+      "severity": "high",
+      "status": "BLOCKED — historical one-off pre-merge check; not current runner output",
+      "title": "All nine required local input roles were absent in the one-off s0 check",
+      "detail": "The session-branch s0 verifier exited 2 before loading data or starting an experiment; nine of nine roles were absent and pins were missing for external/lidar_scarp_features.json and external/topo_10m_derived_100m_u8.tif. The evidence was preserved at evidence/h66_inputs_s0_review.json. The newer main branch intentionally disables the legacy runner, so this snapshot is not a current preflight and cannot clear inputs.",
+      "source_ids": []
+    },
+    {
+      "id": "IR-69-UNIQUENESS-PHASE",
+      "severity": "medium",
+      "status": "FIXED IN THIS REPOSITORY; external template update not submitted",
+      "title": "Continuous-surface and emitted-dot uniqueness need separate semantics",
+      "detail": "The shared package previously conflated positive support on a dense detector surface with final emitted dots and could trust cached signed-only correlation flags. This branch now applies absolute Spearman plus exact pixel/hash identity in both phases, the 3-pixel overlap threshold only to emitted dots, and recomputes cached thresholds. The disabled legacy runner cannot use this code for release; external owner-template review/merge remains outstanding, so no upstream integration or complete registry clearance is claimed.",
+      "source_ids": []
+    },
+    {
+      "id": "IR-70-TEMPLATE-PROVENANCE",
+      "severity": "medium",
+      "status": "CORRECTED IN REPOSITORY; upstream snapshot/pin remains unverified",
+      "title": "The prior shared-package provenance record overstated byte identity and referenced a missing pin",
+      "detail": "The earlier record claimed 23/23 package files were identical and referred to registry/template_pin.json, but that pin file is absent from origin/main. After merging newer main and applying this PR, comparison to the stored per-file template_sha256 values finds 19/23 files identical; anatomy.py and metric.py differ in newer main, and uniqueness.py and gates.py are changed in this PR. No live upstream revision or tarball was fetched/verified, and no external template PR/merge is claimed. Keep the runner disabled and disclose the provenance limit.",
+      "source_ids": []
+    },
+    {
+      "id": "IR-71-LIDAR-RAW-OVERLAP",
+      "severity": "high",
+      "status": "OPEN — raw final-dot threshold trips; registry completeness is not certified",
+      "title": "A density-adjusted uniqueness label cannot override the raw overlap stop or incomplete registry evidence",
+      "detail": "The inherited lidar_lane final-dot comparison reports 0.990386 of candidate dots within 3 px of one accessible registry raster, above the stated >0.70 stop threshold; max absolute Spearman rho is 0.277125. A separate density-adjusted diagnostic labels the same scan UNIQUE, but the 1.5x random-placement lift is not an authorized exemption. Only 60 rasters were compared, no organizer-complete registry certificate or matching expected count is recorded, and pre-placement continuous-surface correlation is null/not reported. Pixel identity was not found in the accessible scan; a full registry file-hash/pixel agreement pass is not established. The candidate remains negative and not submission-cleared.",
+      "source_ids": [],
+      "internal_evidence": [
+        "docs/data/run_card.json",
+        "evidence/uniqueness_gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.json",
+        "evidence/uniqueness_gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba.json"
+      ]
+    },
+    {
+      "id": "IR-72-MAIN-MERGE-CONFLICTS",
+      "severity": "medium",
+      "status": "RESOLVED — conflicting paths reconciled and affected site pages regenerated",
+      "title": "Incoming main conflicts overlapped PR #12's no-download site and audit changes",
+      "detail": "Merging origin/main commit 8f522351 from merge-base 5970770b produced content conflicts in docs/downloads/README.md, docs/index.html, docs/irregularities.html, and scripts/build_site.py. The resolution preserves the no-download/audit-only state, combines the PR #12 provenance and raw-overlap disclosures with the current site generator, and regenerates affected HTML from repository data. This is a merge-process irregularity, not evidence that any scientific release gate passed.",
+      "source_ids": [],
+      "internal_evidence": [
+        "docs/review/2026-10-11-pr12-reconciliation.md"
+      ]
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
- "lane": "native-resolution lidar scarp channels (scarplet / Steger / Frangi)",
+ "lane": "scale-deviating LiDAR scarp-field proxy (100 m-derived inputs; 2\u201320 px = 200\u20132,000 m)",
  "hypothesis": "Faults the USGS Quaternary catalogue lacks are, in the GeoDAWN region, faults whose scarps are visible in 1 m lidar but are averaged away at 100 m; therefore a multiscale line/structure-tensor field built on the 1 m-LiDAR-derived scarp descriptors and the slope-detrended elevation should rank off-catalogue fault pixels higher than the geophysical-habitat fields the project family has used, and higher than chance.",
  "mechanism": "Frangi multiscale vesselness (both polarities) + Steger sub-pixel line localisation + structure-tensor orientation coherence and dominant strike, at 2-20 pixel scales on the 100 m detrended elevation, fused with 1 m-LiDAR scarp amplitude x coherence and a strike-concordance gate, then masked against flat / very steep cultural ground. Emitted as 37,654 dots at >= 2.82 px separation with every dot within 200 m of the known catalogue deleted.",
  "non_fault_process_that_could_mimic_it": "Fluvial terrace risers, alluvial-fan incisement edges, landslide head scarps, and - most importantly on flat ground - road cuts, canal banks and field boundaries all produce lineated 1 m scarps with high Hessian response. The strike-concordance term and the relief/slope cultural mask are the controls; the measured result is that the control is incomplete on basin floors, where the field's gain over chance is -0.003 (4/8 folds).",
@@ -16,15 +16,19 @@
   ],
   "incumbent_0.2778_raster_dti": 0.04896,
   "incumbent_ci95": [
-   0.03830318373164125,
-   0.05195599877600944
+   0.04191333096086842,
+   0.05669148976786438
   ],
   "chance_level_dti": 0.03973192989019804,
   "chance_ci95": [
    0.03803334540003565,
    0.041230025615689954
   ],
-  "lane_minus_chance": null,
+  "lane_minus_chance": 0.031021235718839187,
+  "lane_minus_incumbent_ci95": [
+   -0.0014441793593245793,
+   0.04466544089989038
+  ],
   "lane_minus_chance_ci95": [
    0.012527018335628125,
    0.04978434094456125
@@ -296,11 +300,19 @@
   "argmax_rho_surface": null,
   "max_frac_dots_within_3px": 0.9903861475540447,
   "max_lift_over_random": 3.487693243713407,
-  "verdict": "UNIQUE",
+  "density_adjusted_diagnostic_verdict": "UNIQUE",
+  "verdict": "DUPLICATE_OVERLAP",
+  "protocol_result": "STOP",
+  "organizer_registry_complete": false,
+  "registry_completeness_status": "not certified; 60 accessible rasters, no matching organizer-complete expected count",
+  "expected_registry_raster_count": null,
+  "preplacement_surface_status": "not reported",
+  "pixel_identity_status": "no exact pixel identity reported in accessible scan",
+  "file_hash_agreement_status": "candidate SHA-256 is recorded; complete registry-wide file hash comparison is not certified",
   "thresholds": {
-   "max_rho": 0.9,
-   "max_within3": 0.7,
-   "min_lift": 1.5
+   "max_abs_spearman_rho": 0.9,
+   "max_frac_dots_within_3px": 0.7,
+   "within_px": 3.0
   }
  },
  "raster": {
@@ -334,9 +346,13 @@
  "submission": {
   "name": "gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba",
   "note_140chars": "GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN lidar, 37,654 dots, 0 within 200 m of the catalogue.",
-  "note_length": 128
+  "note_length": 128,
+  "status": "AUDIT ONLY \u2014 not cleared; do not submit",
+  "slot_used": false
  },
  "verdict": "negative",
- "verdict_basis": "gate = lane beats the incumbent on the POOLED novelty holdout AND the lane-minus-chance 95% CI excludes zero AND the format validator passes on the bytes AND the duplicate gate returns UNIQUE AND -- decisively -- the lane still beats the incumbent on the RELIEF-MATCHED instrument with a CI excluding zero. The last condition fails: matched lane-minus-incumbent is -0.0008887673137335508 with CI [-0.008356438925991094, 0.006639641986626998], and matched lane-minus-random is 0.0002623671899855565.",
- "not_claimed": "no organiser score exists for this or any artifact here; the holdout truth is SGMC, not the expert panel's hidden set; promotion here means 'meets the local gate', not 'will score X'"
+ "promote": false,
+ "promotion_decision": "negative",
+ "verdict_basis": "Gate requires a positive pooled novelty result and CI, format validation, a raw final-dot overlap below 0.70, |Spearman rho| below 0.90, and an explicitly organizer-complete registry index whose expected count matches the scan, plus a positive relief-matched comparison. The raw overlap is 0.990386; registry complete certificate=False. The relief-matched condition also fails: matched lane-minus-incumbent is -0.0008887673137335508 with CI [-0.008356438925991094, 0.006639641986626998], and matched lane-minus-random is 0.0002623671899855565.",
+ "not_claimed": "no organiser score exists for this or any artifact here; the holdout truth is SGMC, not the expert panel's hidden set; the density-adjusted uniqueness label is diagnostic only, the raw >0.70 overlap rule is a stop, and incomplete registry access is not a pass"
 }

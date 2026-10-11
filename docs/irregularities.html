@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="on">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="on">Irregularities</a></nav></div></header>
 <main>
 <div class="wrap">
 
@@ -31,10 +31,10 @@
  (0.07075 / 0.04896), so only the de-confounding is new, not the pipeline.</td>
  <td><span class="pill bad">OPEN — verdict flipped</span></td></tr>
 <tr><td><b>IR-66-SCORE-01</b></td>
- <td>The task brief states "0.3195 is the highest score right now". The live public
- leaderboard on 2026-10-11 shows <b>0.4133 at #1</b> and 0.3195 (DARD) at <b>rank 9</b>. The
- brief's target is a stale snapshot.</td>
- <td><span class="pill warn">OPEN</span></td></tr>
+ <td>An earlier draft quoted a public leaderboard target. No leaderboard was accessed or
+ monitored in this reconciliation, and no public row is tied here to an exact artifact receipt.
+ No such number is used as an organizer-confirmed score or decision threshold.</td>
+ <td><span class="pill warn">OPEN — NOT VERIFIED HERE</span></td></tr>
 <tr><td><b>IR-66-DATA-01</b></td>
  <td>The sandbox reaches only github.com, api.github.com, pypi.org and their CDNs.
  <code>prd-tnm.s3.amazonaws.com</code>, <code>earthquake.usgs.gov</code>,
@@ -51,11 +51,28 @@
  control. The live anchor is a lane-choice prior, not evidence.</td>
  <td><span class="pill warn">OPEN</span></td></tr>
 <tr><td><b>IR-66-GATE-01</b></td>
- <td>The protocol's "70 % of dots within 3 px" duplicate test trips on any registry raster that
- is much denser than the candidate: against a 311,617-dot file, ~83 % of <i>random</i>
- locations are already within 3 px. The gate was made density-aware (overlap must exceed 70 %
- <b>and</b> 1.5× the random-placement rate).</td>
- <td><span class="pill ok">FIXED</span></td></tr>
+ <td>A density-adjusted diagnostic was used to label a final-dot scan <code>UNIQUE</code> even
+ though the raw overlap against one accessible registry raster is 0.990, above the brief's
+ 0.70 stop threshold. Against a 311,617-dot raster the random-placement null is high, but the
+ null does not waive the specified threshold. The raw result is a stop; the 1.5× lift is
+ diagnostic only. Only 60 rasters were compared, full organizer-registry completeness is not
+ certified, and this artifact has no recorded pre-placement-surface correlation.</td>
+ <td><span class="pill bad">OPEN — NOT A UNIQUENESS PASS</span></td></tr>
+<tr><td><b>IR-70-TEMPLATE-PROVENANCE</b></td>
+ <td>The recorded shared-template comparison covers 23 <code>src/gems57</code> files: 19 match
+ the stored hashes. <code>anatomy.py</code> and <code>metric.py</code> differ from the recorded
+ template snapshot; <code>uniqueness.py</code> and <code>gates.py</code> are changes in this PR.
+ <code>registry/template_pin.json</code> is absent from <code>origin/main</code>; no live
+ upstream revision or tarball was checked. Do not claim an upstream fix or a complete provenance
+ pass. Details: <a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a>.</td>
+ <td><span class="pill warn">OPEN</span></td></tr>
+<tr><td><b>IR-71-LIDAR-RAW-OVERLAP</b></td>
+ <td>The inherited lidar-lane final-dot result reports 0.990386 within 3 px of one accessible
+ registry raster, above the 0.70 stop threshold. Its density-adjusted <code>UNIQUE</code> label
+ is diagnostic only. Only 60 rasters were compared; organizer-registry completeness is
+ uncertified; pre-placement surface correlation is unreported; no full-registry pixel/hash pass
+ is established. The candidate remains negative and unpublished.</td>
+ <td><span class="pill bad">OPEN — STOP</span></td></tr>
 <tr><td><b>IR-66-BUG-01</b></td>
  <td>The first holdout run excluded the held-out truth's 300 m buffer from <i>emission</i> as
  well as training, forcing TP<sub>w</sub> = 0 for every candidate. The buffer is

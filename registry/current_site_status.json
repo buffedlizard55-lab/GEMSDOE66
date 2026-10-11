@@ -15,17 +15,20 @@
     {
       "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
       "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-      "status": "WITHDRAWN; file not retained in docs/downloads"
+      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
     },
     {
       "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
       "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
-      "status": "WITHDRAWN; file not retained in docs/downloads"
+      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
     },
     {
       "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
       "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
-      "status": "WITHDRAWN; file not retained in docs/downloads"
+      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
     }
   ],
   "gates": {
@@ -41,5 +44,11 @@
   },
   "feed_policy": "Repository-state only; no leaderboard values copied, stored, refreshed, or monitored. No DrivenData subpage is deep-linked from the site absent written authorization.",
   "canonical_run_card": "docs/data/run-card.json",
-  "technical_audit": "docs/review/2026-10-11-audit.md"
+  "technical_audit": "docs/review/2026-10-11-audit.md",
+  "input_preflight_snapshot": {
+    "evidence": "evidence/h66_inputs_s0_review.json",
+    "status": "BLOCKED; one-off pre-merge s0 exited 2; 9 required roles absent, 2 pin records absent; no load/experiment followed",
+    "not_current_runner_output": true
+  },
+  "release_disposition": "H66-2 is retained as a historical NEGATIVE-NOT-PROMOTED experiment from the newer main branch; no new experiment or candidate emission occurred in this PR reconciliation."
 }

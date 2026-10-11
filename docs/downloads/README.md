@@ -1,21 +1,9 @@
 # No submission file is published here
 
-**Download status: NOT AVAILABLE.** There is no current TIFF or ZIP cleared for submission.
-Do not upload a historical H66 artifact.
+**Download status: NOT AVAILABLE.** This directory intentionally contains no current GeoTIFF or ZIP cleared for submission. Do not upload any historical H66 or lidar-lane artifact.
 
-This directory is intentionally empty of rasters. Two independent sessions have now tested the
-native-resolution LiDAR scarp lane and both returned a **NEGATIVE** verdict:
+- **H66-1:** Historical TIFF/ZIP bytes were withdrawn from the public download path and retained only as byte-verified audit copies under `evidence/archives/h66-1/`, outside the Pages document root and without site links. They did not pass the required holdout, leakage, complete-registry, provenance, and exact-footprint release gates.
+- **H66-2:** A historical negative result; its figures are off-catalogue proxies, not `HOLDOUT-DTI` or `ORGANIZER-CONFIRMED`. Audit artifacts are under `artifacts/h66-2/`.
+- **lidar_lane:** The later scarp-field artifact and analysis are retained under `artifacts/lidar_lane/` for audit only. The reported pooled gain was reversed by relief-matched evaluation; no organizer score is established. Its density-adjusted uniqueness output does not override the raw rule: the recorded final-dot overlap is 0.990 against an accessible registry raster, above the 0.70 stop threshold. Only 60 rasters were compared, full organizer-registry completeness is uncertified, and the pre-placement surface comparison is not reported. Do not treat it as unique or submission-cleared.
 
-* **H66-2** (session `arena/133c86e6`) — concordance of three independent 2 m LiDAR scarp
-  attributes. Its mass-matched terrain-only control came within 1.9× of the field pooled.
-  Bytes: `../../artifacts/h66-2/`.
-* **lidar_lane** (session `arena/7d2c4a3b`) — Frangi / Steger / structure-tensor scarp field.
-  It beats the incumbent 0.07075 vs 0.04896 on the pooled holdout, but that instrument is
-  **confounded**: the truth is 59.3 % range front against a footprint that is 25.2 % range
-  front, and the field is 64.3 % range front, so it matches the truth's relief prior rather
-  than finding faults. De-confounded it scores 0.02638 against the incumbent's 0.02727 and
-  random placement's 0.02612 — indistinguishable from both.
-  Bytes: `../../artifacts/lidar_lane/`.
-
-Both files are kept for audit. Neither has passed the release gate, and
-`tests/test_site.py` fails the build if any page links a `.tif` or `.zip`.
+The shared-template provenance discrepancy and the PR #12 reconciliation are recorded in [`review/2026-10-11-pr12-reconciliation.md`](../review/2026-10-11-pr12-reconciliation.md). The current canonical run card is [`data/run-card.json`](../data/run-card.json). No `ORGANIZER-CONFIRMED` result or cleared submission is claimed.

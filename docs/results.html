@@ -5,44 +5,59 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="on">Results</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="on">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
 <main>
 <div class="wrap">
 
-<h2>Results</h2>
-<div class="note">Every number below is <b>HOLDOUT-DTI</b> — evaluator version
-<code>gemsdoe66.metric.dti</code> (verified against a brute-force transcription of the
-organiser's equations to 1e-9), pooled distance-weighted Tversky with α = 0.2, β = 0.8 and a
-300 m triangular kernel, on 8 spatially blocked folds with
-<b>≈ 7,700 withheld positives per fold</b> (61,664 in total for the novelty instrument,
-60,988 for the catalogue instrument). 95 % intervals are percentile bootstraps over folds.
-<b>No ORGANIZER-CONFIRMED score exists for any artifact in this repository.</b></div>
+<h2>Results — inherited negative experiment, not a promotion</h2>
+<div class="note"><b>All performance measurements below are labelled HOLDOUT-DTI.</b>
+Evaluator: <code>gemsdoe66.metric.dti</code> (the inherited card reports a 1e-9 comparison
+with a brute-force equation transcription). Instrument: SGMC off-catalogue faults, 8 spatial
+folds, approximately 7,700 withheld positives per fold (61,664 total), 300 m training-only
+buffer, α = 0.2, β = 0.8, 300 m triangular kernel. The listed 95% CIs are the recorded
+percentile intervals over folds. This proxy holdout is not the organizer's hidden set. No
+<code>ORGANIZER-CONFIRMED</code> score exists for any artifact.</div>
+<p class="stop"><b>Protocol deviation:</b> the inherited lane used 1 m-derived 100 m descriptors
+and 2–20 pixel scales on the 100 m grid (200–2,000 m), not the requested native-resolution
+2–20 m scarp method. The numeric results below do not validate LIDAR-01.</p>
 
-<h3>Primary instrument — novelty (SGMC off-catalogue truth)</h3>
-<table><tr><th>field</th><th>mean DTI</th><th>per-fold</th><th>vs incumbent</th></tr>
-<tr><td class='mono'>catalogue_habitat</td><td><b>0.03505</b></td><td class='small'>0.0077, 0.0226, 0.0253, 0.0465, 0.0357, 0.0599, 0.0319, 0.0508</td><td>-0.01391</td></tr><tr><td class='mono'>fusion</td><td><b>0.02343</b></td><td class='small'>0.0333, 0.0278, 0.0006, 0.0441, 0.0053, 0.0185, 0.0080, 0.0498</td><td>-0.02553</td></tr><tr><td class='mono'>incumbent</td><td><b>0.04896</b></td><td class='small'>0.0345, 0.0434, 0.0694, 0.0448, 0.0467, 0.0440, 0.0665, 0.0423</td><td>+0.00000</td></tr><tr><td class='mono'>lidar_lane</td><td><b>0.07075</b></td><td class='small'>0.0425, 0.0925, 0.0310, 0.1118, 0.0538, 0.0720, 0.0604, 0.1021</td><td>+0.02179</td></tr><tr><td class='mono'>sgmc_novel</td><td><b>0.01363</b></td><td class='small'>0.0349, 0.0015, 0.0001, 0.0166, 0.0002, 0.0189, 0.0289, 0.0079</td><td>-0.03533</td></tr></table>
+<h3>Pooled novelty instrument (relief-confounded)</h3>
+<table><tr><th>field</th><th>HOLDOUT-DTI mean</th><th>95% CI</th><th>folds</th></tr>
+<tr><td>lidar lane</td><td>0.07075</td><td>[0.05217, 0.08967]</td><td>8</td></tr><tr><td>incumbent</td><td>0.04896</td><td>[0.04191, 0.05669]</td><td>8</td></tr><tr><td>uniform random</td><td>0.04019</td><td>[0.03786, 0.04233]</td><td>8</td></tr></table>
 
-<h3>Chance control</h3>
-<table><tr><th>control</th><th>mean</th><th>95 % CI</th></tr>
-<tr><td class='mono'>random</td><td>0.03973</td><td>[+0.03803, +0.04123]</td></tr><tr><td class='mono'>lidar_lane</td><td>0.07075</td><td>[+0.05217, +0.08967]</td></tr><tr><td class='mono'>incumbent_prior</td><td>0.04476</td><td>[+0.03830, +0.05196]</td></tr><tr><td class='mono'>lane_minus_random</td><td>0.03102</td><td>[+0.01253, +0.04978]</td></tr></table>
+<h3>Relief-matched instrument</h3>
+<table><tr><th>field</th><th>HOLDOUT-DTI mean</th><th>95% CI</th><th>folds</th></tr>
+<tr><td>lidar lane</td><td>0.02638</td><td>[0.02087, 0.03183]</td><td>8</td></tr><tr><td>incumbent</td><td>0.02727</td><td>[0.02421, 0.03049]</td><td>8</td></tr><tr><td>uniform random</td><td>0.02612</td><td>[0.02436, 0.02741]</td><td>8</td></tr></table>
+<p>The paired matched lane-minus-incumbent HOLDOUT-DTI difference is
+<b>-0.00089</b>, 95% CI
+[-0.00836,
++0.00664];
+positive in 3 of
+8 folds. The paired lane-minus-random
+HOLDOUT-DTI difference is <b>+0.00026</b>,
+95% CI [-0.00552,
++0.00601]. Both
+intervals include zero; the verdict remains negative.</p>
 
-<h3>Range-front stratification</h3>
-<table><tr><th>terrain</th><th>lane</th><th>chance</th><th>gain</th><th>95 % CI</th>
-<th>folds+</th></tr>
-<tr><td>low_relief (basin floor / pediment)</td><td>0.01637</td><td>0.01949</td><td><b>-0.00312</b></td><td>[-0.00667, +0.00025]</td><td>4/8</td></tr><tr><td>mid_relief</td><td>0.03308</td><td>0.01854</td><td><b>+0.01454</b></td><td>[+0.00553, +0.02358]</td><td>7/8</td></tr><tr><td>high_relief (range front)</td><td>0.05200</td><td>0.01879</td><td><b>+0.03321</b></td><td>[+0.01829, +0.04855]</td><td>8/8</td></tr></table>
+<h3>Relief strata — HOLDOUT-DTI</h3>
+<table><tr><th>terrain</th><th>lane HOLDOUT-DTI mean [95% CI]</th>
+<th>random HOLDOUT-DTI mean [95% CI]</th></tr>
+<tr><td>Basin</td><td>0.00090 [0.00000, 0.00262]</td><td>0.00274 [0.00124, 0.00448]</td></tr><tr><td>Mid-relief</td><td>0.02630 [0.02218, 0.03040]</td><td>0.02585 [0.02305, 0.02840]</td></tr><tr><td>Range front</td><td>0.05054 [0.03613, 0.06538]</td><td>0.04867 [0.04507, 0.05255]</td></tr></table>
+<p class="small">These are per-stratum HOLDOUT-DTI means with their recorded marginal CIs. No
+paired difference is inferred here. No score projection is made.</p>
 
-<h3>Mass sweep (novelty instrument)</h3>
-<table><tr><th>emitted dots</th><th>lidar lane</th><th>incumbent prior surface</th></tr>
-<tr><td>20000</td><td>0.05693</td><td>0.03631</td></tr><tr><td>30000</td><td>0.06550</td><td>0.04172</td></tr><tr><td>37654</td><td>0.07075</td><td>0.04476</td></tr><tr><td>45000</td><td>0.07352</td><td>0.04834</td></tr><tr><td>60000</td><td>0.07611</td><td>0.04963</td></tr></table>
-<div class="note">The sweep says <i>more</i> mass is better on this instrument. It is
-<b>not</b> used to set the shipped budget: the instrument's truth (61,664 px) is about four
-times the size of the likely hidden set (≈ 15,200 px, §3 of the research page), and the
-live-board optimum for this family was measured at 37–46 k dots. Changing the mass on the
-strength of a proxy with the wrong truth size would be an unvalidated leap.</div>
+<h3>Chance-control HOLDOUT-DTI</h3>
+<table><tr><th>control</th><th>mean</th><th>95% CI</th></tr>
+<tr><td>random</td><td>0.03973</td><td>[+0.03803, +0.04123]</td></tr><tr><td>lidar_lane</td><td>0.07075</td><td>[+0.05217, +0.08967]</td></tr><tr><td>incumbent_prior</td><td>0.04476</td><td>[+0.03830, +0.05196]</td></tr><tr><td>lane_minus_random</td><td>0.03102</td><td>[+0.01253, +0.04978]</td></tr></table>
 
-<h3>Relief gate (measured, not shipped)</h3>
-<table><tr><th>gate</th><th>mean DTI</th><th>95 % CI</th><th>pixels excluded</th></tr>
-<tr><td class='mono'>none</td><td>0.07075</td><td>[+0.05217, +0.08967]</td><td>305,335</td></tr><tr><td class='mono'>relief&gt;p10</td><td>0.07075</td><td>[+0.05217, +0.08967]</td><td>891,311</td></tr><tr><td class='mono'>relief&gt;p20</td><td>0.07092</td><td>[+0.05242, +0.08991]</td><td>1,392,303</td></tr><tr><td class='mono'>relief&gt;p33</td><td>0.07277</td><td>[+0.05427, +0.09203]</td><td>2,018,620</td></tr><tr><td class='mono'>relief&gt;p50</td><td>0.07592</td><td>[+0.05681, +0.09566]</td><td>2,788,251</td></tr></table>
+<h3>Other diagnostics</h3>
+<p>The relief-gate sensitivity values are retained in the evidence JSON. They are internal
+HOLDOUT-DTI diagnostics, not a chosen submission budget or a promotion result. The mass sweep
+is omitted here because no score is selected from that instrument.</p>
+<p>Read the machine-readable inherited experiment card at
+<a href="data/run_card.json"><code>docs/data/run_card.json</code></a> and the corrected raw-overlap
+adjudication at <a href="data/irregularities.json">IR-71</a>. All values remain internal; no
+file is cleared for download.</p>
 
 </div>
 </main>

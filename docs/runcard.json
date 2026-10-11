@@ -40,7 +40,12 @@
       "complete_registry": false,
       "result": null
     },
-    "reason": "The prior repository scan covered only a partial raster corpus. Full uniqueness and all byte/pixel checks remain unverified; a partial registry is not a pass."
+    "reason": "The prior repository scan covered only a partial raster corpus. Full uniqueness and all byte/pixel checks remain unverified; a partial registry is not a pass.",
+    "method": {
+      "pre_placement_surface": "Absolute Spearman |rho| > 0.90 or exact decoded-pixel/hash identity stops; 3-pixel dot overlap is not applied to a dense continuous surface.",
+      "post_placement_final_dots": "Absolute Spearman |rho| > 0.90, >70% of emitted dots within 3 pixels, or exact decoded-pixel/hash identity stops.",
+      "completeness": "Incomplete or inaccessible registry entries are BLOCKED, never a complete pass."
+    }
   },
   "raster": {
     "status": "NOT GENERATED IN THIS REVIEW; NO CURRENT FILE CLEARED",
@@ -51,18 +56,21 @@
       {
         "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
         "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-        "status": "WITHDRAWN FROM docs/downloads; not submission-cleared",
-        "properties_recorded_before_withdrawal": "3730×3292, one band, float32, EPSG:32611, 100 m, all finite in [0,1], 37,654 positive cells. Exact reference transform/footprint was not validated in this review."
+        "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
+        "properties_recorded_before_withdrawal": "3730×3292, one band, float32, EPSG:32611, 100 m, all finite in [0,1], 37,654 positive cells. Exact reference transform/footprint was not validated in this review.",
+        "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
       },
       {
         "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
         "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
-        "status": "WITHDRAWN FROM docs/downloads; footprint alignment unverified"
+        "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; footprint alignment unverified",
+        "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
       },
       {
         "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
         "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
-        "status": "WITHDRAWN FROM docs/downloads; not submission-cleared"
+        "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
+        "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
       }
     ]
   },
@@ -70,23 +78,67 @@
     "status": "NOT PASSED — official reference/footprint validation remains incomplete",
     "attempted_command": "python -m gems.validate_submission <historical all-finite TIFF>",
     "result": "passed=false; basic metadata/range checks ran, but reference-grid and footprint checks were skipped because official reference/features rasters were not supplied. Skipped means unverified, not pass.",
-    "current_candidate_result": null
+    "current_candidate_result": {
+      "status": "NOT RUN — no current LIDAR-01 candidate raster exists",
+      "footprint_nan_status": "NOT RUN; no current candidate; required NaN-only outside-footprint condition is not established",
+      "range_0_1_status": "NOT RUN for LIDAR-01; no current candidate",
+      "crs_shape_transform_status": "NOT RUN for LIDAR-01; no current candidate or authorized official reference grid"
+    },
+    "historical_h66_2_local_preflight": {
+      "artifact": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
+      "sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
+      "validation_class": "Local writer/template/range preflight only; not a score, organizer acceptance, or release clearance.",
+      "range_0_1": "Local checks passed; observed min 0 and max 1.",
+      "footprint_nan": "NOT COMPLIANT with the required NaN-only outside-footprint contract: 0 NaNs and outside_footprint_zero=true.",
+      "crs": "EPSG:32611 (local preflight)",
+      "shape": [
+        3730,
+        3292
+      ],
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "reference_grid": "Local receipt says the transform matches the supplied sample submission; exact organizer provenance/completeness is not established.",
+      "artifact_status": "Historical H66-2 negative experiment; audit-only, not linked for download or submission."
+    }
   },
   "submission": {
-    "name": null,
-    "note": null,
-    "note_chars": null,
+    "name": "GEMSDOE66-LIDAR-01-CROSS-SCALE-SCARP",
+    "note": "Proposed only; no valid HOLDOUT-DTI, complete registry pass, or official-grid clearance. Do not submit.",
+    "note_chars": 103,
     "note_limit_chars": 140,
     "file": null,
     "download_status": "NO DOWNLOAD — no file is cleared or offered",
     "clearance": "NOT CLEARED. No competition submission slot used in this review.",
-    "organizer_confirmed_receipt": null
+    "organizer_confirmed_receipt": null,
+    "name_status": "PROPOSED ONLY — not a cleared candidate name",
+    "note_status": "PROPOSED ONLY — must not be used to submit the absent candidate"
   },
   "data_access": {
     "competition_data": "BLOCKED — official data tab redirected to login; no credentials used",
     "local_data_directory": "Absent",
     "official_1m_dem_source": "USGS 3DEP 1 m bare-earth DEM collection is public domain in principle; exact competition tile coverage/alignment not verified",
-    "shared_cache": "Absent"
+    "shared_cache": "Absent",
+    "strict_premerge_s0_review": {
+      "evidence": "evidence/h66_inputs_s0_review.json",
+      "status": "BLOCKED — one-off pre-merge input/pin check exited 2",
+      "checked_utc": "2026-10-11T22:43:00Z",
+      "required_role_count": 9,
+      "missing_role_count": 9,
+      "missing_pin_roles": [
+        "external/lidar_scarp_features.json",
+        "external/topo_10m_derived_100m_u8.tif"
+      ],
+      "hash_mismatches": 0,
+      "pin_conflicts": 0,
+      "experiment_or_data_load_followed": false,
+      "scope_caveat": "This evidence was generated by the branch runner before the merge; the newer main runner remains intentionally disabled. It is not a current runner preflight."
+    }
   },
   "budget": {
     "new_experiments_used": 0,
@@ -111,7 +163,11 @@
     "IR-10-INDEPENDENT-REVIEWS",
     "IR-66-BASE-01",
     "IR-66-GUARD-02",
-    "IR-66-RELEASE-01"
+    "IR-66-RELEASE-01",
+    "IR-67-H66-1-ARCHIVE",
+    "IR-68-PREMERGE-S0-SNAPSHOT",
+    "IR-69-UNIQUENESS-PHASE",
+    "IR-70-TEMPLATE-PROVENANCE"
   ],
   "audit_document": "docs/review/2026-10-11-audit.md",
   "artifact_page": "h66-session.html",
@@ -153,6 +209,19 @@
       "IR-66-GUARD-02",
       "IR-66-RELEASE-01"
     ],
-    "review": "docs/review/2026-10-11-h66-2-verdict.md"
-  }
+    "review": "docs/review/2026-10-11-h66-2-verdict.md",
+    "measurement_class": "OFF-CATALOGUE-PROXY ONLY; none of these measurements is HOLDOUT-DTI or ORGANIZER-CONFIRMED.",
+    "official_score_receipt": null,
+    "holdout_dti": null,
+    "next_candidate_status": "The union candidate is a historical proposed follow-up only; it was not run in this PR and is not authorized without a new approved budget, authorized inputs/provenance, independent reviews, and validated shared tooling."
+  },
+  "research_session": {
+    "this_pr_reconciliation_new_experiments": 0,
+    "this_turn_holdout_runs": 0,
+    "this_turn_candidate_emissions": 0,
+    "this_turn_submission_slots_used": 0,
+    "historical_h66_2_record": "Preserved from newer main; one prior preregistered experiment with a NEGATIVE-NOT-PROMOTED verdict and proxy-only measurements. It is not an experiment run in this PR reconciliation."
+  },
+  "promote": false,
+  "promotion_decision": "negative"
 }

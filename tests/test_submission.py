@@ -11,6 +11,11 @@ from gemsdoe66.submission import to_submission_array, write_submission
 from gemsdoe66.validate_submission import validate
 
 ROOT = Path(__file__).resolve().parent.parent
+SAMPLE_SUBMISSION = ROOT / "data" / "raw" / "sample_submission.tif"
+pytestmark = pytest.mark.skipif(
+    not SAMPLE_SUBMISSION.is_file(),
+    reason="requires the authorized official sample_submission.tif, which is absent locally",
+)
 
 
 def test_to_submission_array_clips_and_nulls():

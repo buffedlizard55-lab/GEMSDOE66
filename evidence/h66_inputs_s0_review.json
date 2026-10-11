@@ -1,0 +1,107 @@
+{
+  "generated_utc": "2026-10-11T22:43:00Z",
+  "required_inputs": [
+    "training_features.tif",
+    "bridge/labels.tif",
+    "bridge/existing_faults.tif",
+    "bridge/sample_submission.tif",
+    "external/lidar_scarp_features_u8.tif",
+    "external/lidar_scarp_features.json",
+    "external/geodawn_extensions_u8.tif",
+    "external/derived_sgmc_faults_100m_u8.tif",
+    "external/topo_10m_derived_100m_u8.tif"
+  ],
+  "checked": {
+    "training_features.tif": {
+      "present": false,
+      "pinned": [
+        "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5"
+      ],
+      "match": false
+    },
+    "bridge/labels.tif": {
+      "present": false,
+      "pinned": [
+        "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+      ],
+      "match": false
+    },
+    "bridge/existing_faults.tif": {
+      "present": false,
+      "pinned": [
+        "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+      ],
+      "match": false
+    },
+    "bridge/sample_submission.tif": {
+      "present": false,
+      "pinned": [
+        "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+      ],
+      "match": false
+    },
+    "external/lidar_scarp_features_u8.tif": {
+      "present": false,
+      "pinned": [
+        "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568"
+      ],
+      "match": false
+    },
+    "external/lidar_scarp_features.json": {
+      "present": false,
+      "pinned": null,
+      "match": false
+    },
+    "external/geodawn_extensions_u8.tif": {
+      "present": false,
+      "pinned": [
+        "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b"
+      ],
+      "match": false
+    },
+    "external/derived_sgmc_faults_100m_u8.tif": {
+      "present": false,
+      "pinned": [
+        "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0"
+      ],
+      "match": false
+    },
+    "external/topo_10m_derived_100m_u8.tif": {
+      "present": false,
+      "pinned": null,
+      "match": false
+    }
+  },
+  "missing": [
+    "training_features.tif",
+    "bridge/labels.tif",
+    "bridge/existing_faults.tif",
+    "bridge/sample_submission.tif",
+    "external/lidar_scarp_features_u8.tif",
+    "external/lidar_scarp_features.json",
+    "external/geodawn_extensions_u8.tif",
+    "external/derived_sgmc_faults_100m_u8.tif",
+    "external/topo_10m_derived_100m_u8.tif"
+  ],
+  "missing_pins": [
+    "external/lidar_scarp_features.json",
+    "external/topo_10m_derived_100m_u8.tif"
+  ],
+  "mismatch": [],
+  "pin_conflicts": [],
+  "ok": false,
+  "purpose": "One-off strict required-role/pin verification executed on the session branch before merging the newer main audit state; no experiment or data load followed. Do not treat this as current executable output from the disabled legacy runner.",
+  "evidence_class": "HISTORICAL INPUT-PREFLIGHT SNAPSHOT; NO EXPERIMENTAL RESULT",
+  "evidence_disposition": {
+    "status": "UNQUALIFIED LEGACY INPUT-PREFLIGHT — NO SCORE OR CURRENT RUNNER OUTPUT",
+    "evaluator_version": null,
+    "withheld_positive_count": null,
+    "ci95": null,
+    "reasons": [
+      "This report records a one-off pre-merge presence/pin check only; it contains no metric or scientific score.",
+      "The session-branch checker returned exit code 2 before loading data or starting an experiment.",
+      "The newer main branch intentionally disables the legacy runner; this is not current runner output."
+    ],
+    "canonical_review": "docs/review/2026-10-11-pr12-reconciliation.md"
+  }
+}

@@ -25,13 +25,14 @@ def load(p):
 
 
 def main() -> int:
-    dl = sorted((ROOT / "docs" / "downloads").glob("*.manifest.json"))
+    artifact_dir = ROOT / "artifacts" / "lidar_lane"
+    dl = sorted(artifact_dir.glob("*.manifest.json"))
     if not dl:
-        print("no submission manifest found")
+        print("no lidar-lane artifact manifest found")
         return 1
     man = load(dl[-1])
     slug = man["slug"]
-    checks = load(ROOT / "docs" / "downloads" / f"checks-{slug}-nan.tif.json")
+    checks = load(artifact_dir / f"checks-{slug}-nan.tif.json")
     uniq_dots = load(next(iter((ROOT / "evidence").glob(f"uniqueness_{slug}-nan.json")), ""))
     uniq_surf = load(next(iter((ROOT / "evidence").glob("uniqueness_surface_*.json")), ""))
     e1 = load(ROOT / "evidence" / "experiment1_parsed.json")
@@ -57,17 +58,31 @@ def main() -> int:
     matched_inc = rmatch.get("relief_matched", {}).get("inc", {}).get("mean")
     matched_gap_ci = rmatch.get("gains_matched", {}).get("lane_minus_inc", {}).get(
         "ci95", [-1, 1])
+    max_rho = abs(float(uniq_dots.get("max_abs_spearman_rho", 0) or 0))
+    raw_overlap = float(uniq_dots.get("max_frac_dots_within_3px", 0) or 0)
+    n_compared = int(uniq_dots.get("n_compared", 0) or 0)
+    registry_index = load(ROOT / "evidence" / "registry_refreshed.json")
+    indexed = registry_index.get("rasters", []) if isinstance(registry_index, dict) else []
+    expected_registry_count = registry_index.get("registry_rasters_expected") if isinstance(registry_index, dict) else None
+    organizer_complete = (
+        isinstance(registry_index, dict)
+        and registry_index.get("organizer_registry_complete") is True
+        and type(expected_registry_count) is int
+        and expected_registry_count == len(indexed) == n_compared
+    )
+    raw_duplicate = bool(uniq_dots.get("identical_to")) or max_rho > 0.90 or raw_overlap > 0.70
+    uniqueness_pass = organizer_complete and not raw_duplicate
     gate_met = (
         lane and inc and chance
         and (sum(lane) / len(lane)) > (sum(inc) / len(inc))
         and chance.get("lane_minus_random", {}).get("ci95", [1, -1])[0] > 0
         and checks.get("ok") is True
-        and uniq_dots.get("verdict") == "UNIQUE"
+        and uniqueness_pass
         and matched_lane is not None and matched_inc is not None
         and matched_lane > matched_inc and matched_gap_ci[0] > 0
     )
     card = {
-        "lane": "native-resolution lidar scarp channels (scarplet / Steger / Frangi)",
+        "lane": "scale-deviating LiDAR scarp-field proxy (100 m-derived inputs; 2–20 px = 200–2,000 m)",
         "hypothesis": (
             "Faults the USGS Quaternary catalogue lacks are, in the GeoDAWN region, faults "
             "whose scarps are visible in 1 m lidar but are averaged away at 100 m; therefore a "
@@ -101,10 +116,11 @@ def main() -> int:
             "lidar_lane_dti": round(sum(lane) / len(lane), 5) if lane else None,
             "lidar_lane_ci95": chance.get("lidar_lane", {}).get("ci95"),
             "incumbent_0.2778_raster_dti": round(sum(inc) / len(inc), 5) if inc else None,
-            "incumbent_ci95": chance.get("incumbent_prior", {}).get("ci95"),
+            "incumbent_ci95": rmatch.get("pooled_confounded", {}).get("inc", {}).get("ci95"),
             "chance_level_dti": chance.get("random", {}).get("mean"),
             "chance_ci95": chance.get("random", {}).get("ci95"),
-            "lane_minus_chance": chance.get("lane_minus_rand", {}).get("mean"),
+            "lane_minus_chance": chance.get("lane_minus_random", {}).get("mean"),
+            "lane_minus_incumbent_ci95": rmatch.get("gains_pooled", {}).get("lane_minus_inc", {}).get("ci95"),
             "lane_minus_chance_ci95": chance.get("lane_minus_random", {}).get("ci95"),
             "lane_minus_chance_folds_positive":
                 chance.get("lane_minus_random", {}).get("folds_positive"),
@@ -139,15 +155,26 @@ def main() -> int:
             "max_frac_dots_within_3px": uniq_dots.get("max_frac_dots_within_3px")
             or sb.get("uniqueness", {}).get("max_frac_dots_within_3px"),
             "max_lift_over_random": uniq_dots.get("max_lift_over_random"),
-            "verdict": uniq_dots.get("verdict") or sb.get("uniqueness", {}).get("verdict"),
-            "thresholds": {"max_rho": 0.90, "max_within3": 0.70, "min_lift": 1.5},
+            "density_adjusted_diagnostic_verdict": uniq_dots.get("verdict") or sb.get("uniqueness", {}).get("verdict"),
+            "verdict": ("DUPLICATE_OVERLAP" if raw_overlap > 0.70 else
+                        "DUPLICATE_CORRELATION" if max_rho > 0.90 else
+                        "NOT_CERTIFIED" if not organizer_complete else "UNIQUE"),
+            "protocol_result": "STOP" if raw_duplicate else ("PASS" if uniqueness_pass else "NOT CERTIFIED"),
+            "organizer_registry_complete": organizer_complete,
+            "registry_completeness_status": ("certified complete" if organizer_complete else
+                f"not certified; {n_compared} accessible rasters, no matching organizer-complete expected count"),
+            "expected_registry_raster_count": expected_registry_count if organizer_complete else None,
+            "preplacement_surface_status": "not reported" if uniq_surf.get("max_abs_spearman_rho") is None else "reported",
+            "pixel_identity_status": "no exact pixel identity reported in accessible scan" if not uniq_dots.get("identical_to") else "exact pixel match found",
+            "file_hash_agreement_status": "candidate SHA-256 is recorded; complete registry-wide file hash comparison is not certified",
+            "thresholds": {"max_abs_spearman_rho": 0.90, "max_frac_dots_within_3px": 0.70, "within_px": 3.0},
         },
         "raster": {
             "filename": f"{slug}-nan.tif",
             "sha256": checks.get("sha256"),
             "size_bytes": checks.get("size_bytes"),
             "zeros_variant_sha256": load(
-                ROOT / "docs" / "downloads" / f"checks-{slug}-zeros.tif.json").get("sha256"),
+                artifact_dir / f"checks-{slug}-zeros.tif.json").get("sha256"),
         },
         "validator_output": {
             "no_nan_inside_footprint": checks.get("checks", {}).get("in_footprint_zero_nan"),
@@ -167,21 +194,27 @@ def main() -> int:
             "name": slug,
             "note_140chars": note,
             "note_length": len(note),
+            "status": "AUDIT ONLY — not cleared; do not submit",
+            "slot_used": False,
         },
         "verdict": "promote" if gate_met else "negative",
+        "promote": bool(gate_met),
+        "promotion_decision": "promote" if gate_met else "negative",
         "verdict_basis": (
-            "gate = lane beats the incumbent on the POOLED novelty holdout AND the "
-            "lane-minus-chance 95% CI excludes zero AND the format validator passes on the "
-            "bytes AND the duplicate gate returns UNIQUE AND -- decisively -- the lane still "
-            "beats the incumbent on the RELIEF-MATCHED instrument with a CI excluding zero. "
-            "The last condition fails: matched lane-minus-incumbent is "
+            "Gate requires a positive pooled novelty result and CI, format validation, a raw "
+            "final-dot overlap below 0.70, |Spearman rho| below 0.90, and an explicitly "
+            "organizer-complete registry index whose expected count matches the scan, plus a "
+            "positive relief-matched comparison. The raw overlap is "
+            f"{raw_overlap:.6f}; registry complete certificate={organizer_complete}. "
+            "The relief-matched condition also fails: matched lane-minus-incumbent is "
             f"{rmatch.get('gains_matched', {}).get('lane_minus_inc', {}).get('mean')} with "
             f"CI {matched_gap_ci}, and matched lane-minus-random is "
             f"{rmatch.get('gains_matched', {}).get('lane_minus_rand', {}).get('mean')}."),
         "not_claimed": (
             "no organiser score exists for this or any artifact here; the holdout truth is "
-            "SGMC, not the expert panel's hidden set; promotion here means 'meets the local "
-            "gate', not 'will score X'"),
+            "SGMC, not the expert panel's hidden set; the density-adjusted uniqueness label is "
+            "diagnostic only, the raw >0.70 overlap rule is a stop, and incomplete registry "
+            "access is not a pass"),
     }
     out = ROOT / "evidence" / f"run_card_{slug}.json"
     out.write_text(json.dumps(card, indent=1))
