@@ -1,0 +1,53 @@
+{
+  "run_id": "gems-lane-scarp-2026-10-11-BLOCKED",
+  "date_utc": "2026-10-11",
+  "lane": "lidar scarp channels (parallel-run lane from the brief)",
+  "top_candidate": "H-A (thermal lineaments) for the first validation; H-D is the assigned lane and is blocked on data",
+  "hypothesis": "A fault absent from the USGS/INGENIOUS catalogue leaves a metre-scale or thermal signature that the 100 m feature stack cannot resolve.",
+  "mechanism": "Fault-controlled fluid flow or sub-grid offset produces a local, trend-aligned anomaly in a layer the 100 m stack does not sample at its native resolution.",
+  "non_fault_mimic": "Solar and albedo contrasts, cultivation and canals, roads and embankments, terrace treads and shorelines",
+  "holdout_dti": {
+    "label": "HOLDOUT-DTI",
+    "value": null,
+    "status": "NOT MEASURED - competition rasters unavailable",
+    "evaluator_version": "gems.metric 0.1.0 (interpretation; see docs/research/metric-derivation.md)",
+    "withheld_positives": null,
+    "ci95": null
+  },
+  "leakage_canary": {
+    "status": "NOT RUN",
+    "reason": "no features available"
+  },
+  "correlation_overlap_vs_registry": {
+    "status": "NOT RUN - tool ready, no candidate raster",
+    "reason": "scripts/lane_check.py implements the rules (Pearson r > 0.90; > 70% of dots within 3 px). It needs a candidate raster; none exists. Duplicate-lane risk logged as IR-18.",
+    "tool": "scripts/lane_check.py"
+  },
+  "raster": {
+    "file": null,
+    "sha256": null
+  },
+  "validator": {
+    "status": "NOT RUN on a competition raster",
+    "synthetic_checks": "tests/test_submission.py: writer and validator behaviour on synthetic rasters; passing locally (CI not yet run)"
+  },
+  "submission": {
+    "name": null,
+    "note": null
+  },
+  "verdict": "negative (blocked) - no gate evaluated, no file offered",
+  "budget": {
+    "holdout_experiments_used": 0,
+    "engineering_checks_used": 3,
+    "wall_time": "not measured"
+  },
+  "projection_policy": "No score or projection is written in this card",
+  "open_irregularities": [
+    "IR-09",
+    "IR-15",
+    "IR-16",
+    "IR-18",
+    "IR-20",
+    "IR-22"
+  ]
+}
