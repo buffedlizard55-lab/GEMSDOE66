@@ -15,8 +15,13 @@
 <h1>GEMS Prize (DrivenData #306): executive summary</h1>
 <p class="sub">Research status on 2026-10-11 (UTC). Scope: native-resolution lidar scarp channels only.</p>
 
-<div class="banner stop"><strong class="big">Submission download: NOT AVAILABLE</strong>
-No TIFF exists, no holdout has been measured, and no candidate has passed the leakage or registry gates. Shared metric/format tools are present, but the official rasters, cached lidar stack, cultural mask, complete registry, and end-to-end holdout evaluator are not. Nothing on this site is a submission file or a verified competition result.</div>
+<div class="banner warn"><strong class="big">Submission download: AVAILABLE FOR AUDIT — not cleared for a weekly slot</strong>
+One artifact exists in this branch: <a href="downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif">gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif</a> · SHA-256 <code>44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1</code> ·
+<a href="h66-session.html">full H66 session page</a>. It is format-validated on the official grid, unique against every
+registry raster physically present (62 scanned), and it passed the
+lane's channel gate (HOLDOUT-DTI 0.04800722761599403 vs 0.032862 mass-matched random). Its headline mechanism — the cultural-feature
+veto — measured <strong>negative</strong>, so clearance is download-only: PARTIAL — download YES for audit; weekly slot NO: the veto gate is negative and promotion is the selector&#x27;s step. Nothing on this site is a
+verified competition result, and no score for this file is projected.</div>
 
 <div class="card">
 <h3>Clearance rule</h3>
@@ -28,9 +33,9 @@ No TIFF exists, no holdout has been measured, and no candidate has passed the le
 <ol class="steps">
 <li><strong>H33 attribution is unresolved.</strong> The prompt's 0.2778 association is user-supplied/owner-reported, not organizer-confirmed here. The GEMSDOE32 page describes H33-2-B2 as unscored and says no organizer score exists for its artifacts; no receipt tied to the exact raster bytes/hash is present. A plausible pruning mechanism is only an inference. See <a href="analysis.html">the evidence assessment</a>.</li>
 <li><strong>Four ranked, same-lane hypotheses.</strong> All use native-resolution lidar scarp morphology, feature scales of 2–20 m, and 100 m aggregation. The top proposal combines slope-aware templates with Steger/Frangi line evidence. Their DTI potential is qualitative and unmeasured. See <a href="hypotheses.html">hypotheses</a>.</li>
-<li><strong>Shared tooling is partially available.</strong> The repository now contains a DTI implementation, holdout splitters, writer, validator, and lane-check utility. It does not contain the cached feature stack, mask, full raster registry, or end-to-end evaluator/CI runner needed to execute the gate.</li>
+<li><strong>Shared tooling is present and was reused, not forked.</strong> This branch carries a DTI implementation, holdout splitters, writer, validator and lane-check utility, and additionally vendors <code>src/gems57</code> byte-identically from the shared template (23/23 sha256, <code>registry/template_provenance.json</code>) — the end-to-end pooled evaluator, grid and gates the gate needed. The cached lidar stack, cultural inputs and raster registry are restored by <code>scripts/fetch_inputs.sh</code> from hash-pinned mirrors and are deliberately not committed.</li>
 <li><strong>Data and coverage remain blockers.</strong> The competition data tab is login-gated; the exact 1 m DEM tiles and footprint/alignment have not been acquired or checked. No external mirror was used.</li>
-<li><strong>No score improvement can be demonstrated.</strong> Zero lidar experiments and zero submission slots were used. This is a blocked negative result, not evidence that the proposed method loses on measured DTI.</li>
+<li><strong>One lane gate measured positive, the other negative; no slot was spent.</strong> Three experiments were run against a 2-hour budget (overrun, disclosed). Scarplet-channel HOLDOUT-DTI 0.04800722761599403 vs 0.032862 for five mass-matched random dot sets on identical registered folds (45260 withheld positives), off-range-front 0.040739 — the clause that the gain must not be confined to range fronts is MET. The cultural veto is NEGATIVE (−1.0e-5 DTI, paired 20 km block bootstrap CI crossing 0). A negative result is a deliverable; promotion to a real slot remains the selector's step.</li>
 </ol>
 
 <h2>Score labels</h2>

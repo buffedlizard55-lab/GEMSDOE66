@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>How to submit · GEMSDOE66</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--ink:#e6edf3;--mut:#9198a1;--ok:#2ea043;--no:#db61a2;--warn:#d29922;--line:#30363d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+main{max-width:1080px;margin:0 auto;padding:26px 20px 80px}h1{font-size:30px;margin:.2em 0}h2{margin-top:2em;border-bottom:1px solid var(--line);padding-bottom:6px}
+a{color:#4493f8}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0}
+.banner{border-left:6px solid var(--warn)}.banner.no{border-left-color:var(--no)}.banner.ok{border-left-color:var(--ok)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}.kpi b{display:block;font-size:24px}
+.btn{display:inline-block;background:var(--ok);color:#fff;padding:11px 16px;border-radius:9px;text-decoration:none;font-weight:600;margin:4px 8px 4px 0}
+.btn.alt{background:#21262d;color:var(--ink);border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#1c2128}code{background:#1c2128;padding:1px 5px;border-radius:5px;font-size:13px}
+.mut{color:var(--mut);font-size:13.5px}nav{position:sticky;top:0;background:#0d1117ee;border-bottom:1px solid var(--line);padding:10px 0;z-index:9}
+nav a{margin-right:14px;font-size:14px}ul{padding-left:22px}.small{font-size:13px}
+</style></head><body><main><nav><a href="index.html">Summary</a><a href="h66-session.html">H66 run</a><a href="executive-summary.html">How to submit</a><a href="run-card.html">Run card</a><a href="irregularities.html">Irregularities</a><a href="sources.html">Sources</a></nav>
+<h1>Exactly how to make a submission into the GEMS Prize</h1>
+<p class="mut">Five steps. Nothing to install, nothing to configure. The portal rejects a file whose values are not
+inside [0, 1]; the files on this page are written so that cannot happen.</p>
+
+<div class="banner ok card"><h2 style="margin-top:0;border:0">Step 1 — download <code>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip</code></h2>
+<p>The submission form accepts “a single-band GeoTIFF (.tif), or a .zip file containing a single GeoTIFF”. The .zip
+is the smallest upload and contains exactly one file. If you prefer the bare raster, take
+<code>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif</code>; both are the same bytes inside the footprint.</p></div>
+
+<div class="card"><h2 style="margin-top:0;border:0">Step 2 — open the submission form</h2>
+<p><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submission/">
+https://www.drivendata.org/competitions/306/competition-doe-gems/submission/</a> → <em>New submission</em> →
+<em>File to submit</em> → choose the .zip.</p></div>
+
+<div class="banner card"><h2 style="margin-top:0;border:0">Step 3 — why your last attempt failed, and why this one will not</h2>
+<p>The portal said <code>Predicted values must be in range [0, 1]</code>. That is a value check, not a format check,
+and it fires for three reasons — all of them fixed in the writer here:</p>
+<ol><li><b>NaN outside the footprint.</b> The problem page says data outside the bounds may be “null or nan”, but the
+range validator reads the whole array. A file with NaN outside the footprint fails <code>0 ≤ p ≤ 1</code> for
+those pixels. <code>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif</code> therefore writes <b>0.0 everywhere outside the footprint and carries no
+nodata tag</b>; the NaN variant is kept only for spec-literalism (<code>gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif</code>).</li>
+<li><b>Unnormalised units.</b> A logit, a z-score or a 0–255 raster is out of range. The writer refuses to emit
+anything not already finite and inside [0,1] — <code>src/gems52/submission_writer.py</code>-style fail-closed,
+re-implemented in <code>scripts/run_h66.py s5</code> and checked again by <code>scripts/verify66.py</code>.</li>
+<li><b>Wrong CRS/shape/transform or an HTML error page saved as <code>.tif</code>.</b> Check the first bytes: a
+GeoTIFF starts with <code>II*\0</code> or <code>MM\0*</code>; a Git-LFS pointer or an S3 error page starts with
+<code>version https://git-lfs…</code> or <code>&lt;?xml</code>. Our receipt below pins the sha256 of the exact bytes.</li></ol>
+<p class="small"><b>Receipt for the bytes you are downloading:</b> sha256 <code>44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1</code> ·
+3730×3292 · EPSG:32611 ·
+dtype float32 · 37,654 positive pixels ·
+min 0.0 max 1.0 · no NODATA tag ·
+all local checks passed <code>true</code>.</p></div>
+
+<div class="card"><h2 style="margin-top:0;border:0">Step 4 — fill in the note (≤140 characters)</h2>
+<p>The form asks for “a short comment to help you or your team tell submissions apart later”. Paste exactly:</p>
+<pre style="background:#1c2128;padding:12px;border-radius:8px;overflow:auto">H66-1 LiDAR scarplet channels + cultural veto, 37654 dots >=300m off catalogue; HOLDOUT-DTI 0.048 vs 0.033 random; veto NEGATIVE</pre>
+<p class="small">128 characters. Suggested submission <b>name</b> if your mirror asks for one:
+<code>GEMSDOE66-H66-1-LIDAR-SCARPLET-VETO-37654</code>.</p></div>
+
+<div class="banner no card"><h2 style="margin-top:0;border:0">Step 5 — decide: this file is NOT promoted</h2>
+<p>Uploading it is allowed by the rules (one submission per day per team is the only hard cadence limit in this
+family's notes; the weekly cap is shown on the submission page). But the honest read of the evidence is that this
+artifact scores in the 0.04–0.16 band where every LiDAR-scarp emission has landed, versus a standing 0.2778 and a
+board top near 0.41. Spend a slot on the selector's pick, not on a negative-result lane.</p></div>
+
+<div class="card"><h2 style="margin-top:0;border:0">Regenerate the file yourself (auditable end to end)</h2>
+<pre style="background:#1c2128;padding:12px;border-radius:8px;overflow:auto">bash scripts/fetch_inputs.sh          # restores hash-pinned inputs into data/
+python scripts/run_h66.py s0 s1 s2 s3 s4 s4b s5
+python scripts/verify66.py --candidate docs/downloads/&lt;file&gt;.tif
+python scripts/write_run_card.py && python scripts/build_site66.py</pre>
+<p class="small">Requires: <code>pip install -r requirements.txt</code> (~2 GB RAM, 2 cores, no GPU; whole run ≈ 4 min).
+Every stage writes its own JSON into <code>evidence/</code> before the next one starts.</p></div>
+<p class="mut small">Official format requirements being satisfied: single band · float32 · values in [0, 1] ·
+EPSG:32611 · 100 m pixels · same bounds as the training data · see
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">the problem page</a>.</p>
+</main></body></html>

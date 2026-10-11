@@ -1,0 +1,80 @@
+{
+  "generated_utc": "2026-10-11T20:45:00Z",
+  "brief": "3-5 candidate geological hypotheses not yet tried, each naming layers / physical signature / why it catches an uncatalogued fault / how it differs from anything implemented, ranked by expected DTI improvement x implementation cost",
+  "candidates": [
+    {
+      "id": "H66-1",
+      "rank": 1,
+      "title": "Cultural-lineament veto on the LiDAR scarplet channel (canals, roads, field edges, mine benches)",
+      "layers": [
+        "data/external/lidar_scarp_features_u8.tif (12 bands, metres-decoded)",
+        "data/external/topo_10m_derived_100m_u8.tif (slope_p90, relief_local)",
+        "data/external/geodawn_extensions_u8.tif (TMI_up150)"
+      ],
+      "signature": "near-1.0 doubled-angle orientation coherence over a 1.5 km corridor x near-constant amplitude along strike x flat setting x no upward-continued magnetic gradient",
+      "why_off_catalogue": "a canal or a section-line road cuts a real 0.3-1.5 m step that no photogeologist mapped as a fault; removing them raises credit per emitted dot, which is the only currency the metric pays",
+      "differs": "no lane in the family ever built a cultural mask (verified: exactly one prose mention across the corpus), and all prior LiDAR arms consumed u8/255 weights without decoding units",
+      "expected_gain": "+0.01 to +0.05 credit/dot",
+      "cost": "low (all inputs committed)",
+      "status": "MEASURED NEGATIVE - see IR-66-NEG-01"
+    },
+    {
+      "id": "H66-2",
+      "rank": 2,
+      "title": "Physical scarplet SNR + relative age from the pinned 2 m stack",
+      "layers": [
+        "lidar_scarp_features_u8 (ex_max, ex_mean, step_max, lapneg_max, lappos_max, downface_max, upface_max, cross_max, relief, coh100, strike, valid)"
+      ],
+      "signature": "amplitude(m/m) / 20 km-block robust background = SNR; scarp fill fraction = mean/max; relative age = cross-face gradient / mean adjacent surface gradient; crest x toe LoG sharpness",
+      "why_off_catalogue": "a fresh, through-cutting scarplet on a Holocene fan is young displacement that a regional compilation below its inclusion threshold never carried",
+      "differs": "fill-fraction and block-robust SNR constructions exist nowhere else in the family; prior arms used the max bands only",
+      "expected_gain": "measured: 2.08x over mass-matched random off-catalogue; 1.46x on the holdout",
+      "cost": "low",
+      "status": "POSITIVE BUT WEAK"
+    },
+    {
+      "id": "H66-3",
+      "rank": 3,
+      "title": "Steger sub-pixel ridges + Frangi 2-20 m Hessian lines on the slope-detrended 1 m surface",
+      "layers": [
+        "USGS 3DEP 1 m tiles (706 of 716 pinned by the competition DEM-links inventory) - NOT in this checkout"
+      ],
+      "signature": "sub-pixel parabolic ridge offset normal to the lineament + multiscale lineness at 2/5/10/20 m on the detrended surface",
+      "why_off_catalogue": "the scarps the 100 m stack averages away are exactly the meter-scale breaks a mapper walks and adds",
+      "differs": "never attempted footprint-wide here; the two committed 3 m pilot tiles make a scaled-down version possible",
+      "expected_gain": "unknown; the ceiling case for this lane",
+      "cost": "BLOCKED: needs one Actions bridge run, no data egress in this sandbox",
+      "status": "NOT RUN (data)"
+    },
+    {
+      "id": "H66-4",
+      "rank": 4,
+      "title": "Pluvial shoreline veto (Lahontan / Bonneville) by contour-parallelism and elevation banding",
+      "layers": [
+        "lidar_scarp_features_u8 (relief, strike, height implied by step_max)",
+        "geodawn_dem_a2_100m.tif band 9 detrended elevation"
+      ],
+      "signature": "long scarp whose strike tracks the local contour and whose elevation falls in a discrete shoreline band",
+      "why_off_catalogue": "shorelines are the second mimic named in the stack's own caveats and they are abundant on the basin floors where faults are absent",
+      "differs": "the chi lane masked playas by raised_n counts; nobody masked shorelines geometrically",
+      "expected_gain": "+0.00 to +0.03 precision",
+      "cost": "low-medium",
+      "status": "NOT RUN (3-experiment budget spent)"
+    },
+    {
+      "id": "H66-5",
+      "rank": 5,
+      "title": "Geo-energy convergence: geodetic strain x thermal x conductivity x seismicity",
+      "layers": [
+        "official training_features bands geod_shearrate, geod_dilaterate, geod_2ndinv, cond_surf, depth_to_base_surf, deq_n100a15 (418 MB, not in checkout; mirrored+parted upstream)",
+        "GDR 1391 2 m temperature probes and palaeogeothermal grids (zips ARE committed)"
+      ],
+      "signature": "an active extensional fault co-fires four independent anomalies",
+      "why_off_catalogue": "this is the only evidence family that does not depend on the existing compilation at all",
+      "differs": "no artifact in 60+ sibling repos has used the geo-energy layers end to end",
+      "expected_gain": "largest ceiling (board top 0.4133 is 0.14 above the family best)",
+      "cost": "high; needs the training_features mirror restored and one bridge run",
+      "status": "PROPOSED"
+    }
+  ]
+}

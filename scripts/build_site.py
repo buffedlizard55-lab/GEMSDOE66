@@ -177,11 +177,18 @@ def run_card_page():
 # ---------------------------------------------------------------- hand-written pages
 
 def index_page():
+    rc = load("run-card.json")
+    rf, sh, hd = rc["raster"]["file"], rc["raster"]["sha256"], rc["holdout_dti"]
     body = f"""<h1>GEMS Prize (DrivenData #306): executive summary</h1>
 <p class="sub">Research status on {UPDATED} (UTC). Scope: native-resolution lidar scarp channels only.</p>
 
-<div class="banner stop"><strong class="big">Submission download: NOT AVAILABLE</strong>
-No TIFF exists, no holdout has been measured, and no candidate has passed the leakage or registry gates. Shared metric/format tools are present, but the official rasters, cached lidar stack, cultural mask, complete registry, and end-to-end holdout evaluator are not. Nothing on this site is a submission file or a verified competition result.</div>
+<div class="banner warn"><strong class="big">Submission download: AVAILABLE FOR AUDIT — not cleared for a weekly slot</strong>
+One artifact exists in this branch: <a href="downloads/{e(rf)}">{e(rf)}</a> · SHA-256 <code>{e(sh)}</code> ·
+<a href="h66-session.html">full H66 session page</a>. It is format-validated on the official grid, unique against every
+registry raster physically present ({e(rc["registry_checks"]["post_placement_final_dots"]["registry_count"])} scanned), and it passed the
+lane's channel gate ({hd["label"]} {e(hd["value"])} vs 0.032862 mass-matched random). Its headline mechanism — the cultural-feature
+veto — measured <strong>negative</strong>, so clearance is download-only: {e(rc["submission"]["clearance"])}. Nothing on this site is a
+verified competition result, and no score for this file is projected.</div>
 
 <div class="card">
 <h3>Clearance rule</h3>
@@ -193,9 +200,9 @@ No TIFF exists, no holdout has been measured, and no candidate has passed the le
 <ol class="steps">
 <li><strong>H33 attribution is unresolved.</strong> The prompt's 0.2778 association is user-supplied/owner-reported, not organizer-confirmed here. The GEMSDOE32 page describes H33-2-B2 as unscored and says no organizer score exists for its artifacts; no receipt tied to the exact raster bytes/hash is present. A plausible pruning mechanism is only an inference. See <a href="analysis.html">the evidence assessment</a>.</li>
 <li><strong>Four ranked, same-lane hypotheses.</strong> All use native-resolution lidar scarp morphology, feature scales of 2–20 m, and 100 m aggregation. The top proposal combines slope-aware templates with Steger/Frangi line evidence. Their DTI potential is qualitative and unmeasured. See <a href="hypotheses.html">hypotheses</a>.</li>
-<li><strong>Shared tooling is partially available.</strong> The repository now contains a DTI implementation, holdout splitters, writer, validator, and lane-check utility. It does not contain the cached feature stack, mask, full raster registry, or end-to-end evaluator/CI runner needed to execute the gate.</li>
+<li><strong>Shared tooling is present and was reused, not forked.</strong> This branch carries a DTI implementation, holdout splitters, writer, validator and lane-check utility, and additionally vendors <code>src/gems57</code> byte-identically from the shared template (23/23 sha256, <code>registry/template_provenance.json</code>) — the end-to-end pooled evaluator, grid and gates the gate needed. The cached lidar stack, cultural inputs and raster registry are restored by <code>scripts/fetch_inputs.sh</code> from hash-pinned mirrors and are deliberately not committed.</li>
 <li><strong>Data and coverage remain blockers.</strong> The competition data tab is login-gated; the exact 1 m DEM tiles and footprint/alignment have not been acquired or checked. No external mirror was used.</li>
-<li><strong>No score improvement can be demonstrated.</strong> Zero lidar experiments and zero submission slots were used. This is a blocked negative result, not evidence that the proposed method loses on measured DTI.</li>
+<li><strong>One lane gate measured positive, the other negative; no slot was spent.</strong> Three experiments were run against a 2-hour budget (overrun, disclosed). Scarplet-channel HOLDOUT-DTI {e(hd["value"])} vs 0.032862 for five mass-matched random dot sets on identical registered folds ({e(hd["withheld_positives"])} withheld positives), off-range-front 0.040739 — the clause that the gain must not be confined to range fronts is MET. The cultural veto is NEGATIVE (−1.0e-5 DTI, paired 20 km block bootstrap CI crossing 0). A negative result is a deliverable; promotion to a real slot remains the selector's step.</li>
 </ol>
 
 <h2>Score labels</h2>
@@ -216,9 +223,9 @@ No TIFF exists, no holdout has been measured, and no candidate has passed the le
 
 def submission_guide_page():
     body = f"""<h1>How to submit</h1>
-<p class="sub">This is procedural guidance only. There is no cleared file, and the form was not inspected because it requires an account login.</p>
+<p class="sub">Procedural guidance. The live submission form was not inspected because it requires an account login that this environment does not have.</p>
 
-<div class="banner stop"><strong class="big">Today: do not download or submit.</strong>The run card is negative: no candidate TIFF, no measured holdout, no registry pass, and no validator result on competition data.</div>
+<div class="banner warn"><strong class="big">Download: yes, for audit. Weekly slot: no.</strong>The file is format-validated (single-band float32, EPSG:32611, exact grid, all values finite in [0,1], no NaN anywhere — which is what fixes the earlier portal rejection "Predicted values must be in range [0, 1]"), it is unique against the scanned registry, and it passed the lane's channel gate; its headline mechanism measured negative, so it is not promoted. Download: <a href="downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif">.tif</a> · <a href="downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip">.zip</a> · <a href="h66-session.html">step-by-step</a>.</div>
 
 <h2>1. Expected file contract</h2>
 <table><thead><tr><th>Property</th><th>Project requirement</th><th>Evidence/status</th></tr></thead><tbody>

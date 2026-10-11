@@ -1,8 +1,17 @@
+
 # GEMSDOE66 — native-resolution lidar-scarp research
 
 > **Read this file before each session.** It is the standing project charter, protocol, and safety gate.
 >
-> **Current decision (2026-10-11 UTC): NEGATIVE / STOP.** The shared metric, holdout primitives, writer, validator, and registry-comparison tool are now present in this branch after reconciling `origin/main`. The competition rasters, cached lidar feature stack, cultural mask, complete prior-raster registry, and end-to-end holdout evaluator are not present. No lidar feature, holdout, leakage canary, registry comparison, or TIFF was produced. **There is no file cleared to download or submit.**
+> **Current decision (2026-10-11 UTC): NEGATIVE ON THE HEADLINE MECHANISM — artifact delivered for audit, not promoted.**
+> A measured run now exists in this branch: the lane's scarplet-channel gate **passed** on the registered holdout
+> (HOLDOUT-DTI 0.048007 vs 0.032862 mass-matched random; 45,260 withheld positives; off-range-front 0.040739) and its
+> cultural-veto gate **failed** (−1.0e-5 DTI, paired block-bootstrap CI crossing 0). One format-validated, registry-unique
+> TIFF is therefore offered **for download and audit only** — `docs/downloads/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif`,
+> sha256 `44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1`. **Zero submission slots used; no score projected.**
+> Site: <https://buffedlizard55-lab.github.io/GEMSDOE66/> → `docs/index.html` (summary), `docs/h66-session.html` (this run),
+> `docs/executive-summary.html` (five-step how-to-submit incl. why the old `[0, 1]` rejection cannot recur).
+
 
 ## Mission and lane boundary
 
@@ -76,3 +85,92 @@ Competition data and generated model artifacts stay out of git (`data/`, `output
 **Maximize P(Win).** Weigh evidence, expected value, risk, and scarce submission opportunities. No lottery-ticket uploads, stale-board chasing, or unsupported projections.
 
 **Own the Outcome.** Report blockers, tool defects, negative results, and uncertainty end to end. Reuse shared tools and fix them in place when demonstrably wrong. Preserve a reproducible record of every correction.
+
+---
+
+# Session H66-1 (this run) — measurements, artifact, reproduction
+
+## 1 · What this repository is
+
+
+A self-contained, re-runnable experiment lane for the GEMS Prize, built on the shared template
+(`60GEMSDOE`) without forking it:
+
+| path | role |
+|---|---|
+| `src/gems57/` | vendored **byte-identical** (23/23 files, hash-verified) — official grid, DTI metric, hide-and-recover holdout, validator, gates, uniqueness, emit |
+| `src/gems66/spec66.py` | decode of the 12-band 2 m LiDAR stack back to **physical units** using the build sidecar's quantisation rule |
+| `src/gems66/channels66.py` | the lane's four named aggregates + scarplet SNR + relative age + the cultural-feature veto |
+| `scripts/run_h66.py` | stages `s0…s5` (verify → channels → E1 → spatial CV → holdout → artifact) |
+| `scripts/verify66.py` | on-disk validator + registry scan (ρ, 3-px overlap, mass-matched-random correction) |
+| `scripts/write_run_card.py` → `registry/run_card.json` | the rule-5 card; the site renders **from** it, so no number is hand-typed |
+| `scripts/build_site66.py` → `docs/` | the GitHub Pages site |
+| `evidence/h66_*.json` | every measurement, written before the next stage starts |
+
+`docs/` and the small receipts are committed; `data/` and `registry/rasters/` are **not** (100 MB GitHub cap) —
+restore them with `bash scripts/fetch_inputs.sh`, which fails closed on any digest mismatch.
+
+## 2 · Result of this session (one paragraph, all numbers tagged)
+
+The scarplet channel set **passed** the lane's holdout clause — HOLDOUT-DTI **0.048007** vs **0.032862** for five
+mass-matched uniform-random dot sets on the identical registered protocol (single pooled run of gems57
+hide-and-recover; 45,260 withheld positive pixels; no CI claimed for the level because no replicate arms were run),
+and **0.040739** restricted to cells off the range-front proxy, so the gain is not confined to range fronts
+**[measured-here]**. On the population-matched off-catalogue instrument (USGS SGMC faults >300 m from the
+catalogue inside the LiDAR-covered footprint) the emission reaches DTI **0.18796** with **0.0764** credit/dot vs
+**0.09028** for mass-matched random — a 2.08× concentration of real, unmapped fault trace **[measured-here]**.
+The lane's *headline* mechanism, the cultural-feature veto, is a clean **negative**: it removed 28 of 37,654
+top-ranked dots, moved the instrument by **−1.0e-5** DTI (paired 20 km block bootstrap CI
+[−1.5e-5, +6.5e-6], P(positive)=0.129), added **0.00000** AUC to the spatial-CV retrain, and received a
+**positive** logistic coefficient (1.39, 1.59 in the two usable folds) — valley-floor cultural scarps co-locate
+with range-front faults instead of diluting them. Uniqueness vs the 62 rasters physically present:
+|ρ|max **0.0196**, worst 3-px overlap **0.5099** (excess over mass-matched random **0.319**), byte- and
+pixel-unique **[measured-here, incomplete corpus]**. Format: float32, EPSG:32611, 3730×3292, transform and bounds
+identical to `sample_submission.tif`, 37,654 positive pixels, finite values in [0,1], **no NaN anywhere**, 0 dots
+on the catalogue **[measured-here]**. No organizer-confirmed score exists for this file; none is projected.
+
+## 3 · Answers to the two questions the brief asks
+
+**Why did `h33-h33-2-b2` score 0.2778 (the family's best)?** Not because its field was good, but because its
+*mass* was near-minimal on a well-ranked field: a five-rung pruning ladder (121,131 → 60,069 → 44,090 → 40,199 →
+37,654 dots; 0.1922 → 0.2477 → 0.2600 → 0.2708 → 0.2778, all owner-reported) in which every deletion of dots
+*raised* the score, and the two deletions that were measured removed dots sitting exactly 1 px and 2 px from the
+published catalogue. Under the official metric `DTI = TP_w/(TP_w + 0.2·FP_w + 0.8·FN_w)` with a 300 m triangular
+kernel, emitted mass costs `0.2·p(x)·(1−k)`, so a dot pays only if its kernel credit exceeds `0.2·DTI` ≈ 0.056.
+The 0.2778 artifact has 0 dots on the catalogue, its nearest dot exactly 3.00 px (300 m) away, and a median dot
+1.97 km from it: it is a wide-field emission whose merit is that it stops wasting mass where the answer is provably
+not. Source for the algebra and the ladder: the official
+[problem page](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) (metric + worked example
+TP=3.00/FP=1.89/FN=2.00→0.60, read this session) and `60GEMSDOE/docs/research/why-02778-and-what-beats-it-2026-10-11.md`.
+
+## 4 · Reproduce
+
+```bash
+python -m venv venv && . venv/bin/activate && pip install -r requirements.txt
+bash scripts/fetch_inputs.sh                    # hash-pinned inputs, fails closed
+python scripts/run_h66.py s0 s1 s2 s3 s4 s4b s5  # ~4 min, 3 GB RAM, no GPU
+python scripts/verify66.py --candidate docs/downloads/<file>.tif
+python scripts/write_run_card.py && python scripts/build_site66.py
+python -m pytest tests -q                        # 8 passed
+```
+
+## 5 · Remaining work / limitations (owned, not deferred)
+
+1. **Governance wall #1 (owner decision).** The registered holdout's truth *is* catalogue trace, so an emission that
+   excludes everything within 300 m of the catalogue scores exactly 0.0 there — including a file that scored 0.2778
+   live (measured: 0.004729 for the champion, 0.0 for ours). Any rule of the form "must beat the current holdout
+   best before a slot" cannot promote off-catalogue work. Flag: `IR-66-GATE-01`.
+2. **Governance wall #2 (inherited).** The literal "≤70 % of dots within 3 px of any registry raster" clause is
+   unsatisfiable against space-filling comparators (60GEMSDOE measured 99.87 %). We report both the literal number
+   (0.5099, passes) and the excess over mass-matched random (0.319, passes), plus the corpus coverage, instead of
+   quietly redefining the rule.
+3. **Native resolution is blocked by data, not by ideas.** Steger sub-pixel lines and a 2–20 m Frangi sweep on 1 m
+   pixels cannot be run footprint-wide here. The fix is one GitHub-Actions bridge job (pattern already exists in
+   `60GEMSDOE/.github/workflows/dem10-chi.yml`) that fetches the pinned 3DEP 1 m tiles listed by the competition
+   DEM-links PDF, computes the lane's two feature sets at 1 m, and uploads a 100 m aggregate with its own manifest
+   — then this lane's E1/E2 re-run on real native data. Flag: `IR-66-RES-01`.
+4. **Untried this session (budget spent):** H66-4 pluvial-shoreline veto; E0 native check on the two committed 3 m
+   pilot tiles (`src/gemsdoe48/scarp3m.py` vendored for it, hashes pinned in `data/pilot/dem3m/dem_pilot_receipt.json`);
+   H66-5 geo-energy convergence.
+5. **The 0.2778 anchor is owner-reported**: no organizer receipt links it to the exact bytes; every inversion of it
+   inherits that caveat.
