@@ -9,8 +9,20 @@ and transparent stops are valid outcomes.
 
 **Start every session here:** read this complete charter, then the canonical
 [`docs/data/run-card.json`](docs/data/run-card.json) and the newest dated file under
-[`docs/review/`](docs/review/), including the PR #12 reconciliation. Do not treat inherited
-artifacts as candidates cleared for release.
+[`docs/review/`](docs/review/), including the [2026-10-11 release-safety review](docs/review/2026-10-11-release-safety.md).
+Do not treat inherited artifacts as candidates cleared for release. The original method and
+parallel-run prompt is preserved in Appendix A; this review retains the full intent, while the
+binding conditional **no download unless all gates pass** rule takes priority over an unconditional
+request for a TIFF. The owner's [H33-2-B2 page](https://github.com/buffedlizard55-lab/GEMSDOE32/blob/main/docs/index.html)
+labels its own artifact UNSCORED; an alleged score association cannot be treated as a receipt.
+
+**Latest local preflight (2026-10-11): NEGATIVE.** All 8 listed competition/cache inputs are
+missing. A shared [mechanical release gate](src/gems/release_gate.py) now prevents format-only or
+partial-registry results from being called cleared. It created no candidate and used no submission
+slot. Its blocker list is [`evidence/release_preflight_2026-10-11.json`](evidence/release_preflight_2026-10-11.json).
+To resume, obtain authorized official data/DEM links and cultural mask, certify the complete
+raster registry, then run the preregistered native-resolution experiment under the holdout and
+independent-review rules below. No current download is safe to submit.
 
 ---
 
@@ -247,9 +259,10 @@ docs/        GitHub Pages site: index, executive summary, hypotheses, research, 
 
 ---
 
-## Appendix A — original project brief (preserved verbatim as historical source text)
+## Appendix A — project brief excerpt (historical, condensed)
 
-The blockquote below preserves the original project aim and method prompt for traceability. Its
+The blockquote below summarizes the original project aim and method prompt for traceability;
+it does not reproduce the user's full site-by-site historical list or repeated instructions. Its
 unconditional wording predates the later fail-closed scientific, registry, provenance, and
 release gates. **It is not authorization to emit, download, publish, or submit an artifact.** The
 current status and binding execution rules later in this README take precedence; stop when any

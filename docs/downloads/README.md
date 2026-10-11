@@ -1,6 +1,6 @@
 # No submission file is published here
 
-**Download status: NOT AVAILABLE.** This directory intentionally contains no current GeoTIFF or ZIP cleared for submission. Do not upload any historical H66 or lidar-lane artifact.
+**Download status: NOT AVAILABLE.** This directory intentionally contains no current GeoTIFF or ZIP cleared for submission. Do not upload any historical H66 or lidar-lane artifact. The 2026-10-11 [release-safety review](../review/2026-10-11-release-safety.md) and [machine blocker list](../../evidence/release_preflight_2026-10-11.json) explain why the shared code does not grant release from a local format check or incomplete registry. No new TIFF was generated.
 
 - **H66-1:** Historical TIFF/ZIP bytes were withdrawn from the public download path and retained only as byte-verified audit copies under `evidence/archives/h66-1/`, outside the Pages document root and without site links. They did not pass the required holdout, leakage, complete-registry, provenance, and exact-footprint release gates.
 - **H66-2:** A historical negative result; its figures are off-catalogue proxies, not `HOLDOUT-DTI` or `ORGANIZER-CONFIRMED`. Audit artifacts are under `artifacts/h66-2/`.

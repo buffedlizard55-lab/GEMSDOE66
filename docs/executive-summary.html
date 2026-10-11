@@ -43,7 +43,20 @@ remains negative and the artifact remains unsubmitted.</p>
 <div class="stop"><b>No file or note is cleared for use.</b> Do not open a submission form, upload an
 artifact, or spend a competition slot. If every scientific, provenance, registry, and official-grid
 gate is passed in a future review, use the official competition interface and record its receipt.
-This page intentionally provides no upload instructions or submit-ready note.</div>
+No submission name or note on this page is cleared. The following instructions are
+<b>conditional, not authorization to submit</b>.</div>
+<ol>
+<li>After an independent selector approves a candidate, confirm that its exact SHA-256
+matches the approved run card, and that the shared validator passed against the official
+sample grid and feature footprint (single-band float32, EPSG:32611, 100 m, values [0,1]
+inside and NaN only outside). Never substitute an all-finite audit variant.</li>
+<li>Only then download the specifically approved TIFF from this site's top-of-page download
+link. There is no such link now. Check the downloaded file SHA-256 before using it.</li>
+<li>On the official DrivenData competition page, review the current rules and weekly limit,
+open the submission form, select the <code>.tif</code> file, enter the approved unique name
+and the approved note (at most 140 characters), then submit. Record the portal receipt and
+its exact file hash; do not claim a score from an owner page or a projection.</li>
+</ol>
 
 <h2>3 · Format information is not release clearance</h2>
 <p>The inherited local sidecar records a format-only check on its artifact bytes. That is not
