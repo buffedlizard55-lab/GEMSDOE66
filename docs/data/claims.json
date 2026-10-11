@@ -1,0 +1,25 @@
+{
+  "schema": 2,
+  "scope": "H33 attribution claims only; no leaderboard snapshot or copied standings.",
+  "claims": [
+    {
+      "claim": "The prompt associates 0.2778 with GEMSDOE32 artifact h33-h33-2-b2.",
+      "attributed_value": "0.2778",
+      "claim_type": "USER-SUPPLIED / OWNER-REPORTED ATTRIBUTION; NOT A VERIFIED SCORE",
+      "evidence_for": "The attribution appears in the user-supplied project brief and owner-maintained project-family material.",
+      "evidence_against_or_missing": "GEMSDOE32's own page describes the artifact as unscored and says no organizer score exists for its artifacts. No organizer receipt tied to the exact artifact bytes or SHA-256 is present here.",
+      "verdict": "UNATTRIBUTED; NOT ORGANIZER-CONFIRMED",
+      "source_ids": ["S17", "S18", "S28"]
+    },
+    {
+      "claim": "H33-2-B2's described catalogue-adjacent pruning may explain a change in a metric result.",
+      "attributed_value": null,
+      "claim_type": "CONDITIONAL MECHANISM; INFERENCE ONLY",
+      "evidence_for": "Owner-maintained method descriptions characterize H33-2-B2 as a post-processing/pruning variant near mapped catalogue faults.",
+      "evidence_against_or_missing": "No controlled same-fold comparison, exact candidate raster, organizer receipt, or artifact-hash mapping is present. Pruning could remove unsupported predictions or useful predictions near new labels.",
+      "verdict": "NOT TESTED; NO CAUSAL ATTRIBUTION",
+      "source_ids": ["S17", "S18"]
+    }
+  ],
+  "policy": "Only HOLDOUT-DTI with evaluator version, withheld-positive count and 95% CI, or ORGANIZER-CONFIRMED from an exact receipt/hash may be reported as a score. Projections and unreceipted associations are not scores."
+}

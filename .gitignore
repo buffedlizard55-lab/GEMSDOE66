@@ -1,22 +1,30 @@
-# Competition data and derived artifacts must not be committed by accident.
+# Competition data is login-gated and must never be committed.
 /data/
 /cache/
 /.cache/
+*.tif
+*.tiff
+*.zip
+
+# Generated/model outputs stay local.
 /outputs/
 /runs/
 /checkpoints/
-
-# Local environments and credentials
-.venv/
-venv/
-.env
-.env.*
-!.env.example
-
-# Model and large array artifacts
 *.pt
 *.pth
 *.ckpt
 *.safetensors
 *.npy
 *.npz
+
+# Local environments, credentials and caches.
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+.pytest_cache/
+*.egg-info/
+build/
+dist/

@@ -1,0 +1,81 @@
+{
+  "schema": 2,
+  "run_id": "gemsdoe66-native-lidar-scarp-blocked-2026-10-11",
+  "date_utc": "2026-10-11",
+  "lane": "native-resolution lidar scarp channels",
+  "top_candidate": "LIDAR-01: slope-aware scarp-template field plus Steger ridge/valley and Frangi multiscale line consensus",
+  "hypothesis": "Faults absent from the existing catalogue may leave coherent metre-scale surface scarps that are diluted by 100 m terrain summaries.",
+  "mechanism": "A fault-related scarp may produce slope-tolerant cross-profile curvature and a scale-persistent, orientation-coherent ridge/valley line; joint evidence is aggregated from 2–20 m scales to the 100 m grid.",
+  "non_fault_mimic": "Fluvial terrace riser (named primary mimic; roads/canals, channel banks and landslide scarps are additional confounders).",
+  "protocol": {
+    "holdout": "Whole fault segments assigned within lidar-covered spatial blocks, with a buffer; catalogue-derived features from visible faults only; visible fault pixels masked exactly.",
+    "alpha": 0.2,
+    "beta": 0.8,
+    "kernel": "300 m triangular distance kernel",
+    "feature_scales_m": [2, 20],
+    "aggregation_m": 100,
+    "range_front_gate": "Gain must not be confined to range-front blocks.",
+    "leakage_auc_stop_threshold": 0.9
+  },
+  "holdout_dti": {
+    "label": "HOLDOUT-DTI",
+    "value": null,
+    "status": "NOT RUN — no candidate/features/labels and no end-to-end holdout evaluator/CI runner",
+    "evaluator_version": "UNKNOWN; shared gems.metric 0.1.0 is a metric implementation, not the missing end-to-end evaluator",
+    "withheld_positives": null,
+    "ci95": null,
+    "reason": "Official rasters, cached feature stack, cultural mask, and evaluator/CI orchestration are absent. No holdout score exists."
+  },
+  "leakage_canary": {
+    "status": "NOT RUN",
+    "threshold_auc": 0.9,
+    "feature_results": null,
+    "reason": "No candidate feature rasters or holdout inputs are present."
+  },
+  "registry_checks": {
+    "pre_placement_surface": {
+      "status": "NOT RUN",
+      "correlation_limit": 0.9,
+      "registry_count": null,
+      "candidate_sha256": null,
+      "comparisons": null,
+      "reason": "No candidate surface or complete prior-raster registry is present."
+    },
+    "post_placement_final_dots": {
+      "status": "NOT RUN",
+      "correlation_limit": 0.9,
+      "overlap_limit": 0.7,
+      "radius_px": 3,
+      "registry_count": null,
+      "candidate_sha256": null,
+      "comparisons": null,
+      "reason": "No final candidate raster or complete prior-raster registry is present."
+    }
+  },
+  "raster": {
+    "file": null,
+    "sha256": null,
+    "pixel_agreement": null
+  },
+  "validator": {
+    "status": "NOT RUN on a competition candidate",
+    "checks": null,
+    "reason": "No candidate TIFF and no official reference/footprint rasters are present. Shared validator behavior is tested only on synthetic fixtures."
+  },
+  "submission": {
+    "name": null,
+    "note": null,
+    "note_chars": null,
+    "note_limit_chars": 140,
+    "clearance": "NO — do not download or submit"
+  },
+  "verdict": "negative / blocked — no experiment run; no submission offered",
+  "budget": {
+    "holdout_experiments_used": 0,
+    "max_holdout_experiments": 3,
+    "time_budget_hours": 2,
+    "wall_time_hours": null,
+    "submission_slots_used": 0
+  },
+  "open_irregularities": ["IR-01", "IR-02", "IR-03", "IR-04", "IR-05", "IR-06", "IR-07", "IR-08", "IR-09", "IR-10", "IR-11", "IR-12", "IR-13", "IR-14", "IR-15", "IR-16", "IR-17", "IR-18", "IR-19", "IR-20", "IR-21", "IR-22"]
+}
