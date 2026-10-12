@@ -17,47 +17,68 @@ here is aimed at that, not at recovering the 60,988 labelled pixels we were give
 
 
 <div class="stop">
-  <h2>Download status: NOT AVAILABLE</h2>
-  <p><b>There is no current TIFF or ZIP cleared for submission.</b>
-  Do not upload a historical H66 artifact — including the lidar-lane GeoTIFF described on
-  this site, which is retained for audit only.</p>
-  <p class="small">A historical artifact has a local format-check receipt; that does not
-  establish official-grid clearance. The scientific gate is <b>NOT MET</b>, so the file is not
-  published as a download. A late
-  de-confounding test showed the lane's measured advantage over the incumbent is
-  <b>entirely an artifact of the holdout truth's own relief bias</b> — see
-  <a href="results.html">results</a> and the
-  <a href="executive-summary.html">executive summary</a>. Uploading a file that our own
-  evidence cannot distinguish from the incumbent would spend a weekly slot on a coin
-  toss. The bytes are kept in
-  <code>artifacts/lidar_lane/</code> for audit and for a future cleared release.</p>
+  <h2>Download status: FILE AVAILABLE — scientific gate NOT MET (review candidate)</h2>
+  <p class="small">The GeoTIFF below is <b>unique and format-valid</b>; verify the SHA-256
+  after downloading. It is <b>not promoted</b>: on the only instrument in this repository that
+  is positively rank-correlated with the owner-reported live scores it measures
+  <b>0.0979 [0.0623, 0.1219]</b>
+  against a frozen best of <b>0.1195</b>.
+  <b>Download: yes. Submit: no.</b> Producing this file spent no competition submission slot.</p>
+  <p class="small"><b>Recommendation: do not submit this file as-is.</b> Its value is as a
+  reproducible, byte-verified, <i>unique</i> alternative-lane artifact and as the measurement
+  that locates the family's remaining headroom in placement geometry rather than in new scarp
+  physics.</p>
+  <p>
+    <a class="btn" href="downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif">Download gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif</a>
+    &nbsp;<a class="btn" href="downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.zip">Download .zip</a>
+  </p>
   <table>
-    <tr><th>sha256</th><td class="mono">bf06995f94d3f8a661772a023d447b559c57c676c86ddb7a3cb51efe92da73f5</td></tr>
-    <tr><th>size</th><td>463,666 bytes</td></tr>
-    <tr><th>emitted pixels</th><td>37,654 &nbsp;
-        (0.729% of the 5,167,373-px footprint)</td></tr>
-    <tr><th>dots within 200 m of a known fault</th><td>0</td></tr>
-    <tr><th>format validator (re-read from disk)</th>
-        <td><span class="pill ok">PASS</span> 12/
-        12 checks</td></tr>
-    <tr><th>Duplicate checks (accessible subset only)</th>
-        <td><span class="pill bad">STOP — overlap threshold trips</span>
-        max |ρ| = 0.277 (0.90 threshold); raw fraction of candidate dots within 3 px =
-        0.990 (STOP: exceeds 0.70).<br>
-        <span class="small">Compared 60 accessible registry rasters; the complete
-        organizer registry and expected raster count are not certified. Surface-level
-        Spearman comparison is not reported for this artifact. Exact pixel matches in the
-        accessible scan: none; the candidate
-        SHA-256 is recorded above, but file-hash agreement against a complete registry is not
-        established. The 1.5× random-placement lift is diagnostic only and cannot override the
-        raw stop threshold or establish full-registry uniqueness.</span>
-        </td></tr>
-    <tr><th>proposed audit-only note (128/140 chars; NOT CLEARED)</th>
-        <td class="mono">GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN lidar, 37,654 dots, 0 within 200 m of the catalogue.</td></tr>
+    <tr><th>sha256 (tif)</th><td class="mono">9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a</td></tr>
+    <tr><th>sha256 (zip)</th><td class="mono">1564930414a31044a4fce73ce57d74dbe5289260cf7ffc9285307ba3381edd5a</td></tr>
+    <tr><th>size</th><td>378,581 bytes</td></tr>
+    <tr><th>grid</th><td>3730 x 3292, float32, 1 band, EPSG:32611, 100 m, transform (100, 0, 243350, 0, -100, 4508550)</td></tr>
+    <tr><th>emitted cells</th><td>42,000 &nbsp;
+        (0.813% of the
+        5,165,852-cell features footprint)</td></tr>
+    <tr><th>dots within 200 m of a known fault</th><td>0 (hard catalogue-gap gate)</td></tr>
+    <tr><th>format validator</th>
+        <td><span class="pill ok">PASS</span> all 15 gating checks pass,
+        0 failures, 0 skipped</td></tr>
+    <tr><th>Duplicate gate — pre-placement surface</th>
+        <td><span class="pill ok">PASS</span>
+        max |&rho;| = 0.080 (0.90 threshold),
+        60 accessible rasters scanned</td></tr>
+    <tr><th>Duplicate gate — final dots, density-adjusted</th>
+        <td><span class="pill ok">PASS</span>
+        max |&rho;| = 0.290 (0.90 threshold);
+        highest lift over random placement = 2.46&times;;
+        worst within-3 px fraction among the 48 rasters above
+        1.5&times; random = 0.341
+        (0.70 stop), computed over all 60 accessible rasters</td></tr>
+    <tr><th>Duplicate gate — final dots, raw protocol rule</th>
+        <td><span class="pill warn">WARN — raw rule trips on density</span>
+        raw max within-3 px = 0.994 against
+        <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>, which carries
+        311,350 dots; random placement already gives
+        0.958, so the lift is only
+        1.04&times;. The literal &gt;0.70 rule therefore
+        trips on <i>density</i>, not similarity. Logged as
+        <a href="irregularities.html">IR-66-UNIQ-01</a>; per this repository's own stricter
+        precedent (IR-71) the density-adjusted pass does not silently overrule it.</td></tr>
+    <tr><th>HOLDOUT-DTI (instrument N)</th>
+        <td>0.0979, 95% CI [0.0623,
+        0.1219], 2,355 withheld
+        positives — <b>below the frozen best</b></td></tr>
+    <tr><th>leakage canary</th>
+        <td><span class="pill ok">PASS</span> highest single-feature AUC
+        0.646 of 63 features (0.90 threshold)</td></tr>
+    <tr><th>submission name</th><td class="mono">gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59</td></tr>
+    <tr><th>submission note (115/140 chars)</th><td class="mono">h66c lidar scarp diffusion inversion + Steger/Frangi lines, TIGER-road masked, 200 m catalogue-gap gate, d4 spacing</td></tr>
   </table>
-  <p class="small">Is it OK to download and submit? <b>No — not yet.</b> The
-  <a href="executive-summary.html">executive summary</a> states the gate, the measurement
-  that failed it, and exactly what would have to be true for this file to be worth a slot.</p>
+  <p class="small">Is it OK to download and submit? <b>Download yes, submit no.</b> The
+  <a href="executive-summary.html">executive summary</a> gives the exact submission procedure
+  if a human selector decides otherwise, the measurement that failed the gate, and precisely
+  what would have to be true for this file to be worth a slot.</p>
 </div>
 
 

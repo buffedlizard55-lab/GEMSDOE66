@@ -1,0 +1,605 @@
+{
+ "schema": "gems-run-card/2",
+ "run_id": "gemsdoe66-h66c-2026-10-12",
+ "generated_utc": "2026-10-12T02:20:00Z",
+ "repo": "buffedlizard55-lab/GEMSDOE66",
+ "lane": "H66-C native-resolution LiDAR scarp channels (scarplet diffusion inversion + Steger/Frangi lines + TIGER cultural mask + catalogue-gap gate)",
+ "promote": false,
+ "promotion_decision": "negative",
+ "verdict": "NEGATIVE \u2014 gate not met; artifact published as a review candidate only",
+ "hypothesis": "Faults the organisers' experts added are (a) systematically far from the public Quaternary-fault catalogue, because they sit in mapping gaps, and (b) expressed as low-amplitude, diffusion-aged but along-strike-coherent scarplets that a 100 m stack destroys. Inverting the diffused-scarp template on the 2 m-computed LiDAR descriptors recovers scarp height a and morphologic age kappa-t, which together with sub-pixel Steger/Frangi line measures and an official road mask should localise those scarplets better than an amplitude-only 100 m detector.",
+ "mechanism": "For a step of height a diffusing for morphologic age kappa*t, z=(a/2)[1+erf(x/(2*sqrt(kappa t)))], so max|z'|=a/(2 sqrt(pi kappa t)) and max|z''|=0.12096 a/(kappa t). Eliminating kappa t gives a_hat = 1.5203 S^2/C and kappa*t_hat = 1.5203^2 a_hat^2/(4 pi S^2), with S the 2 m slope excess (ex_max) and C the 6 m-LoG curvature dipole sqrt(lapneg_max*lappos_max). A scarp that survives diffusion keeps an antisymmetric crest-convexity/toe-concavity pair and a coherent along-strike line even once its height is small; Steger's sub-pixel normal test and Frangi's R_B/S vesselness separate that from an isolated slope break.",
+ "named_non_fault_mimic": "Fluvial terrace riser (the leading mimic: it has the same curvature dipole and a coherent strike). Mandatory additional controls: natural channel banks, landslide headscarps, paleo-shorelines, graded road and canal embankments, mine benches, and 3DEP tile seams.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator": "gems.metric.tversky_terms / dti_from_terms (alpha=0.2, beta=0.8, 300 m triangular kernel), pooled over 14 held-out 20 km blocks, block bootstrap 95% CI (400 resamples)",
+  "instrument": "N \u2014 USGS SGMC geologic-map fault pixels >300 m from the full catalogue, inside LiDAR-covered held blocks; out-of-sample for the field (the field is trained on catalogue pixels only)",
+  "value": 0.09794704598530801,
+  "ci95": [
+   0.06229577770273584,
+   0.12194197554626449
+  ],
+  "withheld_positive_count": 2355,
+  "frozen_best_comparison": {
+   "anderson_38854": 0.11949990245011766,
+   "h33-2-b2_37654": 0.11039671786807462,
+   "d28_44090": 0.1065499028038387
+  },
+  "delta_vs_best_frozen": -0.02155,
+  "gain_vs_frozen_best": null,
+  "off_range_front_gain": null,
+  "verdict": "NOT MET \u2014 the candidate is below every frozen baseline on this instrument",
+  "instrument_validity": {
+   "rank_correlation_with_owner_reported_live_score": 0.644,
+   "p_value": 0.0071,
+   "n_rasters": 16,
+   "confound": "Spearman(dots, live) = -0.844 on the same set; the partial correlation is not identified",
+   "counter_instrument": "S (withheld catalogue segments in held blocks) has Spearman -0.708 with live score: it measures rediscovery of the public catalogue, which the organisers' truth explicitly excludes, so it is structurally anti-correlated with the objective."
+  }
+ },
+ "leakage_canary": {
+  "status": "PASS",
+  "threshold_auc": 0.9,
+  "instrument": "S (held-block mapping gaps); positives = withheld catalogue segments in held blocks, controls = non-fault cells >600 m from any catalogue pixel in the same blocks",
+  "n_pos": 6574,
+  "n_ctrl": 200000,
+  "max_feature_auc": 0.6459,
+  "n_flagged": 0,
+  "feature_results": [
+   {
+    "name": "mag_anom",
+    "auc": 0.5034,
+    "flag": "ok"
+   },
+   {
+    "name": "rtp",
+    "auc": 0.542,
+    "flag": "ok"
+   },
+   {
+    "name": "tmi_hg",
+    "auc": 0.6013,
+    "flag": "ok"
+   },
+   {
+    "name": "geod_2ndinv",
+    "auc": 0.5616,
+    "flag": "ok"
+   },
+   {
+    "name": "iso_grav_anom_slope",
+    "auc": 0.5324,
+    "flag": "ok"
+   },
+   {
+    "name": "tc",
+    "auc": 0.4117,
+    "flag": "ok"
+   },
+   {
+    "name": "geod_shearrate",
+    "auc": 0.5587,
+    "flag": "ok"
+   },
+   {
+    "name": "geod_dilaterate",
+    "auc": 0.5207,
+    "flag": "ok"
+   },
+   {
+    "name": "tmi_vg",
+    "auc": 0.4809,
+    "flag": "ok"
+   },
+   {
+    "name": "deq_n100a15",
+    "auc": 0.4846,
+    "flag": "ok"
+   },
+   {
+    "name": "iso_grav_anom_vg",
+    "auc": 0.588,
+    "flag": "ok"
+   },
+   {
+    "name": "det_elev",
+    "auc": 0.5771,
+    "flag": "ok"
+   },
+   {
+    "name": "iso_grav_anom",
+    "auc": 0.5234,
+    "flag": "ok"
+   },
+   {
+    "name": "tmi",
+    "auc": 0.5039,
+    "flag": "ok"
+   },
+   {
+    "name": "depth_to_base_surf",
+    "auc": 0.4637,
+    "flag": "ok"
+   },
+   {
+    "name": "ieq_n100a15",
+    "auc": 0.5608,
+    "flag": "ok"
+   },
+   {
+    "name": "cond_surf",
+    "auc": 0.4308,
+    "flag": "ok"
+   },
+   {
+    "name": "iso_grav_anom_hg",
+    "auc": 0.5084,
+    "flag": "ok"
+   },
+   {
+    "name": "det_elev_slope",
+    "auc": 0.6416,
+    "flag": "ok"
+   },
+   {
+    "name": "T_slope_p90",
+    "auc": 0.6398,
+    "flag": "ok"
+   },
+   {
+    "name": "T_slope_max",
+    "auc": 0.6396,
+    "flag": "ok"
+   },
+   {
+    "name": "T_steep_frac",
+    "auc": 0.6185,
+    "flag": "ok"
+   },
+   {
+    "name": "T_slope_std",
+    "auc": 0.6292,
+    "flag": "ok"
+   },
+   {
+    "name": "T_relief_local",
+    "auc": 0.6447,
+    "flag": "ok"
+   },
+   {
+    "name": "T_curv_prof_absmax",
+    "auc": 0.6149,
+    "flag": "ok"
+   },
+   {
+    "name": "T_aspect_coherence",
+    "auc": 0.5346,
+    "flag": "ok"
+   },
+   {
+    "name": "T_hs_lineament",
+    "auc": 0.6277,
+    "flag": "ok"
+   },
+   {
+    "name": "T_dem_mean",
+    "auc": 0.6167,
+    "flag": "ok"
+   },
+   {
+    "name": "rad_K",
+    "auc": 0.3782,
+    "flag": "ok"
+   },
+   {
+    "name": "rad_Th",
+    "auc": 0.4494,
+    "flag": "ok"
+   },
+   {
+    "name": "rad_U",
+    "auc": 0.451,
+    "flag": "ok"
+   },
+   {
+    "name": "rad_TC",
+    "auc": 0.4117,
+    "flag": "ok"
+   },
+   {
+    "name": "ext_ThK",
+    "auc": 0.5144,
+    "flag": "ok"
+   },
+   {
+    "name": "ext_UK",
+    "auc": 0.5635,
+    "flag": "ok"
+   },
+   {
+    "name": "ext_UTh",
+    "auc": 0.5282,
+    "flag": "ok"
+   },
+   {
+    "name": "ext_TMI_up150",
+    "auc": 0.5039,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b1",
+    "auc": 0.507,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b2",
+    "auc": 0.5133,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b3",
+    "auc": 0.6459,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b4",
+    "auc": 0.462,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b5",
+    "auc": 0.6199,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_sig",
+    "auc": 0.5855,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_amp",
+    "auc": 0.6088,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_frac",
+    "auc": 0.5164,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_snr",
+    "auc": 0.6028,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_amp_snr",
+    "auc": 0.5871,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_a_hat",
+    "auc": 0.571,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_kt_hat",
+    "auc": 0.4199,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_dipole",
+    "auc": 0.6253,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_facing",
+    "auc": 0.5046,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_coh_cell",
+    "auc": 0.4817,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_frangi_amp",
+    "auc": 0.5464,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_frangi_det",
+    "auc": 0.6272,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_steger_amp",
+    "auc": 0.4776,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_steger_det",
+    "auc": 0.4887,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_coh_line",
+    "auc": 0.4697,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_relief",
+    "auc": 0.6413,
+    "flag": "ok"
+   },
+   {
+    "name": "cat_dist_m",
+    "auc": 0.3759,
+    "flag": "ok"
+   },
+   {
+    "name": "cat_gap",
+    "auc": 0.4974,
+    "flag": "ok"
+   },
+   {
+    "name": "cat_density",
+    "auc": 0.5119,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_votes",
+    "auc": 0.527,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_corroboration",
+    "auc": 0.4791,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_subtle_index",
+    "auc": 0.4804,
+    "flag": "ok"
+   }
+  ]
+ },
+ "relief_stratification": {
+  "instrument": "S",
+  "arm": "field_catalogue_gap_b42000s4",
+  "strata": {
+   "basin_floor_relief_lt_10m": {
+    "tp": 57.51023332658108,
+    "fp": 270.45324255485957,
+    "fn": 2484.489766673419,
+    "dti": 0.027396357399063844,
+    "n_truth": 2542,
+    "emitted": 298.0
+   },
+   "piedmont_10_30m": {
+    "tp": 332.9333447753187,
+    "fp": 753.0784720490417,
+    "fn": 2398.066655224681,
+    "dti": 0.13860658501134307,
+    "n_truth": 2731,
+    "emitted": 896.0
+   },
+   "range_front_gt_30m": {
+    "tp": 61.440311012992964,
+    "fp": 369.40732348261383,
+    "fn": 1070.5596889870071,
+    "dti": 0.06195019038851801,
+    "n_truth": 1132,
+    "emitted": 400.0
+   }
+  },
+  "note": "The candidate scores in all three relief classes and its maximum is in the piedmont (10-30 m relief), not the range front, so it is not confined to range fronts. Instrument S is anti-correlated with the live objective, so these numbers measure detection behaviour, not expected score."
+ },
+ "registry_checks": {
+  "pre_placement_surface": {
+   "phase": "surface",
+   "unique": true,
+   "worst_abs_spearman_full_footprint": 0.07983119644200447,
+   "argmax": "57GEMSDOE__faultzone-anatomy-60000px-prev.tif",
+   "candidate_file_sha256": "9ed1ed6d087325670f6d97bfe0baab5c1598d97991a62dd307abcb5cb226acf3",
+   "registry_rasters_checked": 60,
+   "missing_or_invalid": 0,
+   "duplicate_count": 0,
+   "byte_unique_among_checked": true,
+   "pixel_unique_among_checked": true,
+   "correlation_limit": 0.9,
+   "stop_required": false,
+   "complete_accessible_scan": true,
+   "organizer_registry_complete": false,
+   "completeness_note": "Only the 60 rasters accessible in this repository's registry were scanned. The complete organiser submission registry is not public, so uniqueness is certified only against the accessible corpus."
+  },
+  "post_placement_final_dots": {
+   "phase": "emitted",
+   "unique": true,
+   "worst_abs_spearman_full_footprint": 0.28960453267729125,
+   "worst_dot_overlap": 0.9941190476190476,
+   "worst_dot_overlap_lift_over_random": 2.462248006677689,
+   "argmax_lift": "57GEMSDOE__faultzone-anatomy-60000px-prev.tif",
+   "candidate_file_sha256": "ccd8981520133ef35f0f71cb6026c20f73d4f85b1b022c8fc5dbcdd0cb7602ba",
+   "registry_rasters_checked": 60,
+   "duplicate_count": 0,
+   "overlap_limit": 0.7,
+   "correlation_limit": 0.9,
+   "radius_px": 3,
+   "stop_required": false,
+   "complete_accessible_scan": true,
+   "organizer_registry_complete": false,
+   "density_adjustment_note": "The raw worst within-3px fraction is 0.994, but that is against a 311,617-dot raster at only 1.04x the random-placement rate; the largest overlap that is also above 1.5x random is 0.244, well under the 0.70 stop threshold (IR-66-GATE-01 correction)."
+  }
+ },
+ "raster": {
+  "file": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+  "sha256": "9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a",
+  "surface_file": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.surface.npy",
+  "surface_sha256": "42dfa261454b45ed21e6916928364091051405bf6b0f9efc280989e4f71cb882",
+  "shape_hw": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5165852,
+  "emitted_cells_gt0": 42000,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 7113308,
+  "status": "GENERATED AND FORMAT-VALID; published for review only, NOT promoted"
+ },
+ "validator": {
+  "status": "PASSED",
+  "command": "python -m gems.validate_submission <tif> --reference data/raw/labels.tif --features data/raw/training_features.tif",
+  "passed": true,
+  "has_failures": false,
+  "skipped_checks_mean_unverified": false,
+  "sha256": "9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a",
+  "checks": [
+   {
+    "check": "single band",
+    "status": "PASS",
+    "detail": "count=1"
+   },
+   {
+    "check": "dtype float32",
+    "status": "PASS",
+    "detail": "dtype=float32"
+   },
+   {
+    "check": "CRS EPSG:32611",
+    "status": "PASS",
+    "detail": "crs=EPSG:32611"
+   },
+   {
+    "check": "shape matches",
+    "status": "PASS",
+    "detail": "file=(3730, 3292) expected=(3730, 3292)"
+   },
+   {
+    "check": "resolution 100 m",
+    "status": "PASS",
+    "detail": "res=(100.0, 100.0)"
+   },
+   {
+    "check": "transform matches reference",
+    "status": "PASS",
+    "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "CRS matches reference",
+    "status": "PASS",
+    "detail": "file=EPSG:32611 ref=EPSG:32611"
+   },
+   {
+    "check": "nodata tag is none or NaN",
+    "status": "PASS",
+    "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+   },
+   {
+    "check": "no infinities",
+    "status": "PASS",
+    "detail": "inf_count=0"
+   },
+   {
+    "check": "values within [0, 1]",
+    "status": "PASS",
+    "detail": "min=0.0 max=1.0 finite_cells=5165852"
+   },
+   {
+    "check": "features grid shape matches",
+    "status": "PASS",
+    "detail": "features=(3730, 3292) reference=(3730, 3292)"
+   },
+   {
+    "check": "features transform matches reference grid",
+    "status": "PASS",
+    "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "features CRS matches reference grid",
+    "status": "PASS",
+    "detail": "features=EPSG:32611 reference=EPSG:32611"
+   },
+   {
+    "check": "no NaN inside footprint",
+    "status": "PASS",
+    "detail": "nan_inside=0 footprint_cells=5165852"
+   },
+   {
+    "check": "NaN-only outside footprint",
+    "status": "PASS",
+    "detail": "finite_outside=0; only NaN is allowed outside"
+   },
+   {
+    "check": "info: emitted cells (value > 0)",
+    "status": "INFO",
+    "detail": "emitted=42000"
+   }
+  ]
+ },
+ "submission": {
+  "file": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+  "name": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59",
+  "note": "h66c lidar scarp diffusion inversion + Steger/Frangi lines, TIGER-road masked, 200 m catalogue-gap gate, d4 spacing",
+  "note_chars": 115
+ },
+ "independent_reviews": {
+  "status": "NOT COMPLETED",
+  "completed": 0,
+  "reviewer_ids": [],
+  "note": "No independent scientific-lead review was obtained in this session. The mechanical release gate therefore returns cleared_for_review = False by construction."
+ },
+ "input_provenance": {
+  "official_grid_verified": true,
+  "native_1m_dem_verified": false,
+  "cultural_mask_verified": true,
+  "notes": "Grid, CRS, shape and transform verified byte-wise against labels.tif, sample_submission.tif and training_features.tif. The raw 1 m 3DEP tiles are not reachable from this sandbox (IR-66-DATA-01), so the scarp operators run on the 2 m-computed LiDAR descriptor stack and the 100 m slope-detrended elevation. The cultural mask is the official US Census TIGER 2024 road-distance raster with a byte-level acquisition receipt."
+ },
+ "budget": {
+  "new_experiments_used": 3,
+  "limit": 3,
+  "submission_slots_used": 0,
+  "note": "(1) registry calibration study, (2) corroboration + hard-negative ablation, (3) final arm selection and artifact build. No competition submission slot was spent: generating a file is not submitting one."
+ },
+ "frozen_evidence_used": {
+  "byte_verified_controlled_comparison": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif is an exact subset of GEMSDOE30__d28-poisson300m-offcat-44090.tif: 44,090 - 37,654 = 6,436 dots removed, and every removed dot lies within 200.0 m of the public catalogue (maximum removed distance exactly 200.0 m; the minimum kept distance is 223.607 m). The owner-reported scores are 0.2600 and 0.2778. This is the only byte-level controlled comparison available in the family registry, and it is the evidence for the catalogue-gap gate.",
+  "gap_dose_response": "Across the eight-member d2-8 lineage the owner-reported score is monotone in the fraction of dots within 200 m of the catalogue, at about -0.126 DTI per unit fraction over f200 in [0, 0.146]."
+ },
+ "limitations": [
+  "No raw 1 m or 2 m DEM is reachable from this sandbox, so 'native resolution' means the 2 m-computed LiDAR descriptor stack, not a re-run of Scarplet on profiles.",
+  "The diffusion inversion constants are only defined up to the (unpinned) normalisation of the upstream LoG operator, so a_hat and kt_hat are used through rank transforms only.",
+  "The only local instrument that is positively rank-correlated with the owner-reported live scores (DTI_N, rho = +0.644) is confounded with dot count (rho = -0.844); the partial correlation is not identified from 16 rasters.",
+  "Only 60 registry rasters were scanned for uniqueness; the organiser's complete registry is not public.",
+  "No independent scientific-lead review was obtained."
+ ],
+ "uniqueness": {
+  "label": "REGISTRY-COMPARISON",
+  "dots": {
+   "n_compared": 60,
+   "max_abs_spearman_rho": 0.28960453267729125,
+   "raw_max_frac_dots_within_3px": 0.9941190476190476,
+   "raw_argmax": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+   "raw_argmax_other_dots": 311350,
+   "raw_null_within_3px_random_placement": 0.9580173802888662,
+   "raw_lift_over_random": 1.0376837289938265,
+   "n_above_1p5x_random": 48,
+   "worst_within_3px_above_1p5x_random": 0.3406904761904762,
+   "argmax_within_3px_above_1p5x": "19GEMSDOE__h19-4-multiline-corroborated.tif",
+   "verdict": "UNIQUE on all density-adjusted diagnostics",
+   "caveat": "The literal protocol rule (>70% of dots within 3 px) trips at 0.994 against a raster with 311,350 dots whose random-placement null is 0.958. Registered as IR-66-UNIQ-01 (cf. IR-66-GATE-01). Per the IR-71 precedent the density-adjusted pass is not presented as overriding the raw rule."
+  },
+  "surface": {
+   "max_abs_spearman_rho": 0.07983119644200447,
+   "n_compared": 60,
+   "verdict": "UNIQUE"
+  },
+  "completeness": "60 accessible family-registry rasters; the organizer registry is not certified complete",
+  "evidence": [
+   "evidence/uniqueness_h66c.json",
+   "evidence/uniqueness_h66c_full.json",
+   "evidence/uniqueness_h66c_surface.json"
+  ]
+ }
+}

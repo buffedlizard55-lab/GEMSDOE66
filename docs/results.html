@@ -59,6 +59,63 @@ is omitted here because no score is selected from that instrument.</p>
 adjudication at <a href="data/irregularities.json">IR-71</a>. All values remain internal; no
 file is cleared for download.</p>
 
+<h2>H66-C (2026-10-12) — native-resolution LiDAR scarp channels</h2>
+<p>Method: diffused-scarp template inversion on the 2 m-computed LiDAR descriptors
+(<code>a_hat &prop; S²/C</code>, <code>&kappa;t_hat &prop; a_hat²/S²</code>), Steger sub-pixel
+lines and Frangi multiscale vesselness at &sigma; = 1.0–3.0 cells, an official TIGER 2024 road
+mask, gradient-boosted field under 20 km block holdout, and a 200 m hard / 600 m ramp
+catalogue-gap gate. 63 features; leakage canary highest single-feature AUC
+<b>0.646</b> against a 0.90 threshold.</p>
+
+<h3>Instrument validity — the decisive measurement</h3>
+<p>Every holdout instrument was scored against the 16 registry rasters that carry an
+owner-reported leaderboard value:</p>
+<table>
+<tr><th>instrument</th><th>Spearman &rho; vs owner-reported live score</th><th>p</th><th>reading</th></tr>
+<tr><td>N — SGMC off-catalogue, held blocks</td><td><b>+0.644</b></td><td>0.0071</td>
+    <td>positively correlated, but confounded: &rho;(dots, live) = −0.844 on the same set</td></tr>
+<tr><td>S — withheld catalogue segments, held blocks</td><td><b>−0.708</b></td><td>0.0021</td>
+    <td>structurally <i>anti</i>-correlated: it scores rediscovery of the catalogue, which the
+    scored truth excludes</td></tr>
+<tr><td>dots emitted</td><td>−0.844</td><td>&lt;0.0001</td><td>lineage confound present in all of the above</td></tr>
+</table>
+<p class="small"><b>Consequence.</b> No local instrument in this repository is a validated
+surrogate for the organizer's hidden score. That is a structural fact, not a tuning failure:
+the scored truth is a hidden set of expert-identified faults that is explicitly disjoint from
+every public inventory, so no split of public data can reproduce it.</p>
+
+<h3>Paired comparison (instrument N, out-of-sample for the field)</h3>
+<table>
+<tr><th>raster</th><th>dots</th><th>DTI_N</th><th>DTI_S</th><th>median d(catalogue)</th><th>f200</th></tr>
+<tr><td><b>H66-C candidate</b></td><td>42,000</td><td><b>0.0979</b></td><td>0.1231</td>
+    <td>1,208 m</td><td>0.000</td></tr>
+<tr><td>anderson-geothermal-pinn-38854</td><td>38,854</td><td>0.1195</td><td>0.0076</td><td>1,924 m</td><td>0.000</td></tr>
+<tr><td>h33-2-b2 (owner-reported 0.2778)</td><td>37,654</td><td>0.1104</td><td>0.0071</td><td>1,965 m</td><td>0.000</td></tr>
+<tr><td>d28-poisson300m-offcat-44090</td><td>44,090</td><td>0.1065</td><td>0.1688</td><td>1,500 m</td><td>0.146</td></tr>
+</table>
+<p class="small">95% CI for the candidate: [0.0623, 0.1219] by block
+bootstrap (400 resamples over 14 held blocks), 2,355 withheld
+positives. Delta vs the best frozen baseline: <b>−0.0216</b>. Gate: <b>NOT MET</b>.</p>
+
+<h3>Relief stratification (instrument S)</h3>
+<table>
+<tr><th>stratum</th><th>cell relief</th><th>DTI_S</th><th>withheld positives</th></tr>
+<tr><td>basin floor</td><td>&lt; 10 m</td><td>0.0274</td><td>2,542</td></tr>
+<tr><td>piedmont</td><td>10–30 m</td><td>0.1386</td><td>2,731</td></tr>
+<tr><td>range front</td><td>&gt; 30 m</td><td>0.0620</td><td>1,132</td></tr>
+</table>
+<p class="small">The candidate scores in all three classes and peaks in the piedmont, so it is
+<b>not confined to range fronts</b>. Instrument S is anti-correlated with the objective, so this
+characterises detection behaviour rather than expected score.</p>
+
+<h3>Registry calibration — the byte-verified controlled comparison</h3>
+<pre>gemsdoe32-h33-h33-2-b2-...-zeros.tif  ⊂  GEMSDOE30__d28-poisson300m-offcat-44090.tif
+44,090 − 37,654 = 6,436 dots removed; every removed dot within 200.0 m of the catalogue
+(max removed distance exactly 200.0 m; min kept distance 223.607 m)
+owner-reported: 0.2600 → 0.2778</pre>
+<p>Across the d2-8 lineage the owner-reported score is monotone in f200 at about
+<b>−0.126 DTI per unit fraction</b> over f200 ∈ [0, 0.146].</p>
+
 </div>
 </main>
 <footer><div class="wrap">

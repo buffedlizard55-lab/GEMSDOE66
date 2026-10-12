@@ -1,0 +1,153 @@
+{
+ "name": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59",
+ "note": "h66c lidar scarp diffusion inversion + Steger/Frangi lines, TIGER-road masked, 200 m catalogue-gap gate, d4 spacing",
+ "note_chars": 115,
+ "receipt": {
+  "file": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+  "sha256": "9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a",
+  "shape_hw": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5165852,
+  "emitted_cells_gt0": 42000,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 7113308,
+  "name": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59",
+  "note": "h66c lidar scarp diffusion inversion + Steger/Frangi lines, TIGER-road masked, 200 m catalogue-gap gate, d4 spacing",
+  "note_chars": 115,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+ },
+ "validator": {
+  "file": "/home/user/GEMSDOE66/artifacts/h66c/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+  "sha256": "9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a",
+  "passed": true,
+  "has_failures": false,
+  "checks": [
+   {
+    "check": "single band",
+    "status": "PASS",
+    "detail": "count=1"
+   },
+   {
+    "check": "dtype float32",
+    "status": "PASS",
+    "detail": "dtype=float32"
+   },
+   {
+    "check": "CRS EPSG:32611",
+    "status": "PASS",
+    "detail": "crs=EPSG:32611"
+   },
+   {
+    "check": "shape matches",
+    "status": "PASS",
+    "detail": "file=(3730, 3292) expected=(3730, 3292)"
+   },
+   {
+    "check": "resolution 100 m",
+    "status": "PASS",
+    "detail": "res=(100.0, 100.0)"
+   },
+   {
+    "check": "transform matches reference",
+    "status": "PASS",
+    "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "CRS matches reference",
+    "status": "PASS",
+    "detail": "file=EPSG:32611 ref=EPSG:32611"
+   },
+   {
+    "check": "nodata tag is none or NaN",
+    "status": "PASS",
+    "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+   },
+   {
+    "check": "no infinities",
+    "status": "PASS",
+    "detail": "inf_count=0"
+   },
+   {
+    "check": "values within [0, 1]",
+    "status": "PASS",
+    "detail": "min=0.0 max=1.0 finite_cells=5165852"
+   },
+   {
+    "check": "features grid shape matches",
+    "status": "PASS",
+    "detail": "features=(3730, 3292) reference=(3730, 3292)"
+   },
+   {
+    "check": "features transform matches reference grid",
+    "status": "PASS",
+    "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "features CRS matches reference grid",
+    "status": "PASS",
+    "detail": "features=EPSG:32611 reference=EPSG:32611"
+   },
+   {
+    "check": "no NaN inside footprint",
+    "status": "PASS",
+    "detail": "nan_inside=0 footprint_cells=5165852"
+   },
+   {
+    "check": "NaN-only outside footprint",
+    "status": "PASS",
+    "detail": "finite_outside=0; only NaN is allowed outside"
+   },
+   {
+    "check": "info: emitted cells (value > 0)",
+    "status": "INFO",
+    "detail": "emitted=42000"
+   }
+  ],
+  "skipped_checks_mean_unverified": false
+ },
+ "diagnostics": {
+  "dot_count": 42000,
+  "min_separation_cells": 4,
+  "median_nn_cells": 5.0990195135927845,
+  "median_dist_to_catalogue_m": 1131.370849609375,
+  "frac_dots_within_200m_of_catalogue": 0.0,
+  "frac_dots_on_lidar": 0.7843095238095238,
+  "median_road_dist_m": 700.0,
+  "median_L_ex_max_at_dots": 0.19253364205360413,
+  "median_a_hat_at_dots_m": 7.592764854431152,
+  "median_kt_hat_at_dots_m2": 291.97027587890625,
+  "median_steger_amp_at_dots": 0.0,
+  "median_frangi_amp_at_dots": 0.06356174498796463,
+  "median_coh100_at_dots": 0.6023622155189514,
+  "footprint_cells_features_convention": 5165852,
+  "footprint_cells_sample_submission_convention": 5167373,
+  "footprint_disagreement_cells": 4601,
+  "geodawn_block_share": {
+   "1": 0.35,
+   "2": 0.3887380952380952,
+   "3": 0.15295238095238095,
+   "4": 0.10830952380952381
+  },
+  "training": {
+   "n_pos": 52385,
+   "n_neg": 314310,
+   "positive_set": "full public catalogue (labels.tif > 0) minus cultural veto",
+   "negative_set": "cells >600 m from any catalogue or SGMC fault, minus veto"
+  },
+  "emission": {
+   "gap_hard_m": 200.0,
+   "gap_ref_m": 600.0,
+   "cultural_veto_cells": 729857
+  },
+  "surface_file": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.surface.npy",
+  "surface_sha256": "42dfa261454b45ed21e6916928364091051405bf6b0f9efc280989e4f71cb882",
+  "elapsed_s": 136.8
+ },
+ "generated_utc": "2026-10-12T02:11:47Z"
+}

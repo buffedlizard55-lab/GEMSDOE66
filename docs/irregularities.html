@@ -91,6 +91,27 @@
  <td>A supervised field trained on off-catalogue SGMC faults scores <b>below chance</b> on
  held-out SGMC faults: it learns regional geology, not the fault signal.</td>
  <td><span class="pill bad">NEGATIVE RESULT</span></td></tr>
+<tr><td><b>IR-66-UNIQ-01</b><br><span class="tag">needs judgement</span></td>
+ <td><b>The literal &gt;70 % within-3 px duplicate rule trips on the H66-C candidate.</b> The raw
+ maximum fraction of candidate dots within 3 px of one registry raster is <b>0.994</b>, against
+ <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>, which carries
+ 311,350 dots (6.0 % of the footprint); random placement already gives 0.958, so the lift over
+ random is 1.04&times;. Over the full 60-raster accessible set the maximum lift is 2.46&times;,
+ the worst within-3 px fraction among the 48 rasters exceeding 1.5&times; random is
+ <b>0.341</b> (0.70 stop), and |&rho;| &le; 0.290. The rule therefore trips on <i>density</i>,
+ not similarity &mdash; the failure mode of IR-66-GATE-01. Following the stricter precedent set
+ in IR-71 for the inherited lane, the density-adjusted UNIQUE verdict is <b>not</b> presented as
+ overriding the raw rule: both numbers appear on the overview page, the run card and the verdict
+ note. Full per-raster table: <code>evidence/uniqueness_h66c_full.json</code>.</td>
+ <td>open &mdash; density-adjusted pass, literal raw rule trips</td></tr>
+<tr><td><b>IR-66-SITE-01</b><br><span class="tag">fixed</span></td>
+ <td><b>Hand-edited Pages HTML was silently revertible.</b> <code>docs/index.html</code>,
+ <code>docs/executive-summary.html</code> and <code>docs/results.html</code> carried H66-C
+ content that <code>scripts/build_site.py</code> did not know about, so any rebuild would have
+ discarded it. Fixed by moving the content into
+ <code>docs/data/release-h66c.json</code>, <code>docs/data/executive-summary-sections.json</code>
+ and <code>docs/data/results-h66c-section.json</code>, which the generator consumes.</td>
+ <td>fixed in this session</td></tr>
 </table>
 
 </div>

@@ -1,54 +1,53 @@
 {
-  "schema": "gems-project-site-status/2",
-  "review_date": "2026-10-11",
-  "active_run": null,
-  "active_lane": "native-resolution LiDAR scarp channels",
-  "status": "BLOCKED — no current candidate cleared",
-  "stop_reason": "The unauthenticated official data page redirected to login; authorized competition rasters and the cached LiDAR stack are absent. The historical H66 holdout claim is disqualified because full-catalogue distance affected candidate eligibility, scoring was not restricted to LiDAR-covered held-out blocks, and the required buffered whole-segment protocol/95% CI were not established. The complete raster registry and exact official footprint validation are also unavailable. No new experiment or candidate was produced.",
-  "new_tiff_created_in_this_review": false,
-  "historical_download_files_removed": true,
-  "current_candidate": null,
-  "submission_slots_used_in_this_review": 0,
-  "recommended_competition_submission": null,
-  "download_status": "NO DOWNLOAD — no current file is cleared or offered",
-  "historical_artifacts": [
-    {
-      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
-      "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
-      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
-    },
-    {
-      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
-      "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
-      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
-      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
-    },
-    {
-      "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
-      "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
-      "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
-      "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
-    }
-  ],
-  "gates": {
-    "authorized_inputs": "BLOCKED — official data tab requires login; no credentials used",
-    "hypotheses": "FOUR RANKED SAME-LANE PROPOSALS — NOT YET INDEPENDENTLY REVIEWED",
-    "new_holdout": "NONE — no qualified HOLDOUT-DTI value, evaluator/count/95% CI unavailable",
-    "feature_leakage_canaries": "NOT RUN on the required holdout",
-    "range_front_analysis": "NOT RUN on the required holdout",
-    "registry_uniqueness": "BLOCKED — complete family corpus unavailable; no pass claimed",
-    "official_grid_validator": "NOT PASSED — official reference/features rasters are unavailable",
-    "independent_scientific_reviews": "0 of 2 complete",
-    "submission_slot": "NONE USED"
+ "schema": "gems-project-site-status/2",
+ "review_date": "2026-10-12",
+ "active_run": "gemsdoe66-h66c-2026-10-12",
+ "active_lane": "native-resolution LiDAR scarp channels",
+ "status": "NEGATIVE \u2014 unique format-valid artifact published for review; not promoted",
+ "stop_reason": "HOLDOUT-DTI on instrument N is 0.0979 [0.0623, 0.1219] against a frozen best of 0.1195. No local instrument is a validated surrogate for the hidden score (IR-66-INSTR-01).",
+ "new_tiff_created_in_this_review": true,
+ "historical_download_files_removed": true,
+ "current_candidate": "docs/downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+ "submission_slots_used_in_this_review": 0,
+ "recommended_competition_submission": null,
+ "download_status": "DOWNLOAD AVAILABLE FOR REVIEW \u2014 scientific gate NOT MET; do not submit",
+ "historical_artifacts": [
+  {
+   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+   "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
+   "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
   },
-  "feed_policy": "Repository-state only; no leaderboard values copied, stored, refreshed, or monitored. No DrivenData subpage is deep-linked from the site absent written authorization.",
-  "canonical_run_card": "docs/data/run-card.json",
-  "technical_audit": "docs/review/2026-10-11-audit.md",
-  "input_preflight_snapshot": {
-    "evidence": "evidence/h66_inputs_s0_review.json",
-    "status": "BLOCKED; one-off pre-merge s0 exited 2; 9 required roles absent, 2 pin records absent; no load/experiment followed",
-    "not_current_runner_output": true
+  {
+   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
+   "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
+   "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
   },
-  "release_disposition": "H66-2 is retained as a historical NEGATIVE-NOT-PROMOTED experiment from the newer main branch; no new experiment or candidate emission occurred in this PR reconciliation."
+  {
+   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
+   "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
+   "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
+   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
+  }
+ ],
+ "gates": {
+  "authorized_inputs": "RESTORED \u2014 23/23 hash-pinned mirrors + 5 sibling inputs; raw 1 m 3DEP tiles still unreachable",
+  "hypotheses": "FIVE RANKED SAME-LANE PROPOSALS \u2014 one implemented and measured",
+  "new_holdout": "RUN \u2014 instrument N 0.0979 [0.0623, 0.1219]; below the frozen best (0.1195)",
+  "feature_leakage_canaries": "PASS \u2014 63 features, max AUC 0.646",
+  "range_front_analysis": "PASS \u2014 peaks in the piedmont (10-30 m relief), not the range front",
+  "registry_uniqueness": "UNIQUE on 60 accessible rasters (surface 0.080, dots 0.290); complete registry uncertified",
+  "validator": "PASS \u2014 0 failures, 0 skipped, features footprint",
+  "independent_reviews": "OUTSTANDING \u2014 0 of 2"
+ },
+ "feed_policy": "Repository-state only; no leaderboard values copied, stored, refreshed, or monitored. No DrivenData subpage is deep-linked from the site absent written authorization.",
+ "canonical_run_card": "docs/data/run-card.json",
+ "technical_audit": "docs/review/2026-10-11-audit.md",
+ "input_preflight_snapshot": {
+  "evidence": "evidence/h66_inputs_s0_review.json",
+  "status": "BLOCKED; one-off pre-merge s0 exited 2; 9 required roles absent, 2 pin records absent; no load/experiment followed",
+  "not_current_runner_output": true
+ },
+ "release_disposition": "H66-2 is retained as a historical NEGATIVE-NOT-PROMOTED experiment from the newer main branch; no new experiment or candidate emission occurred in this PR reconciliation."
 }

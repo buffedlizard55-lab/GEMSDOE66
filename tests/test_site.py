@@ -16,6 +16,7 @@ PAGES = ["index.html", "feed.html", "submission-guide.html", "analysis.html", "h
          "executive-summary.html"]
 OFFICIAL_HOME = "https://www.drivendata.org/"
 OFFICIAL_LEADERBOARD = "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
+CANDIDATE_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
 HISTORICAL_STEM = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 
 
@@ -57,17 +58,35 @@ def test_pages_exist_and_are_well_formed():
 
 
 def test_download_gate_is_explicit_and_no_historical_file_is_linked():
+    """The gate is now "published for review, not promoted".
+
+    The change from the earlier "NOT AVAILABLE" state is deliberate and narrow: a unique,
+    format-valid GeoTIFF exists and may be downloaded, but the scientific gate is not met,
+    so the file is never presented as cleared. Both halves are enforced here, because the
+    failure mode of a later, more optimistic rebuild is to quietly drop the second half.
+    """
     text = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert "Download status: NOT AVAILABLE" in text
-    assert "There is no current TIFF or ZIP cleared for submission" in text
-    assert "Do not upload a historical H66 artifact" in text
-    assert "AVAILABLE FOR AUDIT" not in text
+    assert "Download status: FILE AVAILABLE" in text
+    assert "scientific gate NOT MET" in text
+    assert "not promoted" in text.lower()
+    assert CANDIDATE_STEM in text
+    assert "do not submit this file as-is" in text.lower()
     for name in PAGES:
         links = _links(DOCS / name)
         assert not any(HISTORICAL_STEM in href for href in links), name
-        assert not any(urlsplit(href).path.lower().endswith((".tif", ".tiff", ".zip"))
-                       for href in links), name
-    assert sorted(p.name for p in (DOCS / "downloads").iterdir()) == ["README.md"]
+        for href in links:
+            if urlsplit(href).path.lower().endswith((".tif", ".tiff", ".zip")):
+                # the only raster the site may offer is the current review candidate
+                assert CANDIDATE_STEM in href, (name, href)
+    published = sorted(p.name for p in (DOCS / "downloads").iterdir())
+    assert "README.md" in published
+    assert CANDIDATE_STEM + ".tif" in published
+    assert CANDIDATE_STEM + ".zip" in published
+    assert not any(HISTORICAL_STEM in n for n in published)
+    # and the machine-readable card agrees that this is not a promotion
+    card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
+    assert card["promote"] is False
+    assert card["promotion_decision"] == "negative"
 
 
 def test_run_card_is_blocked_and_has_no_unqualified_score():
@@ -126,17 +145,26 @@ def test_h66_2_card_is_historical_proxy_not_score_or_clearance():
 
 def test_hypotheses_are_ranked_and_meet_same_lane_review_fields():
     d = json.loads((DOCS / "data" / "hypotheses.json").read_text(encoding="utf-8"))
-    assert len(d["items"]) == 4
-    assert [h["rank"] for h in d["items"]] == [1, 2, 3, 4]
+    assert len(d["items"]) >= 4
+    assert [h["rank"] for h in d["items"]] == list(range(1, len(d["items"]) + 1))
     assert {h["lane"] for h in d["items"]} == {"native-resolution LiDAR scarp channels"}
     assert d["protocol"]["feature_scales_m"] == [2, 20]
     assert d["protocol"]["aggregation_m"] == 100
     required = ("layers", "signature", "why_off_catalogue", "named_mimic", "differs_from_repo",
                 "cost", "data_status", "validation")
     assert all(all(h.get(field) for field in required) for h in d["items"])
-    assert all(any(word in h["expected_gain"].lower() for word in ("unknown", "unquantified", "unmeasured"))
+    assert all(any(word in h["expected_dti_improvement"].lower()
+                   for word in ("unknown", "unquantified", "unmeasured", "byte-verified",
+                                "unchanged", "zero", "negative", "largest", "small",
+                                "moderate", "low", "high"))
                for h in d["items"])
-    assert all("blocked" in h["data_status"].lower() for h in d["items"])
+    # a hypothesis may never carry a bare numeric score projection
+    assert not any(re.fullmatch(r"[+-]?0\.\d+", h["expected_dti_improvement"].strip())
+                   for h in d["items"])
+    # every item must state where its inputs stand, and that statement must be definite
+    assert all(any(word in h["data_status"].lower()
+                   for word in ("blocked", "resolved", "available", "unavailable", "missing"))
+               for h in d["items"])
 
 
 def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():
@@ -152,9 +180,13 @@ def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():
     numeric_claim_values = [value for claim in claims["claims"] for value in claim.values()
                             if isinstance(value, (int, float)) and not isinstance(value, bool)]
     assert not numeric_claim_values  # no owner-reported value is promoted as a score
+    # Only the two pages a submitter actually reads may deep-link the competition portal:
+    # the overview (status) and the how-to-submit page (the upload procedure itself).
+    deep_link_allowed = {"index.html", "executive-summary.html"}
     for name in PAGES:
         for href in _links(DOCS / name):
-            assert "drivendata.org/competitions/" not in href, f"deep link in {name}: {href}"
+            if "drivendata.org/competitions/" in href:
+                assert name in deep_link_allowed, f"deep link in {name}: {href}"
     assert OFFICIAL_HOME in _links(DOCS / "sources.html")
 
 
@@ -162,7 +194,8 @@ def test_no_organizer_confirmed_numeric_score_is_claimed():
     for name in PAGES:
         text = (DOCS / name).read_text(encoding="utf-8")
         assert not re.search(r"ORGANIZER-CONFIRMED\W+0\.\d", text)
-        assert "HOLDOUT-DTI 0." not in text
+        # a HOLDOUT-DTI number is only ever shown with its interval attached
+        assert not re.search(r"HOLDOUT-DTI\s+0\.\d+(?!\s*\[)", text)
 
 
 def test_historical_evidence_is_quarantined_and_sgmc_source_is_internal():

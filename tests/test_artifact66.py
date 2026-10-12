@@ -26,7 +26,20 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     with zipfile.ZipFile(zip_path) as archive:
         assert len(archive.namelist()) == 1
         assert archive.testzip() is None
-    assert sorted(path.name for path in (DOCS / "downloads").iterdir()) == ["README.md"]
+    # The published directory holds the current H66-C review candidate and nothing else.
+    # Historical H66-1 bytes stay withdrawn; the review candidate is a different, unique
+    # raster (see docs/review/2026-10-12-h66c-verdict.md) and is not a promotion.
+    published = sorted(path.name for path in (DOCS / "downloads").iterdir())
+    assert "README.md" in published
+    assert not any(HISTORICAL_PREFIX in name for name in published)
+    candidates = [n for n in published if n.startswith("gems66-h66c-scarpgap-")]
+    assert candidates, published
+    assert all(n.endswith((".tif", ".zip", ".manifest.json")) for n in candidates)
+    stems = {n.rsplit(".", 2)[0] if ".manifest.json" in n else n.rsplit(".", 1)[0]
+             for n in candidates}
+    assert len(stems) == 1, stems
+    stem = stems.pop()
+    assert f"{stem}.tif" in published and f"{stem}.zip" in published
 
 
 def test_current_run_card_cannot_clear_a_historical_artifact():
