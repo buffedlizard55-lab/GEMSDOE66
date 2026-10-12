@@ -65,6 +65,45 @@ def pill(ok: bool, text: str = None) -> str:
 
 
 # ------------------------------------------------------------------------------------------
+
+def parallel_block() -> str:
+    """The parallel session's candidate (merged from main): listed, never hidden. It is a different
+    lane with its own receipts and its own unchanged disclosures, so it is not folded into this
+    session's gate table."""
+    card = load(ROOT / "registry66" / "run-card-session66.json", {}) or {}
+    if not card:
+        return ""
+    r = card.get("raster", {}) or {}
+    hd = card.get("holdout_dti", {}) or {}
+    names = [Path(r.get("file", "")).name, Path(r.get("sibling_allfinite", "")).name,
+             Path(r.get("zip", "")).name]
+    links = "".join('<a class="btn" href="downloads/%s">%s</a> ' % (esc(n), esc(n)) for n in names if n)
+    hashes = {Path(r.get("file", "")).name: r.get("sha256"),
+              Path(r.get("sibling_allfinite", "")).name: r.get("sibling_allfinite_sha256"),
+              Path(r.get("zip", "")).name: r.get("zip_sha256")}
+    hash_rows = "".join('<tr><td class="mono">%s</td><td class="mono">%s</td></tr>' % (esc(k), esc(v))
+                        for k, v in hashes.items() if k)
+    return """
+<div class="note">
+<h3>DOWNLOAD IS READY &mdash; the parallel session's candidate (listed, not hidden)</h3>
+<p>A second session (branch <code>arena/64fe3477-gemsdoe66</code>, PRs #17/#18) merged its own
+candidate to <code>main</code> before this one. It stays downloadable here with its own register:
+lane <b>%s</b>, verdict <code>%s</code>, %s emitted cells, and its own run card at
+<code>registry66/run-card-session66.json</code>. Its holdout block is labelled <code>%s</code> with
+value <b>%s</b> and status &ldquo;%s&rdquo; &mdash; i.e. that session also claims no measured holdout
+score.</p>
+<p>%s</p>
+<table><tr><th>file</th><th>sha256</th></tr>%s</table>
+<p class="small">Two candidates from two sessions are offered. Not one number here is
+<code>ORGANIZER-CONFIRMED</code>; the H67-1 artifact above carries this session's disclosures and the
+k66 artifact carries its own. The site does not rank them against each other.</p>
+</div>
+""" % (esc(card.get("lane", "")), esc(card.get("verdict", "")), str(r.get("emitted_cells", "?")),
+       esc(hd.get("label", "")),
+       "not measured" if hd.get("value") is None else esc(hd.get("value")),
+       esc(hd.get("status", "")), links, hash_rows)
+
+
 def _rank(vals):
     """Average-rank transform (ties share the mean rank)."""
     order = sorted(range(len(vals)), key=lambda i: vals[i])
@@ -200,6 +239,7 @@ artifacts section, so this page cannot advertise a file. Nothing is cleared for 
   upload decision is the owner's, made with these numbers; 0 submission slots have been spent so far.
   Full accounting: <a href="executive-summary.html">how to submit</a> and
   <a href="data/run-card.json">the run card</a>.</p>
+  {parallel_block()}
   <p><b>Which one to upload:</b> if an earlier upload failed with
   <span class="mono">Predicted values must be in range [0, 1]</span>, upload the
   <b>-zeros</b> file: it is finite everywhere (0 outside the footprint) and cannot fail a
@@ -377,7 +417,7 @@ holdout best&rdquo;) the honest default is <b>keep the slot</b>. Upload is the o
 with the numbers on this page.</p>
 </div>
 
-<h2>1 &middot; Exactly how to submit (five steps)</h2>
+<h2>1 &middot; How to submit, step by step (five steps)</h2>
 <ol>
 <li>Open the official competition page
 <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a> and
@@ -430,7 +470,7 @@ The portal accepts a single-band GeoTIFF (or a ZIP containing one). Every value 
     P2 met ({prof.get("lidar_valid_fraction", 0) * 100:.1f} % LiDAR-valid),
     P3 falsified ({prof.get("block_density_cv", 0):.2f} vs 0.45&ndash;0.58), P4 falsified on the raw rule</td>
     <td><code>registry/preregistration-h67.json</code></td></tr>
-<tr><td>science: holdout DTI on LiDAR blocks, range-front stratified</td>
+<tr><td>science: <code>HOLDOUT-DTI</code> on LiDAR blocks, range-front stratified</td>
     <td><span class="pill bad">UNEVALUABLE</span> pooled {hold.get("pooled_dti", 0):.4f}
     [0.0, 0.0] &mdash; degenerate by construction
     (<a href="irregularities.html">IR-67-INSTR-02</a>); instrument anti-correlated with the

@@ -41,6 +41,22 @@ recovering the 60,988 labelled pixels we were given.</p>
   upload decision is the owner's, made with these numbers; 0 submission slots have been spent so far.
   Full accounting: <a href="executive-summary.html">how to submit</a> and
   <a href="data/run-card.json">the run card</a>.</p>
+  
+<div class="note">
+<h3>DOWNLOAD IS READY &mdash; the parallel session's candidate (listed, not hidden)</h3>
+<p>A second session (branch <code>arena/64fe3477-gemsdoe66</code>, PRs #17/#18) merged its own
+candidate to <code>main</code> before this one. It stays downloadable here with its own register:
+lane <b>native-resolution LiDAR scarp channels (session 66)</b>, verdict <code>PROMOTE-FOR-DOWNLOAD (local gates met; dot-overlap rule degenerate and logged; no HOLDOUT-DTI or ORGANIZER-CONFIRMED score claimed)</code>, 32000 emitted cells, and its own run card at
+<code>registry66/run-card-session66.json</code>. Its holdout block is labelled <code>HOLDOUT-DTI</code> with
+value <b>not measured</b> and status &ldquo;NOT MEASURED — the scored truth is login-walled; the visible catalogue is the wrong exam&rdquo; &mdash; i.e. that session also claims no measured holdout
+score.</p>
+<p><a class="btn" href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif">gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif</a> <a class="btn" href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif">gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif</a> <a class="btn" href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip">gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip</a> </p>
+<table><tr><th>file</th><th>sha256</th></tr><tr><td class="mono">gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif</td><td class="mono">122fcd16202ce74e7475a1856dd5e47ae235fa80ecb1122f7db204ead49bc058</td></tr><tr><td class="mono">gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif</td><td class="mono">c160efd3b62b42a28ae94a43187c7a3ce852f308a49d90efeb33d67abb49c283</td></tr><tr><td class="mono">gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip</td><td class="mono">46f5d5d07ad35da9590eb8d3b6363847aa399d3b29bee4b6ea5673525eb3fb9a</td></tr></table>
+<p class="small">Two candidates from two sessions are offered. Not one number here is
+<code>ORGANIZER-CONFIRMED</code>; the H67-1 artifact above carries this session's disclosures and the
+k66 artifact carries its own. The site does not rank them against each other.</p>
+</div>
+
   <p><b>Which one to upload:</b> if an earlier upload failed with
   <span class="mono">Predicted values must be in range [0, 1]</span>, upload the
   <b>-zeros</b> file: it is finite everywhere (0 outside the footprint) and cannot fail a

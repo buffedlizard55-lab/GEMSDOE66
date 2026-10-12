@@ -69,7 +69,9 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         html = f.read_text()
         hits = [m.group(1) for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html)]
         for href in hits:
-            assert href.split("?")[0] in allowed, f"{f.name} links an unlisted raster: {href}"
+            rel = href.split("?")[0]
+            k66 = rel.split("/")[-1].startswith("gems66-k66-kanchor-consensus-")
+            assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
             assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"

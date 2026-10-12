@@ -56,6 +56,14 @@ def test_pages_exist_and_are_well_formed():
         parser.close()
 
 
+
+K66_FILES = sorted([
+    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif",
+    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif",
+    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif.receipt.json",
+    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip",
+])
+
 ALLOWED_RASTERS = {
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
@@ -80,14 +88,15 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
         for href in links:
             path_part = urlsplit(href).path.lower()
             if path_part.endswith((".tif", ".tiff", ".zip")):
-                assert urlsplit(href).path in ALLOWED_RASTERS, f"{name}: {href}"
+                rel = urlsplit(href).path
+                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in K66_FILES, f"{name}: {href}"
     assert sorted(p.name for p in (DOCS / "downloads").iterdir()) == sorted([
         "README.md",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
-    ])
+    ] + K66_FILES)
 
 
 def test_run_card_labels_every_number_and_claims_no_qualified_score():

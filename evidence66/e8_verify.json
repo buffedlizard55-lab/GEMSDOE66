@@ -1,0 +1,162 @@
+{
+ "slug": "gems66-k66-kanchor-consensus-32000-20261012T003000Z",
+ "submission_name": "GEMSDOE66-K66-kanchor-consensus-32000",
+ "note": "GEMSDOE66 K66 | off-catalogue K^0.5-anchored consensus-support dots, metric-marginal accept, 32000 dots; local checks only",
+ "note_chars": 122,
+ "files": {
+  "nan": {
+   "path": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif",
+   "sha256": "122fcd16202ce74e7475a1856dd5e47ae235fa80ecb1122f7db204ead49bc058",
+   "bytes": 346355,
+   "dtype": "float32",
+   "shape": [
+    3730,
+    3292
+   ],
+   "min_finite": 0.0,
+   "max_finite": 1.0,
+   "nan_inside_footprint": 0,
+   "nan_outside_footprint": 7111787,
+   "finite_outside_footprint": 0,
+   "emitted_cells": 32000,
+   "validator_passed": false,
+   "validator_checks": {
+    "single band": "PASS",
+    "dtype float32": "PASS",
+    "CRS EPSG:32611": "PASS",
+    "shape matches": "PASS",
+    "resolution 100 m": "PASS",
+    "transform matches reference": "PASS",
+    "CRS matches reference": "PASS",
+    "nodata tag is none or NaN": "PASS",
+    "no infinities": "PASS",
+    "values within [0, 1]": "PASS",
+    "footprint checks": "SKIPPED",
+    "info: emitted cells (value > 0)": "INFO"
+   }
+  },
+  "allfinite": {
+   "path": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif",
+   "sha256": "c160efd3b62b42a28ae94a43187c7a3ce852f308a49d90efeb33d67abb49c283",
+   "bytes": 294337,
+   "dtype": "float32",
+   "shape": [
+    3730,
+    3292
+   ],
+   "min_finite": 0.0,
+   "max_finite": 1.0,
+   "nan_inside_footprint": 0,
+   "nan_outside_footprint": 0,
+   "finite_outside_footprint": 7111787,
+   "emitted_cells": 32000,
+   "validator_passed": false,
+   "validator_checks": {
+    "single band": "PASS",
+    "dtype float32": "PASS",
+    "CRS EPSG:32611": "PASS",
+    "shape matches": "PASS",
+    "resolution 100 m": "PASS",
+    "transform matches reference": "PASS",
+    "CRS matches reference": "PASS",
+    "nodata tag is none or NaN": "PASS",
+    "no infinities": "PASS",
+    "values within [0, 1]": "PASS",
+    "footprint checks": "SKIPPED",
+    "info: emitted cells (value > 0)": "INFO"
+   }
+  },
+  "zip": {
+   "path": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip",
+   "sha256": "46f5d5d07ad35da9590eb8d3b6363847aa399d3b29bee4b6ea5673525eb3fb9a",
+   "contains": "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif"
+  }
+ },
+ "checks": {
+  "byte_identical_to_prior_raster": [],
+  "registry_screen": {
+   "n_checked": 60,
+   "max_frac_candidate_dots_within_3px": 0.99884375,
+   "argmax": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+   "max_abs_spearman": 0.28919222193466976,
+   "argmax_spearman": "GEMSDOE36__anderson-geothermal-pinn-38854.tif",
+   "thresholds": {
+    "frac_within_3px": 0.7,
+    "abs_spearman": 0.9
+   },
+   "top10": [
+    {
+     "raster": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+     "frac_candidate_dots_within_3px": 0.99884375,
+     "frac_registry_dots_within_3px": 0.12487123616490756,
+     "spearman": 0.0118014829142451
+    },
+    {
+     "raster": "GEMSDOE36__anderson-geothermal-pinn-38854.tif",
+     "frac_candidate_dots_within_3px": 0.97628125,
+     "frac_registry_dots_within_3px": 0.7167344417563185,
+     "spearman": 0.28919222193466976
+    },
+    {
+     "raster": "19GEMSDOE__h19-5-powerlaw-budget-multiline.tif",
+     "frac_candidate_dots_within_3px": 0.968375,
+     "frac_registry_dots_within_3px": 0.601464530136794,
+     "spearman": 0.22568654170812932
+    },
+    {
+     "raster": "GEMSDOE27__topo-gap-closure-t-v2-on-d1-5.tif",
+     "frac_candidate_dots_within_3px": 0.957125,
+     "frac_registry_dots_within_3px": 0.5947691103574224,
+     "spearman": 0.21961946064873544
+    },
+    {
+     "raster": "GEMSDOE24__h25-1-dotted-h19-5-d1-5.tif",
+     "frac_candidate_dots_within_3px": 0.9566875,
+     "frac_registry_dots_within_3px": 0.6064359320115201,
+     "spearman": 0.22194984322133082
+    },
+    {
+     "raster": "gemsdoe32-h33-h33-2b2-plus-h33-1-20261004T220000Z-31588dc7-nan.tif",
+     "frac_candidate_dots_within_3px": 0.954125,
+     "frac_registry_dots_within_3px": 0.7024433262437101,
+     "spearman": 0.2821965702693345
+    },
+    {
+     "raster": "gemsdoe32-h33-h33-2b2-plus-h33-1-20261004T220000Z-31588dc7-zeros.tif",
+     "frac_candidate_dots_within_3px": 0.954125,
+     "frac_registry_dots_within_3px": 0.7024433262437101,
+     "spearman": 0.2821965702693345
+    },
+    {
+     "raster": "gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-nan.tif",
+     "frac_candidate_dots_within_3px": 0.95271875,
+     "frac_registry_dots_within_3px": 0.5884139726621826,
+     "spearman": 0.2549730026466535
+    },
+    {
+     "raster": "gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-zeros.tif",
+     "frac_candidate_dots_within_3px": 0.95271875,
+     "frac_registry_dots_within_3px": 0.5884139726621826,
+     "spearman": 0.2549730026466535
+    },
+    {
+     "raster": "GEMSDOE28__h38-1-hf-euler-r30-r1.tif",
+     "frac_candidate_dots_within_3px": 0.9525625,
+     "frac_registry_dots_within_3px": 0.6725039619651347,
+     "spearman": 0.27778518710511313
+    }
+   ],
+   "pass": false
+  },
+  "leakage_canary": {
+   "layer": "K (GeoDAWN radiometric potassium, mirror band)",
+   "truth": "visible catalogue (labels.tif > 0, 60,988 cells)",
+   "block_px": 64,
+   "held_blocks": 12,
+   "auc_blocked_K_vs_catalogue": 0.5783731147820507,
+   "auc_full_footprint_K_vs_catalogue": null,
+   "threshold": 0.9,
+   "verdict": "pass (<0.90): K does not re-find the catalogue faults on held-out blocks"
+  }
+ }
+}

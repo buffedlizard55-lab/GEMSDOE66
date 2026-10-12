@@ -7,6 +7,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 CARD_PATH = DOCS / "data" / "run-card.json"
+
+K66_FILES = sorted([
+    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif",
+    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif",
+    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif.receipt.json",
+    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip",
+])
+
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 # The only files this project may offer: the two disclosed H67-1 siblings and their receipts.
 PUBLISHED = sorted([
@@ -34,7 +42,7 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     with zipfile.ZipFile(zip_path) as archive:
         assert len(archive.namelist()) == 1
         assert archive.testzip() is None
-    assert sorted(path.name for path in (DOCS / "downloads").iterdir()) == PUBLISHED
+    assert sorted(path.name for path in (DOCS / "downloads").iterdir()) == sorted(PUBLISHED + K66_FILES)
 
 
 def test_current_run_card_cannot_clear_a_historical_artifact():

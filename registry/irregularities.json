@@ -366,6 +366,18 @@
       "internal_evidence": [
         "docs/review/2026-10-11-pr12-reconciliation.md"
       ]
+    },
+    {
+      "id": "IR-73-LEADERBOARD-CLAIM-CONFLICT",
+      "severity": "medium",
+      "status": "OPEN — conflicting user-supplied claims; not independently verified",
+      "title": "The prompt gives incompatible overall leaderboard-high values",
+      "detail": "The 2026-10-12 user request gives 0.3774 as the current GEMSDOE high and later states that 0.3195 is currently highest. These are conflicting user-provided claims, not a leaderboard snapshot verified in this session. No DrivenData leaderboard was accessed, and neither number is tied here to an organizer receipt and exact artifact hash. Do not present either as a current verified result or as the H33-2-B2 score.",
+      "source_ids": [],
+      "internal_evidence": [
+        "docs/review/2026-10-12-review.md",
+        "evidence/h33_owner_claim_review_2026-10-12.json"
+      ]
     }
   ]
 }
