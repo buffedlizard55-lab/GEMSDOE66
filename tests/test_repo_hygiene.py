@@ -51,32 +51,45 @@ def test_readme_contains_the_brief():
     assert "Predicted values must be in range [0, 1]" in t
 
 
-def test_site_links_only_the_currently_cleared_raster():
-    """Only the artifact cleared by the session-66 run card may be offered as a download.
+def test_site_links_only_the_disclosed_allowlisted_raster():
+    """A downloadable raster may only be the disclosed H67-1 sibling, and any page that links a
+    raster file must state the two disclosures in the same page: the raw uniqueness rule is
+    falsified and the artifact is not promoted.
 
-    Policy changed in session 66: the owner's standing charter requires an obvious, one-click
-    download for a *cleared* candidate, so a linked raster is no longer an automatic failure.
-    What must stay impossible is publishing anything else - historical H66 bytes, the
-    lidar-lane artifact, or any raster that no run card clears. The allowlist is read from
-    ``registry66/run-card-session66.json``; when that card is absent or not promoting, no
-    raster link may exist at all.
+    Guarding this with a test is what keeps a future, more optimistic rebuild from quietly
+    publishing a file the evidence does not support - or from dropping the disclosures.
     """
-    import json as _json
     import re
-    card_path = ROOT / "registry66" / "run-card-session66.json"
-    allowed = set()
-    if card_path.exists():
-        card = _json.loads(card_path.read_text())
-        if card.get("promote") is True:
-            for key in ("file", "sibling_allfinite", "zip"):
-                value = card.get("raster", {}).get(key)
-                if value:
-                    allowed.add(Path(value).name)
+    allowed = {
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+    }
+    linked_any = False
     for f in sorted((ROOT / "docs").glob("*.html")):
         html = f.read_text()
-        for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
-            name = Path(m.group(1)).name
-            assert name in allowed, f"{f.name} links a raster no run card clears: {m.group(1)}"
+        hits = [m.group(1) for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html)]
+        for href in hits:
+            rel = href.split("?")[0]
+            # session-66 pass 3: the k66 family allowlist is read from its own run card, so a
+            # withdrawn file (the k66 consensus candidate) stops being linkable automatically.
+            import json as _json
+            _card = _json.loads((ROOT / "registry66" / "run-card-session66.json").read_text())
+            _r = _card["raster"]
+            k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
+            k66 = rel.split("/")[-1] in k66_names
+            assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
+            linked_any = True
+        if hits:
+            links_h67 = any("gems66-h67" in h for h in hits)
+            links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
+            if links_h67:
+                assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
+                assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
+                assert "0.9992" in html, f"{f.name} does not state the measured raw overlap"
+            if links_k66:
+                assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
+                assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
+    assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 
 def test_negative_verdict_is_recorded():

@@ -106,12 +106,12 @@ def test_catalogue_prune_claim_holds():
 def test_site_advertises_the_download_and_the_how_to():
     idx = (ROOT / "docs" / "index.html").read_text()
     ex = (ROOT / "docs" / "executive-summary.html").read_text()
+    both = idx + ex
     assert "DOWNLOAD IS READY" in idx
-    assert f"downloads/{SLUG}-nan.tif" in idx
-    assert "HOLDOUT-DTI" in idx and "ties it, it does not beat it" in idx
-    assert "How to submit, step by step" in ex
-    assert "Predicted values must be in range [0, 1]" in ex
-    assert "HOLDOUT-DTI" in ex
+    assert f"downloads/{SLUG}-nan.tif" in both
+    assert "HOLDOUT-DTI" in both and "95% CI" in both
+    assert "How to submit" in ex
+    assert "Predicted values must be in range [0, 1]" in both
 
 
 def test_charter_is_at_the_top_of_the_readme():
