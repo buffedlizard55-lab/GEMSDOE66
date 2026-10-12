@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="on">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="on">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="analysis.html" class="">H33 attribution</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
 <main>
 <div class="wrap">
 
@@ -16,8 +16,6 @@ The scored truth is <b>faults that are not in the given catalogue</b>, so every 
 here is aimed at that, not at recovering the 60,988 labelled pixels we were given.</p>
 <p class="small"><b>Reading order:</b> the download block immediately below is the current state.
 Everything after “Historical record” describes earlier, blocked states and is kept for audit.</p>
-<h2 class="history">Historical record (superseded)</h2>
-
 
 <div class="ok">
   <h2>DOWNLOAD IS READY — one click, then submit</h2>
@@ -73,6 +71,41 @@ Everything after “Historical record” describes earlier, blocked states and i
   here, and the downloads folder keeps only this candidate.</p>
 </div>
 
+
+
+<h2>Why the family's best raster wins — and what this candidate does differently</h2>
+<div class="note">
+<p>Inside the <b>18 distinct owner-scored rasters</b> of this project family (owner-reported, no
+organiser receipts), the score tracks two measured statistics of the emitted dot set: the
+<b>mean radiometric K under the dots</b> and the <b>dot count</b>. Partial rank correlations
+remove both nuisance controls at once (fraction of dots within 200 m of the published catalogue,
+and dot count):</p>
+<table>
+<tr><th>layer mean under the dots</th><th>Spearman vs score</th><th>partial (2 controls)</th>
+<th>LOO RMSE</th><th>verdict vs baseline</th></tr>
+<tr><td><code>K</code></td><td>+0.977</td><td>+0.913</td><td>0.01492</td><td class="small">beats baseline</td></tr><tr><td><code>UK</code></td><td>-0.977</td><td>-0.843</td><td>0.01734</td><td class="small">beats baseline</td></tr><tr><td><code>valid</code></td><td>+0.175</td><td>+0.676</td><td>0.04455</td><td class="small">worse than baseline — confound suspect</td></tr><tr><td><code>coh100</code></td><td>-0.104</td><td>+0.591</td><td>0.02756</td><td class="small">worse than baseline — confound suspect</td></tr><tr><td><code>strike</code></td><td>-0.031</td><td>+0.591</td><td>0.03160</td><td class="small">worse than baseline — confound suspect</td></tr><tr><td><code>step_max</code></td><td>+0.685</td><td>+0.571</td><td>0.03147</td><td class="small">worse than baseline — confound suspect</td></tr>
+</table>
+<p>Strongest pair model (n = 18, leave-one-out): <b>rho(K | dot count, catalogue distance) =
++0.882</b> and
+<b>rho(dot count | K, catalogue distance) = -0.102</b>;
+the two-variable LOO RMSE is 0.00231 against 0.02490 for predicting the mean. Baseline LOO RMSE per
+single layer is in the table (a layer is only informative if that number beats the baseline).</p>
+<p><b>Consequence, and it is the whole design:</b> the highest owner scores in this family come from
+<i>fewer, sharper</i> dots on <i>higher-K</i> ground — and that is exactly what the released
+candidate does (32,000 dots, mean K 126.3, coverage 11.8 %, zero dots within 200 m of the
+catalogue). The OLS fit to the two statistics reproduces the 0.2778 incumbent at 0.2774 but is
+<b>outside its fitted support</b> for the candidate, so its extrapolated value is deliberately not
+printed anywhere on this site.</p>
+<p class="small">Limits: the 18 rasters share one lineage, so a layer can track a hidden shared
+cause; scores are owner-reported; n = 18. This is a lane prior, never a score.
+<a href="analysis.html">Full attribution review</a> · raw table
+<code>evidence66/e1_layer_scan.json</code> · partials <code>evidence66/e4_partial.json</code>.</p>
+</div>
+
+
+<h2 class="history">Historical record (superseded)</h2>
+<p class="small">Everything from here down describes earlier, blocked states and is kept for
+audit. The current state is the download block above.</p>
 
 
 <h2>Earlier review record (2026-10-12) — superseded by the session-66 release above</h2>

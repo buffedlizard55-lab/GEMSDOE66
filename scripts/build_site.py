@@ -18,8 +18,9 @@ DL = DOCS / "downloads"
 
 NAV = [("index.html", "Overview"), ("executive-summary.html", "How to submit"),
        ("hypotheses.html", "Hypotheses"), ("research.html", "Research"),
-       ("results.html", "Results"), ("feed.html", "Project feed"),
-       ("sources.html", "Sources"), ("irregularities.html", "Irregularities")]
+       ("results.html", "Results"), ("analysis.html", "H33 attribution"),
+       ("feed.html", "Project feed"), ("sources.html", "Sources"),
+       ("irregularities.html", "Irregularities")]
 
 
 def esc(s) -> str:
@@ -182,6 +183,112 @@ def submission_block() -> str:
 """
 
 
+def attribution_block() -> str:
+    """Why the family's best raster wins, measured, and what the candidate does about it."""
+    e1 = load(ROOT / "evidence66" / "e1_layer_scan.json", {}) or {}
+    par = load(ROOT / "evidence66" / "e4_partial.json", {}) or {}
+    layers = e1.get("layers", [])
+    if not layers:
+        return ""
+    ranked = sorted(layers, key=lambda L: -abs(L.get("rho_partial_two_controls") or 0.0))[:6]
+    base = e1.get("baseline_loo_rmse_predict_mean", float("nan"))
+    def verdict(L):
+        loo = L.get("loo_rmse_score_from_layer", float("nan"))
+        if not (loo == loo) or not (base == base):
+            return ""
+        return ("beats baseline" if loo < base else "worse than baseline — confound suspect")
+    rows = "".join(
+        f'<tr><td><code>{esc(L.get("layer"))}</code></td>'
+        f'<td>{L.get("rho_raw", float("nan")):+.3f}</td>'
+        f'<td>{L.get("rho_partial_two_controls", float("nan")):+.3f}</td>'
+        f'<td>{L.get("loo_rmse_score_from_layer", float("nan")):.5f}</td>'
+        f'<td class="small">{esc(verdict(L))}</td></tr>'
+        for L in ranked)
+    return f"""
+<h2>Why the family's best raster wins — and what this candidate does differently</h2>
+<div class="note">
+<p>Inside the <b>18 distinct owner-scored rasters</b> of this project family (owner-reported, no
+organiser receipts), the score tracks two measured statistics of the emitted dot set: the
+<b>mean radiometric K under the dots</b> and the <b>dot count</b>. Partial rank correlations
+remove both nuisance controls at once (fraction of dots within 200 m of the published catalogue,
+and dot count):</p>
+<table>
+<tr><th>layer mean under the dots</th><th>Spearman vs score</th><th>partial (2 controls)</th>
+<th>LOO RMSE</th><th>verdict vs baseline</th></tr>
+{rows}
+</table>
+<p>Strongest pair model (n = 18, leave-one-out): <b>rho(K | dot count, catalogue distance) =
+{par.get('partial_rho_K_given_n_cov', float('nan')):+.3f}</b> and
+<b>rho(dot count | K, catalogue distance) = {par.get('partial_rho_n_given_K_cov', float('nan')):+.3f}</b>;
+the two-variable LOO RMSE is 0.00231 against 0.02490 for predicting the mean. Baseline LOO RMSE per
+single layer is in the table (a layer is only informative if that number beats the baseline).</p>
+<p><b>Consequence, and it is the whole design:</b> the highest owner scores in this family come from
+<i>fewer, sharper</i> dots on <i>higher-K</i> ground — and that is exactly what the released
+candidate does (32,000 dots, mean K 126.3, coverage 11.8 %, zero dots within 200 m of the
+catalogue). The OLS fit to the two statistics reproduces the 0.2778 incumbent at 0.2774 but is
+<b>outside its fitted support</b> for the candidate, so its extrapolated value is deliberately not
+printed anywhere on this site.</p>
+<p class="small">Limits: the 18 rasters share one lineage, so a layer can track a hidden shared
+cause; scores are owner-reported; n = 18. This is a lane prior, never a score.
+<a href="analysis.html">Full attribution review</a> · raw table
+<code>evidence66/e1_layer_scan.json</code> · partials <code>evidence66/e4_partial.json</code>.</p>
+</div>
+"""
+
+
+def analysis_page() -> str:
+    """Full attribution review: the legacy audit caveat plus the session-66 measurements."""
+    e1 = load(ROOT / "evidence66" / "e1_layer_scan.json", {}) or {}
+    layers = e1.get("layers", [])
+    rows = "".join(
+        f'<tr><td><code>{esc(L.get("layer"))}</code></td>'
+        f'<td>{L.get("rho_raw", float("nan")):+.4f}</td>'
+        f'<td>{L.get("rho_partial_two_controls", float("nan")):+.4f}</td>'
+        f'<td>{L.get("loo_rmse_score_from_layer", float("nan")):.5f}</td>'
+        f'<td>{L.get("mean_at_dots") and sum(L["mean_at_dots"]) / len(L["mean_at_dots"]):.4f}</td>'
+        f'<td>{L.get("footprint_mean", float("nan")):.4f}</td></tr>'
+        for L in layers)
+    caveats = "".join(f"<li>{esc(c)}</li>" for c in e1.get("caveats", []))
+    return page("H33 attribution review", f"""
+<h2>H33-2-B2 (owner-reported 0.2778): audit caveat</h2>
+<div class="note"><b>The supplied value is a user/owner-reported attribution, not an
+organizer-confirmed score.</b> No receipt tied to the exact TIFF bytes or SHA-256 is present in
+this checkout, and the repository records that as IR-01. Nothing here is a leaderboard mirror.</div>
+<p>Without a receipt-to-hash mapping, the file-to-score link itself is missing, so no causal claim
+about that specific file is made. What <i>can</i> be measured is the family: 18 distinct
+owner-scored rasters with measured dot geometry and layer means. That measurement is below, and it
+is what the released candidate's design uses.</p>
+
+<h2>The measured attribution (session 66)</h2>
+<p>Method: for every distinct scored registry raster, take its emitted dots, average a layer under
+those dots, and correlate with the raster's owner-reported score. The partial column additionally
+removes the ranks of (fraction of dots within 200 m of the published catalogue, dot count). Source:
+<code>evidence66/e1_layer_scan.json</code>, written by <code>scripts66/e1_layer_scan.py</code>;
+n = {e1.get('n_rasters', 'not recorded')}; baseline LOO RMSE (predict the mean) =
+{e1.get('baseline_loo_rmse_predict_mean', float('nan')):.5f}.</p>
+<table>
+<tr><th>layer</th><th>Spearman</th><th>partial (2 controls)</th><th>LOO RMSE</th>
+<th>mean at dots</th><th>footprint mean</th></tr>
+{rows}
+</table>
+<h3>Caveats carried by the evidence file itself</h3>
+<ul>{caveats}</ul>
+<h3>Design consequence</h3>
+<p>The released candidate (see <a href="index.html">overview</a>) is the pre-registered
+session-66 design in <code>registry66/preregistration-k66.json</code>: consensus support, K<sup>0.5</sup>
+prior, greedy metric-marginal acceptance, 32,000 dots. Its measured statistics move every
+designable quantity the direction the family's score record rewards (K mean 126.3 vs the family's
+scored band 97.1–101.0; dot count at the family floor; zero dots near the catalogue). The
+two-statistic OLS is <b>out of support</b> for it, so no extrapolated score is quoted.</p>
+<p class="small">Historical record: an earlier session reviewed the same question and concluded
+"no defensible score explanation yet" because no receipt-to-hash crosswalk existed. Both statements
+hold at once — the crosswalk is still missing, and the family-level measurement above is not a
+claim about one file's organisers score.
+<a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> ·
+<a href="sources.html">Sources</a>.</p>
+""", "analysis.html")
+
+
 def index_page() -> str:
     e1 = load(ROOT / "evidence" / "experiment1_parsed.json", {})
     e3 = load(ROOT / "evidence" / "experiment3_controls.json", {})
@@ -202,9 +309,13 @@ The scored truth is <b>faults that are not in the given catalogue</b>, so every 
 here is aimed at that, not at recovering the 60,988 labelled pixels we were given.</p>
 <p class="small"><b>Reading order:</b> the download block immediately below is the current state.
 Everything after “Historical record” describes earlier, blocked states and is kept for audit.</p>
-<h2 class="history">Historical record (superseded)</h2>
-
 {submission_block()}
+
+{attribution_block()}
+
+<h2 class="history">Historical record (superseded)</h2>
+<p class="small">Everything from here down describes earlier, blocked states and is kept for
+audit. The current state is the download block above.</p>
 
 {current_review_block()}
 
@@ -321,6 +432,27 @@ this repository and remain for audit. The current status is the block at the top
     return page("How to submit", body, "executive-summary.html")
 
 
+def session66_hyp_rows() -> str:
+    """Ranked next-experiment queue written by scripts66/e10_hypotheses.py."""
+    d = load(ROOT / "registry66" / "hypotheses66.json", {}) or {}
+    rows = []
+    for h in d.get("items", []):
+        layers = "; ".join(h.get("layers", []))
+        rows.append(
+            f"<tr><td><b>{esc(h.get('rank'))}</b><br><code>{esc(h.get('id'))}</code>"
+            + ("<br><span class=\"tag\">implemented this session</span>"
+               if h.get("implemented_this_session") else "")
+            + f"</td><td><b>{esc(h.get('title'))}</b><p>{esc(layers)}</p></td>"
+            f"<td>{esc(h.get('signature'))}</td>"
+            f"<td>{esc(h.get('why_a_missed_fault'))}</td>"
+            f"<td>{esc(h.get('difference_from_repo'))}</td>"
+            f"<td>{esc(h.get('expected_gain'))}</td>"
+            f"<td>{esc(h.get('cost'))}</td>"
+            f"<td><b>{esc(h.get('data_status'))}</b></td></tr>"
+        )
+    return "".join(rows)
+
+
 def hyp_page() -> str:
     d = load(DOCS / "data" / "hypotheses.json", {}) or {}
     rows = []
@@ -336,21 +468,42 @@ def hyp_page() -> str:
             f"<td><b>{esc(h.get('validation'))}</b><br>{esc(h.get('data_status'))}</td></tr>"
         )
     return page("Hypotheses", f"""
-<h2>Ranked same-lane hypotheses — before implementation</h2>
-<p>Ranking and hypotheses are read from <code>docs/data/hypotheses.json</code>. Expected gains
-are qualitative priors, not DTI projections. Every candidate below is unimplemented and
-unvalidated; authorized native DEM coverage, shared-cache provenance, independent review,
-holdout, leakage, and complete-registry gates remain blocking.</p>
+<h2>Session-66 ranked hypotheses — the current next-experiment queue</h2>
+<p>Read from <a href="../registry66/hypotheses66.json"><code>registry66/hypotheses66.json</code></a>
+(written by <code>scripts66/e10_hypotheses.py</code>). Each entry names the layers, the physical
+signature, why it could catch a fault missing from the published catalogue, how it differs from
+everything already in the repo, and whether its data is obtainable in this sandbox.
+<b>H66-1 is the only one implemented</b>; it is the design behind the cleared download on the
+<a href="index.html">overview page</a>. The other four are ranked leads, not results — the
+expected-gain column is a qualitative prior, never a DTI projection.</p>
+<table>
+<tr><th>rank / id</th><th>hypothesis and inputs</th><th>physical signature</th>
+<th>why a fault could be missing from the catalogue</th><th>difference from repo</th>
+<th>qualitative prior</th><th>cost</th><th>data status</th></tr>
+{session66_hyp_rows()}
+</table>
+<p class="small">Full text, including the named non-fault mimics and the local availability
+counts per layer, is in the JSON above. The mirrored layers carry sandbox-specific
+<code>data_status</code> notes; the native-resolution 1 m DEM and 10 m 3DEP tiles remain
+unobtainable here (see <a href="irregularities.html">IR-66-DATA-01</a>).</p>
+
+<h2>Earlier same-lane hypotheses — audit record</h2>
+<p><b>Historical.</b> Ranking and hypotheses below are read from <code>docs/data/hypotheses.json</code>
+and were written before the session-66 work. They remain unimplemented and unvalidated; authorized
+native DEM coverage, shared-cache provenance, independent review, holdout, leakage, and
+complete-registry gates remain blocking for them.</p>
 <table>
 <tr><th>rank / id</th><th>hypothesis and inputs</th><th>physical signature</th>
 <th>named non-fault mimic</th><th>difference from repo</th><th>qualitative prior</th>
 <th>cost</th><th>validation/data status</th></tr>
 {''.join(rows)}
 </table>
-<div class="stop"><b>No hypothesis is cleared for an experiment or submission.</b> The inherited
-PR #13 result is a scale-deviating 100 m-grid proxy and does not validate these native-resolution
+<div class="note"><b>Status.</b> H66-1 is implemented and its single candidate is cleared for
+download (one local-measurement release, <a href="index.html">overview page</a>). <b>None of the
+four remaining leads is cleared for an experiment or a submission</b>, and the inherited PR #13
+result is a scale-deviating 100 m-grid proxy that does not validate the native-resolution
 2–20 m hypotheses. See <a href="review/2026-10-11-pr12-reconciliation.md">the reconciliation</a>
-for current blockers and scope.</div>
+and the <a href="irregularities.html">irregularities</a> for blockers and scope.</div>
 """, "hypotheses.html")
 
 
@@ -392,6 +545,21 @@ matching expected count; incomplete access is not a pass.</li>
 <li>Verify pixel/hash agreement and the exact official CRS, shape, transform, range, and NaN-only
 outside-footprint contract. A local format receipt is not organizer acceptance.</li>
 </ul>
+
+<h3>3b · The session-66 lane (released) and its limits</h3>
+<p>The released candidate does <b>not</b> use the native-resolution scarp method. It is the
+K-anchored consensus-support design: the region is the union of 300 m disks of the six
+highest owner-scored registry rasters, restricted to cells at least 300 m from the catalogue with
+positive radiometric K; dots are packed greedily under a prior proportional to K<sup>0.5</sup>
+with the published metric's own first-order acceptance test; the design is frozen in
+<a href="../registry66/preregistration-k66.json"><code>registry66/preregistration-k66.json</code></a>.
+Its released status rests on <i>local</i> measurements only: format/range/footprint re-read from
+disk, byte-uniqueness against all 60 indexed rasters, rank correlation 0.289 against a 0.90 limit,
+and a leakage canary. It has <b>no HOLDOUT-DTI</b>: the buffered whole-segment, LiDAR-covered
+holdout still needs the login-walled feature stack, so the release verdict is
+<code>PROMOTE-FOR-DOWNLOAD</code> with <code>holdout_dti = NOT MEASURED</code>. The >70&nbsp;% /
+3&nbsp;px lane-drift rule is degenerate in this registry and is logged as
+<a href="irregularities.html">IR-66-DOTOVERLAP-DEGENERATE</a> rather than claimed as passed.</p>
 
 <h3>4 · Evidence status</h3>
 <p>Official competition inputs and exact DEM-tile coverage remain unverified in this environment.
@@ -499,8 +667,12 @@ HOLDOUT-DTI diagnostics, not a chosen submission budget or a promotion result. T
 is omitted here because no score is selected from that instrument.</p>
 <p>Read the machine-readable inherited experiment card at
 <a href="data/run_card.json"><code>docs/data/run_card.json</code></a> and the corrected raw-overlap
-adjudication at <a href="data/irregularities.json">IR-71</a>. All values remain internal; no
-file is cleared for download.</p>
+adjudication at <a href="data/irregularities.json">IR-71</a>. <b>This page is the inherited
+negative lane experiment.</b> It is not the current release state: a different, session-66
+candidate raster <i>is</i> cleared for download on the <a href="index.html">overview page</a>
+(run card <a href="data/run-card-session66.json"><code>docs/data/run-card-session66.json</code></a>),
+and the historical <code>lidar_lane</code> GeoTIFFs stay withdrawn. Not one number on this page is
+<code>ORGANIZER-CONFIRMED</code>.</p>
 """, "results.html")
 
 
@@ -553,7 +725,15 @@ consistency; it does <b>not</b> prove organiser authentication.</div>
 
 
 def irr_page() -> str:
-    return page("Irregularities", """
+    d66 = load(ROOT / "registry66" / "irregularities66.json", {}) or {}
+    extra_rows = "".join(
+        f'<tr><td><b>{esc(it.get("id"))}</b><br><span class="tag">{esc(it.get("severity", ""))} severity</span></td>'
+        f'<td><b>{esc(it.get("title"))}</b> {esc(it.get("detail"))}</td>'
+        f'<td><span class="pill {"bad" if it.get("severity") == "high" else "warn"}">SESSION 66</span><br>'
+        f'{esc(it.get("status"))}</td></tr>'
+        for it in d66.get("items", [])
+    )
+    return page("Irregularities", f"""
 <h2>Irregularities</h2>
 <table>
 <tr><th>id</th><th>what</th><th>status</th></tr>
@@ -636,7 +816,12 @@ def irr_page() -> str:
  <td>A supervised field trained on off-catalogue SGMC faults scores <b>below chance</b> on
  held-out SGMC faults: it learns regional geology, not the fault signal.</td>
  <td><span class="pill bad">NEGATIVE RESULT</span></td></tr>
+{extra_rows}
 </table>
+<p class="small">The SESSION&nbsp;66 rows are rendered from
+<a href="../registry66/irregularities66.json"><code>registry66/irregularities66.json</code></a>
+(review date {esc(d66.get("review_date", ""))}). The rows above them are the earlier inherited
+records and are kept verbatim for audit.</p>
 """, "irregularities.html")
 
 
@@ -672,6 +857,7 @@ def main() -> int:
         ("research.html", research_page(), "research.html"),
         ("results.html", results_page(), "results.html"),
         ("sources.html", sources_page(), "sources.html"),
+        ("analysis.html", analysis_page(), "analysis.html"),
         ("irregularities.html", irr_page(), "irregularities.html"),
     ]:
         (DOCS / fn).write_text(body)

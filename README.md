@@ -216,12 +216,12 @@ and data-access limitations below.
 
 ---
 
-## Submission status — NO DOWNLOAD; nothing is cleared
+## Submission status — historical record (SUPERSEDED by the session-66 release above)
 
-**Do not upload a historical artifact.** There is no current TIFF or ZIP cleared for
-submission; [`docs/downloads/README.md`](docs/downloads/README.md) explains the audit-only
-files and the stop conditions. The executive summary explicitly says **No** to download or
-submit.
+**Historical.** This section records the state *before* session 66. The current state is the
+download block at the top of this file: exactly one cleared candidate, everything historical
+still withdrawn. [`docs/downloads/README.md`](docs/downloads/README.md) lists the cleared file
+and the do-not-upload list.
 
 The inherited PR #13 `lidar_lane` experiment is retained only for audit under
 [`artifacts/lidar_lane/`](artifacts/lidar_lane/README.md). Its reported pooled advantage was reversed by relief-matched
