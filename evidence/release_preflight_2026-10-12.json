@@ -1,0 +1,31 @@
+{
+  "schema": "gems-release-preflight/1",
+  "checked_utc": "2026-10-12T00:42:46Z",
+  "lane": "native-resolution LiDAR scarp channels",
+  "candidate_exists": false,
+  "candidate_sha256": null,
+  "cleared_for_review": false,
+  "download_allowed": false,
+  "new_experiments": 0,
+  "new_holdouts": 0,
+  "candidate_emissions": 0,
+  "submission_slots_used": 0,
+  "blockers": [
+    "selector has not promoted the candidate",
+    "candidate file/name/SHA-256 does not match the canonical run card",
+    "official reference/features format and footprint validation is incomplete or failed",
+    "validator report does not identify the candidate file",
+    "pre-placement surface has no complete-registry uniqueness pass",
+    "final dots has no complete-registry uniqueness pass",
+    "pre-placement surface audit is not tied to a pinned surface file",
+    "final-dot audit is not tied to the submitted candidate bytes",
+    "qualified HOLDOUT-DTI, paired gain over frozen best and off-front gain with 95% CIs missing",
+    "feature-alone leakage canary incomplete or AUC > 0.90",
+    "two independent scientific-lead reviews not documented",
+    "official grid/native DEM/cultural mask provenance not verified"
+  ],
+  "meaning": "Passing mechanical checks only permits independent review; it never automatically publishes or submits.",
+  "input_preflight": "evidence/input_preflight_2026-10-12.json",
+  "source": "src/gems/release_gate.py",
+  "note": "No candidate is intentional: required authorized inputs, native DEM, cultural mask, complete registry, valid holdout and official footprint are absent."
+}

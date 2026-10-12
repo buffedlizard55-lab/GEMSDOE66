@@ -64,6 +64,29 @@ def pill(ok: bool, text: str = None) -> str:
     return f'<span class="pill {cls}">{esc(text or ("PASS" if ok else "FAIL"))}</span>'
 
 
+def current_review_block() -> str:
+    """Render the latest presence/release preflight before any inherited artifact details."""
+    preflight = load(ROOT / "evidence" / "input_preflight_2026-10-12.json", {}) or {}
+    release = load(ROOT / "evidence" / "release_preflight_2026-10-12.json", {}) or {}
+    required = preflight.get("required_files", [])
+    missing = sum(not item.get("present", False) for item in required)
+    date = preflight.get("review_date", "2026-10-12")
+    return f"""
+<div class="stop">
+  <h2>Current review ({esc(date)}): BLOCKED / NEGATIVE</h2>
+  <p>The presence-only preflight found <b>{missing} of {len(required)} required competition/cache inputs absent</b>.
+  It made no network request and copied no data. There is no current cached stack, native 1 m DEM,
+  cultural mask, official reference grid, or complete-registry certificate. The four ranked
+  native-LiDAR hypotheses remain untested research leads.</p>
+  <p><b>No qualified HOLDOUT-DTI or leakage canary was run; no candidate, download, or submission
+  slot exists for this review.</b> The H33 owner-page attribution is unverified, not an organizer
+  receipt. Read the <a href="review/2026-10-12-review.md">three-pass review</a> and
+  <a href="data/run-card.json">canonical run card</a> before relying on inherited diagnostics.
+  The release preflight says download is not allowed: <b>{str(release.get('download_allowed', False)).lower()}</b>.</p>
+</div>
+"""
+
+
 # ------------------------------------------------------------------------------------------
 def submission_block() -> str:
     """The one-click download block.  Reads the newest build manifest."""
@@ -104,8 +127,8 @@ def submission_block() -> str:
   <a href="results.html">results</a> and the
   <a href="executive-summary.html">executive summary</a>. Uploading a file that our own
   evidence cannot distinguish from the incumbent would spend a weekly slot on a coin
-  toss. The bytes are kept in
-  <code>artifacts/lidar_lane/</code> for audit and for a future cleared release.</p>
+  toss. These bytes are kept in <code>artifacts/lidar_lane/</code> for audit only; a future
+  candidate would need to be generated from authorized inputs and pass every gate anew.</p>
   <table>
     <tr><th>sha256</th><td class="mono">{esc(chk.get('sha256', ''))}</td></tr>
     <tr><th>size</th><td>{chk.get('size_bytes', 0):,} bytes</td></tr>
@@ -156,6 +179,7 @@ def index_page() -> str:
 The scored truth is <b>faults that are not in the given catalogue</b>, so every design choice
 here is aimed at that, not at recovering the 60,988 labelled pixels we were given.</p>
 
+{current_review_block()}
 {submission_block()}
 
 <h2>The one idea that matters</h2>
@@ -164,9 +188,10 @@ here is aimed at that, not at recovering the 60,988 labelled pixels we were give
 <pre>DTI = T / ( 0.2·T + 0.2·(S − M) + 0.8·|G| )
 
 adding a unit of mass raises DTI  ⟺  k &gt; 0.2 · DTI</pre>
-<p>At DTI = 0.28 that bar is <b>0.056</b>. Mass that cannot clear it is a loss. That is why the
-best-scoring rasters in this project family are sparse dot sets (~38 k pixels out of 5.17 M)
-and not dense probability maps.</p>
+<p>For illustration only, at a <b>hypothetical</b> DTI of 0.28 that bar is 0.056. This is
+an algebra example, not a measured project value, verified H33 score, or prediction. It shows
+why surplus low-credit mass can reduce the metric; it does not establish an optimal emission
+budget for the untested native-resolution lane. See the <a href="research/metric-derivation.md">metric derivation</a>.</p>
 
 <h2>Inherited lane result — negative, not the target method</h2>
 <p>The inherited PR #13 run reports an internal <b>HOLDOUT-DTI</b> evaluation on SGMC
@@ -193,7 +218,7 @@ complete organizer registry, and no pre-placement surface comparison is recorded
    <p class="small">Raw 3 px dot overlap is 0.990 (&gt; 0.70); only 60 accessible rasters were
    compared, the complete registry is uncertified, and surface correlation was not reported.</p></div>
 </div>
-<p class="small"><a href="analysis.html">H33 attribution review</a> · <a href="review/2026-10-11-pr12-reconciliation.md">PR #12 merge reconciliation and shared-template provenance audit</a></p>
+<p class="small"><a href="analysis.html">H33 attribution review</a> · <a href="review/2026-10-12-review.md">Latest three-pass review</a> · <a href="review/2026-10-11-pr12-reconciliation.md">PR #12 merge reconciliation and shared-template provenance audit</a></p>
 """, "index.html")
 
 
@@ -206,8 +231,9 @@ def exec_page() -> str:
     return page("How to submit", f"""
 <h2>Executive summary — why there is nothing to download</h2>
 
+{current_review_block()}
 <div class="stop">
-<h2>Verdict: NEGATIVE — do not submit this file</h2>
+<h2>Inherited lidar_lane artifact: NEGATIVE — not cleared</h2>
 <p>A historical GeoTIFF exists under <code>artifacts/lidar_lane/</code> with a local format
 sidecar. It is <b>not</b> a current, officially cleared submission and is not published as a
 download; the relief-matched result and raw uniqueness stop both block release.</p>
@@ -223,7 +249,7 @@ not distributed like the terrain: it is <b>59.3 % range front</b> and <b>1.3 % b
 while the footprint is 25.2 % range front and 23.7 % basin. The inherited experiment found the
 pooled lane advantage did not survive relief matching. Its recorded HOLDOUT-DTI summaries are:</p>
 <table>
-<tr><th>instrument</th><th>lane mean [95% CI]</th><th>incumbent mean [95% CI]</th><th>uniform random mean [95% CI]</th></tr>
+<tr><th>instrument</th><th>lane HOLDOUT-DTI mean [95% CI]</th><th>incumbent HOLDOUT-DTI mean [95% CI]</th><th>uniform-random HOLDOUT-DTI mean [95% CI]</th></tr>
 <tr><td>pooled (confounded)</td><td><b>0.07075 [0.05217, 0.08967]</b></td><td>0.04896 [0.04191, 0.05669]</td><td>0.04019 [0.03786, 0.04233]</td></tr>
 <tr><td><b>relief-matched</b></td><td>0.02638 [0.02087, 0.03183]</td><td><b>0.02727 [0.02421, 0.03049]</b></td><td>0.02612 [0.02436, 0.02741]</td></tr>
 </table>
@@ -339,8 +365,9 @@ holdout, leakage, and complete-registry gates remain blocking.</p>
 </table>
 <div class="stop"><b>No hypothesis is cleared for an experiment or submission.</b> The inherited
 PR #13 result is a scale-deviating 100 m-grid proxy and does not validate these native-resolution
-2–20 m hypotheses. See <a href="review/2026-10-11-pr12-reconciliation.md">the reconciliation</a>
-for current blockers and scope.</div>
+2–20 m hypotheses. The current input/release blockers are recorded in the
+<a href="review/2026-10-12-review.md">latest three-pass review</a>; the
+<a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a> documents the inherited artifact audit.</div>
 """, "hypotheses.html")
 
 
@@ -390,8 +417,11 @@ organizer-authenticated. The site does not poll leaderboard pages or infer artif
 from owner reports. No organizer receipt in this checkout confirms a score for any raster.</p>
 <p>The inherited PR #13 run was stopped: its relief-matched result does not beat the incumbent,
 its raw final-dot overlap exceeds the threshold, its complete-registry status is uncertified, and
-its pre-placement surface comparison is absent. No experiment or submission slot was used in the
-PR #12 reconciliation.</p>
+its pre-placement surface comparison is absent. The current 2026-10-12 check-only preflight found
+all eight required competition/cache inputs absent; this review also ran no experiment or
+submission slot. See the <a href="review/2026-10-12-review.md">latest review</a> for current
+blockers and the <a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a>
+for the inherited artifact analysis.</p>
 
 <h3>5 · Trusted method references</h3>
 <ul>

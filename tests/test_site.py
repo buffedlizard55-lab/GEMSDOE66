@@ -23,7 +23,9 @@ HISTORICAL_STEM = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 def built():
     import sys
     sys.path.insert(0, str(ROOT / "scripts"))
+    import build_site_h66b
     import build_site
+    build_site_h66b.main()
     build_site.main()
 
 
@@ -61,6 +63,8 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
     assert "Download status: NOT AVAILABLE" in text
     assert "There is no current TIFF or ZIP cleared for submission" in text
     assert "Do not upload a historical H66 artifact" in text
+    assert "kept in" in text and "for audit only" in text
+    assert "for a future cleared release" not in text
     assert "AVAILABLE FOR AUDIT" not in text
     for name in PAGES:
         links = _links(DOCS / name)
@@ -68,6 +72,29 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
         assert not any(urlsplit(href).path.lower().endswith((".tif", ".tiff", ".zip"))
                        for href in links), name
     assert sorted(p.name for p in (DOCS / "downloads").iterdir()) == ["README.md"]
+
+
+def test_current_review_banner_precedes_historical_metrics():
+    index = (DOCS / "index.html").read_text(encoding="utf-8")
+    summary = (DOCS / "executive-summary.html").read_text(encoding="utf-8")
+    workflow = (DOCS / "submission-guide.html").read_text(encoding="utf-8")
+    run_card = (DOCS / "run-card.html").read_text(encoding="utf-8")
+    for text in (index, summary):
+        assert "Current review (2026-10-12): BLOCKED / NEGATIVE" in text
+        assert "8 of 8 required competition/cache inputs absent" in text
+        assert "No qualified HOLDOUT-DTI or leakage canary was run" in text
+        assert "four ranked" in text
+        assert "canonical run card" in text
+    assert "Inherited lidar_lane artifact: NEGATIVE — not cleared" in summary
+    assert "lane HOLDOUT-DTI mean [95% CI]" in summary
+    assert "hypothetical</b> DTI of 0.28" in index
+    assert "not a measured project value" in index
+    assert "Current disposition (2026-10-12): BLOCKED / NEGATIVE" in workflow
+    assert "8 of 8 required competition/cache inputs absent" in workflow
+    assert "Prior [0,1] rejection: code guard, not portal acceptance" in workflow
+    assert "verify a portal upload" in workflow
+    assert "gemsdoe66-native-lidar-review-2026-10-12" in run_card
+    assert "latest three-pass review" in run_card
 
 
 def test_run_card_is_blocked_and_has_no_unqualified_score():

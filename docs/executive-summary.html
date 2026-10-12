@@ -11,8 +11,22 @@
 
 <h2>Executive summary — why there is nothing to download</h2>
 
+
 <div class="stop">
-<h2>Verdict: NEGATIVE — do not submit this file</h2>
+  <h2>Current review (2026-10-12): BLOCKED / NEGATIVE</h2>
+  <p>The presence-only preflight found <b>8 of 8 required competition/cache inputs absent</b>.
+  It made no network request and copied no data. There is no current cached stack, native 1 m DEM,
+  cultural mask, official reference grid, or complete-registry certificate. The four ranked
+  native-LiDAR hypotheses remain untested research leads.</p>
+  <p><b>No qualified HOLDOUT-DTI or leakage canary was run; no candidate, download, or submission
+  slot exists for this review.</b> The H33 owner-page attribution is unverified, not an organizer
+  receipt. Read the <a href="review/2026-10-12-review.md">three-pass review</a> and
+  <a href="data/run-card.json">canonical run card</a> before relying on inherited diagnostics.
+  The release preflight says download is not allowed: <b>false</b>.</p>
+</div>
+
+<div class="stop">
+<h2>Inherited lidar_lane artifact: NEGATIVE — not cleared</h2>
 <p>A historical GeoTIFF exists under <code>artifacts/lidar_lane/</code> with a local format
 sidecar. It is <b>not</b> a current, officially cleared submission and is not published as a
 download; the relief-matched result and raw uniqueness stop both block release.</p>
@@ -28,7 +42,7 @@ not distributed like the terrain: it is <b>59.3 % range front</b> and <b>1.3 % b
 while the footprint is 25.2 % range front and 23.7 % basin. The inherited experiment found the
 pooled lane advantage did not survive relief matching. Its recorded HOLDOUT-DTI summaries are:</p>
 <table>
-<tr><th>instrument</th><th>lane mean [95% CI]</th><th>incumbent mean [95% CI]</th><th>uniform random mean [95% CI]</th></tr>
+<tr><th>instrument</th><th>lane HOLDOUT-DTI mean [95% CI]</th><th>incumbent HOLDOUT-DTI mean [95% CI]</th><th>uniform-random HOLDOUT-DTI mean [95% CI]</th></tr>
 <tr><td>pooled (confounded)</td><td><b>0.07075 [0.05217, 0.08967]</b></td><td>0.04896 [0.04191, 0.05669]</td><td>0.04019 [0.03786, 0.04233]</td></tr>
 <tr><td><b>relief-matched</b></td><td>0.02638 [0.02087, 0.03183]</td><td><b>0.02727 [0.02421, 0.03049]</b></td><td>0.02612 [0.02436, 0.02741]</td></tr>
 </table>
