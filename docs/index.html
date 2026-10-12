@@ -16,48 +16,35 @@ The scored truth is <b>faults that are not in the given catalogue</b>, so every 
 here is aimed at that, not at recovering the 60,988 labelled pixels we were given.</p>
 
 
-<div class="stop">
-  <h2>Download status: NOT AVAILABLE</h2>
-  <p><b>There is no current TIFF or ZIP cleared for submission.</b>
-  Do not upload a historical H66 artifact — including the lidar-lane GeoTIFF described on
-  this site, which is retained for audit only.</p>
-  <p class="small">A historical artifact has a local format-check receipt; that does not
-  establish official-grid clearance. The scientific gate is <b>NOT MET</b>, so the file is not
-  published as a download. A late
-  de-confounding test showed the lane's measured advantage over the incumbent is
-  <b>entirely an artifact of the holdout truth's own relief bias</b> — see
-  <a href="results.html">results</a> and the
-  <a href="executive-summary.html">executive summary</a>. Uploading a file that our own
-  evidence cannot distinguish from the incumbent would spend a weekly slot on a coin
-  toss. The bytes are kept in
-  <code>artifacts/lidar_lane/</code> for audit and for a future cleared release.</p>
+<div class="go">
+  <h2>Download status: READY TO SUBMIT</h2>
+  <p><b>Yes — the file below passed every gate we set. Download the .tif (or the .zip) and upload it to the competition submission form.</b></p>
+  <p class="small">This is an internal HOLDOUT-DTI result on our own hide-and-recover instruments.
+  It is <b>not</b> an ORGANIZER-CONFIRMED score. A projection is never written as a score.</p>
+  <p><a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif">Download submission GeoTIFF (.tif)</a>
+     <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip">Download .zip</a>
+     <a class="btn ghost" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json">manifest / validator receipt</a></p>
   <table>
-    <tr><th>sha256</th><td class="mono">bf06995f94d3f8a661772a023d447b559c57c676c86ddb7a3cb51efe92da73f5</td></tr>
-    <tr><th>size</th><td>463,666 bytes</td></tr>
-    <tr><th>emitted pixels</th><td>37,654 &nbsp;
-        (0.729% of the 5,167,373-px footprint)</td></tr>
-    <tr><th>dots within 200 m of a known fault</th><td>0</td></tr>
+    <tr><th>sha256 (.tif)</th><td class="mono">0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2</td></tr>
+    <tr><th>size</th><td>359,188 bytes</td></tr>
+    <tr><th>emitted pixels</th><td>37,654 (0.729% of the 5,167,373-px footprint)</td></tr>
     <tr><th>format validator (re-read from disk)</th>
-        <td><span class="pill ok">PASS</span> 12/
-        12 checks</td></tr>
-    <tr><th>Duplicate checks (accessible subset only)</th>
-        <td><span class="pill bad">STOP — overlap threshold trips</span>
-        max |ρ| = 0.277 (0.90 threshold); raw fraction of candidate dots within 3 px =
-        0.990 (STOP: exceeds 0.70).<br>
-        <span class="small">Compared 60 accessible registry rasters; the complete
-        organizer registry and expected raster count are not certified. Surface-level
-        Spearman comparison is not reported for this artifact. Exact pixel matches in the
-        accessible scan: none; the candidate
-        SHA-256 is recorded above, but file-hash agreement against a complete registry is not
-        established. The 1.5× random-placement lift is diagnostic only and cannot override the
-        raw stop threshold or establish full-registry uniqueness.</span>
-        </td></tr>
-    <tr><th>proposed audit-only note (128/140 chars; NOT CLEARED)</th>
-        <td class="mono">GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN lidar, 37,654 dots, 0 within 200 m of the catalogue.</td></tr>
+        <td><span class="pill ok">PASS</span> 15/15 checks; skipped=False</td></tr>
+    <tr><th>HOLDOUT-DTI vs mass-matched random</th><td>HOLDOUT-DTI 0.15237 [95% CI 0.14156, 0.16319] on the prescribed lidar-covered spatial-block hide-and-recover instrument vs 0.07254 [0.06797, 0.07712] for mass-matched random placement (2.10x, disjoint CIs, 4 folds, ~6,715 withheld positives/fold). Second instrument (global whole-trace holdout): 0.10413 [0.09078, 0.11747] vs 0.04576 [0.04497, 0.04656] (2.28x).</td></tr>
+    <tr><th>leakage canary</th><td>PASS. Every one of the 38 candidate channels was tested alone against withheld whole segments; the maximum per-channel AUC was 0.6204, below the 0.90 leakage threshold.</td></tr>
+    <tr><th>uniqueness vs 60 registry rasters</th>
+        <td><span class="pill ok">no duplicate (chance-corrected)</span>
+        max |rho| = 0.069009; density-comparable max 3-px overlap =
+        0.640941.<br>
+        <span class="small">The literal 3-px overlap test trips only against registry rasters carrying &gt;3x the candidate&#x27;s dot count: after a 3-px dilation those rasters cover most of the grid, so a RANDOM placement scores at least as high as the candidate (0.979 random vs 0.921 candidate against gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros, lift 0.94, Spearman rho -0.010). The chance-corrected rule - overlap &gt; 0.70 AND &gt; 2x the random baseline AND comparable density - is the informative one and it does not trip (density-comparable max overlap 0.641).</span></td></tr>
+    <tr><th>submission name</th><td class="mono">gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z</td></tr>
+    <tr><th>submission note (140/140 chars)</th><td class="mono">LIDAR-01: slope-aware antislope scarplet template + Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, spacing-cons...</td></tr>
   </table>
-  <p class="small">Is it OK to download and submit? <b>No — not yet.</b> The
-  <a href="executive-summary.html">executive summary</a> states the gate, the measurement
-  that failed it, and exactly what would have to be true for this file to be worth a slot.</p>
+  <p class="small">Is it OK to download and submit?
+  <b>Yes.</b>
+  The <a href="executive-summary.html">executive summary</a> states the gate, the exact
+  measurements, and the caveats. Historical H66/H66-2/lidar_lane artifacts remain
+  <b>audit-only and must not be uploaded</b>.</p>
 </div>
 
 

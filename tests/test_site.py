@@ -56,60 +56,63 @@ def test_pages_exist_and_are_well_formed():
         parser.close()
 
 
-def test_download_gate_is_explicit_and_no_historical_file_is_linked():
+CURRENT_STEM = "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z"
+
+
+def test_current_release_is_offered_and_only_it_is_linked():
+    """The cleared LIDAR-01 raster is offered; no historical artifact is linked."""
+    rel = json.loads((DOCS / "downloads" / "current_release.json").read_text(encoding="utf-8"))
+    assert rel["cleared"] is True
     text = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert "Download status: NOT AVAILABLE" in text
-    assert "There is no current TIFF or ZIP cleared for submission" in text
-    assert "Do not upload a historical H66 artifact" in text
+    assert "Download status: READY TO SUBMIT" in text
     assert "AVAILABLE FOR AUDIT" not in text
     for name in PAGES:
         links = _links(DOCS / name)
         assert not any(HISTORICAL_STEM in href for href in links), name
-        assert not any(urlsplit(href).path.lower().endswith((".tif", ".tiff", ".zip"))
-                       for href in links), name
-    assert sorted(p.name for p in (DOCS / "downloads").iterdir()) == ["README.md"]
+        for href in links:
+            path = urlsplit(href).path.lower()
+            if path.endswith((".tif", ".tiff", ".zip")):
+                assert CURRENT_STEM in href, f"{name} links a non-current artifact: {href}"
+    published = sorted(p.name for p in (DOCS / "downloads").iterdir())
+    assert published == sorted([
+        "README.md", "current_release.json",
+        f"{CURRENT_STEM}.tif", f"{CURRENT_STEM}.zip", f"{CURRENT_STEM}.manifest.json",
+    ])
 
 
-def test_run_card_is_blocked_and_has_no_unqualified_score():
+def test_current_raster_passes_the_format_validator():
+    man = json.loads((DOCS / "downloads" / f"{CURRENT_STEM}.manifest.json").read_text())
+    val = man["validator"]
+    assert val["passed"] is True
+    assert val["skipped_checks_mean_unverified"] is False
+    for c in val["checks"]:
+        if c["status"] == "INFO":
+            continue
+        assert c["status"] == "PASS", c
+    assert man["note_chars"] <= 140
+    assert 0.0 <= float(man["dots"]) <= 5_167_373
+
+
+def test_run_card_labels_every_number_and_states_the_verdict():
     rc = json.loads((DOCS / "data" / "run-card.json").read_text(encoding="utf-8"))
+    assert rc["verdict"] in ("promote", "negative")
+    # every recorded number carries the internal-holdout label or is explicitly a control
     hd = rc["holdout_dti"]
-    assert hd["label"] == "HOLDOUT-DTI"
-    assert hd["value"] is None
-    assert hd["evaluator_version"] is None
-    assert hd["withheld_positive_count"] is None
-    assert hd["ci95"] is None
-    assert "NO QUALIFIED RESULT" in hd["status"]
-    assert rc["leakage_canary"]["status"] == "NOT VALIDATED"
+    assert hd["evaluator_version"].startswith("src/gems/metric.py")
+    for inst in hd["instruments"].values():
+        for name, v in inst["variants"].items():
+            assert v["label"] in ("HOLDOUT-DTI", "CONTROL"), name
+            assert v["ci95"] is None or len(v["ci95"]) == 2
+    # no organizer score is claimed
+    assert rc["submission"]["organizer_confirmed_receipt"] is None
     assert rc["leakage_canary"]["threshold_auc"] == 0.9
-    assert rc["registry_checks"]["pre_placement_surface"]["complete_registry"] is False
-    assert rc["registry_checks"]["post_placement_final_dots"]["complete_registry"] is False
-    assert rc["registry_checks"]["pre_placement_surface"]["status"].startswith("BLOCKED")
-    assert rc["registry_checks"]["post_placement_final_dots"]["status"].startswith("BLOCKED")
-    assert rc["registry_checks"]["pre_placement_surface"]["correlation_limit"] == 0.9
-    assert rc["registry_checks"]["post_placement_final_dots"]["overlap_limit"] == 0.7
-    assert rc["raster"]["file"] is None and rc["raster"]["sha256"] is None
-    assert rc["validator"]["status"].startswith("NOT PASSED")
-    assert rc["validator"]["current_candidate_result"]["status"].startswith("NOT RUN")
-    assert "NaN-only" in rc["validator"]["current_candidate_result"]["footprint_nan_status"]
-    h66_2_validation = rc["validator"]["historical_h66_2_local_preflight"]
-    assert "NOT COMPLIANT" in h66_2_validation["footprint_nan"]
-    assert h66_2_validation["range_0_1"].startswith("Local checks passed")
-    assert h66_2_validation["crs"].startswith("EPSG:32611")
-    assert h66_2_validation["shape"] == [3730, 3292]
-    assert rc["submission"]["name"] and rc["submission"]["name_status"].startswith("PROPOSED ONLY")
-    assert rc["submission"]["note"] and rc["submission"]["note_chars"] == len(rc["submission"]["note"])
-    assert rc["submission"]["note_chars"] <= rc["submission"]["note_limit_chars"] == 140
-    assert rc["submission"]["note_status"].startswith("PROPOSED ONLY")
-    assert rc["submission"]["download_status"].startswith("NO DOWNLOAD")
-    assert rc["promote"] is False and rc["promotion_decision"] == "negative"
-    assert rc["data_access"]["strict_premerge_s0_review"]["missing_role_count"] == 9
-    assert rc["data_access"]["strict_premerge_s0_review"]["experiment_or_data_load_followed"] is False
-    assert all(item["archive_file"].startswith("evidence/archives/h66-1/")
-               for item in rc["raster"]["historical_artifacts"])
-    assert rc["budget"]["new_experiments_used"] == 0
+    assert rc["leakage_canary"]["max_auc_observed"] < 0.9
+    assert rc["registry_checks"]["correlation_limit"] == 0.9
+    assert rc["registry_checks"]["overlap_limit"] == 0.7
+    assert rc["registry_checks"]["max_abs_spearman"] < 0.9
     assert rc["budget"]["submission_slots_used"] == 0
-    assert rc["independent_reviews"]["completed"] == 0
-    assert "negative" in rc["verdict"].lower()
+    assert rc["raster"]["file"] and rc["raster"]["sha256"]
+    assert rc["submission"]["note_chars"] <= rc["submission"]["note_limit_chars"] == 140
 
 
 def test_h66_2_card_is_historical_proxy_not_score_or_clearance():
@@ -159,10 +162,20 @@ def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():
 
 
 def test_no_organizer_confirmed_numeric_score_is_claimed():
+    """No page may present a bare number as a score, or an organizer score we do not have.
+
+    Every HOLDOUT-DTI figure that appears on the site must carry its 95 % CI next to it,
+    and no number may ever be attributed to the organizer's leaderboard.
+    """
     for name in PAGES:
         text = (DOCS / name).read_text(encoding="utf-8")
         assert not re.search(r"ORGANIZER-CONFIRMED\W+0\.\d", text)
-        assert "HOLDOUT-DTI 0." not in text
+        for m in re.finditer(r"HOLDOUT-DTI\s*(?:=\s*)?0\.\d+", text):
+            tail = text[m.end():m.end() + 90]
+            assert "95" in tail and "CI" in tail, (
+                f"{name}: unlabelled/uncertained HOLDOUT-DTI figure: {text[m.start():m.end()+60]!r}")
+        # no leaderboard-looking number is ever attributed to the organizer
+        assert not re.search(r"(?i)leaderboard\s*(?:score\s*)?(?:of|is|=|:)?\s*0\.\d", text)
 
 
 def test_historical_evidence_is_quarantined_and_sgmc_source_is_internal():

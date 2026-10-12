@@ -1,0 +1,333 @@
+{
+ "generated_utc": "2026-10-12T01:30:38Z",
+ "stage": "sweep",
+ "protocol": "spatial-block hide-and-recover: whole INGENIOUS trace segments held (authoritative record_id segments), 300 m buffer, lidar-covered 6 km blocks, truth = withheld segments inside held blocks, score domain = held blocks + 300 m halo intersected with the footprint and lidar coverage, budget scaled to fold domain area, DTI alpha=0.2 beta=0.8 R=300 m",
+ "evaluator": "src/gems/metric.py :: tversky_terms / dti_from_terms",
+ "n_folds": 6,
+ "variants": {
+  "random_lidar|budget=37654|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.071105,
+    0.076652,
+    0.074469,
+    0.076978,
+    0.073354,
+    0.071783
+   ],
+   "mean": 0.074057,
+   "ci95": [
+    0.072103,
+    0.076011
+   ],
+   "pooled": 0.074095,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264,
+    3271,
+    3261
+   ],
+   "budget_full_grid": 37654,
+   "separation_px": 2.8
+  },
+  "random_lidar|budget=60246|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.104103,
+    0.111298,
+    0.110078,
+    0.112829,
+    0.110141,
+    0.105597
+   ],
+   "mean": 0.109008,
+   "ci95": [
+    0.106283,
+    0.111732
+   ],
+   "pooled": 0.109117,
+   "dots_per_fold": [
+    5238,
+    5239,
+    5255,
+    5223,
+    5233,
+    5218
+   ],
+   "budget_full_grid": 60246,
+   "separation_px": 2.8
+  },
+  "random_lidar|budget=100000|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.158514,
+    0.15903,
+    0.15689,
+    0.16303,
+    0.165994,
+    0.153804
+   ],
+   "mean": 0.159544,
+   "ci95": [
+    0.156054,
+    0.163033
+   ],
+   "pooled": 0.159718,
+   "dots_per_fold": [
+    8694,
+    8695,
+    8723,
+    8669,
+    8686,
+    8661
+   ],
+   "budget_full_grid": 100000,
+   "separation_px": 2.8
+  },
+  "random_lidar|budget=160000|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.212267,
+    0.208275,
+    0.212173,
+    0.21461,
+    0.220155,
+    0.19205
+   ],
+   "mean": 0.209922,
+   "ci95": [
+    0.202252,
+    0.217592
+   ],
+   "pooled": 0.210327,
+   "dots_per_fold": [
+    13910,
+    13913,
+    13956,
+    13871,
+    13898,
+    13857
+   ],
+   "budget_full_grid": 160000,
+   "separation_px": 2.8
+  },
+  "distance_only|budget=37654|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.047848,
+    0.052512,
+    0.045488,
+    0.036498,
+    0.047464,
+    0.052273
+   ],
+   "mean": 0.047014,
+   "ci95": [
+    0.042325,
+    0.051703
+   ],
+   "pooled": 0.046862,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264,
+    3271,
+    3261
+   ],
+   "budget_full_grid": 37654,
+   "separation_px": 2.8
+  },
+  "distance_only|budget=60246|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.061947,
+    0.072894,
+    0.066597,
+    0.062477,
+    0.06922,
+    0.078044
+   ],
+   "mean": 0.06853,
+   "ci95": [
+    0.063549,
+    0.07351
+   ],
+   "pooled": 0.068372,
+   "dots_per_fold": [
+    5238,
+    5239,
+    5255,
+    5223,
+    5233,
+    5218
+   ],
+   "budget_full_grid": 60246,
+   "separation_px": 2.8
+  },
+  "distance_only|budget=100000|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.089827,
+    0.09754,
+    0.100167,
+    0.096225,
+    0.105841,
+    0.112776
+   ],
+   "mean": 0.100396,
+   "ci95": [
+    0.093992,
+    0.1068
+   ],
+   "pooled": 0.100366,
+   "dots_per_fold": [
+    8694,
+    8695,
+    8723,
+    8669,
+    8686,
+    8661
+   ],
+   "budget_full_grid": 100000,
+   "separation_px": 2.8
+  },
+  "distance_only|budget=160000|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.138101,
+    0.134739,
+    0.145345,
+    0.130863,
+    0.13966,
+    0.146878
+   ],
+   "mean": 0.139264,
+   "ci95": [
+    0.134364,
+    0.144164
+   ],
+   "pooled": 0.139247,
+   "dots_per_fold": [
+    13910,
+    13913,
+    13956,
+    13871,
+    13898,
+    13857
+   ],
+   "budget_full_grid": 160000,
+   "separation_px": 2.8
+  },
+  "lane_full|budget=37654|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.025578,
+    0.031705,
+    0.022483,
+    0.020873,
+    0.034611,
+    0.022788
+   ],
+   "mean": 0.02634,
+   "ci95": [
+    0.021883,
+    0.030797
+   ],
+   "pooled": 0.026477,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264,
+    3271,
+    3261
+   ],
+   "budget_full_grid": 37654,
+   "separation_px": 2.8
+  },
+  "lane_full|budget=60246|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.049297,
+    0.047747,
+    0.037553,
+    0.032277,
+    0.059599,
+    0.032851
+   ],
+   "mean": 0.043221,
+   "ci95": [
+    0.034565,
+    0.051876
+   ],
+   "pooled": 0.043547,
+   "dots_per_fold": [
+    5238,
+    5239,
+    5255,
+    5223,
+    5233,
+    5218
+   ],
+   "budget_full_grid": 60246,
+   "separation_px": 2.8
+  },
+  "lane_full|budget=100000|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.088268,
+    0.079898,
+    0.072254,
+    0.083778,
+    0.095234,
+    0.057797
+   ],
+   "mean": 0.079538,
+   "ci95": [
+    0.069005,
+    0.090071
+   ],
+   "pooled": 0.080003,
+   "dots_per_fold": [
+    8694,
+    8695,
+    8723,
+    8669,
+    8686,
+    8661
+   ],
+   "budget_full_grid": 100000,
+   "separation_px": 2.8
+  },
+  "lane_full|budget=160000|sep=2.8": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.111321,
+    0.10419,
+    0.100677,
+    0.121437,
+    0.114981,
+    0.085591
+   ],
+   "mean": 0.106366,
+   "ci95": [
+    0.096279,
+    0.116453
+   ],
+   "pooled": 0.106715,
+   "dots_per_fold": [
+    13910,
+    13913,
+    13956,
+    13871,
+    13898,
+    13857
+   ],
+   "budget_full_grid": 160000,
+   "separation_px": 2.8
+  }
+ }
+}

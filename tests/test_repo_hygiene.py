@@ -51,19 +51,29 @@ def test_readme_contains_the_brief():
     assert "Predicted values must be in range [0, 1]" in t
 
 
-def test_site_links_no_downloadable_raster():
-    """A NEGATIVE verdict must not publish a submission file.
+def test_site_links_only_the_current_cleared_raster():
+    """Only the raster the current run card clears may be linked as a download.
 
-    The lane's advantage did not survive relief matching, so the GeoTIFF lives in
-    ``artifacts/lidar_lane/`` for audit and the site must not offer it as a download.
-    Guarding this with a test is what keeps a future, more optimistic rebuild from quietly
-    re-publishing a file the evidence does not support.
+    This replaces an earlier absolute ban, which encoded the previous NEGATIVE verdict.
+    The rule is now: at most one raster may be published, it must be the one named by
+    ``docs/downloads/current_release.json`` and by the canonical run card, and it must be
+    the file whose validator receipt is published next to it.
     """
     import re
-    for f in sorted((ROOT / "docs").glob("*.html")):
+    docs = ROOT / "docs"
+    rel = json.loads((docs / "downloads" / "current_release.json").read_text(encoding="utf-8"))
+    card = json.loads((docs / "data" / "run-card.json").read_text(encoding="utf-8"))
+    cleared = {rel["tif"], rel["zip"]}
+    assert card["verdict"] == "promote"
+    assert card["raster"]["file"].endswith(rel["tif"])
+    seen = set()
+    for f in sorted(docs.glob("*.html")):
         html = f.read_text()
         for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
-            raise AssertionError(f"{f.name} links a downloadable raster: {m.group(1)}")
+            target = m.group(1).rsplit("/", 1)[-1]
+            assert target in cleared, f"{f.name} links a non-cleared raster: {m.group(1)}"
+            seen.add(target)
+    assert rel["tif"] in seen, "the cleared raster is never actually linked"
 
 
 def test_negative_verdict_is_recorded():

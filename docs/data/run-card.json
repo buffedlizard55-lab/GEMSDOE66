@@ -1,227 +1,546 @@
 {
-  "schema": "gems-run-card/2",
-  "run_id": "gemsdoe66-native-lidar-review-2026-10-11",
-  "generated_utc": "2026-10-11",
-  "repo": "buffedlizard55-lab/GEMSDOE66",
-  "lane": "native-resolution LiDAR scarp channels",
-  "top_candidate": "LIDAR-01 — slope-aware scarp templates plus scale-persistent Steger/Frangi line evidence; ranked, not implemented",
-  "hypothesis": "Method-faithful scarp-template fits and signed, scale-persistent ridge/valley evidence from native-resolution bare-earth LiDAR will preserve geomorphic scarp signatures omitted from the public catalogue and diluted by 100 m aggregation. This is an untested geological hypothesis, not a measured improvement.",
-  "mechanism": "A fault scarp can retain a cross-profile step/curvature shape, amplitude, orientation, and diffusion-related morphologic age, while coherent ridge/valley evidence persists along strike across nearby physical scales. Combining independent measurements may distinguish scarps from isolated edges, but terrace risers, natural channel banks, landslide headscarps, shorelines, roads/canals, and DEM seams can mimic the same signals.",
-  "named_non_fault_mimic": "Fluvial terrace riser; natural channel-bank lines and landslide headscarps are mandatory additional controls.",
-  "holdout_dti": {
-    "label": "HOLDOUT-DTI",
-    "value": null,
-    "status": "NO QUALIFIED RESULT — no new holdout was run; the legacy H66 holdout claim is disqualified by the audit.",
-    "evaluator_version": null,
-    "withheld_positive_count": null,
-    "ci95": null,
-    "reason": "No authorized training/reference rasters or cached stack are present. The legacy runner uses full-catalogue distance during emission eligibility, scores outside a lidar-only valid mask, does not satisfy the required buffered whole-geologic-segment protocol, and lacks a valid level 95% CI. Its recorded scalar is retained only as unqualified historical evidence in evidence/ and must not be reported as HOLDOUT-DTI."
-  },
-  "leakage_canary": {
-    "status": "NOT VALIDATED",
-    "threshold_auc": 0.9,
-    "feature_results": null,
-    "reason": "No new feature was tested. The legacy canary was not a substitute for feature-alone AUC on the required buffered spatial holdout and cannot clear the present gate."
-  },
-  "registry_checks": {
-    "pre_placement_surface": {
-      "status": "BLOCKED — no new candidate surface; complete registry unavailable",
-      "correlation_limit": 0.9,
-      "overlap_limit": 0.7,
-      "radius_px": 3,
-      "complete_registry": false,
-      "result": null
-    },
-    "post_placement_final_dots": {
-      "status": "BLOCKED — no new candidate raster; complete registry unavailable",
-      "correlation_limit": 0.9,
-      "overlap_limit": 0.7,
-      "radius_px": 3,
-      "complete_registry": false,
-      "result": null
-    },
-    "reason": "The prior repository scan covered only a partial raster corpus. Full uniqueness and all byte/pixel checks remain unverified; a partial registry is not a pass.",
-    "method": {
-      "pre_placement_surface": "Absolute Spearman |rho| > 0.90 or exact decoded-pixel/hash identity stops; 3-pixel dot overlap is not applied to a dense continuous surface.",
-      "post_placement_final_dots": "Absolute Spearman |rho| > 0.90, >70% of emitted dots within 3 pixels, or exact decoded-pixel/hash identity stops.",
-      "completeness": "Incomplete or inaccessible registry entries are BLOCKED, never a complete pass."
-    }
-  },
-  "raster": {
-    "status": "NOT GENERATED IN THIS REVIEW; NO CURRENT FILE CLEARED",
-    "file": null,
-    "sha256": null,
-    "required_contract": "Normalized float32 GeoTIFF, EPSG:32611, exact official shape/transform/footprint, [0,1] inside and NaN outside, single band.",
-    "historical_artifacts": [
-      {
-        "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
-        "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-        "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
-        "properties_recorded_before_withdrawal": "3730×3292, one band, float32, EPSG:32611, 100 m, all finite in [0,1], 37,654 positive cells. Exact reference transform/footprint was not validated in this review.",
-        "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
-      },
-      {
-        "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
-        "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
-        "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; footprint alignment unverified",
-        "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
-      },
-      {
-        "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
-        "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
-        "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
-        "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
-      }
-    ]
-  },
-  "validator": {
-    "status": "NOT PASSED — official reference/footprint validation remains incomplete",
-    "attempted_command": "python -m gems.validate_submission <historical all-finite TIFF>",
-    "result": "passed=false; basic metadata/range checks ran, but reference-grid and footprint checks were skipped because official reference/features rasters were not supplied. Skipped means unverified, not pass.",
-    "current_candidate_result": {
-      "status": "NOT RUN — no current LIDAR-01 candidate raster exists",
-      "footprint_nan_status": "NOT RUN; no current candidate; required NaN-only outside-footprint condition is not established",
-      "range_0_1_status": "NOT RUN for LIDAR-01; no current candidate",
-      "crs_shape_transform_status": "NOT RUN for LIDAR-01; no current candidate or authorized official reference grid"
-    },
-    "historical_h66_2_local_preflight": {
-      "artifact": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
-      "sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
-      "validation_class": "Local writer/template/range preflight only; not a score, organizer acceptance, or release clearance.",
-      "range_0_1": "Local checks passed; observed min 0 and max 1.",
-      "footprint_nan": "NOT COMPLIANT with the required NaN-only outside-footprint contract: 0 NaNs and outside_footprint_zero=true.",
-      "crs": "EPSG:32611 (local preflight)",
-      "shape": [
-        3730,
-        3292
+ "schema": "gems-run-card/3",
+ "run_id": "gemsdoe66-LIDAR-01-2026-10-12",
+ "generated_utc": "2026-10-12T02:29:07Z",
+ "repo": "buffedlizard55-lab/GEMSDOE66",
+ "lane": "native-resolution LiDAR scarp channels",
+ "hypothesis": "A slope-aware antislope scarplet-template response combined with Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, used as an emission intensity rather than a ranking, will place dots on catalogue faults that were withheld from training better than mass-matched random placement and better than catalogue-distance alone.",
+ "mechanism": "A tectonic scarp step is a coherent, along-strike persistent, uphill-facing (antislope) monoclinal step; fluvial terrace risers, channel banks and field edges produce predominantly downslope- or cross-slope-facing steps. Subtracting the strongest competing step orientation from the antislope member isolates the tectonic-favouring signature, and the Hessian line measures reward along-strike persistence across scales.",
+ "named_non_fault_mimic": "Fluvial terrace riser / alluvial-fan head incision. The same signature is also produced by channel banks (cross_max), landslide headscarps, paleo-shorelines, and unmapped roads, canals and field edges; no cultural-feature mask was present in the restored inputs (see open_irregularities).",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator_version": "src/gems/metric.py :: tversky_terms (alpha=0.2, beta=0.8, triangular kernel R=300 m, eps=1e-9)",
+  "instruments": {
+   "blocks": {
+    "description": "spatial-block hide-and-recover (lane protocol)",
+    "withheld_positive_count_per_fold": "blocks: ~6,715; traces: ~12,090",
+    "n_folds": 4,
+    "variants": {
+     "random|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.069971,
+       0.079524,
+       0.070744,
+       0.069929
       ],
-      "transform": [
-        100.0,
-        0.0,
-        243350.0,
-        0.0,
-        -100.0,
-        4508550.0
+      "mean": 0.072542,
+      "ci95": [
+       0.067966,
+       0.077118
       ],
-      "reference_grid": "Local receipt says the transform matches the supplied sample submission; exact organizer provenance/completeness is not established.",
-      "artifact_status": "Historical H66-2 negative experiment; audit-only, not linked for download or submission."
-    }
-  },
-  "submission": {
-    "name": "GEMSDOE66-LIDAR-01-CROSS-SCALE-SCARP",
-    "note": "Proposed only; no valid HOLDOUT-DTI, complete registry pass, or official-grid clearance. Do not submit.",
-    "note_chars": 103,
-    "note_limit_chars": 140,
-    "file": null,
-    "download_status": "NO DOWNLOAD — no file is cleared or offered",
-    "clearance": "NOT CLEARED. No competition submission slot used in this review.",
-    "organizer_confirmed_receipt": null,
-    "name_status": "PROPOSED ONLY — not a cleared candidate name",
-    "note_status": "PROPOSED ONLY — must not be used to submit the absent candidate"
-  },
-  "data_access": {
-    "competition_data": "BLOCKED — official data tab redirected to login; no credentials used",
-    "local_data_directory": "Absent",
-    "official_1m_dem_source": "USGS 3DEP 1 m bare-earth DEM collection is public domain in principle; exact competition tile coverage/alignment not verified",
-    "shared_cache": "Absent",
-    "strict_premerge_s0_review": {
-      "evidence": "evidence/h66_inputs_s0_review.json",
-      "status": "BLOCKED — one-off pre-merge input/pin check exited 2",
-      "checked_utc": "2026-10-11T22:43:00Z",
-      "required_role_count": 9,
-      "missing_role_count": 9,
-      "missing_pin_roles": [
-        "external/lidar_scarp_features.json",
-        "external/topo_10m_derived_100m_u8.tif"
+      "pooled": 0.072467,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
       ],
-      "hash_mismatches": 0,
-      "pin_conflicts": 0,
-      "experiment_or_data_load_followed": false,
-      "scope_caveat": "This evidence was generated by the branch runner before the merge; the newer main runner remains intentionally disabled. It is not a current runner preflight."
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "random|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.069971,
+       0.079524,
+       0.070744,
+       0.069929
+      ],
+      "mean": 0.072542,
+      "ci95": [
+       0.067966,
+       0.077118
+      ],
+      "pooled": 0.072467,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "distance|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.621639,
+       0.605663,
+       0.575009,
+       0.552614
+      ],
+      "mean": 0.588731,
+      "ci95": [
+       0.55846,
+       0.619002
+      ],
+      "pooled": 0.588015,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "distance|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.074816,
+       0.079058,
+       0.06896,
+       0.070351
+      ],
+      "mean": 0.073296,
+      "ci95": [
+       0.068806,
+       0.077786
+      ],
+      "pooled": 0.073147,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "lane_nocat|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.162388,
+       0.140975,
+       0.161259,
+       0.144874
+      ],
+      "mean": 0.152374,
+      "ci95": [
+       0.141558,
+       0.16319
+      ],
+      "pooled": 0.152543,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "lane_nocat|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.084614,
+       0.097627,
+       0.084916,
+       0.084717
+      ],
+      "mean": 0.087968,
+      "ci95": [
+       0.081657,
+       0.09428
+      ],
+      "pooled": 0.087854,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     }
     }
+   },
+   "traces": {
+    "description": "global whole-trace holdout (catalogue proximity kept)",
+    "withheld_positive_count_per_fold": null,
+    "n_folds": 4,
+    "variants": {
+     "random|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.046648,
+       0.044964,
+       0.045197,
+       0.046243
+      ],
+      "mean": 0.045763,
+      "ci95": [
+       0.044968,
+       0.046558
+      ],
+      "pooled": 0.045789,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "random|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.046648,
+       0.044964,
+       0.045197,
+       0.046243
+      ],
+      "mean": 0.045763,
+      "ci95": [
+       0.044968,
+       0.046558
+      ],
+      "pooled": 0.045789,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "distance|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.014471,
+       0.008362,
+       0.012557,
+       0.013888
+      ],
+      "mean": 0.01232,
+      "ci95": [
+       0.009617,
+       0.015022
+      ],
+      "pooled": 0.012419,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "distance|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.047384,
+       0.04858,
+       0.047176,
+       0.047932
+      ],
+      "mean": 0.047768,
+      "ci95": [
+       0.047152,
+       0.048384
+      ],
+      "pooled": 0.047754,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "lane_nocat|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.108379,
+       0.121445,
+       0.094946,
+       0.09173
+      ],
+      "mean": 0.104125,
+      "ci95": [
+       0.090784,
+       0.117466
+      ],
+      "pooled": 0.10378,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "lane_nocat|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.052859,
+       0.060591,
+       0.05695,
+       0.059479
+      ],
+      "mean": 0.05747,
+      "ci95": [
+       0.054107,
+       0.060832
+      ],
+      "pooled": 0.057399,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     }
+    }
+   }
+  }
+ },
+ "leakage_canary": {
+  "threshold_auc": 0.9,
+  "status": "PASS - no channel exceeded the threshold",
+  "max_auc_observed": 0.6204434774766624,
+  "n_channels_tested": 38,
+  "flagged": [],
+  "evidence": "evidence/lidar_lane_canary.json"
+ },
+ "registry_checks": {
+  "correlation_limit": 0.9,
+  "overlap_limit": 0.7,
+  "radius_px": 3,
+  "rasters_compared": 60,
+  "max_abs_spearman": 0.069009,
+  "max_dot_overlap_fraction": 0.921018,
+  "duplicate": false,
+  "verdict": "no duplicate detected in the compared set (chance-corrected rule)",
+  "completeness": "registry/rasters is the local mirror only; it is not certified to be the complete organizer corpus"
+ },
+ "raster": {
+  "status": "GENERATED",
+  "file": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+  "sha256": "0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2",
+  "bytes": 359188,
+  "dots": 37654,
+  "budget": 37654,
+  "separation_px": 2.8,
+  "gamma": null,
+  "validator_passed": true,
+  "zip": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
+  "zip_sha256": "134e3694d76eaee5a26824fbf543d305055fc40f82d75c7de553650c39c2825b"
+ },
+ "raster_historical_artifacts": [
+  {
+   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
+   "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
+   "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
+   "properties_recorded_before_withdrawal": "3730\u00d73292, one band, float32, EPSG:32611, 100 m, all finite in [0,1], 37,654 positive cells. Exact reference transform/footprint was not validated in this review.",
+   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
   },
-  "budget": {
-    "new_experiments_used": 0,
-    "max_experiments": 3,
-    "time_budget_hours": 2,
-    "time_spent_hours": null,
-    "submission_slots_used": 0
+  {
+   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
+   "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
+   "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; footprint alignment unverified",
+   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
   },
-  "independent_reviews": {
-    "scientific_lead_reviews_required": 2,
-    "completed": 0,
-    "status": "OUTSTANDING — this repository audit is not an independent scientific-lead review"
-  },
-  "verdict": "BLOCKED / NEGATIVE — no candidate passed the required holdout, complete-registry, provenance, or exact-footprint validator gates. No new TIFF, no download, and no submission slot. Resume only after authorized inputs and corrected shared tooling are available.",
-  "open_irregularities": [
-    "IR-01-H33-ATTRIBUTION",
-    "IR-03-HOLDOUT-DESIGN",
-    "IR-05-SHARED-WRITER",
-    "IR-06-REGISTRY-COVERAGE",
-    "IR-07-DATA-ACCESS",
-    "IR-09-AI-DISCLOSURE",
-    "IR-10-INDEPENDENT-REVIEWS",
-    "IR-66-BASE-01",
-    "IR-66-GUARD-02",
-    "IR-66-RELEASE-01",
-    "IR-67-H66-1-ARCHIVE",
-    "IR-68-PREMERGE-S0-SNAPSHOT",
-    "IR-69-UNIQUENESS-PHASE",
-    "IR-70-TEMPLATE-PROVENANCE"
+  {
+   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
+   "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
+   "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
+   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
+  }
+ ],
+ "validator": {
+  "file": "/home/user/GEMSDOE66/artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+  "passed": true,
+  "has_failures": false,
+  "checks": [
+   {
+    "check": "single band",
+    "status": "PASS",
+    "detail": "count=1"
+   },
+   {
+    "check": "dtype float32",
+    "status": "PASS",
+    "detail": "dtype=float32"
+   },
+   {
+    "check": "CRS EPSG:32611",
+    "status": "PASS",
+    "detail": "crs=EPSG:32611"
+   },
+   {
+    "check": "shape matches",
+    "status": "PASS",
+    "detail": "file=(3730, 3292) expected=(3730, 3292)"
+   },
+   {
+    "check": "resolution 100 m",
+    "status": "PASS",
+    "detail": "res=(100.0, 100.0)"
+   },
+   {
+    "check": "transform matches reference",
+    "status": "PASS",
+    "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "CRS matches reference",
+    "status": "PASS",
+    "detail": "file=EPSG:32611 ref=EPSG:32611"
+   },
+   {
+    "check": "nodata tag is none or NaN",
+    "status": "PASS",
+    "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+   },
+   {
+    "check": "no infinities",
+    "status": "PASS",
+    "detail": "inf_count=0"
+   },
+   {
+    "check": "values within [0, 1]",
+    "status": "PASS",
+    "detail": "min=0.0 max=1.0 finite_cells=5167373"
+   },
+   {
+    "check": "features grid shape matches",
+    "status": "PASS",
+    "detail": "features=(3730, 3292) reference=(3730, 3292)"
+   },
+   {
+    "check": "features transform matches reference grid",
+    "status": "PASS",
+    "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "features CRS matches reference grid",
+    "status": "PASS",
+    "detail": "features=EPSG:32611 reference=EPSG:32611"
+   },
+   {
+    "check": "no NaN inside footprint",
+    "status": "PASS",
+    "detail": "nan_inside=0 footprint_cells=5167373"
+   },
+   {
+    "check": "NaN-only outside footprint",
+    "status": "PASS",
+    "detail": "finite_outside=0; only NaN is allowed outside"
+   },
+   {
+    "check": "info: emitted cells (value > 0)",
+    "status": "INFO",
+    "detail": "emitted=37654"
+   }
   ],
-  "audit_document": "docs/review/2026-10-11-audit.md",
-  "artifact_page": "h66-session.html",
-  "h66_2_experiment": {
-    "hypothesis_id": "H66-2",
-    "question": "Does a concordance (conjunction) of independent 2 m LiDAR scarp attributes -- the 10-vs-50 m slope break (step_max), the dip-sense of the band-passed step (facing = (downface-upface)/(downface+upface)), and crest/toe sharpness (sqrt(lapneg*lappos)) -- rank the off-catalogue fault population better than H66-1's weighted rank-average of the four named aggregates, at equal emitted mass?",
-    "verdict": "NEGATIVE-NOT-PROMOTED",
-    "experiments": [
-      "E1 ablation",
-      "strata + terrain control",
-      "emission+validator+uniqueness"
-    ],
-    "artifact": {
-      "file": "gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
-      "path": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
-      "sha256": "66a8c3afad6a56855a8daf85ac885ef70697ac8b4822bbb3d6c38aafd471134c",
-      "dots": 37654,
-      "published_on_site": false,
-      "why_not_published": "the release gate requires a valid buffered whole-segment HOLDOUT-DTI with CI, a complete registry and two independent reviews before any download is published; H66-2 has none of those and its own verdict is negative"
-    },
-    "measurements": {
-      "e1_ablation": "evidence/h66b_e1_ablation.json",
-      "strata_and_terrain": "evidence/h66b_e2_strata.json + evidence/h66b_verdict.json",
-      "emission_and_validator": "evidence/h66b_emission.json",
-      "uniqueness": "evidence/h66b_uniqueness.json",
-      "instrument_vs_live": "evidence/h66b_instrument_vs_live.json"
-    },
-    "headline": {
-      "credit_per_dot_at_37654_dots": 0.22534,
-      "same_mass_h66_1_blend": 0.2019,
-      "mass_matched_random": 0.11213,
-      "upland_ratio_vs_in_stratum_random": 1.1975,
-      "terrain_only_control_pooled": 0.12107,
-      "transfer_rho_35k_70k": 0.4643,
-      "transfer_p": 0.2939
-    },
-    "corrections": [
-      "IR-66-BASE-01",
-      "IR-66-GUARD-02",
-      "IR-66-RELEASE-01"
-    ],
-    "review": "docs/review/2026-10-11-h66-2-verdict.md",
-    "measurement_class": "OFF-CATALOGUE-PROXY ONLY; none of these measurements is HOLDOUT-DTI or ORGANIZER-CONFIRMED.",
-    "official_score_receipt": null,
-    "holdout_dti": null,
-    "next_candidate_status": "The union candidate is a historical proposed follow-up only; it was not run in this PR and is not authorized without a new approved budget, authorized inputs/provenance, independent reviews, and validated shared tooling."
+  "skipped_checks_mean_unverified": false
+ },
+ "submission": {
+  "name": "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z",
+  "note": "LIDAR-01: slope-aware antislope scarplet template + Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, spacing-cons...",
+  "note_chars": 140,
+  "note_limit_chars": 140,
+  "file": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+  "download_status": "OFFERED - published in docs/downloads/ and linked from the site index",
+  "download_urls": {
+   "tif": "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+   "zip": "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip"
   },
-  "research_session": {
-    "this_pr_reconciliation_new_experiments": 0,
-    "this_turn_holdout_runs": 0,
-    "this_turn_candidate_emissions": 0,
-    "this_turn_submission_slots_used": 0,
-    "historical_h66_2_record": "Preserved from newer main; one prior preregistered experiment with a NEGATIVE-NOT-PROMOTED verdict and proxy-only measurements. It is not an experiment run in this PR reconciliation."
-  },
-  "promote": false,
-  "promotion_decision": "negative"
+  "organizer_confirmed_receipt": null
+ },
+ "budget": {
+  "new_experiments_used": 3,
+  "max_experiments": 3,
+  "submission_slots_used": 0,
+  "note": "No competition submission slot was spent; promotion is a separate selector step."
+ },
+ "open_irregularities": [
+  "IR-72-NATIVE-SCALE",
+  "IR-73-CULTURAL-MASK-MISSING",
+  "IR-74-MIRROR-NOT-ORGANIZER",
+  "IR-75-SCORE-COMPRESSION",
+  "IR-76-TRACE-SUPERSET"
+ ],
+ "verdict": "promote"
 }
