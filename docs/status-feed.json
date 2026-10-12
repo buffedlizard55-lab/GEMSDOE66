@@ -7,6 +7,17 @@
   "entries": [
     {
       "date": "2026-10-12",
+      "kind": "h67-lane-run",
+      "status": "NEGATIVE — NO H67-MEASUREMENT CANDIDATE CLEARED (independent of the H67-1 and K66 candidates above)",
+      "summary": "H67 native-resolution scarp lane (branch arena/9ae5a972): 23/23 hash-pinned mirrors re-verified; five new same-lane hypotheses (H67-A..E) implemented on the pinned 1 m-derived scarp stack + GEMSDOE48 h52 native 1 m-tile scarp-height product + TIGER/BLM cultural layers. E1 canary: no leakage (max AUC 0.5755), no cross-fold transfer (0.29-0.80, four folds sub-chance). E2 h52_h_rank emission: pooled HOLDOUT-DTI of 0.12118 vs incumbent 0.09539 (+0.0258, paired 95% CI [-0.0109, +0.0365]), gain range-front-dominated; 77.7% of final dots within 3 px of the GEMSDOE32 bayesopt-scarp registry raster (4.38x lift) -> lane-drift DUPLICATE stop. E3 lane-separation complement: 83 eligible dots, pooled HOLDOUT-DTI of 0.0. Verdict NEGATIVE; no H67 TIFF offered; 0 slots used. See review/2026-10-12-h67-session.md and data/run-card-h67.json.",
+      "links": [
+        "review/2026-10-12-h67-session.md",
+        "data/run-card-h67.json",
+        "data/hypotheses.json"
+      ]
+    },
+    {
+      "date": "2026-10-12",
       "kind": "candidate-emitted",
       "status": "H67-1 EMITTED - 40,000 dots, two format siblings, validator PASS",
       "summary": "gems66-h67-scarp-lane-novelty-40000dots-v2-{nan,zeros}.tif written from one dot set. -zeros holds all 12,279,160 cells in [0, 1] with zero NaN, which removes the 'Predicted values must be in range [0, 1]' rejection mode (IR-67-FORMAT-01). sha256 nan 1a72bfeb..., zeros eeadc5ce.... Dot profile: nn median 5.66 px, 85.0% on LiDAR-valid cells, mean distance to mapped faults 2,340 m, block-density CV 0.32.",

@@ -163,6 +163,35 @@ thing that can promote a number here to `ORGANIZER-CONFIRMED`.
 | independent scientific review | **0 of 2** — unchanged since the 2026-10-11 audit |
 | experiments used | **3 of 3** (E1 credit regression, E1b robustness, E2 proxy-vs-live concordance) |
 
+## H67 lane measurement (branch `arena/9ae5a972`, 2026-10-12) — NEGATIVE, no slot used,
+independent of the H67-1 and session-66 artifacts above
+
+A parallel session ran the same assigned lane as a *measurement* (five new hypotheses, three
+experiments, no emission): 23/23 hash-pinned mirrors re-fetched and sha256-verified; H67-A…E
+implemented in `src/gems66/h67_layers.py` / `h67_hypotheses.py` with runner
+`scripts/run_h67_lane.py` on the pinned 1 m-derived native scarp stack, the GEMSDOE48 h52
+native 1 m-tile scarp-height product (697/700 tiles) and TIGER-road / BLM-claim cultural
+layers (unpinned additions ledgered with hashes — IR-67-05).
+
+| exp | measured (all HOLDOUT-DTI, SGMC off-catalogue proxy, 62,122 px, 8 spatial folds, 3 px buffer) |
+|---|---|
+| E1 leakage canary | no leakage (max AUC 0.5755 ≤ 0.90); no cross-fold transfer (per-fold AUC 0.29–0.80, four folds sub-chance) |
+| E2 h52_h_rank emission (37,654 dots, incumbent geometry) | pooled 0.12118 vs incumbent 0.09539 (+0.0258, paired 95 % CI [−0.0109, +0.0365] — gate G2 FAIL); gain range-front-dominated (low −0.026 / mid +0.087 / high +0.177 — IR-67-03); **final dots duplicate the sparse GEMSDOE32 bayesopt-scarp registry raster: 77.7 % within 3 px at 4.38× the random rate (null 0.177) → lane-drift DUPLICATE stop (gate G4 FAIL)**; raw 0.999 vs the 311,617-dot dense raster is the same degeneracy IR-67-01/IR-67-GATE-02 record |
+| E3 lane-separation complement (dots ≥ 4 px from every registry dot) | 83 eligible dots (the 60-raster union's halo leaves no scarp-rich cell), pooled HOLDOUT-DTI of 0.0 (IR-67-04) |
+
+**Verdict NEGATIVE** — the lane gate (transferable DTI gain, not range-front-confined, on a
+lane-unique dot set) is not met; no TIFF is generated from this branch, nothing is offered
+for download, and the negative result is the deliverable (consistent with the H67-1 finding
+that the scarp lane's dot population is saturated by the registry). The review doc answers
+"why h33-2-b2 scores what it scores and what would be needed to beat it" (budget geometry:
+sparse dots, zero mass on known faults, habitat ~2 km off the catalogue; beatablity requires
+a cross-fold-transferable field, a lane-unique population, and relief-de-confounded gain).
+Shared-tool fix (once, in the template): `fields.sgmc_offcatalogue` now prefers the
+hash-pinned SGMC truth (62,122 px) with fallback (IR-67-02). Full record:
+[`docs/review/2026-10-12-h67-session.md`](docs/review/2026-10-12-h67-session.md), session run
+card [`docs/data/run-card-h67.json`](docs/data/run-card-h67.json), evidence
+`evidence/h67_e1_canary.json` + `evidence/h67_e2_emit_*.json`.
+
 ## Historical context — inherited `lidar_lane` session (`arena/7d2c4a3b`)
 
 ### Competition references and native-resolution target
