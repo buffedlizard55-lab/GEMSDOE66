@@ -186,10 +186,18 @@ def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():
 
 
 def test_no_organizer_confirmed_numeric_score_is_claimed():
+    """Session-66 pass 3 policy: a HOLDOUT-DTI value may be shown, but only next to its CI.
+
+    The pre-66 rule banned the string "HOLDOUT-DTI 0." outright, because no qualified holdout
+    existed.  A measured holdout now exists, so the rule becomes: an ORGANIZER-CONFIRMED number
+    is still forbidden, and every printed HOLDOUT-DTI value must be accompanied by a 95% CI on
+    the same page.
+    """
     for name in PAGES:
         text = (DOCS / name).read_text(encoding="utf-8")
         assert not re.search(r"ORGANIZER-CONFIRMED\W+0\.\d", text)
-        assert "HOLDOUT-DTI 0." not in text
+        if "HOLDOUT-DTI 0." in text:
+            assert "95% CI" in text, name
 
 
 def test_historical_evidence_is_quarantined_and_sgmc_source_is_internal():

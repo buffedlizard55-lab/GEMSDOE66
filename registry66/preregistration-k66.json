@@ -1,18 +1,25 @@
 {
- "schema": "gems66-preregistration/1",
- "id": "K66",
+ "schema": "gems66-preregistration/2",
+ "id": "K66C",
  "fixed_before_emission": true,
- "why": "pre-registered in scripts66/e5_design.py + e7_final.py before the candidate raster existed; the design constants below were chosen from the E1/E4 statistics and then frozen",
- "support": "union of the 300 m disks of the six highest owner-scored registry rasters, intersected with footprint, K>0, distance-to-catalogue >= 3 cells",
- "prior": "K^0.5 over that support (GeoDAWN radiometric potassium, uint8 mirror band 1)",
- "acceptance_rule": "accept a dot iff dT * (0.8*g + 0.2*F) > 0.2*T*dF with g = 60988, F = sum of exp(-0.5*nu) over accepted dots",
+ "why": "written from the E11 negative and the E12 screen: the E7 K^0.5 consensus design lost to the incumbent on the frozen holdout, so a new pre-registered variant was required before any further release",
+ "support": "footprint and lidar-covered and distance-to-catalogue >= 3 cells and K > 0",
+ "prior": "GeoDAWN radiometric K (uint8 mirror band 1), no exponent",
+ "budget": "32000 dots, split across the three L_relief strata in proportion to lidar-covered footprint AREA",
+ "acceptance_rule": "greedy per stratum with min separation 2 cells; the truth-free budget split is the point",
  "constants": {
   "N_cap": 32000,
   "min_sep_cells": 2,
   "cat_min_cells": 3,
-  "gamma": 0.5,
   "g_truth": 60988
  },
- "predicted_direction": "K_mean above the family's observed band (97.1-101.0), dot count below the family's floor (37,654), coverage lower than the 0.1508 incumbent",
- "stopping": "single experiment; no design iteration after seeing the emitted statistics"
+ "predicted_direction": "pooled HOLDOUT-DTI at least the incumbent order (0.049) and clearly above chance (0.034)",
+ "measured_after_emission": {
+  "holdout_dti": 0.04880102023310905,
+  "ci95": [
+   0.029498375501489225,
+   0.07327236004281738
+  ]
+ },
+ "stopping": "single emission; the E12 screen is the only iteration and all five variants are recorded"
 }

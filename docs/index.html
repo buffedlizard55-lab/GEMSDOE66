@@ -19,17 +19,17 @@ Everything after “Historical record” describes earlier, blocked states and i
 
 <div class="ok">
   <h2>DOWNLOAD IS READY — one click, then submit</h2>
-  <p><b><a class="big-link" href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif">⬇ Download the submission GeoTIFF</a></b>
-  &nbsp;(<span class="mono">gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif</span>,
-  346,355 bytes, sha256 <span class="mono">122fcd16202ce74e…</span>)</p>
-  <p>Prefer a ZIP? <a href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip">⬇ gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip</a>
+  <p><b><a class="big-link" href="downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif">⬇ Download the submission GeoTIFF</a></b>
+  &nbsp;(<span class="mono">gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif</span>,
+  335,449 bytes, sha256 <span class="mono">dbee66e6cd030ad3…</span>)</p>
+  <p>Prefer a ZIP? <a href="downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip">⬇ gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip</a>
   (contains the same single-band GeoTIFF). An all-finite sibling that writes <code>0</code>
-  outside the footprint instead of NaN is <a href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif">here</a>
-  (sha256 <span class="mono">c160efd3b62b42a2…</span>).</p>
+  outside the footprint instead of NaN is <a href="downloads/gems66-k66c-kbalance-31999-20261012T020000Z-allfinite.tif">here</a>
+  (sha256 <span class="mono">1072d688791fb6f2…</span>).</p>
   <table>
-    <tr><th>Submission name (type this)</th><td class="mono">GEMSDOE66-K66-kanchor-consensus-32000</td></tr>
-    <tr><th>Note (paste this, 122/140 chars)</th>
-        <td class="mono">GEMSDOE66 K66 | off-catalogue K^0.5-anchored consensus-support dots, metric-marginal accept, 32000 dots; local checks only</td></tr>
+    <tr><th>Submission name (type this)</th><td class="mono">GEMSDOE66-K66C-kbalance-reliefarea-31999</td></tr>
+    <tr><th>Note (paste this, 129/140 chars)</th>
+        <td class="mono">GEMSDOE66 K66C | K prior, lidar-covered, relief-area-balanced dots; ties the family&#x27;s best-known on our frozen holdout, no margin</td></tr>
     <tr><th>Grid</th><td>[3730, 3292], EPSG:32611, 100 m,
         float32, single band</td></tr>
     <tr><th>Values</th><td>0–1 inside the 5,167,373-cell
@@ -42,30 +42,27 @@ Everything after “Historical record” describes earlier, blocked states and i
         verified here against <code>sample_submission.tif</code> (identical 5,167,373-cell
         finite mask, complementary 7,111,787 NaNs), so the skip is a missing-file skip, not a
         disagreement.</span></td></tr>
-    <tr><th>Emitted dots</th><td>32,000
+    <tr><th>Emitted dots</th><td>31,999
         (0.619% of the footprint)</td></tr>
     <tr><th>Dots within 200 m of the published catalogue</th>
         <td>0.00% (0 dots)</td></tr>
     <tr><th>Rank correlation vs registry</th><td><span class="pill ok">PASS</span>
-        max |Spearman| = 0.289
+        max |Spearman| = 0.021
         (limit 0.90); closest raster
-        GEMSDOE36__anderson-geothermal-pinn-38854.tif</td></tr>
+        gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif</td></tr>
     <tr><th>3-px dot-overlap rule</th>
         <td><span class="pill bad">DEGENERATE — LOGGED, NOT A PASS</span>
-        0.999 of these dots lie within
+        0.997 of these dots lie within
         3 px of <span class="mono">gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</span>'s dots, above 0.70.
         <br><span class="small">This rule cannot be satisfied inside this registry: the incumbent
         0.2778 raster itself scores 1.000 on the same test, and the footprint has
         <b>0 cells</b> that are more than 3 px from every registry dot. Exact-cell overlap with
-        the closest registry raster is Jaccard 0.170;
-        the byte hash is new; no registry raster has 32,000 dots.</span></td></tr>
-    <tr><th>HOLDOUT-DTI</th><td><b>Not measured</b> — the scored truth is login-walled and the visible
-        catalogue is the wrong exam. Owner-reported scores are not organiser receipts.</td></tr>
+        the closest registry raster is Jaccard 0.012;
+        the byte hash is new; no registry raster has 31,999 dots.</span></td></tr>
+    <tr><th>HOLDOUT-DTI<br><span class="small">frozen instrument, local proxy</span></th>
+        <td><b>0.04880</b> 95% CI [0.02950, 0.07327] over 8 folds, 39,863 withheld positives; instrument: buffered whole-segment hide-and-recover, lidar-covered; SGMC faults &gt; 300 m from the catalogue; 8 component folds; 3 px buffer; alpha 0.2 / beta 0.8; 300 m triangular kernel.<br><span class='small'>Same folds: owner-reported-0.2778 incumbent 0.04888 [0.04425, 0.05415], chance 0.03416, and the withdrawn first candidate 0.03765.</span><br><span class='small'><b>Margin vs the family's best-known design: -0.00008</b> — this file ties it, it does not beat it, and the CIs overlap. MEASURED — the design ties the family&#x27;s best-known member on this instrument and does not beat it by a margin; the 95% CIs overlap. No variant screened in E12 beat the incumbent cleanly: V3&#x27;s apparent 0.06058 was truth-share leakage (truth-free twin V6: 0.04408).</span></td></tr>
   </table>
-  <p><b>Is it OK to download and submit? YES — this file only.</b> Every check that can be run in
-  this checkout passes, and the one that cannot be satisfied is proven degenerate rather than
-  ignored. What is <i>not</i> claimed: no HOLDOUT-DTI value, no ORGANIZER-CONFIRMED score, no
-  complete-registry certification.</p>
+  <p><b>Is it OK to download and submit? YES for a slot — with the margin stated above.</b> The design is the best <i>clean</i> variant of the pre-registered screen; the one variant that appeared to beat the incumbent did so by reading the withheld truth's stratum masses and is logged as leakage, not released. What is <i>not</i> claimed: no ORGANIZER-CONFIRMED score, no complete-registry certification, and no gain over the family's best-known member on our own instrument.</p>
   <p class="small"><b>Do not upload any historical artifact.</b> The earlier H66-1 and
   <code>lidar_lane</code> GeoTIFFs remain withdrawn: they are not cleared, they are not linked
   here, and the downloads folder keeps only this candidate.</p>

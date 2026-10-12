@@ -59,50 +59,48 @@
 
 ## Session 66 status — a unique candidate IS cleared for download
 
-**Download: <a href="docs/downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif">`gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif`</a>**
-(sha256 `122fcd16202ce74e7475a1856dd5e47ae235fa80ecb1122f7db204ead49bc058`, 346,355 bytes) — also
-shipped as
-[`…-nan.zip`](docs/downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip)
-(sha256 `46f5d5d07ad35da9590eb8d3b6363847aa399d3b29bee4b6ea5673525eb3fb9a`) and as an all-finite
-sibling that writes `0` outside the footprint
-([`…-allfinite.tif`](docs/downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif)).
-Submission name `GEMSDOE66-K66-kanchor-consensus-32000`; note (122/140 chars)
-`GEMSDOE66 K66 | off-catalogue K^0.5-anchored consensus-support dots, metric-marginal accept, 32000 dots; local checks only`.
+**Download: [`gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif`](docs/downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif)**
+(sha256 `dbee66e6cd030ad3c619d5aa9b04a4b3a2717cffe1b591c3ef281726af66b638`, 335,449 bytes) — also shipped as
+[`…-nan.zip`](docs/downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip)
+(sha256 `ecc6bac9a3106bd17ae72cb30484befd7719f7eb687a813d243f6083f506a13e`) and as an all-finite sibling that writes `0` outside the
+footprint ([`…-allfinite.tif`](docs/downloads/gems66-k66c-kbalance-31999-20261012T020000Z-allfinite.tif)).
+Submission name `GEMSDOE66-K66C-kbalance-reliefarea-31999`; note (129/140 chars) `GEMSDOE66 K66C | K prior, lidar-covered, relief-area-balanced dots; ties the family's best-known on our frozen holdout, no margin`.
 
 | gate | result (all numbers are LOCAL measurements unless labelled otherwise) |
 |---|---|
-| format validator, re-read from disk against `sample_submission.tif` | **PASS 9/9 runnable checks** — 1 band, float32, EPSG:32611, 3,730×3,292, 100 m, transform/CRS match, no nodata tag, no infinities, values in [0,1]. The single `SKIPPED` line is the footprint check, which needs the login-walled `training_features.tif`; the same footprint is verified directly against `sample_submission.tif` (5,167,373 finite cells inside, 7,111,787 NaNs outside, 0 NaNs inside) |
-| bytes | 32,000 unit dots, NaN outside the footprint, 0 NaN inside, sha256 above, unique vs all 60 registry rasters (no byte match) |
-| rank correlation vs registry | **PASS** max \|Spearman\| = 0.289 (limit 0.90) vs `GEMSDOE36__anderson-geothermal-pinn-38854.tif` |
-| 3-px dot-overlap rule | **DEGENERATE — logged, not a pass** (0.999 vs `gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif`): the incumbent 0.2778 raster itself scores 1.000 on the same test and the footprint has **0 cells** more than 3 px from every registry dot, so the rule as literally written condemns every published member of the family. Exact-cell Jaccard vs the closest registry raster is 0.170; the dot count 32,000 appears in no registry raster |
-| HOLDOUT-DTI / ORGANIZER-CONFIRMED | **not claimed** — the scored truth is login-walled and the visible catalogue is the wrong exam; owner-reported scores are not receipts |
-| experiment budget used | 4 experiments in one session (E1 layer scan, E2 inversion [negative], E3/E5/E6 design, E7 emission, E8/E9 verification); no design iteration after the emitted statistics were read |
+| frozen holdout — **HOLDOUT-DTI** | **0.04880** 95% CI [0.02950, 0.07327] over 8 folds, 39,863 withheld positives. Instrument: buffered whole-segment hide-and-recover, lidar-covered; SGMC faults > 300 m from the catalogue; 8 component folds; 3 px buffer; alpha 0.2 / beta 0.8; 300 m triangular kernel. Same folds: owner-reported-0.2778 incumbent **0.04888** [0.04425, 0.05415], chance 0.03416, withdrawn first candidate 0.03765. **Margin vs the family's best-known design: -0.00008 — this file ties it, it does not beat it, and the CIs overlap.** |
+| format validator, re-read from disk against `sample_submission.tif` | **PASS 10 checks** (1 band, float32, EPSG:32611, 3,730×3,292, 100 m, transform/CRS match, no nodata tag, no infinities, values in [0,1]); the single `SKIPPED` line is the footprint check that needs the login-walled `training_features.tif` — the same footprint is verified against `sample_submission.tif` (5,167,373 cells inside, 7,111,787 NaNs outside, 0 NaNs inside) |
+| bytes | 31,999 unit dots, NaN outside the footprint, 0 NaN inside, sha256 above, byte-unique vs all 60 registry rasters |
+| rank correlation vs registry | **PASS** max \|Spearman\| = 0.021 (limit 0.90) vs `gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif` |
+| 3-px dot-overlap rule | **DEGENERATE — logged, not a pass** (0.997 vs `the densest peer`): the incumbent 0.2778 raster itself measures 1.000 and the footprint has **0 cells** more than 3 px from every registry dot. Exact-cell Jaccard vs the closest registry raster is 0.012 |
+| leakage canary | pass (<0.90): K does not re-find the catalogue faults on held-out blocks |
+| ORGANIZER-CONFIRMED score | **not claimed** — no receipt exists for any raster in this repository |
+| experiment budget used | E1–E4 layer/screen scans, E5–E7 emission designs, E8/E9 first release (withdrawn), E11 holdout [negative for E7], E12 five-variant screen [one leakage variant excluded], E13 re-release |
 
-**Why these design choices.** Two statistics of the 18 distinct scored rasters were validated against
-the only ground signal that exists for this family (owner-reported leaderboard scores, no
-hash-to-score receipt): the mass-weighted mean GeoDAWN radiometric K under the dots (+0.977
-Spearman; +0.913 partial controlling for dot count and catalogue adjacency; LOO RMSE 0.0149 against
-a 0.0249 baseline) and the dot count (−0.827). The candidate moves every designable quantity the way
-those measurements point, inside the only region where the family has ever scored well (the union of
-the 300 m disks of the six highest-scoring rasters): 32,000 dots (family floor 37,654), mean K 126.3
-(family band 97.1–101.0), coverage 11.8 % (incumbent 15.1 %), 0 dots within 200 m of the catalogue,
-each dot accepted by the published metric's own first-order condition. See
-[`scripts66/e7_final.py`](scripts66/e7_final.py) and
-[`registry66/preregistration-k66.json`](registry66/preregistration-k66.json).
+**What changed today, and why the first file is gone.** The earlier release
+(`gems66-k66-kanchor-consensus-32000…`, sha256 `122fcd16…`) was scored on the project's own frozen
+buffered, lidar-covered novelty holdout and **lost**: 0.03765 [0.03087, 0.04440] against the
+incumbent's 0.04888 [0.04425, 0.05415], negative in all three relief strata
+(`evidence66/e11_holdout.json`). It is withdrawn from the download page and kept in `artifacts66/`
+for audit. E12 then screened five pre-registered variants on the same instrument
+(`evidence66/e12_screen.json`), including one whose budget shares were read off the *withheld truth*
+— that variant scored highest (0.06058) and its truth-free twin collapsed to 0.04408, so it is
+logged as leakage (`IR-66-TRUTH-SHARE-LEAKAGE`) and excluded. The clean winner is the file above:
+prior = radiometric K, budget split across the three L_relief strata in proportion to
+lidar-covered footprint **area**, ≥300 m from the catalogue, minimum separation 2 cells.
 
-**What is explicitly NOT claimed:** no HOLDOUT-DTI, no ORGANIZER-CONFIRMED score, no certification
-that the organizer registry is complete, and no assertion that the 3-px dot rule is satisfied (it is
-proven degenerate). The fitted two-variable surface is out of support at this candidate's K, so its
-extrapolated value is deliberately not printed as a number. Session-66 negative results (a
-7-parameter metric-inversion model that failed: in-sample RMSE 0.093, Spearman −0.61 to −0.86 against
-observation) are recorded in [`evidence66/`](evidence66/) as deliverables in their own right.
+**What is explicitly NOT claimed:** no ORGANIZER-CONFIRMED score; no claim of beating the family's
+best-known design (it ties it on our instrument); no certification that the registry is complete;
+and no assertion that the 3-px dot rule is satisfied (it is proven degenerate). Historical H66-1,
+H66-2 and `lidar_lane` artifacts remain withdrawn and unlinked.
 
 ---
 
 # Historical context (sessions before 66)
 
 
-**Current project verdict: NO candidate is cleared for download or submission.** The target
+**Verdict at the end of the pre-66 sessions (historical — superseded by the session-66 block
+above, which clears one candidate): no candidate was cleared for download or submission.** The target
 is native-resolution lidar scarp channels; the inherited PR #13 `lidar_lane` is a scale-deviating
 100 m-derived proxy, not an implementation of the full target method, and it fails relief-matched
 and raw-uniqueness gates. This reconciliation ran no experiment, emitted no candidate, and used

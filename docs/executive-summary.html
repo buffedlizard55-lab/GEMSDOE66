@@ -12,12 +12,12 @@
 <h2>Executive summary</h2>
 <div class="ok">
 <h2>Status: a unique submission file is ready to download and submit</h2>
-<p>One file, one upload: <b><a href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif">download the GeoTIFF</a></b>
-(sha256 <span class="mono">122fcd16202ce74e7475a1856dd5e47ae235fa80ecb1122f7db204ead49bc058</span>). It is a single-band float32
+<p>One file, one upload: <b><a href="downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif">download the GeoTIFF</a></b>
+(sha256 <span class="mono">dbee66e6cd030ad3c619d5aa9b04a4b3a2717cffe1b591c3ef281726af66b638</span>). It is a single-band float32
 EPSG:32611 100 m raster on exactly the official grid ([3730, 3292]),
-values 0–1, 32,000 unit dots, NaN outside the
-footprint and none inside it. Copy the name <span class="mono">GEMSDOE66-K66-kanchor-consensus-32000</span>
-and the 122-character note from the <a href="index.html">overview page</a>.
+values 0–1, 31,999 unit dots, NaN outside the
+footprint and none inside it. Copy the name <span class="mono">GEMSDOE66-K66C-kbalance-reliefarea-31999</span>
+and the 129-character note from the <a href="index.html">overview page</a>.
 <b>The earlier "Predicted values must be in range [0, 1]" rejection cannot recur with this file:</b>
 the writer refuses to clip silently and the validator re-reads it from disk
 (min 0.0, max 1.0); every finite cell is inside [0, 1] and
@@ -49,14 +49,14 @@ the published metric's own first-order condition.</p>
 
 <h2>The honest limits</h2>
 <ul>
- <li><b>No HOLDOUT-DTI.</b> NOT MEASURED — the scored truth is login-walled; the visible catalogue is the wrong exam</li>
+ <li><b>No HOLDOUT-DTI.</b> MEASURED — the design ties the family&#x27;s best-known member on this instrument and does not beat it by a margin; the 95% CIs overlap. No variant screened in E12 beat the incumbent cleanly: V3&#x27;s apparent 0.06058 was truth-share leakage (truth-free twin V6: 0.04408).</li>
  <li><b>No organiser score.</b> Output-side statistics are projections from a fitted surface
      whose support is narrower than this candidate; the projection is deliberately not printed
      as a number here.</li>
  <li><b>The 3-px dot-overlap rule is degenerate in this registry</b> (max
-     0.999; the incumbent itself scores
+     0.997; the incumbent itself scores
      1.000; zero cells are more than 3 px from every registry dot). The rank-correlation half of
-     the same protocol passes at 0.289 vs a 0.90 limit.</li>
+     the same protocol passes at 0.021 vs a 0.90 limit.</li>
  <li><b>Registry completeness is not certified</b> — 60 accessible rasters were compared.</li>
 </ul>
 

@@ -126,6 +126,41 @@ def submission_block() -> str:
     v = rc["validator_output"]
     passed = [k for k, s_ in v.items() if s_ == "PASS"]
     skipped = [k for k, s_ in v.items() if s_ == "SKIPPED"]
+    hold = rc.get("holdout_dti", {})
+    if hold.get("value") is None:
+        hold_html = ("<b>Not measured</b> — the scored truth is login-walled and the visible "
+                     "catalogue is the wrong exam. Owner-reported scores are not organiser receipts.")
+        verdict_html = ('<p><b>Is it OK to download and submit? YES, with the stated limits.</b> '
+                        'Every check that can be run in this checkout passes. What is <i>not</i> '
+                        'claimed: no HOLDOUT-DTI value, no ORGANIZER-CONFIRMED score, '
+                        'no complete-registry certification.</p>')
+    else:
+        cmps = hold.get("comparators_on_the_same_folds", {})
+        inc = cmps.get("owner_reported_0.2778_incumbent", {})
+        chn = cmps.get("chance_uniform_same_budget", {})
+        old = cmps.get("withdrawn_e7_candidate", {})
+        margin = hold.get("margin_vs_incumbent")
+        hold_html = (
+            f"<b>{hold['value']:.5f}</b> 95% CI "
+            f"[{hold['ci95'][0]:.5f}, {hold['ci95'][1]:.5f}] over {hold.get('n_folds', 8)} folds, "
+            f"{hold.get('withheld_positive_count', 0):,} withheld positives; "
+            f"instrument: {esc(hold.get('instrument', ''))}."
+            + (f"<br><span class='small'>Same folds: owner-reported-0.2778 incumbent "
+               f"{inc.get('value', float('nan')):.5f} "
+               f"[{inc.get('ci95', [float('nan'), float('nan')])[0]:.5f}, "
+               f"{inc.get('ci95', [float('nan'), float('nan')])[1]:.5f}], chance "
+               f"{chn.get('value', float('nan')):.5f}, and the withdrawn first candidate "
+               f"{old.get('value', float('nan')):.5f}.</span>" if inc else "")
+            + (f"<br><span class='small'><b>Margin vs the family's best-known design: "
+               f"{margin:+.5f}</b> — this file ties it, it does not beat it, and the CIs overlap. "
+               f"{esc(hold.get('status', ''))}</span>" if margin is not None else ""))
+        verdict_html = ('<p><b>Is it OK to download and submit? YES for a slot — with the margin '
+                        'stated above.</b> The design is the best <i>clean</i> variant of the '
+                        'pre-registered screen; the one variant that appeared to beat the incumbent '
+                        'did so by reading the withheld truth\'s stratum masses and is logged as '
+                        'leakage, not released. What is <i>not</i> claimed: no ORGANIZER-CONFIRMED '
+                        'score, no complete-registry certification, and no gain over the family\'s '
+                        'best-known member on our own instrument.</p>')
     return f"""
 <div class="ok">
   <h2>DOWNLOAD IS READY — one click, then submit</h2>
@@ -169,13 +204,10 @@ def submission_block() -> str:
         <b>0 cells</b> that are more than 3 px from every registry dot. Exact-cell overlap with
         the closest registry raster is Jaccard {gates['dot_overlap_rule']['exact_cell_jaccard_vs_closest_registry_raster']['value']:.3f};
         the byte hash is new; no registry raster has {st['n_dots']:,} dots.</span></td></tr>
-    <tr><th>HOLDOUT-DTI</th><td><b>Not measured</b> — the scored truth is login-walled and the visible
-        catalogue is the wrong exam. Owner-reported scores are not organiser receipts.</td></tr>
+    <tr><th>HOLDOUT-DTI<br><span class="small">frozen instrument, local proxy</span></th>
+        <td>{hold_html}</td></tr>
   </table>
-  <p><b>Is it OK to download and submit? YES — this file only.</b> Every check that can be run in
-  this checkout passes, and the one that cannot be satisfied is proven degenerate rather than
-  ignored. What is <i>not</i> claimed: no HOLDOUT-DTI value, no ORGANIZER-CONFIRMED score, no
-  complete-registry certification.</p>
+  {verdict_html}
   <p class="small"><b>Do not upload any historical artifact.</b> The earlier H66-1 and
   <code>lidar_lane</code> GeoTIFFs remain withdrawn: they are not cleared, they are not linked
   here, and the downloads folder keeps only this candidate.</p>

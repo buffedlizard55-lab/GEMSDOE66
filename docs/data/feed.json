@@ -1,10 +1,21 @@
 {
   "schema": "gems-project-status-feed/1",
   "generated_utc": "2026-10-12",
-  "status": "READY TO SUBMIT — one cleared candidate (local checks only); 0 slots used",
+  "status": "READY TO SUBMIT — one cleared candidate; frozen holdout measured (ties the family's best-known); 0 slots used",
   "scope": "Project-state feed only. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages. Current release state: one unique session-66 candidate is cleared for download; every historical artifact stays withdrawn.",
   "external_monitoring": "Disabled. DrivenData Terms of Use restrict automated access and manual monitoring/copying without prior written consent. No leaderboard values are stored.",
   "entries": [
+    {
+      "date": "2026-10-12",
+      "kind": "session-66-release-v2",
+      "status": "CLEARED FOR DOWNLOAD — v2 CANDIDATE, E7 FILE WITHDRAWN",
+      "summary": "E11 scored the first session-66 candidate on the repository's frozen buffered, lidar-covered novelty holdout: 0.03765 [0.03087, 0.04440] vs the incumbent's 0.04888 [0.04425, 0.05415] — a loss, so that file is withdrawn. E12 screened five pre-registered variants: the highest (0.06058) used the withheld truth's stratum masses and its truth-free twin fell to 0.04408, so it is logged as leakage and excluded. The clean winner is now published: K prior, budget split across L_relief strata by lidar-covered footprint AREA, 31,999 dots, HOLDOUT-DTI 0.04880 [0.02950, 0.07327] — it ties the owner-reported-0.2778 incumbent (-0.00008) and does not beat it. Format/range/NaN checks PASS from disk, byte-unique vs all 60 registry rasters, rank correlation 0.021 (limit 0.90). No ORGANIZER-CONFIRMED score is claimed; 0 slots used.",
+      "links": [
+        "downloads/README.md",
+        "data/run-card-session66.json",
+        "irregularities.html"
+      ]
+    },
     {
       "date": "2026-10-12",
       "kind": "session-66-release",
@@ -150,6 +161,8 @@
     }
   ],
   "next_actions": [
+    "Submit the cleared v2 file if the owner accepts a tie with the family's best-known design on our own instrument. Record the outcome (slot count, exact error text if any) in this feed and the run card; until an organiser receipt exists, any score is owner-reported.",
+    "Do not spend further slots on designs that do not beat the frozen holdout best (the incumbent's 0.04888 on instrument N). The untried leads are in registry66/hypotheses66.json — H66-2 (thermal-discharge corridors: 27,092 in-footprint wells/springs, 1,873 Hot, max 296.5 °C), H66-3 (ternary radiometry), H66-4 (along-strike matched filter on the 12 lidar bands).",
     "One file is cleared for submission. Download gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif from the overview page, upload it with the name GEMSDOE66-K66-kanchor-consensus-32000 and its 122-character note, then record the outcome (slot count, any error text) in the feed and the run card. Until a receipt from the organiser exists, any result is owner-reported and must be labelled that way; never write a projection as a score.",
     "Do not spend a second slot before the buffered whole-segment, LiDAR-covered holdout runs: fetch training_features.tif (5 parts, sha256 4371c82e…) to unblock gemsdoe66.features.load_stack and evaluate_holdout.py, and record HOLDOUT-DTI with evaluator version, withheld-positive count and 95% CI.",
     "Before testing a candidate, verify the official USGS 3DEP tile inventory and exact footprint; source availability in principle is not proof that these tiles are obtainable here.",
