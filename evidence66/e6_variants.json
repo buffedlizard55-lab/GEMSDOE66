@@ -1,0 +1,31 @@
+{
+ "rule": "maximise K_mean subject to n_dots <= 37654 and coverage >= 0.13 and 0 dots within 2 cells of the catalogue and consensus-support membership",
+ "variants": {
+  "consensus_g0.35_n31000_hedged": {
+   "n_dots": 37654,
+   "K_mean": 128.58036330801508,
+   "coverage_frac": 0.1390882756092893,
+   "frac_dots_within_2px_cat": 0.015987677272002974
+  },
+  "consensus_g0.5_n31000_hedged": {
+   "n_dots": 37654,
+   "K_mean": 131.16356827959845,
+   "coverage_frac": 0.136427929626911,
+   "frac_dots_within_2px_cat": 0.016571944547724014
+  },
+  "consensus_g0.5_n37654_hedged": {
+   "n_dots": 37654,
+   "K_mean": 123.14290646412067,
+   "coverage_frac": 0.1357397656410714,
+   "frac_dots_within_2px_cat": 0.00018590322409305784
+  },
+  "control_uniform_40k": {
+   "n_dots": 40000,
+   "K_mean": 107.151825,
+   "coverage_frac": 0.07400201224103621,
+   "frac_dots_within_2px_cat": 0.0
+  }
+ },
+ "pick": null,
+ "runtime_s": 204.4
+}

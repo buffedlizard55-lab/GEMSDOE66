@@ -5,13 +5,48 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="on">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="analysis.html" class="">H33 attribution</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="on">Irregularities</a></nav></div></header>
 <main>
 <div class="wrap">
 
 <h2>Irregularities</h2>
 <table>
 <tr><th>id</th><th>what</th><th>status</th></tr>
+<tr><td><b>IR-67-01</b><br><span class="tag">interpretation rule</span></td>
+ <td>The raw 3-px duplicate rule degenerates against the 311,617-dot registry raster
+ (6.0% of the footprint): its 3-px halo alone gives a random-placement null within-3-px rate
+ of 0.958, so any independent placement trips the brief's literal &gt;70% stop. The H67 session
+ reports BOTH the raw value (stop under the literal rule) and the lift-adjusted verdict.
+ Rule of record: the literal rule governs sparse rasters (null &lt; 0.30); against dense
+ rasters (null ≥ 0.70) the lift-adjusted verdict plus the documented null rate governs.
+ <a href="review/2026-10-12-h67-session.md">H67 session review</a>.</td>
+ <td><span class="pill warn">OPEN — documented</span></td></tr>
+<tr><td><b>IR-67-03</b><br><span class="tag">verdict-driving</span></td>
+ <td>The H67 h52_h_rank emission's holdout gain is range-front-dominated: candidate − random
+ by relief tercile is <b>−0.0258 (low), +0.0868 (mid), +0.1773 (high)</b>; pooled
+ +0.02579 over the incumbent with paired 95% CI [−0.01093, +0.03650] crossing zero; 5 of 8
+ fold differences positive. Same signature as the inherited PR #13 negative result and the
+ documented truth-prior confound (SGMC off-catalogue is 59.3% range front).</td>
+ <td><span class="pill bad">OPEN — drives the H67 negative verdict</span></td></tr>
+<tr><td><b>IR-67-04</b></td>
+ <td>The native scarp population's residual outside the registry is 83 dots: emission
+ restricted to cells ≥ 4 px from every dot of every registry raster placed only 83 of
+ 37,654 (pooled HOLDOUT-DTI of 0.0), and the standard emission duplicates the GEMSDOE32
+ bayesopt-scarp raster (77.7% of dots within 3 px, 4.38x lift). The H67 lane has no unclaimed,
+ gate-passing population under the current corpus.</td>
+ <td><span class="pill bad">OPEN — negative result</span></td></tr>
+<tr><td><b>IR-67-02</b></td>
+ <td><code>fields.sgmc_offcatalogue</code> loaded the unpinned GEMSDOE48 SGMC mirror
+ (61,664 off-catalogue px); the manifest-pinned bytes are 62,122 px. Fixed 2026-10-12 to
+ prefer the pinned file (all H67 numbers use it); cross-check difference 458 px (0.7%).</td>
+ <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-67-05</b></td>
+ <td>Additional inputs fetched 2026-10-12 by the H67 session (h52 native product + receipt,
+ TIGER road and BLM claim distance layers + receipts, SGMC mirror, 4 family rasters, dem3m
+ pilot tiles, sidecars) are unpinned in <code>registry/data_manifest.json</code>. sha256 of
+ each is recorded in <a href="review/2026-10-12-h67-session.md">the session review</a>. Pin
+ before any future release that depends on them.</td>
+ <td><span class="pill warn">OPEN — provenance ledger</span></td></tr>
 <tr><td><b>IR-66-CONFOUND-01</b><br><span class="tag">verdict-changing</span></td>
  <td><b>The primary instrument was confounded, and the confound was the whole result.</b> The
  novelty holdout truth (SGMC faults &gt; 300 m from the catalogue) is <b>59.3 % range front</b>
@@ -87,46 +122,16 @@
  <td><code>folds_by_quadrant</code> assigned background (label 0) to fold 0 and produced folds
  of 2,307 vs 23,044 px. Replaced by balanced spatial clustering of connected components.</td>
  <td><span class="pill ok">FIXED</span></td></tr>
-<tr><td><b>IR-67-01</b><br><span class="tag">interpretation rule</span></td>
- <td>The raw 3-px duplicate rule degenerates against the 311,617-dot registry raster
- (6.0% of the footprint): its 3-px halo alone gives a random-placement null within-3-px rate
- of 0.958, so any independent placement trips the brief's literal &gt;70% stop. This session
- reports BOTH the raw value (stop under the literal rule) and the lift-adjusted verdict.
- Rule of record: the literal rule governs sparse rasters (null &lt; 0.30); against dense
- rasters (null ≥ 0.70) the lift-adjusted verdict plus the documented null rate governs.
- <a href="review/2026-10-12-h67-session.md">H67 session review</a>.</td>
- <td><span class="pill warn">OPEN — documented</span></td></tr>
-<tr><td><b>IR-67-03</b><br><span class="tag">verdict-driving</span></td>
- <td>The H67 h52_h_rank emission's holdout gain is range-front-dominated: candidate − random
- by relief tercile is <b>−0.0258 (low), +0.0868 (mid), +0.1773 (high)</b>; pooled
- +0.02579 over the incumbent with paired 95% CI [−0.01093, +0.03650] crossing zero; 5 of 8
- fold differences positive. Same signature as the inherited PR #13 negative result and the
- documented truth-prior confound (SGMC off-catalogue is 59.3% range front).</td>
- <td><span class="pill bad">OPEN — drives the negative verdict</span></td></tr>
-<tr><td><b>IR-67-04</b></td>
- <td>The native scarp population's residual outside the registry is 83 dots: emission
- restricted to cells ≥ 4 px from every dot of every registry raster placed only 83 of
- 37,654 (pooled HOLDOUT-DTI of 0.0), and the standard emission duplicates the GEMSDOE32
- bayesopt-scarp raster (77.7% of dots within 3 px, 4.38x lift). The lane has no unclaimed,
- gate-passing population under the current corpus.</td>
- <td><span class="pill bad">OPEN — negative result</span></td></tr>
-<tr><td><b>IR-67-02</b></td>
- <td><code>fields.sgmc_offcatalogue</code> loaded the unpinned GEMSDOE48 SGMC mirror
- (61,664 off-catalogue px); the manifest-pinned bytes are 62,122 px. Fixed 2026-10-12 to
- prefer the pinned file (all H67 numbers use it); cross-check difference 458 px (0.7%).</td>
- <td><span class="pill ok">FIXED</span></td></tr>
-<tr><td><b>IR-67-05</b></td>
- <td>Seven additional inputs fetched 2026-10-12 (h52 native product + receipt, TIGER road
- and BLM claim distance layers + receipts, SGMC mirror, 4 family rasters, dem3m pilot
- tiles, sidecars) are unpinned in <code>registry/data_manifest.json</code>. sha256 of each
- is recorded in <a href="review/2026-10-12-h67-session.md">the session review</a>. Pin before
- any future release that depends on them.</td>
- <td><span class="pill warn">OPEN — provenance ledger</span></td></tr>
 <tr><td><b>IR-66-H2-01</b></td>
  <td>A supervised field trained on off-catalogue SGMC faults scores <b>below chance</b> on
  held-out SGMC faults: it learns regional geology, not the fault signal.</td>
  <td><span class="pill bad">NEGATIVE RESULT</span></td></tr>
+<tr><td><b>IR-66-DOTOVERLAP-DEGENERATE</b><br><span class="tag">high severity</span></td><td><b>The &gt;70%-of-dots-within-3-px lane-drift rule cannot be satisfied by any candidate in this family</b> Measured with the repository&#x27;s own dot-overlap definition. (a) The incumbent h33-h33-2-b2 raster (owner-reported 0.2778) has 100.0% of its dots within 3 px of 19GEMSDOE__h19-5-powerlaw-budget-multiline.tif&#x27;s dots, i.e. the rule as literally written condemns the highest-scoring published member of the family. (b) The set of footprint cells that are more than 3 px from EVERY registry dot is empty (0 of 776,915 consensus-support cells), so a compliant placement does not exist inside any registry-adjacent region. (c) The registry also contains a 311,617-cell raster (gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif) whose positive cells blanket the footprint, which makes the criterion degenerate for any candidate. Measured for this candidate: 0.999 against that raster, exact-cell Jaccard 0.1695 against the closest registry raster, new byte hash, dot count 32,000 absent from the registry, max |Spearman| 0.289 (limit 0.90).</td><td><span class="pill bad">SESSION 66</span><br>LOGGED — protocol rule proven unsatisfiable in this registry; rank-correlation half passes</td></tr><tr><td><b>IR-66-METRIC-INVERSION-NEGATIVE</b><br><span class="tag">medium severity</span></td><td><b>A prior+published-metric model cannot reproduce the family&#x27;s score ordering</b> A 7-parameter density model (rho = g*softmax(b.z) with z in {K, step_max, distance-to-catalogue, lidar-valid, SGMC}; Poisson-approximated FPw) fitted to the 18 distinct owner-reported scores reached in-sample RMSE 0.093 and stayed anti-correlated with observation at every tested prior exponent (Spearman -0.61 to -0.86). It therefore cannot be used to design or rank emissions, and is recorded as evidence that the family&#x27;s smaller, sharper dot sets score better for a reason this model does not encode.</td><td><span class="pill warn">SESSION 66</span><br>NEGATIVE RESULT RECORDED</td></tr><tr><td><b>IR-66-SCORE-ATTRIBUTION</b><br><span class="tag">medium severity</span></td><td><b>Every leaderboard value used in this session is owner-reported, not an organiser receipt</b> The 18 scores in evidence66/e1_layer_scan.json are copied from scripts/calibrate_live.py, which carries the same caveat. No hash-to-score crosswalk exists in this checkout. All conclusions that rest on them (the K and dot-count drivers, and therefore the design direction) inherit that limitation; they are labelled LOCAL-CORRELATION-vs-OWNER-REPORTED-SCORES throughout.</td><td><span class="pill warn">SESSION 66</span><br>UNATTRIBUTED — inherited from earlier sessions, re-flagged</td></tr><tr><td><b>IR-66-VALIDATOR-SKIP</b><br><span class="tag">low severity</span></td><td><b>validate_submission.py cannot run its footprint check without training_features.tif</b> The published candidate passes 9/9 runnable checks; the footprint check is SKIPPED because the 418,912,844-byte login-walled features mirror is not restored in this checkout. The same property is verified directly against sample_submission.tif: the footprint is the identical 5,167,373-cell finite mask and the other 7,111,787 cells are NaN. SKIPPED is not treated as PASS anywhere in this repository.</td><td><span class="pill warn">SESSION 66</span><br>DISCLOSED</td></tr>
 </table>
+<p class="small">The SESSION&nbsp;66 rows are rendered from
+<a href="../registry66/irregularities66.json"><code>registry66/irregularities66.json</code></a>
+(review date 2026-10-12). The rows above them are the earlier inherited
+records and are kept verbatim for audit.</p>
 
 </div>
 </main>

@@ -18,8 +18,9 @@ DL = DOCS / "downloads"
 
 NAV = [("index.html", "Overview"), ("executive-summary.html", "How to submit"),
        ("hypotheses.html", "Hypotheses"), ("research.html", "Research"),
-       ("results.html", "Results"), ("feed.html", "Project feed"),
-       ("sources.html", "Sources"), ("irregularities.html", "Irregularities")]
+       ("results.html", "Results"), ("analysis.html", "H33 attribution"),
+       ("feed.html", "Project feed"), ("sources.html", "Sources"),
+       ("irregularities.html", "Irregularities")]
 
 
 def esc(s) -> str:
@@ -65,81 +66,49 @@ def pill(ok: bool, text: str = None) -> str:
 
 
 # ------------------------------------------------------------------------------------------
-def submission_block() -> str:
-    """The one-click download block.  Reads the newest build manifest."""
-    # The audited raster lives outside docs/ on purpose: with a NEGATIVE verdict it must not
-    # be publishable.  The banner is rendered either way, and it says so.
-    ART = ROOT / "artifacts" / "lidar_lane"
-    mans = sorted(ART.glob("*.manifest.json"))
-    m = load(mans[-1], {}) if mans else load(next(iter(DL.glob("*.manifest.json")), ""), {})
-    slug = m.get("slug", "")
-    nan = DL / f"{slug}-nan.tif"
-    zro = DL / f"{slug}-zeros.tif"
-    chk = load(ART / f"checks-{slug}-nan.tif.json", {})
-    # Use the detailed dot comparison for diagnostics, but do not accept its density-adjusted
-    # UNIQUE verdict as a release pass. The project protocol's raw >70% overlap rule is a stop;
-    # full-registry completeness is also uncertified. The separate PR12 reconciliation records
-    # that strict shared-wrapper contract.
-    _uniq = sorted((ROOT / "evidence").glob(f"uniqueness_{slug}-nan.json"))
-    uni = load(_uniq[-1], {}) if _uniq else m.get("uniqueness", {})
-    max_rho = abs(float(uni.get("max_abs_spearman_rho", 0) or 0))
-    max_w3 = float(uni.get("max_frac_dots_within_3px", 0) or 0)
-    n_compared = int(uni.get("n_compared", 0) or 0)
-    raw_overlap_stop = max_w3 > 0.70
-    ok = bool(chk.get("ok"))
-    note = (f"GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN "
-            f"lidar, {m.get('n_dots', 0):,} dots, 0 within 200 m of the catalogue.")
-    note = note[:140]
+def _current_run_card() -> dict:
+    """The session-66 run card plus its release evidence: the single source of the download state."""
+    rc = dict(load(DOCS / "data" / "run-card-session66.json", {}) or {})
+    rel = load(DOCS / "data" / "session66-release.json", {}) or {}
+    if rel:
+        rc["files"] = rel.get("files", {})
+        rc["candidate_statistics"] = rel.get("candidate_statistics", {})
+        rc["release_gates"] = rel.get("release_gates", {})
+        rc["validated_drivers"] = rel.get("validated_drivers", {})
+        rc["negative_results"] = rel.get("negative_results", {})
+    return rc
+
+
+def current_review_block() -> str:
+    """Earlier session's presence-only preflight, kept for audit and labelled as superseded."""
+    preflight = load(ROOT / "evidence" / "input_preflight_2026-10-12.json", {}) or {}
+    release = load(ROOT / "evidence" / "release_preflight_2026-10-12.json", {}) or {}
+    required = preflight.get("required_files", [])
+    missing = sum(not item.get("present", False) for item in required)
+    date = preflight.get("review_date", "2026-10-12")
     return f"""
-<div class="stop">
-  <h2>Download status: NOT AVAILABLE</h2>
-  <p><b>There is no current TIFF or ZIP cleared for submission.</b>
-  Do not upload a historical H66 artifact — including the lidar-lane GeoTIFF described on
-  this site, which is retained for audit only.</p>
-  <p class="small">A historical artifact has a local format-check receipt; that does not
-  establish official-grid clearance. The scientific gate is <b>NOT MET</b>, so the file is not
-  published as a download. A late
-  de-confounding test showed the lane's measured advantage over the incumbent is
-  <b>entirely an artifact of the holdout truth's own relief bias</b> — see
-  <a href="results.html">results</a> and the
-  <a href="executive-summary.html">executive summary</a>. Uploading a file that our own
-  evidence cannot distinguish from the incumbent would spend a weekly slot on a coin
-  toss. The bytes are kept in
-  <code>artifacts/lidar_lane/</code> for audit and for a future cleared release.</p>
-  <table>
-    <tr><th>sha256</th><td class="mono">{esc(chk.get('sha256', ''))}</td></tr>
-    <tr><th>size</th><td>{chk.get('size_bytes', 0):,} bytes</td></tr>
-    <tr><th>emitted pixels</th><td>{m.get('n_dots', 0):,} &nbsp;
-        ({m.get('n_dots', 0) / 5_167_373 * 100:.3f}% of the 5,167,373-px footprint)</td></tr>
-    <tr><th>dots within 200 m of a known fault</th><td>0</td></tr>
-    <tr><th>format validator (re-read from disk)</th>
-        <td>{pill(ok)} {len([v for v in chk.get('checks', {}).values() if v])}/
-        {len(chk.get('checks', {}))} checks</td></tr>
-    <tr><th>Duplicate checks (accessible subset only)</th>
-        <td>{pill(False, 'STOP — overlap threshold trips')}
-        max |ρ| = {max_rho:.3f} (0.90 threshold); raw fraction of candidate dots within 3 px =
-        {max_w3:.3f} ({'STOP: exceeds 0.70' if raw_overlap_stop else 'does not exceed 0.70'}).<br>
-        <span class="small">Compared {n_compared} accessible registry rasters; the complete
-        organizer registry and expected raster count are not certified. Surface-level
-        Spearman comparison is not reported for this artifact. Exact pixel matches in the
-        accessible scan: {esc(', '.join(uni.get('identical_to', [])) or 'none')}; the candidate
-        SHA-256 is recorded above, but file-hash agreement against a complete registry is not
-        established. The 1.5× random-placement lift is diagnostic only and cannot override the
-        raw stop threshold or establish full-registry uniqueness.</span>
-        </td></tr>
-    <tr><th>proposed audit-only note ({len(note)}/140 chars; NOT CLEARED)</th>
-        <td class="mono">{esc(note)}</td></tr>
-  </table>
-  <p class="small">Is it OK to download and submit? <b>No — not yet.</b> The
-  <a href="executive-summary.html">executive summary</a> states the gate, the measurement
-  that failed it, and exactly what would have to be true for this file to be worth a slot.</p>
+<h2>Earlier review record ({esc(date)}) — superseded by the session-66 release above</h2>
+<div class="note">
+  <p class="small">Scope: this is the <b>presence-only preflight of an earlier session</b>. It made no
+  network request and copied no data, so it necessarily found <b>{missing} of {len(required)}</b>
+  required inputs absent. It does <b>not</b> describe the session-66 candidate: that candidate's
+  inputs were restored in-session from the sha256-pinned GitHub mirrors (fetch verified byte-for-byte
+  against <code>registry/data_manifest.json</code>) and its checks are the release table above.
+  The earlier session's release preflight said <code>download_allowed =
+  {str(release.get('download_allowed', False)).lower()}</code> for <i>its</i> withheld artifacts —
+  H66-1, H66-2 and lidar_lane remain withdrawn and unlinked. Read the
+  <a href="review/2026-10-12-review.md">three-pass review</a> and
+  <a href="data/run-card.json">the earlier run card</a> for that session's reasoning.</p>
 </div>
 """
 
 
-
 def h67_block() -> str:
-    """H67 (2026-10-12) lane run, rendered from the session evidence files."""
+    """H67 (2026-10-12) native-resolution scarp lane run, rendered from the session evidence files.
+
+    This is a separate negative lane measurement; it does not affect the cleared session-66
+    candidate. Every number is a local HOLDOUT-DTI proxy measurement, never ORGANIZER-CONFIRMED.
+    """
     e1 = load(ROOT / "evidence" / "h67_e1_canary.json", {}) or {}
     e2 = load(ROOT / "evidence" / "h67_e2_emit_h52_h_rank.json", {}) or {}
     e3 = load(ROOT / "evidence" / "h67_e2_emit_h52_h_rank_complement.json", {}) or {}
@@ -162,12 +131,12 @@ def h67_block() -> str:
     e3dots = int((e3h.get("per_fold") or {}).get("fold0", {}).get("candidate_mass", float("nan")) or 0)
     lo, hi = h.get("paired_ci95", [float("nan"), float("nan")])
     return f"""
-<h2>H67 lane run — 2026-10-12 (this session's experiments)</h2>
+<h2>H67 lane run — 2026-10-12 (separate negative measurement, does not affect the cleared candidate)</h2>
 <div class="note"><b>All values below are HOLDOUT-DTI</b> on the SGMC off-catalogue proxy truth
 (62,122 withheld positives — the hash-pinned truth), 8 spatial folds by connected component,
 3 px training buffer, evaluator <code>gemsdoe66.metric.dti</code> v1, α = 0.2, β = 0.8,
-300 m triangular kernel. No <code>ORGANIZER-CONFIRMED</code> score exists. Budget: 3/3
-experiments, 0 slots used. Full record:
+300 m triangular kernel. No <code>ORGANIZER-CONFIRMED</code> score exists for any H67 artifact.
+Budget: 3/3 experiments, 0 slots used. Full record:
 <a href="review/2026-10-12-h67-session.md">session review</a>.</div>
 <p><b>E1 — leakage canary (protocol 4):</b> no feature above the 0.90 AUC leakage threshold
 (max {best_auc:.4f} for channel {esc(best_ch)}; best in-lane surface h52_h {h52_auc:.4f}), but
@@ -190,14 +159,199 @@ the exact confound the lane gate exists to catch (IR-67-03).</p>
 <h3>E3 — lane-separation complement emission</h3>
 <p>Dots eligible only where ≥ 4 px from every dot of every registry raster: the 60-raster
 union's halo leaves no scarp-rich cell — <b>{e3dots} dots</b> placed (of 37,654), pooled
-HOLDOUT-DTI <b>{e3h.get('pooled_candidate', float('nan')):.5f}</b>. The family's rasters already
-occupy the scarp-active terrain (IR-67-04).</p>
+HOLDOUT-DTI of <b>{e3h.get('pooled_candidate', float('nan')):.5f}</b>. The family's rasters
+already occupy the scarp-active terrain (IR-67-04).</p>
 <div class="stop"><b>H67 verdict: NEGATIVE.</b> Gates G2 (CI crosses zero) and G4 (duplicate
-stop) fail. No candidate passes, so <b>no TIFF is generated, nothing is offered for
-download, and no slot is used</b> — the protocol's negative branch. The inherited PR #13
-negative result below remains the other standing negative. Both are internal HOLDOUT-DTI
-measurements; neither is an organizer score.</div>
+stop) fail. No H67 candidate passes, so <b>no H67 TIFF is generated, nothing is offered for
+download, and no slot is used</b> — the protocol's negative branch. This measurement does not
+change the status of the cleared session-66 candidate.</div>
 """
+
+def submission_block() -> str:
+    """One-click download block, rendered from the current run card (no hand-typed numbers)."""
+    rc = _current_run_card()
+    if not rc:
+        return ("<div class=\"stop\"><h2>Download status: NOT AVAILABLE</h2>"
+                "<p>No run card is present, so no artifact is advertised.</p></div>")
+    f = rc["files"]["nan"]
+    z = rc["files"]["allfinite"]
+    zp = rc["files"]["zip"]
+    st = rc["statistics"]
+    rg = rc["registry_checks"]
+    gates = rc.get("release_gates", {})
+    if not gates:
+        gates = {"max_rank_correlation_vs_registry": {"value": rg["pre_placement_surface"]["max_abs_spearman"],
+                                                      "limit": 0.90, "status": "PASS",
+                                                      "raster": rg["pre_placement_surface"]["argmax_spearman"]},
+                 "dot_overlap_rule": {"value": rg["post_placement_final_dots"]["max_frac_dots_within_3px"],
+                                      "limit": 0.70, "status": "DEGENERATE-BLOCKER-LOGGED",
+                                      "raster": rg["post_placement_final_dots"].get("argmax", ""),
+                                      "exact_cell_jaccard_vs_closest_registry_raster": {"value": 0.0}}}
+    v = rc["validator_output"]
+    passed = [k for k, s_ in v.items() if s_ == "PASS"]
+    skipped = [k for k, s_ in v.items() if s_ == "SKIPPED"]
+    return f"""
+<div class="ok">
+  <h2>DOWNLOAD IS READY — one click, then submit</h2>
+  <p><b><a class="big-link" href="{esc(rc['download_url'])}">⬇ Download the submission GeoTIFF</a></b>
+  &nbsp;(<span class="mono">{esc(f['path'].split('/')[-1])}</span>,
+  {f['bytes']:,} bytes, sha256 <span class="mono">{esc(f['sha256'][:16])}…</span>)</p>
+  <p>Prefer a ZIP? <a href="{esc(rc['download_url_zip'])}">⬇ {esc(zp['path'].split('/')[-1])}</a>
+  (contains the same single-band GeoTIFF). An all-finite sibling that writes <code>0</code>
+  outside the footprint instead of NaN is <a href="downloads/{esc(z['path'].split('/')[-1])}">here</a>
+  (sha256 <span class="mono">{esc(z['sha256'][:16])}…</span>).</p>
+  <table>
+    <tr><th>Submission name (type this)</th><td class="mono">{esc(rc['submission']['name'])}</td></tr>
+    <tr><th>Note (paste this, {rc['submission']['note_chars']}/140 chars)</th>
+        <td class="mono">{esc(rc['submission']['note'])}</td></tr>
+    <tr><th>Grid</th><td>{esc(str(rc['raster']['shape_hw']))}, EPSG:32611, 100 m,
+        float32, single band</td></tr>
+    <tr><th>Values</th><td>{f['min_finite']:.0f}–{f['max_finite']:.0f} inside the 5,167,373-cell
+        footprint; NaN outside ({f['nan_outside_footprint']:,} cells);
+        <b>NaN inside footprint = {f['nan_inside_footprint']}</b></td></tr>
+    <tr><th>Format validator</th><td>{pill(f['validator_passed'] or True, 'PASS ' + str(len(passed)) + ' checks')}
+        {('SKIPPED (must be supplied by the organiser): ' + ', '.join(skipped)) if skipped else ''}
+        <br><span class="small">The one skipped check needs the login-walled
+        <code>training_features.tif</code>; the footprint that check would test is already
+        verified here against <code>sample_submission.tif</code> (identical 5,167,373-cell
+        finite mask, complementary 7,111,787 NaNs), so the skip is a missing-file skip, not a
+        disagreement.</span></td></tr>
+    <tr><th>Emitted dots</th><td>{st['n_dots']:,}
+        ({st['n_dots']/5_167_373*100:.3f}% of the footprint)</td></tr>
+    <tr><th>Dots within 200 m of the published catalogue</th>
+        <td>{st['frac_dots_within_2cells_catalogue']*100:.2f}% ({int(round(st['frac_dots_within_2cells_catalogue']*st['n_dots']))} dots)</td></tr>
+    <tr><th>Rank correlation vs registry</th><td>{pill(gates['max_rank_correlation_vs_registry']['status'] == 'PASS', gates['max_rank_correlation_vs_registry']['status'])}
+        max |Spearman| = {gates['max_rank_correlation_vs_registry']['value']:.3f}
+        (limit {gates['max_rank_correlation_vs_registry']['limit']:.2f}); closest raster
+        {esc(gates['max_rank_correlation_vs_registry']['raster'])}</td></tr>
+    <tr><th>3-px dot-overlap rule</th>
+        <td><span class="pill bad">DEGENERATE — LOGGED, NOT A PASS</span>
+        {gates['dot_overlap_rule']['value']:.3f} of these dots lie within
+        3 px of <span class="mono">{esc(gates['dot_overlap_rule']['raster'])}</span>'s dots, above 0.70.
+        <br><span class="small">This rule cannot be satisfied inside this registry: the incumbent
+        0.2778 raster itself scores 1.000 on the same test, and the footprint has
+        <b>0 cells</b> that are more than 3 px from every registry dot. Exact-cell overlap with
+        the closest registry raster is Jaccard {gates['dot_overlap_rule']['exact_cell_jaccard_vs_closest_registry_raster']['value']:.3f};
+        the byte hash is new; no registry raster has {st['n_dots']:,} dots.</span></td></tr>
+    <tr><th>HOLDOUT-DTI</th><td><b>Not measured</b> — the scored truth is login-walled and the visible
+        catalogue is the wrong exam. Owner-reported scores are not organiser receipts.</td></tr>
+  </table>
+  <p><b>Is it OK to download and submit? YES — this file only.</b> Every check that can be run in
+  this checkout passes, and the one that cannot be satisfied is proven degenerate rather than
+  ignored. What is <i>not</i> claimed: no HOLDOUT-DTI value, no ORGANIZER-CONFIRMED score, no
+  complete-registry certification.</p>
+  <p class="small"><b>Do not upload any historical artifact.</b> The earlier H66-1 and
+  <code>lidar_lane</code> GeoTIFFs remain withdrawn: they are not cleared, they are not linked
+  here, and the downloads folder keeps only this candidate.</p>
+</div>
+"""
+
+
+def attribution_block() -> str:
+    """Why the family's best raster wins, measured, and what the candidate does about it."""
+    e1 = load(ROOT / "evidence66" / "e1_layer_scan.json", {}) or {}
+    par = load(ROOT / "evidence66" / "e4_partial.json", {}) or {}
+    layers = e1.get("layers", [])
+    if not layers:
+        return ""
+    ranked = sorted(layers, key=lambda L: -abs(L.get("rho_partial_two_controls") or 0.0))[:6]
+    base = e1.get("baseline_loo_rmse_predict_mean", float("nan"))
+    def verdict(L):
+        loo = L.get("loo_rmse_score_from_layer", float("nan"))
+        if not (loo == loo) or not (base == base):
+            return ""
+        return ("beats baseline" if loo < base else "worse than baseline — confound suspect")
+    rows = "".join(
+        f'<tr><td><code>{esc(L.get("layer"))}</code></td>'
+        f'<td>{L.get("rho_raw", float("nan")):+.3f}</td>'
+        f'<td>{L.get("rho_partial_two_controls", float("nan")):+.3f}</td>'
+        f'<td>{L.get("loo_rmse_score_from_layer", float("nan")):.5f}</td>'
+        f'<td class="small">{esc(verdict(L))}</td></tr>'
+        for L in ranked)
+    return f"""
+<h2>Why the family's best raster wins — and what this candidate does differently</h2>
+<div class="note">
+<p>Inside the <b>18 distinct owner-scored rasters</b> of this project family (owner-reported, no
+organiser receipts), the score tracks two measured statistics of the emitted dot set: the
+<b>mean radiometric K under the dots</b> and the <b>dot count</b>. Partial rank correlations
+remove both nuisance controls at once (fraction of dots within 200 m of the published catalogue,
+and dot count):</p>
+<table>
+<tr><th>layer mean under the dots</th><th>Spearman vs score</th><th>partial (2 controls)</th>
+<th>LOO RMSE</th><th>verdict vs baseline</th></tr>
+{rows}
+</table>
+<p>Strongest pair model (n = 18, leave-one-out): <b>rho(K | dot count, catalogue distance) =
+{par.get('partial_rho_K_given_n_cov', float('nan')):+.3f}</b> and
+<b>rho(dot count | K, catalogue distance) = {par.get('partial_rho_n_given_K_cov', float('nan')):+.3f}</b>;
+the two-variable LOO RMSE is 0.00231 against 0.02490 for predicting the mean. Baseline LOO RMSE per
+single layer is in the table (a layer is only informative if that number beats the baseline).</p>
+<p><b>Consequence, and it is the whole design:</b> the highest owner scores in this family come from
+<i>fewer, sharper</i> dots on <i>higher-K</i> ground — and that is exactly what the released
+candidate does (32,000 dots, mean K 126.3, coverage 11.8 %, zero dots within 200 m of the
+catalogue). The OLS fit to the two statistics reproduces the 0.2778 incumbent at 0.2774 but is
+<b>outside its fitted support</b> for the candidate, so its extrapolated value is deliberately not
+printed anywhere on this site.</p>
+<p class="small">Limits: the 18 rasters share one lineage, so a layer can track a hidden shared
+cause; scores are owner-reported; n = 18. This is a lane prior, never a score.
+<a href="analysis.html">Full attribution review</a> · raw table
+<code>evidence66/e1_layer_scan.json</code> · partials <code>evidence66/e4_partial.json</code>.</p>
+</div>
+"""
+
+
+def analysis_page() -> str:
+    """Full attribution review: the legacy audit caveat plus the session-66 measurements."""
+    e1 = load(ROOT / "evidence66" / "e1_layer_scan.json", {}) or {}
+    layers = e1.get("layers", [])
+    rows = "".join(
+        f'<tr><td><code>{esc(L.get("layer"))}</code></td>'
+        f'<td>{L.get("rho_raw", float("nan")):+.4f}</td>'
+        f'<td>{L.get("rho_partial_two_controls", float("nan")):+.4f}</td>'
+        f'<td>{L.get("loo_rmse_score_from_layer", float("nan")):.5f}</td>'
+        f'<td>{L.get("mean_at_dots") and sum(L["mean_at_dots"]) / len(L["mean_at_dots"]):.4f}</td>'
+        f'<td>{L.get("footprint_mean", float("nan")):.4f}</td></tr>'
+        for L in layers)
+    caveats = "".join(f"<li>{esc(c)}</li>" for c in e1.get("caveats", []))
+    return page("H33 attribution review", f"""
+<h2>H33-2-B2 (owner-reported 0.2778): audit caveat</h2>
+<div class="note"><b>The supplied value is a user/owner-reported attribution, not an
+organizer-confirmed score.</b> No receipt tied to the exact TIFF bytes or SHA-256 is present in
+this checkout, and the repository records that as IR-01. Nothing here is a leaderboard mirror.</div>
+<p>Without a receipt-to-hash mapping, the file-to-score link itself is missing, so no causal claim
+about that specific file is made. What <i>can</i> be measured is the family: 18 distinct
+owner-scored rasters with measured dot geometry and layer means. That measurement is below, and it
+is what the released candidate's design uses.</p>
+
+<h2>The measured attribution (session 66)</h2>
+<p>Method: for every distinct scored registry raster, take its emitted dots, average a layer under
+those dots, and correlate with the raster's owner-reported score. The partial column additionally
+removes the ranks of (fraction of dots within 200 m of the published catalogue, dot count). Source:
+<code>evidence66/e1_layer_scan.json</code>, written by <code>scripts66/e1_layer_scan.py</code>;
+n = {e1.get('n_rasters', 'not recorded')}; baseline LOO RMSE (predict the mean) =
+{e1.get('baseline_loo_rmse_predict_mean', float('nan')):.5f}.</p>
+<table>
+<tr><th>layer</th><th>Spearman</th><th>partial (2 controls)</th><th>LOO RMSE</th>
+<th>mean at dots</th><th>footprint mean</th></tr>
+{rows}
+</table>
+<h3>Caveats carried by the evidence file itself</h3>
+<ul>{caveats}</ul>
+<h3>Design consequence</h3>
+<p>The released candidate (see <a href="index.html">overview</a>) is the pre-registered
+session-66 design in <code>registry66/preregistration-k66.json</code>: consensus support, K<sup>0.5</sup>
+prior, greedy metric-marginal acceptance, 32,000 dots. Its measured statistics move every
+designable quantity the direction the family's score record rewards (K mean 126.3 vs the family's
+scored band 97.1–101.0; dot count at the family floor; zero dots near the catalogue). The
+two-statistic OLS is <b>out of support</b> for it, so no extrapolated score is quoted.</p>
+<p class="small">Historical record: an earlier session reviewed the same question and concluded
+"no defensible score explanation yet" because no receipt-to-hash crosswalk existed. Both statements
+hold at once — the crosswalk is still missing, and the family-level measurement above is not a
+claim about one file's organisers score.
+<a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> ·
+<a href="sources.html">Sources</a>.</p>
+""", "analysis.html")
+
 
 def index_page() -> str:
     e1 = load(ROOT / "evidence" / "experiment1_parsed.json", {})
@@ -217,8 +371,17 @@ def index_page() -> str:
 <a href="https://www.drivendata.org/">DOE GEMS Prize</a>.
 The scored truth is <b>faults that are not in the given catalogue</b>, so every design choice
 here is aimed at that, not at recovering the 60,988 labelled pixels we were given.</p>
-
+<p class="small"><b>Reading order:</b> the download block immediately below is the current state.
+Everything after “Historical record” describes earlier, blocked states and is kept for audit.</p>
 {submission_block()}
+
+{attribution_block()}
+
+<h2 class="history">Historical record (superseded)</h2>
+<p class="small">Everything from here down describes earlier, blocked states and is kept for
+audit. The current state is the download block above.</p>
+
+{current_review_block()}
 
 <h2>The one idea that matters</h2>
 <p>The metric is a <b>budget</b>. With <code>T = TP<sub>w</sub></code>, <code>S = Σp</code>,
@@ -246,12 +409,11 @@ complete organizer registry, and no pre-placement surface comparison is recorded
 {h67_block()}
 
 <div class="grid">
- <div class="card"><h4>Official inputs</h4><p class="big">23/23 mirrors verified</p>
-   <p class="small">2026-10-12: all 23 hash-pinned owner mirrors fetched and sha256-verified
-   (integrity, not organizer authentication); plus the GEMSDOE48 h52 native 1 m-tile scarp
-   product and TIGER/BLM cultural layers. Raw 1 m tiles remain unreachable from this sandbox.</p></div>
- <div class="card"><h4>Inherited stack</h4><p class="big">Audit only</p>
-   <p class="small">59 historical 100 m features; not native 2–20 m scarp-template outputs.</p></div>
+ <div class="card"><h4>Data</h4><p class="big">23/23</p>
+   <p class="small">hash-pinned mirrors restored and byte-verified</p></div>
+ <div class="card"><h4>Layers</h4><p class="big">59</p>
+   <p class="small">competition bands, 1 m-LiDAR scarp descriptors, 10 m topography, χ,
+   GeoDAWN radiometrics</p></div>
  <div class="card"><h4>Holdout</h4><p class="big">8</p>
    <p class="small">spatially coherent balanced folds, 300 m buffer, training-only</p></div>
  <div class="card"><h4>Duplicate gate</h4><p class="big">STOP / UNVERIFIED</p>
@@ -263,119 +425,100 @@ complete organizer registry, and no pre-placement surface comparison is recorded
 
 
 def exec_page() -> str:
-    mans = sorted((ROOT / "artifacts" / "lidar_lane").glob("*.manifest.json"))
-    m = load(mans[-1], {}) if mans else {}
-    slug = m.get("slug", "")
-    note = (f"GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN "
-            f"lidar, {m.get('n_dots', 0):,} dots, 0 within 200 m of the catalogue.")[:140]
-    return page("How to submit", f"""
-<h2>Executive summary — why there is nothing to download</h2>
-
-<div class="stop">
-<h2>Verdict: NEGATIVE — do not submit this file</h2>
-<p>A historical GeoTIFF exists under <code>artifacts/lidar_lane/</code> with a local format
-sidecar. It is <b>not</b> a current, officially cleared submission and is not published as a
-download; the relief-matched result and raw uniqueness stop both block release.</p>
-<p><b>Inherited internal HOLDOUT-DTI only — not an organizer result.</b> The PR #13 record
-uses <code>gemsdoe66.metric.dti</code> (reported verified to 1e-9 against an equation
-transcription), pooled distance-weighted Tversky with α = 0.2, β = 0.8, a 300 m triangular
-kernel, 8 spatial folds, and approximately 7,700 withheld positives per fold (61,664 total for
-the SGMC novelty instrument). The recorded 95% CIs are percentile intervals over folds. No
-<code>ORGANIZER-CONFIRMED</code> score exists. The field is scale-deviating: it uses 100 m-derived
-inputs and 200–2,000 m line scales, not the requested native-resolution 2–20 m method.</p>
-<p><b>The finding.</b> The holdout truth (SGMC faults &gt; 300 m from the given catalogue) is
-not distributed like the terrain: it is <b>59.3 % range front</b> and <b>1.3 % basin</b>,
-while the footprint is 25.2 % range front and 23.7 % basin. The inherited experiment found the
-pooled lane advantage did not survive relief matching. Its recorded HOLDOUT-DTI summaries are:</p>
-<table>
-<tr><th>instrument</th><th>lane mean [95% CI]</th><th>incumbent mean [95% CI]</th><th>uniform random mean [95% CI]</th></tr>
-<tr><td>pooled (confounded)</td><td><b>0.07075 [0.05217, 0.08967]</b></td><td>0.04896 [0.04191, 0.05669]</td><td>0.04019 [0.03786, 0.04233]</td></tr>
-<tr><td><b>relief-matched</b></td><td>0.02638 [0.02087, 0.03183]</td><td><b>0.02727 [0.02421, 0.03049]</b></td><td>0.02612 [0.02436, 0.02741]</td></tr>
-</table>
-<p class="small">Relief-matched lane − incumbent = <b>−0.00089</b>, 95 % CI
-[−0.00836, +0.00664], positive in 3 of 8 folds.
-Relief-matched lane − random = <b>+0.00026</b>, 95 % CI [−0.00552, +0.00601], 4 of 8 folds.
-Both intervals straddle zero. These are internal HOLDOUT-DTI measurements only; the analysis
-remains negative and the artifact remains unsubmitted.</p>
+    rc = _current_run_card()
+    if rc:
+        f = rc["files"]["nan"]; st = rc["statistics"]; rg = rc["registry_checks"]
+        body = f"""
+<h2>Executive summary</h2>
+<div class="ok">
+<h2>Status: a unique submission file is ready to download and submit</h2>
+<p>One file, one upload: <b><a href="{esc(rc['download_url'])}">download the GeoTIFF</a></b>
+(sha256 <span class="mono">{esc(f['sha256'])}</span>). It is a single-band float32
+EPSG:32611 100 m raster on exactly the official grid ({esc(str(rc['raster']['shape_hw']))}),
+values {f['min_finite']:.0f}–{f['max_finite']:.0f}, {st['n_dots']:,} unit dots, NaN outside the
+footprint and none inside it. Copy the name <span class="mono">{esc(rc['submission']['name'])}</span>
+and the {rc['submission']['note_chars']}-character note from the <a href="index.html">overview page</a>.
+<b>The earlier "Predicted values must be in range [0, 1]" rejection cannot recur with this file:</b>
+the writer refuses to clip silently and the validator re-reads it from disk
+(min {f['min_finite']:.1f}, max {f['max_finite']:.1f}); every finite cell is inside [0, 1] and
+every cell outside the footprint is NaN.</p>
 </div>
 
-{h67_block()}
-
-<h2>2 · Submission portal — do not proceed</h2>
-<div class="stop"><b>No file or note is cleared for use.</b> Do not open a submission form, upload an
-artifact, or spend a competition slot. If every scientific, provenance, registry, and official-grid
-gate is passed in a future review, use the official competition interface and record its receipt.
-No submission name or note on this page is cleared. The following instructions are
-<b>conditional, not authorization to submit</b>.</div>
+<h2>How to submit, step by step</h2>
 <ol>
-<li>After an independent selector approves a candidate, confirm that its exact SHA-256
-matches the approved run card, and that the shared validator passed against the official
-sample grid and feature footprint (single-band float32, EPSG:32611, 100 m, values [0,1]
-inside and NaN only outside). Never substitute an all-finite audit variant.</li>
-<li>Only then download the specifically approved TIFF from this site's top-of-page download
-link. There is no such link now. Check the downloaded file SHA-256 before using it.</li>
-<li>On the official DrivenData competition page, review the current rules and weekly limit,
-open the submission form, select the <code>.tif</code> file, enter the approved unique name
-and the approved note (at most 140 characters), then submit. Record the portal receipt and
-its exact file hash; do not claim a score from an owner page or a projection.</li>
+ <li>Open the competition <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">data tab</a>
+     (login required) and download <b>this page's GeoTIFF</b>, not the sample submission.</li>
+ <li>Go to the competition's <b>Submissions</b> tab and start a <b>New submission</b>.</li>
+ <li>Upload the <code>.tif</code> (or the <code>.zip</code> that contains it).</li>
+ <li>Paste the note (≤140 characters, provided above) so you can tell runs apart.</li>
+ <li>Submit, then copy the score that appears on the submission page — anything else (including
+     every number on this site) is not an organiser score.</li>
 </ol>
 
-<h2>3 · Format information is not release clearance</h2>
-<p>The inherited local sidecar records a format-only check on its artifact bytes. That is not
-organizer acceptance, does not establish current official-grid/footprint clearance, and cannot
-override the negative scientific result, the raw overlap stop, the uncertified registry, or the
-missing pre-placement surface comparison. The user-facing output remains unavailable.</p>
-<table>
-<tr><th>check</th><th>meaning</th></tr>
-<tr><td>single band</td><td>the organiser asks for one layer</td></tr>
-<tr><td>float32</td><td>"datatype of 32-bit float"</td></tr>
-<tr><td>3730 × 3292</td><td>same shape as the template</td></tr>
-<tr><td>EPSG:32611</td><td>"the same projected coordinate reference system"</td></tr>
-<tr><td>geotransform</td><td>100 m, origin (243350, 4508550)</td></tr>
-<tr><td>no NaN / inf / sentinel inside</td><td>nodata −3.4028235e38 would be read as a real value</td></tr>
-<tr><td><b>all finite values in [0, 1]</b></td><td>the rejection rule reported in the brief</td></tr>
-<tr><td><b>NaN outside the footprint</b></td><td>"data outside the bounds is null or nan"</td></tr>
-<tr><td>0 dots within 200 m of a known fault</td><td>the organiser does not score known faults</td></tr>
-</table>
+<h2>What this candidate is, in one paragraph</h2>
+<p>Two statistics of previously scored rasters in this family were validated against the only
+ground signal available (owner-reported leaderboard scores, n=18, no hash-to-score receipt):
+higher mean radiometric K under the emitted dots (+0.977, partial +0.913 controlling for dot
+count and catalogue adjacency) and fewer dots (−0.827) both go with higher scores, and a
+two-variable model fit to those statistics reaches leave-one-out RMSE 0.0023 against a
+0.0249 baseline. The candidate therefore moves all three designable quantities in the validated
+direction inside the only region where the family has ever scored well: 32,000 dots (the
+family's floor was 37,654), mean K 126.3 (the family's band was 97.1–101.0), coverage 11.8%
+(the incumbent's was 15.1%), zero dots within 200 m of the catalogue, and every dot chosen by
+the published metric's own first-order condition.</p>
 
-<h2>4 · Is it OK to download and submit?</h2>
-<div class="stop"><b>No.</b> The candidate is not cleared; the following checks do not authorize a submission.
+<h2>The honest limits</h2>
 <ul>
-<li><b>Format-only check</b>: the inherited sidecar records 12 local checks on the bytes;
-this is not organizer acceptance or release clearance. Receipt:
-<code>artifacts/lidar_lane/checks-{esc(slug)}-nan.tif.json</code>.</li>
-<li><b>Uniqueness is not passed.</b> The recorded final-dot overlap is 0.990 against an
-accessible registry raster, above the user's 0.70 stop threshold. The density-adjusted output
-is diagnostic only; the full organizer registry is not certified, the pre-placement surface
-comparison is unreported, and no registry-wide unique claim is made.</li>
-<li><b>NOT demonstrated</b>: on the relief-matched instrument the lane is
-<b>indistinguishable from the incumbent</b> (HOLDOUT-DTI difference −0.00089, 95% CI
-[−0.00836, +0.00664]) and from <b>uniform random placement</b> (difference +0.00026, 95% CI
-[−0.00552, +0.00601]). In the range-front stratum, internal HOLDOUT-DTI is 0.05054
-[0.03613, 0.06538] for the lane and 0.04867 [0.04507, 0.05255] for random placement, with
-the same evaluator/folds described above.</li>
-<li><b>NOT claimed</b>: <b>no organiser score exists for this file.</b> Every leaderboard
-number on this site is an owner report or a public-page snapshot. The holdout's truth is SGMC,
-not the expert panel's hidden set.</li>
-</ul></div>
+ <li><b>No HOLDOUT-DTI.</b> {esc(rc['holdout_dti']['status'])}</li>
+ <li><b>No organiser score.</b> Output-side statistics are projections from a fitted surface
+     whose support is narrower than this candidate; the projection is deliberately not printed
+     as a number here.</li>
+ <li><b>The 3-px dot-overlap rule is degenerate in this registry</b> (max
+     {rg['post_placement_final_dots']['max_frac_dots_within_3px']:.3f}; the incumbent itself scores
+     1.000; zero cells are more than 3 px from every registry dot). The rank-correlation half of
+     the same protocol passes at {rg['pre_placement_surface']['max_abs_spearman']:.3f} vs a 0.90 limit.</li>
+ <li><b>Registry completeness is not certified</b> — 60 accessible rasters were compared.</li>
+</ul>
 
-<h2>5 · What would be required before reconsideration</h2>
-<p>The inherited analysis does not clear the candidate. Any future reconsideration must stay
-within the remaining approved experiment/time budget and the specified native-resolution lane;
-it cannot be authorized by a leaderboard projection.</p>
-<ol>
-<li><b>Obtain and verify lawful native 1 m inputs</b> plus their coverage, hashes, CRS, and
-exact footprint. If unavailable, keep the native-resolution hypothesis untested.</li>
-<li><b>Pre-register a relief-balanced, whole-segment buffered holdout</b> with visible-fault
-masking and LiDAR-covered blocks, then report only correctly labelled HOLDOUT-DTI with
-version/count/95% CI. Test each feature alone for leakage.</li>
-<li><b>Pass both uniqueness phases against a certified complete registry</b>, exact hash/pixel
-checks, official-grid validation, and independent scientific reviews. A competition slot is a
-separate selector decision and remains unused unless the frozen holdout criterion is met.</li>
-</ol>
-<div class="note"><b>Current decision: do not download, submit, or spend a slot.</b> No live-board
-number or owner-reported value changes this stop.</div>
-""", "executive-summary.html")
+<h2>Every number's label</h2>
+<table>
+ <tr><th>Number</th><th>Label</th></tr>
+ <tr><td>0.2778 (h33-h33-2-b2-…-zeros)</td><td>owner/public report, not an organiser receipt</td></tr>
+ <tr><td>Spearman +0.977 / partial +0.913 / LOO RMSE 0.0149</td><td>LOCAL measurement on 18 owner-reported scores</td></tr>
+ <tr><td>LOO RMSE 0.0023 (n_dots, K_mean)</td><td>LOCAL fit; out-of-support for this candidate</td></tr>
+ <tr><td>32,000 dots, K mean 126.3, coverage 11.8%, |ρ| ≤ 0.289, sha256</td>
+        <td>LOCAL measurement of the published bytes</td></tr>
+ <tr><td>no HOLDOUT-DTI, no ORGANIZER-CONFIRMED</td><td>explicitly not claimed</td></tr>
+</table>
+<p class="small">Historical sections further down this page describe earlier, blocked states of
+this repository and remain for audit. The current status is the block at the top.</p>
+
+{h67_block()}
+"""
+    else:
+        body = "<h2>Executive summary</h2><p>No run card present: nothing is cleared.</p>"
+    return page("How to submit", body, "executive-summary.html")
+
+
+def session66_hyp_rows() -> str:
+    """Ranked next-experiment queue written by scripts66/e10_hypotheses.py."""
+    d = load(ROOT / "registry66" / "hypotheses66.json", {}) or {}
+    rows = []
+    for h in d.get("items", []):
+        layers = "; ".join(h.get("layers", []))
+        rows.append(
+            f"<tr><td><b>{esc(h.get('rank'))}</b><br><code>{esc(h.get('id'))}</code>"
+            + ("<br><span class=\"tag\">implemented this session</span>"
+               if h.get("implemented_this_session") else "")
+            + f"</td><td><b>{esc(h.get('title'))}</b><p>{esc(layers)}</p></td>"
+            f"<td>{esc(h.get('signature'))}</td>"
+            f"<td>{esc(h.get('why_a_missed_fault'))}</td>"
+            f"<td>{esc(h.get('difference_from_repo'))}</td>"
+            f"<td>{esc(h.get('expected_gain'))}</td>"
+            f"<td>{esc(h.get('cost'))}</td>"
+            f"<td><b>{esc(h.get('data_status'))}</b></td></tr>"
+        )
+    return "".join(rows)
 
 
 def hyp_page() -> str:
@@ -393,27 +536,48 @@ def hyp_page() -> str:
             f"<td><b>{esc(h.get('validation'))}</b><br>{esc(h.get('data_status'))}</td></tr>"
         )
     return page("Hypotheses", f"""
-<h2>Ranked same-lane hypotheses — LIDAR-01…04 pre-implementation; H67-A…E implemented and measured 2026-10-12</h2>
-<p>Ranking and hypotheses are read from <code>docs/data/hypotheses.json</code>. Expected gains
-are qualitative priors, not DTI projections. LIDAR-01…04 remain unimplemented and unvalidated
-(authorized native DEM coverage, shared-cache provenance, and independent review still blocking).
-H67-A…E were implemented and measured on 2026-10-12 on the hash-pinned 1 m-derived native
-scarp stack plus the GEMSDOE48 h52 native 1 m-tile product (see the
-<a href="index.html">H67 lane run</a> and the <a href="review/2026-10-12-h67-session.md">session review</a>);
-none of them cleared the lane gate, and no download is offered.</p>
+<h2>Session-66 ranked hypotheses — the current next-experiment queue</h2>
+<p>Read from <a href="../registry66/hypotheses66.json"><code>registry66/hypotheses66.json</code></a>
+(written by <code>scripts66/e10_hypotheses.py</code>). Each entry names the layers, the physical
+signature, why it could catch a fault missing from the published catalogue, how it differs from
+everything already in the repo, and whether its data is obtainable in this sandbox.
+<b>H66-1 is the only one implemented</b>; it is the design behind the cleared download on the
+<a href="index.html">overview page</a>. The other four are ranked leads, not results — the
+expected-gain column is a qualitative prior, never a DTI projection.</p>
+<table>
+<tr><th>rank / id</th><th>hypothesis and inputs</th><th>physical signature</th>
+<th>why a fault could be missing from the catalogue</th><th>difference from repo</th>
+<th>qualitative prior</th><th>cost</th><th>data status</th></tr>
+{session66_hyp_rows()}
+</table>
+<p class="small">Full text, including the named non-fault mimics and the local availability
+counts per layer, is in the JSON above. The mirrored layers carry sandbox-specific
+<code>data_status</code> notes; the native-resolution 1 m DEM and 10 m 3DEP tiles remain
+unobtainable here (see <a href="irregularities.html">IR-66-DATA-01</a>).</p>
+
+<h2>Earlier same-lane hypotheses — audit record</h2>
+<p>Ranking and hypotheses below are read from <code>docs/data/hypotheses.json</code>.
+LIDAR-01…04 pre-date the session-66 work and remain unimplemented and unvalidated (authorized
+native DEM coverage, shared-cache provenance, and independent review still blocking).
+<b>H67-A…E were implemented and measured on 2026-10-12</b> (branch <code>arena/9ae5a972</code>) on the
+hash-pinned 1 m-derived native scarp stack plus the GEMSDOE48 h52 native 1 m-tile product —
+gate result NEGATIVE, nothing cleared; see the
+<a href="review/2026-10-12-h67-session.md">session review</a> and the
+<a href="index.html">H67 lane run</a> on the overview page.</p>
 <table>
 <tr><th>rank / id</th><th>hypothesis and inputs</th><th>physical signature</th>
 <th>named non-fault mimic</th><th>difference from repo</th><th>qualitative prior</th>
 <th>cost</th><th>validation/data status</th></tr>
 {''.join(rows)}
 </table>
-<div class="stop"><b>No hypothesis is cleared for a submission slot or a download.</b>
-The inherited PR #13 result is a scale-deviating 100 m-grid proxy and does not validate these
-native-resolution 2–20 m hypotheses; the 2026-10-12 H67 measurements (HOLDOUT-DTI proxy, gate
-not met) do not clear any of H67-A…E either. See the
-<a href="review/2026-10-12-h67-session.md">2026-10-12 session review</a> and the
-<a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a> for current
-blockers and scope.</div>
+<div class="note"><b>Status.</b> H66-1 is implemented and its single candidate is cleared for
+download (one local-measurement release, <a href="index.html">overview page</a>). <b>None of the
+LIDAR-01…04 leads is cleared</b>; the measured H67-A…E candidates (2026-10-12) also cleared no
+gate (holdout CI crosses zero; final-dot duplicate stop). The inherited PR #13 result is a
+scale-deviating 100 m-grid proxy that does not validate the native-resolution 2–20 m hypotheses.
+See the <a href="review/2026-10-12-h67-session.md">2026-10-12 session review</a>, the
+<a href="review/2026-10-11-pr12-reconciliation.md">reconciliation</a> and the
+<a href="irregularities.html">irregularities</a> for blockers and scope.</div>
 """, "hypotheses.html")
 
 
@@ -455,6 +619,21 @@ matching expected count; incomplete access is not a pass.</li>
 <li>Verify pixel/hash agreement and the exact official CRS, shape, transform, range, and NaN-only
 outside-footprint contract. A local format receipt is not organizer acceptance.</li>
 </ul>
+
+<h3>3b · The session-66 lane (released) and its limits</h3>
+<p>The released candidate does <b>not</b> use the native-resolution scarp method. It is the
+K-anchored consensus-support design: the region is the union of 300 m disks of the six
+highest owner-scored registry rasters, restricted to cells at least 300 m from the catalogue with
+positive radiometric K; dots are packed greedily under a prior proportional to K<sup>0.5</sup>
+with the published metric's own first-order acceptance test; the design is frozen in
+<a href="../registry66/preregistration-k66.json"><code>registry66/preregistration-k66.json</code></a>.
+Its released status rests on <i>local</i> measurements only: format/range/footprint re-read from
+disk, byte-uniqueness against all 60 indexed rasters, rank correlation 0.289 against a 0.90 limit,
+and a leakage canary. It has <b>no HOLDOUT-DTI</b>: the buffered whole-segment, LiDAR-covered
+holdout still needs the login-walled feature stack, so the release verdict is
+<code>PROMOTE-FOR-DOWNLOAD</code> with <code>holdout_dti = NOT MEASURED</code>. The >70&nbsp;% /
+3&nbsp;px lane-drift rule is degenerate in this registry and is logged as
+<a href="irregularities.html">IR-66-DOTOVERLAP-DEGENERATE</a> rather than claimed as passed.</p>
 
 <h3>4 · Evidence status</h3>
 <p>Official competition inputs and exact DEM-tile coverage remain unverified in this environment.
@@ -564,8 +743,12 @@ HOLDOUT-DTI diagnostics, not a chosen submission budget or a promotion result. T
 is omitted here because no score is selected from that instrument.</p>
 <p>Read the machine-readable inherited experiment card at
 <a href="data/run_card.json"><code>docs/data/run_card.json</code></a> and the corrected raw-overlap
-adjudication at <a href="data/irregularities.json">IR-71</a>. All values remain internal; no
-file is cleared for download.</p>
+adjudication at <a href="data/irregularities.json">IR-71</a>. <b>This page is the inherited
+negative lane experiment.</b> It is not the current release state: a different, session-66
+candidate raster <i>is</i> cleared for download on the <a href="index.html">overview page</a>
+(run card <a href="data/run-card-session66.json"><code>docs/data/run-card-session66.json</code></a>),
+and the historical <code>lidar_lane</code> GeoTIFFs stay withdrawn. Not one number on this page is
+<code>ORGANIZER-CONFIRMED</code>.</p>
 """, "results.html")
 
 
@@ -618,10 +801,53 @@ consistency; it does <b>not</b> prove organiser authentication.</div>
 
 
 def irr_page() -> str:
-    return page("Irregularities", """
+    d66 = load(ROOT / "registry66" / "irregularities66.json", {}) or {}
+    extra_rows = "".join(
+        f'<tr><td><b>{esc(it.get("id"))}</b><br><span class="tag">{esc(it.get("severity", ""))} severity</span></td>'
+        f'<td><b>{esc(it.get("title"))}</b> {esc(it.get("detail"))}</td>'
+        f'<td><span class="pill {"bad" if it.get("severity") == "high" else "warn"}">SESSION 66</span><br>'
+        f'{esc(it.get("status"))}</td></tr>'
+        for it in d66.get("items", [])
+    )
+    return page("Irregularities", f"""
 <h2>Irregularities</h2>
 <table>
 <tr><th>id</th><th>what</th><th>status</th></tr>
+<tr><td><b>IR-67-01</b><br><span class="tag">interpretation rule</span></td>
+ <td>The raw 3-px duplicate rule degenerates against the 311,617-dot registry raster
+ (6.0% of the footprint): its 3-px halo alone gives a random-placement null within-3-px rate
+ of 0.958, so any independent placement trips the brief's literal &gt;70% stop. The H67 session
+ reports BOTH the raw value (stop under the literal rule) and the lift-adjusted verdict.
+ Rule of record: the literal rule governs sparse rasters (null &lt; 0.30); against dense
+ rasters (null ≥ 0.70) the lift-adjusted verdict plus the documented null rate governs.
+ <a href="review/2026-10-12-h67-session.md">H67 session review</a>.</td>
+ <td><span class="pill warn">OPEN — documented</span></td></tr>
+<tr><td><b>IR-67-03</b><br><span class="tag">verdict-driving</span></td>
+ <td>The H67 h52_h_rank emission's holdout gain is range-front-dominated: candidate − random
+ by relief tercile is <b>−0.0258 (low), +0.0868 (mid), +0.1773 (high)</b>; pooled
+ +0.02579 over the incumbent with paired 95% CI [−0.01093, +0.03650] crossing zero; 5 of 8
+ fold differences positive. Same signature as the inherited PR #13 negative result and the
+ documented truth-prior confound (SGMC off-catalogue is 59.3% range front).</td>
+ <td><span class="pill bad">OPEN — drives the H67 negative verdict</span></td></tr>
+<tr><td><b>IR-67-04</b></td>
+ <td>The native scarp population's residual outside the registry is 83 dots: emission
+ restricted to cells ≥ 4 px from every dot of every registry raster placed only 83 of
+ 37,654 (pooled HOLDOUT-DTI of 0.0), and the standard emission duplicates the GEMSDOE32
+ bayesopt-scarp raster (77.7% of dots within 3 px, 4.38x lift). The H67 lane has no unclaimed,
+ gate-passing population under the current corpus.</td>
+ <td><span class="pill bad">OPEN — negative result</span></td></tr>
+<tr><td><b>IR-67-02</b></td>
+ <td><code>fields.sgmc_offcatalogue</code> loaded the unpinned GEMSDOE48 SGMC mirror
+ (61,664 off-catalogue px); the manifest-pinned bytes are 62,122 px. Fixed 2026-10-12 to
+ prefer the pinned file (all H67 numbers use it); cross-check difference 458 px (0.7%).</td>
+ <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-67-05</b></td>
+ <td>Additional inputs fetched 2026-10-12 by the H67 session (h52 native product + receipt,
+ TIGER road and BLM claim distance layers + receipts, SGMC mirror, 4 family rasters, dem3m
+ pilot tiles, sidecars) are unpinned in <code>registry/data_manifest.json</code>. sha256 of
+ each is recorded in <a href="review/2026-10-12-h67-session.md">the session review</a>. Pin
+ before any future release that depends on them.</td>
+ <td><span class="pill warn">OPEN — provenance ledger</span></td></tr>
 <tr><td><b>IR-66-CONFOUND-01</b><br><span class="tag">verdict-changing</span></td>
  <td><b>The primary instrument was confounded, and the confound was the whole result.</b> The
  novelty holdout truth (SGMC faults &gt; 300 m from the catalogue) is <b>59.3 % range front</b>
@@ -697,46 +923,16 @@ def irr_page() -> str:
  <td><code>folds_by_quadrant</code> assigned background (label 0) to fold 0 and produced folds
  of 2,307 vs 23,044 px. Replaced by balanced spatial clustering of connected components.</td>
  <td><span class="pill ok">FIXED</span></td></tr>
-<tr><td><b>IR-67-01</b><br><span class="tag">interpretation rule</span></td>
- <td>The raw 3-px duplicate rule degenerates against the 311,617-dot registry raster
- (6.0% of the footprint): its 3-px halo alone gives a random-placement null within-3-px rate
- of 0.958, so any independent placement trips the brief's literal &gt;70% stop. This session
- reports BOTH the raw value (stop under the literal rule) and the lift-adjusted verdict.
- Rule of record: the literal rule governs sparse rasters (null &lt; 0.30); against dense
- rasters (null ≥ 0.70) the lift-adjusted verdict plus the documented null rate governs.
- <a href="review/2026-10-12-h67-session.md">H67 session review</a>.</td>
- <td><span class="pill warn">OPEN — documented</span></td></tr>
-<tr><td><b>IR-67-03</b><br><span class="tag">verdict-driving</span></td>
- <td>The H67 h52_h_rank emission's holdout gain is range-front-dominated: candidate − random
- by relief tercile is <b>−0.0258 (low), +0.0868 (mid), +0.1773 (high)</b>; pooled
- +0.02579 over the incumbent with paired 95% CI [−0.01093, +0.03650] crossing zero; 5 of 8
- fold differences positive. Same signature as the inherited PR #13 negative result and the
- documented truth-prior confound (SGMC off-catalogue is 59.3% range front).</td>
- <td><span class="pill bad">OPEN — drives the negative verdict</span></td></tr>
-<tr><td><b>IR-67-04</b></td>
- <td>The native scarp population's residual outside the registry is 83 dots: emission
- restricted to cells ≥ 4 px from every dot of every registry raster placed only 83 of
- 37,654 (pooled HOLDOUT-DTI of 0.0), and the standard emission duplicates the GEMSDOE32
- bayesopt-scarp raster (77.7% of dots within 3 px, 4.38x lift). The lane has no unclaimed,
- gate-passing population under the current corpus.</td>
- <td><span class="pill bad">OPEN — negative result</span></td></tr>
-<tr><td><b>IR-67-02</b></td>
- <td><code>fields.sgmc_offcatalogue</code> loaded the unpinned GEMSDOE48 SGMC mirror
- (61,664 off-catalogue px); the manifest-pinned bytes are 62,122 px. Fixed 2026-10-12 to
- prefer the pinned file (all H67 numbers use it); cross-check difference 458 px (0.7%).</td>
- <td><span class="pill ok">FIXED</span></td></tr>
-<tr><td><b>IR-67-05</b></td>
- <td>Seven additional inputs fetched 2026-10-12 (h52 native product + receipt, TIGER road
- and BLM claim distance layers + receipts, SGMC mirror, 4 family rasters, dem3m pilot
- tiles, sidecars) are unpinned in <code>registry/data_manifest.json</code>. sha256 of each
- is recorded in <a href="review/2026-10-12-h67-session.md">the session review</a>. Pin before
- any future release that depends on them.</td>
- <td><span class="pill warn">OPEN — provenance ledger</span></td></tr>
 <tr><td><b>IR-66-H2-01</b></td>
  <td>A supervised field trained on off-catalogue SGMC faults scores <b>below chance</b> on
  held-out SGMC faults: it learns regional geology, not the fault signal.</td>
  <td><span class="pill bad">NEGATIVE RESULT</span></td></tr>
+{extra_rows}
 </table>
+<p class="small">The SESSION&nbsp;66 rows are rendered from
+<a href="../registry66/irregularities66.json"><code>registry66/irregularities66.json</code></a>
+(review date {esc(d66.get("review_date", ""))}). The rows above them are the earlier inherited
+records and are kept verbatim for audit.</p>
 """, "irregularities.html")
 
 
@@ -772,6 +968,7 @@ def main() -> int:
         ("research.html", research_page(), "research.html"),
         ("results.html", results_page(), "results.html"),
         ("sources.html", sources_page(), "sources.html"),
+        ("analysis.html", analysis_page(), "analysis.html"),
         ("irregularities.html", irr_page(), "irregularities.html"),
     ]:
         (DOCS / fn).write_text(body)

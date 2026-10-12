@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="on">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="on">Results</a><a href="analysis.html" class="">H33 attribution</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
 <main>
 <div class="wrap">
 
@@ -18,12 +18,12 @@ buffer, α = 0.2, β = 0.8, 300 m triangular kernel. The listed 95% CIs are the 
 percentile intervals over folds. This proxy holdout is not the organizer's hidden set. No
 <code>ORGANIZER-CONFIRMED</code> score exists for any artifact.</div>
 
-<h2>H67 lane run — 2026-10-12 (this session's experiments)</h2>
+<h2>H67 lane run — 2026-10-12 (separate negative measurement, does not affect the cleared candidate)</h2>
 <div class="note"><b>All values below are HOLDOUT-DTI</b> on the SGMC off-catalogue proxy truth
 (62,122 withheld positives — the hash-pinned truth), 8 spatial folds by connected component,
 3 px training buffer, evaluator <code>gemsdoe66.metric.dti</code> v1, α = 0.2, β = 0.8,
-300 m triangular kernel. No <code>ORGANIZER-CONFIRMED</code> score exists. Budget: 3/3
-experiments, 0 slots used. Full record:
+300 m triangular kernel. No <code>ORGANIZER-CONFIRMED</code> score exists for any H67 artifact.
+Budget: 3/3 experiments, 0 slots used. Full record:
 <a href="review/2026-10-12-h67-session.md">session review</a>.</div>
 <p><b>E1 — leakage canary (protocol 4):</b> no feature above the 0.90 AUC leakage threshold
 (max nan for channel -; best in-lane surface h52_h nan), but
@@ -46,13 +46,12 @@ the exact confound the lane gate exists to catch (IR-67-03).</p>
 <h3>E3 — lane-separation complement emission</h3>
 <p>Dots eligible only where ≥ 4 px from every dot of every registry raster: the 60-raster
 union's halo leaves no scarp-rich cell — <b>83 dots</b> placed (of 37,654), pooled
-HOLDOUT-DTI <b>0.00000</b>. The family's rasters already
-occupy the scarp-active terrain (IR-67-04).</p>
+HOLDOUT-DTI of <b>0.00000</b>. The family's rasters
+already occupy the scarp-active terrain (IR-67-04).</p>
 <div class="stop"><b>H67 verdict: NEGATIVE.</b> Gates G2 (CI crosses zero) and G4 (duplicate
-stop) fail. No candidate passes, so <b>no TIFF is generated, nothing is offered for
-download, and no slot is used</b> — the protocol's negative branch. The inherited PR #13
-negative result below remains the other standing negative. Both are internal HOLDOUT-DTI
-measurements; neither is an organizer score.</div>
+stop) fail. No H67 candidate passes, so <b>no H67 TIFF is generated, nothing is offered for
+download, and no slot is used</b> — the protocol's negative branch. This measurement does not
+change the status of the cleared session-66 candidate.</div>
 
 <h3>Inherited PR #13 experiment — negative, for reference</h3>
 <p class="stop"><b>Protocol deviation:</b> the inherited lane used 1 m-derived 100 m descriptors
@@ -94,8 +93,12 @@ HOLDOUT-DTI diagnostics, not a chosen submission budget or a promotion result. T
 is omitted here because no score is selected from that instrument.</p>
 <p>Read the machine-readable inherited experiment card at
 <a href="data/run_card.json"><code>docs/data/run_card.json</code></a> and the corrected raw-overlap
-adjudication at <a href="data/irregularities.json">IR-71</a>. All values remain internal; no
-file is cleared for download.</p>
+adjudication at <a href="data/irregularities.json">IR-71</a>. <b>This page is the inherited
+negative lane experiment.</b> It is not the current release state: a different, session-66
+candidate raster <i>is</i> cleared for download on the <a href="index.html">overview page</a>
+(run card <a href="data/run-card-session66.json"><code>docs/data/run-card-session66.json</code></a>),
+and the historical <code>lidar_lane</code> GeoTIFFs stay withdrawn. Not one number on this page is
+<code>ORGANIZER-CONFIRMED</code>.</p>
 
 </div>
 </main>

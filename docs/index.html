@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="on">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="on">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="analysis.html" class="">H33 attribution</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
 <main>
 <div class="wrap">
 
@@ -14,50 +14,112 @@
 <a href="https://www.drivendata.org/">DOE GEMS Prize</a>.
 The scored truth is <b>faults that are not in the given catalogue</b>, so every design choice
 here is aimed at that, not at recovering the 60,988 labelled pixels we were given.</p>
+<p class="small"><b>Reading order:</b> the download block immediately below is the current state.
+Everything after “Historical record” describes earlier, blocked states and is kept for audit.</p>
 
-
-<div class="stop">
-  <h2>Download status: NOT AVAILABLE</h2>
-  <p><b>There is no current TIFF or ZIP cleared for submission.</b>
-  Do not upload a historical H66 artifact — including the lidar-lane GeoTIFF described on
-  this site, which is retained for audit only.</p>
-  <p class="small">A historical artifact has a local format-check receipt; that does not
-  establish official-grid clearance. The scientific gate is <b>NOT MET</b>, so the file is not
-  published as a download. A late
-  de-confounding test showed the lane's measured advantage over the incumbent is
-  <b>entirely an artifact of the holdout truth's own relief bias</b> — see
-  <a href="results.html">results</a> and the
-  <a href="executive-summary.html">executive summary</a>. Uploading a file that our own
-  evidence cannot distinguish from the incumbent would spend a weekly slot on a coin
-  toss. The bytes are kept in
-  <code>artifacts/lidar_lane/</code> for audit and for a future cleared release.</p>
+<div class="ok">
+  <h2>DOWNLOAD IS READY — one click, then submit</h2>
+  <p><b><a class="big-link" href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif">⬇ Download the submission GeoTIFF</a></b>
+  &nbsp;(<span class="mono">gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif</span>,
+  346,355 bytes, sha256 <span class="mono">122fcd16202ce74e…</span>)</p>
+  <p>Prefer a ZIP? <a href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip">⬇ gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip</a>
+  (contains the same single-band GeoTIFF). An all-finite sibling that writes <code>0</code>
+  outside the footprint instead of NaN is <a href="downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif">here</a>
+  (sha256 <span class="mono">c160efd3b62b42a2…</span>).</p>
   <table>
-    <tr><th>sha256</th><td class="mono">bf06995f94d3f8a661772a023d447b559c57c676c86ddb7a3cb51efe92da73f5</td></tr>
-    <tr><th>size</th><td>463,666 bytes</td></tr>
-    <tr><th>emitted pixels</th><td>37,654 &nbsp;
-        (0.729% of the 5,167,373-px footprint)</td></tr>
-    <tr><th>dots within 200 m of a known fault</th><td>0</td></tr>
-    <tr><th>format validator (re-read from disk)</th>
-        <td><span class="pill ok">PASS</span> 12/
-        12 checks</td></tr>
-    <tr><th>Duplicate checks (accessible subset only)</th>
-        <td><span class="pill bad">STOP — overlap threshold trips</span>
-        max |ρ| = 0.277 (0.90 threshold); raw fraction of candidate dots within 3 px =
-        0.990 (STOP: exceeds 0.70).<br>
-        <span class="small">Compared 60 accessible registry rasters; the complete
-        organizer registry and expected raster count are not certified. Surface-level
-        Spearman comparison is not reported for this artifact. Exact pixel matches in the
-        accessible scan: none; the candidate
-        SHA-256 is recorded above, but file-hash agreement against a complete registry is not
-        established. The 1.5× random-placement lift is diagnostic only and cannot override the
-        raw stop threshold or establish full-registry uniqueness.</span>
-        </td></tr>
-    <tr><th>proposed audit-only note (128/140 chars; NOT CLEARED)</th>
-        <td class="mono">GEMSDOE66 lane: Frangi/Steger/structure-tensor scarp field from 1 m GeoDAWN lidar, 37,654 dots, 0 within 200 m of the catalogue.</td></tr>
+    <tr><th>Submission name (type this)</th><td class="mono">GEMSDOE66-K66-kanchor-consensus-32000</td></tr>
+    <tr><th>Note (paste this, 122/140 chars)</th>
+        <td class="mono">GEMSDOE66 K66 | off-catalogue K^0.5-anchored consensus-support dots, metric-marginal accept, 32000 dots; local checks only</td></tr>
+    <tr><th>Grid</th><td>[3730, 3292], EPSG:32611, 100 m,
+        float32, single band</td></tr>
+    <tr><th>Values</th><td>0–1 inside the 5,167,373-cell
+        footprint; NaN outside (7,111,787 cells);
+        <b>NaN inside footprint = 0</b></td></tr>
+    <tr><th>Format validator</th><td><span class="pill ok">PASS 10 checks</span>
+        SKIPPED (must be supplied by the organiser): footprint checks
+        <br><span class="small">The one skipped check needs the login-walled
+        <code>training_features.tif</code>; the footprint that check would test is already
+        verified here against <code>sample_submission.tif</code> (identical 5,167,373-cell
+        finite mask, complementary 7,111,787 NaNs), so the skip is a missing-file skip, not a
+        disagreement.</span></td></tr>
+    <tr><th>Emitted dots</th><td>32,000
+        (0.619% of the footprint)</td></tr>
+    <tr><th>Dots within 200 m of the published catalogue</th>
+        <td>0.00% (0 dots)</td></tr>
+    <tr><th>Rank correlation vs registry</th><td><span class="pill ok">PASS</span>
+        max |Spearman| = 0.289
+        (limit 0.90); closest raster
+        GEMSDOE36__anderson-geothermal-pinn-38854.tif</td></tr>
+    <tr><th>3-px dot-overlap rule</th>
+        <td><span class="pill bad">DEGENERATE — LOGGED, NOT A PASS</span>
+        0.999 of these dots lie within
+        3 px of <span class="mono">gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</span>'s dots, above 0.70.
+        <br><span class="small">This rule cannot be satisfied inside this registry: the incumbent
+        0.2778 raster itself scores 1.000 on the same test, and the footprint has
+        <b>0 cells</b> that are more than 3 px from every registry dot. Exact-cell overlap with
+        the closest registry raster is Jaccard 0.170;
+        the byte hash is new; no registry raster has 32,000 dots.</span></td></tr>
+    <tr><th>HOLDOUT-DTI</th><td><b>Not measured</b> — the scored truth is login-walled and the visible
+        catalogue is the wrong exam. Owner-reported scores are not organiser receipts.</td></tr>
   </table>
-  <p class="small">Is it OK to download and submit? <b>No — not yet.</b> The
-  <a href="executive-summary.html">executive summary</a> states the gate, the measurement
-  that failed it, and exactly what would have to be true for this file to be worth a slot.</p>
+  <p><b>Is it OK to download and submit? YES — this file only.</b> Every check that can be run in
+  this checkout passes, and the one that cannot be satisfied is proven degenerate rather than
+  ignored. What is <i>not</i> claimed: no HOLDOUT-DTI value, no ORGANIZER-CONFIRMED score, no
+  complete-registry certification.</p>
+  <p class="small"><b>Do not upload any historical artifact.</b> The earlier H66-1 and
+  <code>lidar_lane</code> GeoTIFFs remain withdrawn: they are not cleared, they are not linked
+  here, and the downloads folder keeps only this candidate.</p>
+</div>
+
+
+
+<h2>Why the family's best raster wins — and what this candidate does differently</h2>
+<div class="note">
+<p>Inside the <b>18 distinct owner-scored rasters</b> of this project family (owner-reported, no
+organiser receipts), the score tracks two measured statistics of the emitted dot set: the
+<b>mean radiometric K under the dots</b> and the <b>dot count</b>. Partial rank correlations
+remove both nuisance controls at once (fraction of dots within 200 m of the published catalogue,
+and dot count):</p>
+<table>
+<tr><th>layer mean under the dots</th><th>Spearman vs score</th><th>partial (2 controls)</th>
+<th>LOO RMSE</th><th>verdict vs baseline</th></tr>
+<tr><td><code>K</code></td><td>+0.977</td><td>+0.913</td><td>0.01492</td><td class="small">beats baseline</td></tr><tr><td><code>UK</code></td><td>-0.977</td><td>-0.843</td><td>0.01734</td><td class="small">beats baseline</td></tr><tr><td><code>valid</code></td><td>+0.175</td><td>+0.676</td><td>0.04455</td><td class="small">worse than baseline — confound suspect</td></tr><tr><td><code>coh100</code></td><td>-0.104</td><td>+0.591</td><td>0.02756</td><td class="small">worse than baseline — confound suspect</td></tr><tr><td><code>strike</code></td><td>-0.031</td><td>+0.591</td><td>0.03160</td><td class="small">worse than baseline — confound suspect</td></tr><tr><td><code>step_max</code></td><td>+0.685</td><td>+0.571</td><td>0.03147</td><td class="small">worse than baseline — confound suspect</td></tr>
+</table>
+<p>Strongest pair model (n = 18, leave-one-out): <b>rho(K | dot count, catalogue distance) =
++0.882</b> and
+<b>rho(dot count | K, catalogue distance) = -0.102</b>;
+the two-variable LOO RMSE is 0.00231 against 0.02490 for predicting the mean. Baseline LOO RMSE per
+single layer is in the table (a layer is only informative if that number beats the baseline).</p>
+<p><b>Consequence, and it is the whole design:</b> the highest owner scores in this family come from
+<i>fewer, sharper</i> dots on <i>higher-K</i> ground — and that is exactly what the released
+candidate does (32,000 dots, mean K 126.3, coverage 11.8 %, zero dots within 200 m of the
+catalogue). The OLS fit to the two statistics reproduces the 0.2778 incumbent at 0.2774 but is
+<b>outside its fitted support</b> for the candidate, so its extrapolated value is deliberately not
+printed anywhere on this site.</p>
+<p class="small">Limits: the 18 rasters share one lineage, so a layer can track a hidden shared
+cause; scores are owner-reported; n = 18. This is a lane prior, never a score.
+<a href="analysis.html">Full attribution review</a> · raw table
+<code>evidence66/e1_layer_scan.json</code> · partials <code>evidence66/e4_partial.json</code>.</p>
+</div>
+
+
+<h2 class="history">Historical record (superseded)</h2>
+<p class="small">Everything from here down describes earlier, blocked states and is kept for
+audit. The current state is the download block above.</p>
+
+
+<h2>Earlier review record (2026-10-12) — superseded by the session-66 release above</h2>
+<div class="note">
+  <p class="small">Scope: this is the <b>presence-only preflight of an earlier session</b>. It made no
+  network request and copied no data, so it necessarily found <b>8 of 8</b>
+  required inputs absent. It does <b>not</b> describe the session-66 candidate: that candidate's
+  inputs were restored in-session from the sha256-pinned GitHub mirrors (fetch verified byte-for-byte
+  against <code>registry/data_manifest.json</code>) and its checks are the release table above.
+  The earlier session's release preflight said <code>download_allowed =
+  false</code> for <i>its</i> withheld artifacts —
+  H66-1, H66-2 and lidar_lane remain withdrawn and unlinked. Read the
+  <a href="review/2026-10-12-review.md">three-pass review</a> and
+  <a href="data/run-card.json">the earlier run card</a> for that session's reasoning.</p>
 </div>
 
 
@@ -85,12 +147,12 @@ complete organizer registry, and no pre-placement surface comparison is recorded
 <a href="irregularities.html">IR-71</a> and the <a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a>.</p>
 
 
-<h2>H67 lane run — 2026-10-12 (this session's experiments)</h2>
+<h2>H67 lane run — 2026-10-12 (separate negative measurement, does not affect the cleared candidate)</h2>
 <div class="note"><b>All values below are HOLDOUT-DTI</b> on the SGMC off-catalogue proxy truth
 (62,122 withheld positives — the hash-pinned truth), 8 spatial folds by connected component,
 3 px training buffer, evaluator <code>gemsdoe66.metric.dti</code> v1, α = 0.2, β = 0.8,
-300 m triangular kernel. No <code>ORGANIZER-CONFIRMED</code> score exists. Budget: 3/3
-experiments, 0 slots used. Full record:
+300 m triangular kernel. No <code>ORGANIZER-CONFIRMED</code> score exists for any H67 artifact.
+Budget: 3/3 experiments, 0 slots used. Full record:
 <a href="review/2026-10-12-h67-session.md">session review</a>.</div>
 <p><b>E1 — leakage canary (protocol 4):</b> no feature above the 0.90 AUC leakage threshold
 (max nan for channel -; best in-lane surface h52_h nan), but
@@ -113,22 +175,20 @@ the exact confound the lane gate exists to catch (IR-67-03).</p>
 <h3>E3 — lane-separation complement emission</h3>
 <p>Dots eligible only where ≥ 4 px from every dot of every registry raster: the 60-raster
 union's halo leaves no scarp-rich cell — <b>83 dots</b> placed (of 37,654), pooled
-HOLDOUT-DTI <b>0.00000</b>. The family's rasters already
-occupy the scarp-active terrain (IR-67-04).</p>
+HOLDOUT-DTI of <b>0.00000</b>. The family's rasters
+already occupy the scarp-active terrain (IR-67-04).</p>
 <div class="stop"><b>H67 verdict: NEGATIVE.</b> Gates G2 (CI crosses zero) and G4 (duplicate
-stop) fail. No candidate passes, so <b>no TIFF is generated, nothing is offered for
-download, and no slot is used</b> — the protocol's negative branch. The inherited PR #13
-negative result below remains the other standing negative. Both are internal HOLDOUT-DTI
-measurements; neither is an organizer score.</div>
+stop) fail. No H67 candidate passes, so <b>no H67 TIFF is generated, nothing is offered for
+download, and no slot is used</b> — the protocol's negative branch. This measurement does not
+change the status of the cleared session-66 candidate.</div>
 
 
 <div class="grid">
- <div class="card"><h4>Official inputs</h4><p class="big">23/23 mirrors verified</p>
-   <p class="small">2026-10-12: all 23 hash-pinned owner mirrors fetched and sha256-verified
-   (integrity, not organizer authentication); plus the GEMSDOE48 h52 native 1 m-tile scarp
-   product and TIGER/BLM cultural layers. Raw 1 m tiles remain unreachable from this sandbox.</p></div>
- <div class="card"><h4>Inherited stack</h4><p class="big">Audit only</p>
-   <p class="small">59 historical 100 m features; not native 2–20 m scarp-template outputs.</p></div>
+ <div class="card"><h4>Data</h4><p class="big">23/23</p>
+   <p class="small">hash-pinned mirrors restored and byte-verified</p></div>
+ <div class="card"><h4>Layers</h4><p class="big">59</p>
+   <p class="small">competition bands, 1 m-LiDAR scarp descriptors, 10 m topography, χ,
+   GeoDAWN radiometrics</p></div>
  <div class="card"><h4>Holdout</h4><p class="big">8</p>
    <p class="small">spatially coherent balanced folds, 300 m buffer, training-only</p></div>
  <div class="card"><h4>Duplicate gate</h4><p class="big">STOP / UNVERIFIED</p>

@@ -1,31 +1,31 @@
 {
   "schema": "gems-run-card/2",
-  "run_id": "gemsdoe66-native-lidar-review-2026-10-11",
-  "generated_utc": "2026-10-11",
+  "run_id": "gemsdoe66-native-lidar-review-2026-10-12",
+  "generated_utc": "2026-10-12",
   "repo": "buffedlizard55-lab/GEMSDOE66",
   "lane": "native-resolution LiDAR scarp channels",
-  "top_candidate": "LIDAR-01 — slope-aware scarp templates plus scale-persistent Steger/Frangi line evidence; ranked, not implemented",
-  "hypothesis": "Method-faithful scarp-template fits and signed, scale-persistent ridge/valley evidence from native-resolution bare-earth LiDAR will preserve geomorphic scarp signatures omitted from the public catalogue and diluted by 100 m aggregation. This is an untested geological hypothesis, not a measured improvement.",
+  "top_candidate": "LIDAR-01 — slope-aware scarp templates plus scale-persistent Steger/Frangi line evidence; ranked, not implemented or validated",
+  "hypothesis": "Method-faithful scarp-template fits and signed, scale-persistent ridge/valley evidence from native-resolution bare-earth LiDAR may preserve geomorphic scarp signatures omitted from the public catalogue and diluted by 100 m aggregation. This remains untested; no DTI improvement is measured.",
   "mechanism": "A fault scarp can retain a cross-profile step/curvature shape, amplitude, orientation, and diffusion-related morphologic age, while coherent ridge/valley evidence persists along strike across nearby physical scales. Combining independent measurements may distinguish scarps from isolated edges, but terrace risers, natural channel banks, landslide headscarps, shorelines, roads/canals, and DEM seams can mimic the same signals.",
   "named_non_fault_mimic": "Fluvial terrace riser; natural channel-bank lines and landslide headscarps are mandatory additional controls.",
   "holdout_dti": {
     "label": "HOLDOUT-DTI",
     "value": null,
-    "status": "NO QUALIFIED RESULT — no new holdout was run; the legacy H66 holdout claim is disqualified by the audit.",
+    "status": "NO QUALIFIED RESULT — NOT RUN; blocked by missing authorized inputs and cached stack",
     "evaluator_version": null,
     "withheld_positive_count": null,
     "ci95": null,
-    "reason": "No authorized training/reference rasters or cached stack are present. The legacy runner uses full-catalogue distance during emission eligibility, scores outside a lidar-only valid mask, does not satisfy the required buffered whole-geologic-segment protocol, and lacks a valid level 95% CI. Its recorded scalar is retained only as unqualified historical evidence in evidence/ and must not be reported as HOLDOUT-DTI."
+    "reason": "bash scripts/fetch_inputs.sh returned exit 2 on 2026-10-12 with all eight required competition/cache paths missing. No eligible whole-segment LiDAR-covered holdout was run. No score or projection is recorded."
   },
   "leakage_canary": {
     "status": "NOT VALIDATED",
     "threshold_auc": 0.9,
     "feature_results": null,
-    "reason": "No new feature was tested. The legacy canary was not a substitute for feature-alone AUC on the required buffered spatial holdout and cannot clear the present gate."
+    "reason": "No new native-resolution feature was computed; feature-alone AUC on the required spatial holdout cannot be tested without authorized DEM, mask, and holdout inputs."
   },
   "registry_checks": {
     "pre_placement_surface": {
-      "status": "BLOCKED — no new candidate surface; complete registry unavailable",
+      "status": "BLOCKED — not run; no candidate surface; complete registry unavailable",
       "correlation_limit": 0.9,
       "overlap_limit": 0.7,
       "radius_px": 3,
@@ -33,25 +33,27 @@
       "result": null
     },
     "post_placement_final_dots": {
-      "status": "BLOCKED — no new candidate raster; complete registry unavailable",
+      "status": "BLOCKED — not run; no candidate raster; complete registry unavailable",
       "correlation_limit": 0.9,
       "overlap_limit": 0.7,
       "radius_px": 3,
       "complete_registry": false,
       "result": null
     },
-    "reason": "The prior repository scan covered only a partial raster corpus. Full uniqueness and all byte/pixel checks remain unverified; a partial registry is not a pass.",
+    "reason": "No new candidate exists; 60 local rasters are an accessible subset only, with no organizer-complete certificate. No pre-placement surface or final-dot comparison was run.",
     "method": {
       "pre_placement_surface": "Absolute Spearman |rho| > 0.90 or exact decoded-pixel/hash identity stops; 3-pixel dot overlap is not applied to a dense continuous surface.",
       "post_placement_final_dots": "Absolute Spearman |rho| > 0.90, >70% of emitted dots within 3 pixels, or exact decoded-pixel/hash identity stops.",
       "completeness": "Incomplete or inaccessible registry entries are BLOCKED, never a complete pass."
-    }
+    },
+    "accessible_registry_tif_count": 60,
+    "completeness_certificate": null
   },
   "raster": {
-    "status": "NOT GENERATED IN THIS REVIEW; NO CURRENT FILE CLEARED",
+    "status": "NOT GENERATED — no candidate exists and no file is cleared",
     "file": null,
     "sha256": null,
-    "required_contract": "Normalized float32 GeoTIFF, EPSG:32611, exact official shape/transform/footprint, [0,1] inside and NaN outside, single band.",
+    "required_contract": "If a candidate is later cleared: single-band normalized float32, EPSG:32611, exact official shape/transform/footprint, [0,1] inside, NaN only outside.",
     "historical_artifacts": [
       {
         "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
@@ -72,17 +74,23 @@
         "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
         "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
       }
-    ]
+    ],
+    "new_candidate_generated": false
   },
   "validator": {
-    "status": "NOT PASSED — official reference/footprint validation remains incomplete",
+    "status": "NOT PASSED — NOT RUN; no current candidate or authorized official reference/features rasters",
     "attempted_command": "python -m gems.validate_submission <historical all-finite TIFF>",
     "result": "passed=false; basic metadata/range checks ran, but reference-grid and footprint checks were skipped because official reference/features rasters were not supplied. Skipped means unverified, not pass.",
     "current_candidate_result": {
       "status": "NOT RUN — no current LIDAR-01 candidate raster exists",
-      "footprint_nan_status": "NOT RUN; no current candidate; required NaN-only outside-footprint condition is not established",
-      "range_0_1_status": "NOT RUN for LIDAR-01; no current candidate",
-      "crs_shape_transform_status": "NOT RUN for LIDAR-01; no current candidate or authorized official reference grid"
+      "no_nan_inside_footprint": null,
+      "values_in_0_1": null,
+      "crs_shape_transform_match": null,
+      "nan_only_outside_footprint": null,
+      "reason": "No candidate, official sample grid, or feature-footprint raster is present.",
+      "footprint_nan_status": "NOT RUN — NaN-only outside-footprint status is unverified because no current candidate or official features footprint is present.",
+      "range_0_1_status": "NOT RUN — no current candidate.",
+      "crs_shape_transform_status": "NOT RUN — no current candidate or authorized official reference grid."
     },
     "historical_h66_2_local_preflight": {
       "artifact": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
@@ -109,21 +117,21 @@
   },
   "submission": {
     "name": "GEMSDOE66-LIDAR-01-CROSS-SCALE-SCARP",
-    "note": "Proposed only; no valid HOLDOUT-DTI, complete registry pass, or official-grid clearance. Do not submit.",
-    "note_chars": 103,
+    "note": "No qualified HOLDOUT-DTI or cleared raster; audit only — do not submit.",
+    "note_chars": 71,
     "note_limit_chars": 140,
     "file": null,
     "download_status": "NO DOWNLOAD — no file is cleared or offered",
-    "clearance": "NOT CLEARED. No competition submission slot used in this review.",
+    "clearance": "NOT CLEARED. No experiment, candidate, or submission slot used in this review.",
     "organizer_confirmed_receipt": null,
-    "name_status": "PROPOSED ONLY — not a cleared candidate name",
-    "note_status": "PROPOSED ONLY — must not be used to submit the absent candidate"
+    "name_status": "PROPOSED ONLY — audit metadata, not a cleared candidate name",
+    "note_status": "PROPOSED ONLY — audit metadata, not approved for submission"
   },
   "data_access": {
-    "competition_data": "BLOCKED — official data tab redirected to login; no credentials used",
-    "local_data_directory": "Absent",
+    "competition_data": "BLOCKED — no official data files in checkout; official data page requires authorized access; no credentials used",
+    "local_data_directory": "Absent (verified 2026-10-12)",
     "official_1m_dem_source": "USGS 3DEP 1 m bare-earth DEM collection is public domain in principle; exact competition tile coverage/alignment not verified",
-    "shared_cache": "Absent",
+    "shared_cache": "Absent (verified 2026-10-12); data/processed/stack.f32 not present",
     "strict_premerge_s0_review": {
       "evidence": "evidence/h66_inputs_s0_review.json",
       "status": "BLOCKED — one-off pre-merge input/pin check exited 2",
@@ -138,21 +146,27 @@
       "pin_conflicts": 0,
       "experiment_or_data_load_followed": false,
       "scope_caveat": "This evidence was generated by the branch runner before the merge; the newer main runner remains intentionally disabled. It is not a current runner preflight."
-    }
+    },
+    "input_preflight": "evidence/input_preflight_2026-10-12.json",
+    "native_1m_dem_tiles": "Absent; exact USGS 3DEP competition tile coverage/alignment unavailable in this sandbox",
+    "cultural_feature_mask": "Absent; source/provenance/alignment not verified"
   },
   "budget": {
     "new_experiments_used": 0,
     "max_experiments": 3,
     "time_budget_hours": 2,
     "time_spent_hours": null,
-    "submission_slots_used": 0
+    "submission_slots_used": 0,
+    "new_holdouts_used": 0,
+    "candidate_emissions_used": 0,
+    "experiment_time_used_hours": 0.0
   },
   "independent_reviews": {
     "scientific_lead_reviews_required": 2,
     "completed": 0,
-    "status": "OUTSTANDING — this repository audit is not an independent scientific-lead review"
+    "status": "OUTSTANDING — no independent scientific-lead review is documented"
   },
-  "verdict": "BLOCKED / NEGATIVE — no candidate passed the required holdout, complete-registry, provenance, or exact-footprint validator gates. No new TIFF, no download, and no submission slot. Resume only after authorized inputs and corrected shared tooling are available.",
+  "verdict": "BLOCKED / NEGATIVE — authorized inputs/cache absent; no qualified HOLDOUT-DTI, no leakage canary, no complete-registry checks, no official-grid validation, and no candidate TIF. No download or submission slot.",
   "open_irregularities": [
     "IR-01-H33-ATTRIBUTION",
     "IR-03-HOLDOUT-DESIGN",
@@ -167,9 +181,10 @@
     "IR-67-H66-1-ARCHIVE",
     "IR-68-PREMERGE-S0-SNAPSHOT",
     "IR-69-UNIQUENESS-PHASE",
-    "IR-70-TEMPLATE-PROVENANCE"
+    "IR-70-TEMPLATE-PROVENANCE",
+    "IR-73-LEADERBOARD-CLAIM-CONFLICT"
   ],
-  "audit_document": "docs/review/2026-10-11-audit.md",
+  "audit_document": "docs/review/2026-10-12-review.md",
   "artifact_page": "h66-session.html",
   "h66_2_experiment": {
     "hypothesis_id": "H66-2",
@@ -216,15 +231,19 @@
     "next_candidate_status": "The union candidate is a historical proposed follow-up only; it was not run in this PR and is not authorized without a new approved budget, authorized inputs/provenance, independent reviews, and validated shared tooling."
   },
   "research_session": {
-    "this_pr_reconciliation_new_experiments": 0,
+    "this_turn_new_experiments": 0,
     "this_turn_holdout_runs": 0,
     "this_turn_candidate_emissions": 0,
     "this_turn_submission_slots_used": 0,
-    "historical_h66_2_record": "Preserved from newer main; one prior preregistered experiment with a NEGATIVE-NOT-PROMOTED verdict and proxy-only measurements. It is not an experiment run in this PR reconciliation.",
-    "latest_review": "2026-10-11 release-safety three-pass review: zero native-LiDAR experiments/holdouts/emissions and zero submission slots; new shared fail-closed release preflight and synthetic tests only.",
-    "latest_preflight": "evidence/release_preflight_2026-10-11.json",
-    "latest_input_presence": "scripts/fetch_inputs.sh: missing all 8 listed roles; check-only, no data transfer",
-    "latest_review_document": "docs/review/2026-10-11-release-safety.md"
+    "input_preflight": "bash scripts/fetch_inputs.sh returned exit 2; all eight listed paths absent; no data transfer",
+    "registry": "60 accessible local TIFFs; organizer completeness uncertified",
+    "H33_attribution": "user-supplied score unverified; owner page says no organizer score exists and marks its estimate as a model/projection",
+    "leaderboard": "not accessed; conflicting user-supplied overall values are logged in IR-73",
+    "test_run": ".venv/bin/python -m pytest -q: 120 passed, 5 skipped (official sample raster absent)",
+    "build": "python scripts/build_site.py completed; no external leaderboard feed added",
+    "latest_review_document": "docs/review/2026-10-12-review.md",
+    "latest_preflight": "evidence/release_preflight_2026-10-12.json",
+    "review_date": "2026-10-12"
   },
   "promote": false,
   "promotion_decision": "negative"
