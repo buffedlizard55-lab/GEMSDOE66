@@ -19,6 +19,27 @@ def _k66_files():
 
 K66_FILES = _k66_files()
 
+
+def _h67_geophys_files():
+    """Whatever the H67 geophysics lane clears, by its own filenames -- fail closed.
+
+    Read from the lane's own run card so a withdrawn candidate stops being publishable
+    automatically, exactly as the session-66 family above does.  If no card is cleared, the
+    lane may publish nothing at all.
+    """
+    import glob
+    hits = sorted(glob.glob(str(ROOT / "docs" / "data" / "run-card-h67.json")))
+    if not hits:
+        return []
+    card = json.loads(Path(hits[-1]).read_text())
+    if not card.get("cleared_for_download"):
+        return []
+    return sorted({Path(card["raster"]["file"]).name,
+                   Path(card["submission"]["zip"]).name})
+
+
+H67_GEOPHYS_FILES = _h67_geophys_files()
+
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 # The LIDAR-01 session's cleared release (see docs/data/run-card-lidar01.json). A second,
 # separately-named candidate from a parallel session; it is allow-listed here for the same
@@ -39,10 +60,8 @@ PUBLISHED = sorted([
     "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
     "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
     "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
-    # the H66-C review candidate (published for review, not promoted)
-    H66C_STEM + ".tif",
-    H66C_STEM + ".zip",
-    H66C_STEM + ".manifest.json",
+    # H66-C is deliberately absent: gate not met, so its bytes are audit-only under
+    # artifacts/h66c/ and must never appear in the public download path.
 ])
 
 
@@ -67,8 +86,11 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     historical_names = {item["file"] for item in historical}
     names = {path.name for path in (DOCS / "downloads").iterdir()}
     assert not (names & historical_names)
-    assert names <= set(PUBLISHED + K66_FILES + LIDAR01_FILES), (
-        names - set(PUBLISHED + K66_FILES + LIDAR01_FILES))
+    allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES)
+    assert names <= allowed, names - allowed
+    # and if the H67 geophysics lane is NOT cleared, none of its files may be present
+    if not H67_GEOPHYS_FILES:
+        assert not any(n.startswith("gems66-h67-geophys-maxcov-") for n in names), names
 
 
 def test_current_run_card_cannot_clear_a_historical_artifact():

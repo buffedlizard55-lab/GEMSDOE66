@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to submit · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 &mdash; DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html">Download &amp; status</a><a href="executive-summary.html" class="on">How to submit</a><a href="results.html">Results</a><a href="hypotheses.html">Hypotheses</a><a href="method.html">Method &amp; metric</a><a href="sources.html">Sources</a><a href="irregularities.html">Irregularities</a><a href="run-card.html">Run card</a></nav></div></header>
+<main><div class="wrap">
+<h2>Executive summary &mdash; exactly how to make a submission</h2>
+<div class="banner go">
+<h2>&#9989; DOWNLOAD READY &mdash; OK TO SUBMIT</h2>
+<p><b>All 15 release gates pass on the bytes that are published here.</b>
+Re-verified from disk at build time, not copied from an older receipt.</p>
+<div class="dl">
+<a href="../downloads/gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif" download>&#11015; Download the submission .tif</a>
+<a class="alt" href="../downloads/gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.zip" download>&#11015; Download the .zip</a>
+</div>
+<table class="kv">
+<tr><th>file</th><td class="mono">gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif</td></tr>
+<tr><th>sha256</th><td class="mono">512fda025b830209abb013190aa320e58eaa03de2ba212510805fff6e97ad578</td></tr>
+<tr><th>size</th><td>356,131 bytes (zip 244,842)</td></tr>
+<tr><th>grid</th><td>3730 &times; 3292, EPSG:32611, 100 m, single band
+float32 &mdash; identical to <code>sample_submission.tif</code></td></tr>
+<tr><th>values</th><td>min 0.0000 &middot; max 1.0000 &middot;
+45,000 pixels &gt; 0 &middot; 7,111,787 NaN cells, all outside the footprint</td></tr>
+<tr><th>submission name</th><td class="mono">gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan</td></tr>
+<tr><th>note (119/140 chars)</th>
+<td class="mono">H67 inventory-free geophysics/topography belief, metric-native max-coverage emission; 45000 dots; NaN outside footprint</td></tr>
+</table>
+<h3>Gate detail</h3><table><tr><th>single float32 band</th><td><span class="pill ok">PASS</span> <span class="small">count=1 dtype=float32</span></td></tr><tr><th>EPSG:32611 and CRS matches the official reference</th><td><span class="pill ok">PASS</span> <span class="small">EPSG:32611 vs EPSG:32611</span></td></tr><tr><th>shape matches the official reference</th><td><span class="pill ok">PASS</span> <span class="small">(3730, 3292) vs (3730, 3292)</span></td></tr><tr><th>geotransform matches the official reference</th><td><span class="pill ok">PASS</span> <span class="small">(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) vs (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)</span></td></tr><tr><th>all finite values in [0, 1]</th><td><span class="pill ok">PASS</span> <span class="small">min=0.0 max=1.0</span></td></tr><tr><th>no NaN inside the footprint</th><td><span class="pill ok">PASS</span> <span class="small">nan_inside=0 of 5,167,373 reference-mask cells; features-mask disagreement=(3061, 1540)</span></td></tr><tr><th>NaN only outside the footprint</th><td><span class="pill ok">PASS</span> <span class="small">finite_outside=0</span></td></tr><tr><th>official validator reports no failures and no skipped checks</th><td><span class="pill ok">PASS</span> <span class="small">passed=True failures=False skipped=False</span></td></tr><tr><th>submission note is at most 140 characters</th><td><span class="pill ok">PASS</span> <span class="small">119 chars</span></td></tr><tr><th>rank correlation with every registry raster below 0.90</th><td><span class="pill ok">PASS</span> <span class="small">max |rho| = 0.2241 over 72 rasters</span></td></tr><tr><th>no registry raster is duplicated (within-3px and null lift judged per raster)</th><td><span class="pill ok">PASS</span> <span class="small">max within-3px = 0.9997 (unconditional null lift 6.03; neighbourhood-conditioned null 0.9985, lift 1.00); rasters failing BOTH the 0.70 overlap rule and a 3x neighbourhood-null lift = 0 of 72</span></td></tr><tr><th>not byte-identical to any registry raster</th><td><span class="pill ok">PASS</span> <span class="small">0 sha256 twins; max coincident dots with one raster = 6,801</span></td></tr><tr><th>holdout evidence exists for the emitted recipe</th><td><span class="pill ok">PASS</span> <span class="small">h67_holdout_C.json / R3|k1.0|s2</span></td></tr><tr><th>emitted recipe beats the random-placement null on the same folds and budget</th><td><span class="pill ok">PASS</span> <span class="small">HOLDOUT-DTI 0.1790 vs null 0.0707</span></td></tr><tr><th>run card promotion decision is promote</th><td><span class="pill ok">PASS</span> <span class="small">promote</span></td></tr></table>
+<p class="small">No organizer score is claimed for this file. Nothing has been uploaded by this
+repository; uploading is a manual step described in
+<a href="executive-summary.html">How to submit</a>.</p>
+</div>
+
+<h2>H66-C (2026-10-12) — the scarp-channel candidate, and why there is no download</h2>
+<p>Another session implemented the native-resolution LiDAR scarp-channel lane end to end and
+built a <b>unique, format-valid</b> GeoTIFF (<code>gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif</code>, sha256
+<code class="mono">9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a</code>). It passes the shared validator with
+15 gating checks and zero
+failures, and its leakiest single feature reaches AUC 0.646 against a
+0.90 threshold. <b>It is not offered here.</b></p>
+<p>The reason is the gate, not the file. On instrument N (SGMC off-catalogue faults inside
+LiDAR-covered held-out blocks) it measures <b>0.0979</b>, 95% CI
+[0.0623, 0.1219], against frozen baselines of 0.1195
+(anderson), 0.1104 (h33-2-b2) and 0.1065 (d28). On instrument S it measures 0.1231 against 0.1688
+(d28), but that instrument is <i>anti</i>-correlated (&rho; = &minus;0.708) with the owner-reported
+live scores, so it cannot be used to argue a win. Neither instrument is a validated surrogate; see
+<a href="irregularities.html">IR-66-INSTR-01</a>. Because the brief says to offer a download only
+when the gate is met, the bytes stay in <code>artifacts/h66c/</code> for audit, with their hashes
+published on the <a href="index.html">overview</a>.</p>
+<p>What would have to change for it to be worth a slot: an organiser receipt for a candidate with a
+<i>different</i> field confirming the &minus;0.126-per-unit-f200 dose response is causal; a local
+instrument whose rank correlation with live scores survives partialling out dot count; and two
+independent scientific-lead reviews. None of the three exists today, so the honest default is to
+keep the slot.</p>
+
+<h3>1. What the portal accepts</h3>
+<p>From the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official submission-format rules</a>: a single-band
+<b>float32</b> GeoTIFF, <b>EPSG:32611</b> (UTM zone 11N), <b>100 m</b> resolution, the same bounds
+as the training data, values in <b>[0, 1]</b>, and null/NaN outside the study area. A
+<code>.zip</code> containing one GeoTIFF is also accepted. The portal's own rejection message
+<code>Predicted values must be in range [0, 1]</code> means a value fell outside [0, 1] &mdash;
+the file published here is checked for exactly that at build time (see the gate table above).</p>
+<h3>2. Steps</h3>
+<ol>
+<li>Click <b>Download the submission .tif</b> at the top of this page. Prefer the .tif; the .zip
+is the same bytes zipped.</li>
+<li>Check the file's SHA-256 matches <code class="mono">512fda025b830209abb013190aa320e58eaa03de2ba212510805fff6e97ad578</code>.
+If it does not, you downloaded something else &mdash; do not upload it.</li>
+<li>Open the <a href="https://www.drivendata.org/">GEMS Prize</a> on DrivenData and sign in. You must be a
+registered participant and have accepted the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/rules/">rules</a>.</li>
+<li>Go to <b>Submissions &rarr; New submission</b>, choose the <code>.tif</code>, and paste the note
+below into the optional note field (it is 119/140 characters).</li>
+<li>Submit. The portal scores it and shows the public-leaderboard value. Copy that receipt back
+into <code>evidence/</code>; until then no score is claimed here.</li>
+</ol>
+<div class="note"><b>Submission name:</b> <code class="mono">gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan</code><br>
+<b>Note (paste this):</b> <code class="mono">H67 inventory-free geophysics/topography belief, metric-native max-coverage emission; 45000 dots; NaN outside footprint</code></div>
+<h3>3. Budget and rules that matter</h3>
+<ul>
+<li>Up to <b>three feedback submissions per week</b>.</li>
+<li>You must choose <b>one</b> submission before the deadline; it is scored in <b>both</b> prize
+rounds, and you choose without seeing your private-test result.</li>
+<li>The <b>Initial Prize Round</b> is scored against a fixed private set of expert-labelled new
+faults. The <b>Final Prize Round</b> re-scores the same file against an <i>expanded</i> label set
+built by an expert panel that reviews every team's predictions &mdash; so genuinely new,
+defensible fault candidates can pay off twice.</li>
+<li>The rules require a narrative disclosure of generative-AI use. This repository's pipeline was
+written by an AI agent working from the public competition pages and public USGS/GDR data; say
+so truthfully and specifically in your narrative.</li>
+</ul>
+<h3>4. What is <i>not</i> cleared</h3>
+<div class="stop-box">Historical artifacts under <code>artifacts/lidar_lane/</code>,
+<code>artifacts/h66-2/</code> and <code>evidence/archives/h66-1/</code> are audit-only. They are
+not published here and must not be uploaded.</div>
+<h3>5. Links for manual review</h3>
+<ul>
+<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Problem description (page 967)</a></li>
+<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/">About / resources (page 968)</a></li>
+<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/rules/">Full rules</a></li>
+<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Leaderboard</a> (values are not mirrored on this site)</li>
+<li><a href="https://github.com/drivendataorg/gems-prize-reference-solution">Official reference solution</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Tversky_index">Tversky index</a> &middot; <a href="https://epsg.io/32611">EPSG:32611</a></li>
+</ul>
+
+</div></main>
+<footer class="wrap"><p class="small">Built 2026-10-12T03:35:07Z
+by <code>scripts/build_site_h67.py</code>. Every number on this site is either HOLDOUT-DTI
+(internal, with its evaluator and CI) or a measurement of our own bytes. Nothing here is an
+organizer score.</p></footer>
+</body></html>

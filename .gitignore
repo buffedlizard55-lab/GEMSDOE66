@@ -52,7 +52,9 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# The cleared release raster must be publishable on GitHub Pages even though
-# raster/binary archives are otherwise kept out of Git.
+# Cleared release rasters must be publishable on GitHub Pages even though raster/binary archives
+# are otherwise kept out of Git.  These are our own predictions (hundreds of KB), not organizer or
+# competition data, so the "/data/" and mirrored-raster rules above still hold.  Each lane's
+# builder only ever touches its own filename prefix inside docs/downloads/.
 !docs/downloads/*.tif
 !docs/downloads/*.zip

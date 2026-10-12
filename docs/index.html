@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="on">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="on">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a><a href="h67/index.html" class="">H67 geophysics lane</a></nav></div></header>
 <main>
 <div class="wrap">
 
@@ -154,28 +154,25 @@ exists for this file and none is claimed.</p>
 
 
 <div class="stop">
-  <h2>H66-C (2026-10-12): the scarp-channel candidate — FILE AVAILABLE, scientific gate NOT MET</h2>
-  <p class="small">Another session implemented the <b>native-resolution LiDAR scarp-channel
-  lane</b> end to end (scarplet diffusion inversion, Steger sub-pixel lines, Frangi multiscale
-  vesselness, official TIGER 2024 road mask). Its GeoTIFF is <b>unique and format-valid</b>, so
-  it is published here <b>for review</b> and you may download it. The <b>scientific gate is NOT
-  MET</b> and the file is <b>not promoted</b>: on the only instrument in this repository that
-  is positively rank-correlated with the owner-reported live scores it measures
-  <b>0.0979 [0.0623, 0.1219]</b>
-  against a frozen best of <b>0.1195</b>.
-  <b>Download: yes. Submit: no.</b> Producing this file spent no competition submission slot.</p>
-  <p class="small"><b>Recommendation: do not submit this file as-is.</b> Its value is as a
-  reproducible, byte-verified, <i>unique</i> alternative-lane artifact and as the measurement
-  that locates the family's remaining headroom in placement geometry rather than in new scarp
-  physics. The site does not rank the candidates against each other; each carries its own
-  register and its own disclosures.</p>
-  <p>
-    <a class="btn" href="downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif">Download gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif</a>
-    &nbsp;<a class="btn" href="downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.zip">Download .zip</a>
-  </p>
+  <h2>H66-C (2026-10-12): the scarp-channel candidate — NOT OFFERED, gate not met</h2>
+  <p><b>There is no H66-C download.</b> This session implemented the native-resolution LiDAR
+  scarp-channel lane end to end and built a <b>unique, format-valid</b> GeoTIFF, but its
+  scientific gate is <b>not met</b>: HOLDOUT-DTI on instrument N is
+  <b>0.0979 [0.0623, 0.1219]</b> against a
+  frozen best of <b>0.1195</b>. The brief is
+  unconditional here — offer the download only if the gate is met, else log the negative result —
+  so the bytes are not published in the download path. They are retained for audit under
+  <code>artifacts/h66c/</code> with the hashes below, and this repository's own run card for them
+  says <code>promote: false</code>.</p>
+  <p class="small">Every other candidate that <i>is</i> offered on this page carries its own run
+  card and its own disclosures; the site does not rank them against each other, and none of them
+  is <code>ORGANIZER-CONFIRMED</code>. <b>Do not submit the H66-C file.</b> If a future session
+  measures a real gain for this field under a valid instrument, the same builder can publish it
+  by setting <code>promote</code> in <code>docs/data/release-h66c.json</code>.</p>
   <table>
-    <tr><th>sha256 (tif)</th><td class="mono">9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a</td></tr>
-    <tr><th>sha256 (zip)</th><td class="mono">1564930414a31044a4fce73ce57d74dbe5289260cf7ffc9285307ba3381edd5a</td></tr>
+    <tr><th>sha256 (tif, audit copy)</th><td class="mono">9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a</td></tr>
+    <tr><th>sha256 (zip, audit copy)</th><td class="mono">1564930414a31044a4fce73ce57d74dbe5289260cf7ffc9285307ba3381edd5a</td></tr>
+    <tr><th>audit path</th><td class="mono">artifacts/h66c/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif</td></tr>
     <tr><th>size</th><td>378,581 bytes</td></tr>
     <tr><th>grid</th><td>3730 x 3292, float32, 1 band, EPSG:32611, 100 m, transform (100, 0, 243350, 0, -100, 4508550)</td></tr>
     <tr><th>emitted cells</th><td>42,000 &nbsp;
@@ -213,10 +210,13 @@ exists for this file and none is claimed.</p>
     <tr><th>leakage canary</th>
         <td><span class="pill ok">PASS</span> highest single-feature AUC
         0.646 of 63 features (0.90 threshold)</td></tr>
-    <tr><th>submission name</th><td class="mono">gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59</td></tr>
-    <tr><th>submission note (115/140 chars)</th><td class="mono">h66c lidar scarp diffusion inversion + Steger/Frangi lines, TIGER-road masked, 200 m catalogue-gap gate, d4 spacing</td></tr>
+    <tr><th>name that would be used if it were ever cleared</th>
+        <td class="mono">gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59</td></tr>
+    <tr><th>note drafted for that case (115/140 chars) — NOT CLEARED</th>
+        <td class="mono">h66c lidar scarp diffusion inversion + Steger/Frangi lines, TIGER-road masked, 200 m catalogue-gap gate, d4 spacing</td></tr>
   </table>
-  <p class="small">Is it OK to download and submit? <b>Download yes, submit no.</b>
+  <p class="small">Is it OK to download and submit? <b>No — there is no download, and the file
+  must not be submitted.</b>
   <a href="review/2026-10-12-h66c-verdict.md">Full verdict note</a> ·
   <a href="data/run-card-h66c.json">machine-readable run card</a> ·
   <a href="results.html">measurements</a>.</p>

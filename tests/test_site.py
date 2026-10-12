@@ -76,16 +76,9 @@ def _k66_files():
 
 K66_FILES = _k66_files()
 
-H66C_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
-H66C_FILES = sorted({H66C_STEM + ext for ext in
-                     (".tif", ".zip", ".manifest.json", ".tif.receipt.json")})
-
 ALLOWED_RASTERS = {
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
-
-    "downloads/" + H66C_STEM + ".tif",
-    "downloads/" + H66C_STEM + ".zip",
 }
 
 
@@ -108,18 +101,22 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
             path_part = urlsplit(href).path.lower()
             if path_part.endswith((".tif", ".tiff", ".zip")):
                 rel = urlsplit(href).path
-                assert (rel in ALLOWED_RASTERS
-                        or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + H66C_FILES)), \
-                    f"{name}: {href}"
-    assert {p.name for p in (DOCS / "downloads").iterdir()} <= set([
+                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES), f"{name}: {href}"
+    # the H67 geophysics lane may publish exactly what its own run card clears (fail closed)
+    import glob as _glob
+    _h67 = []
+    _hits = _glob.glob(str(ROOT / "docs" / "data" / "run-card-h67.json"))
+    if _hits:
+        _c = json.loads(Path(_hits[-1]).read_text())
+        if _c.get("cleared_for_download"):
+            _h67 = [Path(_c["raster"]["file"]).name, Path(_c["submission"]["zip"]).name]
+    assert {p.name for p in (DOCS / "downloads").iterdir()} <= set(_h67) | set([
         "README.md",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
-    ] + K66_FILES + LIDAR01_FILES + H66C_FILES + [
-        H66C_STEM + ".manifest.json",
-    ])
+    ] + K66_FILES + LIDAR01_FILES)
 
 
 def test_run_card_labels_every_number_and_claims_no_qualified_score():
@@ -287,30 +284,40 @@ def test_all_local_links_resolve():
             assert target.exists(), f"{name}: broken local link {href}"
 
 
-def test_h66c_candidate_is_published_only_as_a_review_candidate():
-    """The H66-C candidate may be downloaded but must never read as promoted.
+H66C_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
 
-    Its gate is not met, so the same page that offers the bytes has to say so, name the
-    measurement that failed, and point at the run card. This is the half of the contract a
-    later, more optimistic rebuild is most likely to drop.
+
+def test_h66c_negative_result_is_logged_and_never_offered_as_a_download():
+    """The H66-C gate is not met, so its bytes must not be in the download path.
+
+    The brief is unconditional: offer the download only if the gate is met, else log the
+    negative result. The measurement, the hashes and the audit path still have to be on the
+    page, and the run card has to say `promote: false`.
     """
+    assert not list((DOCS / "downloads").glob(H66C_STEM + "*")), \
+        "the unmet-gate candidate must not be published in docs/downloads"
     text = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert H66C_STEM in text
     low = text.lower()
-    assert "not promoted" in low
-    assert "for review" in low
-    assert "scientific gate not met" in low
-    assert "download yes, submit no" in low
-    assert "do not submit this file as-is" in low
+    assert H66C_STEM in text
+    assert "gate not met" in low or "gate is not met" in low
+    assert "not offered" in low or "there is no h66-c download" in low
+    # the hashes and the audit path are published so the bytes stay verifiable
     card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
     assert card["promote"] is False
     assert card["promotion_decision"] == "negative"
     assert card["submission"]["slots_used"] == 0
+    assert card["raster"]["sha256"] in text
+    assert "artifacts/h66c/" in text
+    for name in PAGES:
+        for href in _links(DOCS / name):
+            assert H66C_STEM not in href or not href.lower().endswith((".tif", ".zip")), \
+                f"{name} offers the unmet-gate candidate: {href}"
 
 
-def test_h66c_downloads_are_present_and_hash_pinned():
-    tif = DOCS / "downloads" / (H66C_STEM + ".tif")
-    assert tif.is_file()
+def test_h66c_audit_bytes_still_verify_if_rebuilt():
+    """If the audit copy exists locally it must match the published hash."""
+    audit = ROOT / "artifacts" / "h66c" / (H66C_STEM + ".tif")
+    if not audit.is_file():
+        return
     card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
-    digest = hashlib.sha256(tif.read_bytes()).hexdigest()
-    assert digest == card["raster"]["sha256"], digest
+    assert hashlib.sha256(audit.read_bytes()).hexdigest() == card["raster"]["sha256"]

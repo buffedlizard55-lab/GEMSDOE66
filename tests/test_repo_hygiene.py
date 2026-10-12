@@ -69,9 +69,7 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         # and named by docs/downloads/current_release.json.
         "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
         "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
-        # H66-C session: published for review only, never promoted (gate NOT MET).
-        "downloads/%s.tif" % H66C_STEM,
-        "downloads/%s.zip" % H66C_STEM,
+        # H66-C is deliberately absent: its gate is not met, so it is never offered here.
     }
     linked_any = False
     for f in sorted((ROOT / "docs").glob("*.html")):
@@ -106,6 +104,33 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
                         or "no ORGANIZER-CONFIRMED score" in html), (
                     f"{f.name} links LIDAR-01 without disclaiming an organizer score")
     assert linked_any, "the disclosed candidate should be linked from at least one page"
+
+
+def test_h67_geophys_pages_disclose_and_match_their_own_verdict():
+    """The H67 geophysics lane keeps its own pages under docs/h67/ and must obey the same rule:
+    link a raster only when its recomputed verdict is cleared, and always show the label, the CI
+    and the null it is compared against.  A projection is never written as a score.
+    """
+    import re
+    import sys
+
+    pages = sorted((ROOT / "docs" / "h67").glob("*.html"))
+    assert pages, "scripts/build_site_h67.py must publish the lane's pages"
+    sys.path.insert(0, str(ROOT / "scripts"))
+    sys.path.insert(0, str(ROOT / "src"))
+    import build_site_h67
+
+    card = build_site_h67.newest(str(ROOT / "artifacts" / "h67" / "run-card-*.json"))
+    a = build_site_h67.assess(card)
+    index = (ROOT / "docs" / "h67" / "index.html").read_text()
+    assert ("OK TO SUBMIT" in index) == a["cleared"], "banner disagrees with the recomputed verdict"
+    for f in pages:
+        html = f.read_text()
+        assert "HOLDOUT-DTI" in html or f.name in ("sources.html", "method.html"), f.name
+        for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
+            assert a["cleared"], f"{f.name} links {m.group(1)} while the verdict is negative"
+            assert (ROOT / "docs" / "h67" / m.group(1)).resolve().is_file(), m.group(1)
+        assert not re.search(r"ORGANIZER-CONFIRMED\W+0\.\d", html), f.name
 
 
 def test_negative_verdict_is_recorded():

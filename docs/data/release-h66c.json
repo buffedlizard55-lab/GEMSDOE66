@@ -3,8 +3,8 @@
  "note_file": "Consumed by scripts/build_site.py; do not hand-edit docs/index.html.",
  "date": "2026-10-12",
  "slug": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59",
- "rel_tif": "downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
- "rel_zip": "downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.zip",
+ "rel_tif": "",
+ "rel_zip": "",
  "sha256_tif": "9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a",
  "sha256_zip": "1564930414a31044a4fce73ce57d74dbe5289260cf7ffc9285307ba3381edd5a",
  "size_bytes": 378581,
@@ -82,5 +82,9 @@
  "canary_max_auc": 0.6459,
  "n_features": 63,
  "promote": false,
- "promotion_decision": "negative"
+ "promotion_decision": "negative",
+ "published": false,
+ "published_files": [],
+ "audit_tif": "artifacts/h66c/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+ "audit_zip": "artifacts/h66c/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.zip"
 }

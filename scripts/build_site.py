@@ -19,7 +19,8 @@ DL = DOCS / "downloads"
 NAV = [("index.html", "Overview"), ("executive-summary.html", "How to submit"),
        ("hypotheses.html", "Hypotheses"), ("research.html", "Research"),
        ("results.html", "Results"), ("feed.html", "Project feed"),
-       ("sources.html", "Sources"), ("irregularities.html", "Irregularities")]
+       ("sources.html", "Sources"), ("irregularities.html", "Irregularities"),
+       ("h67/index.html", "H67 geophysics lane")]
 
 
 def esc(s) -> str:
@@ -50,6 +51,9 @@ Every number on this site is a local measurement or an owner/public report and i
 one; no organiser score exists for any artifact here.
 </div></footer></body></html>
 """
+
+
+from h66c_blocks import submission_block_h66c, h66c_exec_block, pillw  # noqa: E402  (site blocks)
 
 
 def load(p: Path, default=None):
@@ -992,128 +996,6 @@ evidence supports. Nothing here is waived; items marked OPEN stay open for the n
 <h3>Inherited items, unchanged</h3>
 {block(past)}
 """, "irregularities.html")
-
-
-def submission_block_h66c() -> str:
-    """The H66-C candidate (branch arena/e7d32f78), published for review, never promoted.
-
-    Verdict NEGATIVE: the file is unique and format-valid and is offered for inspection, but
-    the scientific gate is not met.  Must say so in the first sentence the reader sees.
-    """
-    R = load(ROOT / "docs" / "data" / "release-h66c.json", {})
-    if not R:
-        return ""
-    chk = R.get("validator", {})
-    uni = R.get("uniqueness_dots", {})
-    usf = R.get("uniqueness_surface", {})
-    hold = R.get("holdout", {})
-    ok = bool(chk.get("ok"))
-    note = R.get("note", "")
-    return f"""
-<div class="stop">
-  <h2>H66-C (2026-10-12): the scarp-channel candidate — FILE AVAILABLE, scientific gate NOT MET</h2>
-  <p class="small">Another session implemented the <b>native-resolution LiDAR scarp-channel
-  lane</b> end to end (scarplet diffusion inversion, Steger sub-pixel lines, Frangi multiscale
-  vesselness, official TIGER 2024 road mask). Its GeoTIFF is <b>unique and format-valid</b>, so
-  it is published here <b>for review</b> and you may download it. The <b>scientific gate is NOT
-  MET</b> and the file is <b>not promoted</b>: on the only instrument in this repository that
-  is positively rank-correlated with the owner-reported live scores it measures
-  <b>{hold.get('dti', 0):.4f} [{hold.get('ci_lo', 0):.4f}, {hold.get('ci_hi', 0):.4f}]</b>
-  against a frozen best of <b>{max(b['n'] for b in R.get('baselines', [{'n': 0}])):.4f}</b>.
-  <b>Download: yes. Submit: no.</b> Producing this file spent no competition submission slot.</p>
-  <p class="small"><b>Recommendation: do not submit this file as-is.</b> Its value is as a
-  reproducible, byte-verified, <i>unique</i> alternative-lane artifact and as the measurement
-  that locates the family's remaining headroom in placement geometry rather than in new scarp
-  physics. The site does not rank the candidates against each other; each carries its own
-  register and its own disclosures.</p>
-  <p>
-    <a class="btn" href="{esc(R.get('rel_tif', ''))}">Download {esc(R.get('slug', ''))}.tif</a>
-    &nbsp;<a class="btn" href="{esc(R.get('rel_zip', ''))}">Download .zip</a>
-  </p>
-  <table>
-    <tr><th>sha256 (tif)</th><td class="mono">{esc(R.get('sha256_tif', ''))}</td></tr>
-    <tr><th>sha256 (zip)</th><td class="mono">{esc(R.get('sha256_zip', ''))}</td></tr>
-    <tr><th>size</th><td>{R.get('size_bytes', 0):,} bytes</td></tr>
-    <tr><th>grid</th><td>{esc(R.get('grid', ''))}</td></tr>
-    <tr><th>emitted cells</th><td>{R.get('n_dots', 0):,} &nbsp;
-        ({R.get('n_dots', 0) / max(R.get('footprint_cells', 1), 1) * 100:.3f}% of the
-        {R.get('footprint_cells', 0):,}-cell features footprint)</td></tr>
-    <tr><th>dots within 200 m of a known fault</th><td>0 (hard catalogue-gap gate)</td></tr>
-    <tr><th>format validator</th>
-        <td>{pill(ok)} all {len(chk.get('checks', {}))} gating checks pass,
-        {len(chk.get('failures', []))} failures, {len(chk.get('skipped', []))} skipped</td></tr>
-    <tr><th>Duplicate gate — pre-placement surface</th>
-        <td>{pill(usf.get('max_abs_spearman_rho', 1) <= 0.90)}
-        max |&rho;| = {usf.get('max_abs_spearman_rho', 0):.3f} (0.90 threshold),
-        {usf.get('n_compared', 0)} accessible rasters scanned</td></tr>
-    <tr><th>Duplicate gate — final dots, density-adjusted</th>
-        <td>{pill(uni.get('worst_within_3px_above_1p5x_random', 1) <= 0.70)}
-        max |&rho;| = {uni.get('max_abs_spearman_rho', 0):.3f} (0.90 threshold);
-        highest lift over random placement = {uni.get('max_lift_over_random', 0):.2f}&times;;
-        worst within-3 px fraction among the {uni.get('n_above_1p5x_random', 0)} rasters above
-        1.5&times; random = {uni.get('worst_within_3px_above_1p5x_random', 0):.3f}
-        (0.70 stop), over all {uni.get('n_compared', 0)} accessible rasters</td></tr>
-    <tr><th>Duplicate gate — final dots, literal raw rule</th>
-        <td>{pillw('WARN — raw rule trips on density')}
-        raw max within-3 px = {uni.get('raw_max_frac_dots_within_3px', 0):.3f} against
-        <code>{esc(uni.get('raw_argmax', ''))}</code>, which carries
-        {uni.get('raw_other_dots', 0):,} dots; random placement already gives
-        {uni.get('raw_null_within_3px_random_placement', 0):.3f}, so the lift is only
-        {uni.get('raw_lift_over_random', 0):.2f}&times;. The literal &gt;0.70 rule therefore
-        trips on <i>density</i>, not similarity. Logged as
-        <a href="irregularities.html">IR-66-UNIQ-01</a>; per this repository's own stricter
-        precedent (IR-71) the density-adjusted pass does not silently overrule it.</td></tr>
-    <tr><th>HOLDOUT-DTI (instrument {esc(hold.get('instrument', 'N'))})</th>
-        <td>{hold.get('dti', 0):.4f}, 95% CI [{hold.get('ci_lo', 0):.4f},
-        {hold.get('ci_hi', 0):.4f}], {hold.get('n_withheld_positives', 0):,} withheld
-        positives — <b>below the frozen best</b></td></tr>
-    <tr><th>leakage canary</th>
-        <td>{pill(R.get('canary_max_auc', 1) <= 0.90)} highest single-feature AUC
-        {R.get('canary_max_auc', 0):.3f} of {R.get('n_features', 0)} features (0.90 threshold)</td></tr>
-    <tr><th>submission name</th><td class="mono">{esc(R.get('slug', ''))}</td></tr>
-    <tr><th>submission note ({len(note)}/140 chars)</th><td class="mono">{esc(note)}</td></tr>
-  </table>
-  <p class="small">Is it OK to download and submit? <b>Download yes, submit no.</b>
-  <a href="review/2026-10-12-h66c-verdict.md">Full verdict note</a> ·
-  <a href="data/run-card-h66c.json">machine-readable run card</a> ·
-  <a href="results.html">measurements</a>.</p>
-</div>
-"""
-
-
-def h66c_exec_block() -> str:
-    """H66-C section on the how-to-submit page: what a selector would be doing, and why not."""
-    R = load(ROOT / "docs" / "data" / "release-h66c.json", {})
-    if not R:
-        return ""
-    hold = R.get("holdout", {})
-    return f"""
-<h2>H66-C (2026-10-12) — the scarp-channel candidate, and why the answer is still no</h2>
-<p>Another session implemented the native-resolution LiDAR scarp-channel lane and produced a
-<b>unique, format-valid</b> GeoTIFF: <code>{esc(R.get('slug', ''))}.tif</code>, sha256
-<code class="mono">{esc(R.get('sha256_tif', ''))}</code>. It passes the shared validator with
-{len([v for v in R.get('validator', {}).get('checks', {}).values() if v])} gating checks and zero
-failures, and its leakiest single feature reaches AUC
-{R.get('canary_max_auc', 0):.3f} against a 0.90 threshold.</p>
-<p><b>It is not promoted and this page does not recommend it.</b> On instrument N
-(SGMC off-catalogue faults inside LiDAR-covered held-out blocks) it measures
-<b>{hold.get('dti', 0):.4f}</b>, 95% CI [{hold.get('ci_lo', 0):.4f}, {hold.get('ci_hi', 0):.4f}],
-against frozen baselines of 0.1195 (anderson), 0.1104 (h33-2-b2) and 0.1065 (d28). On instrument
-S it measures 0.1231 against 0.1688 (d28), but that instrument is <i>anti</i>-correlated
-(&rho; = &minus;0.708) with the owner-reported live scores, so it cannot be used to argue a win.
-Neither instrument is a validated surrogate; see
-<a href="irregularities.html">IR-66-INSTR-01</a>.</p>
-<p>If a human selector decides to spend a slot on it anyway, the procedure is identical to the
-one above — download, verify this exact SHA-256, upload on the official form, enter the name and
-the {len(R.get('note', ''))}-character note shown on the
-<a href="index.html">overview</a>, then copy the portal receipt into <code>evidence/</code>.
-<b>No</b> leaderboard row here is <code>ORGANIZER-CONFIRMED</code>; producing the file spent no
-slot.</p>
-<p class="small">What would have to be true for it to be worth a slot: an organiser receipt for a
-candidate with a <i>different</i> field confirming the &minus;0.126-per-unit-f200 dose response is
-causal; a local instrument whose rank correlation with live scores survives partialling out dot
-count; and two independent scientific-lead reviews. None of the three exists today.</p>
-"""
 
 
 def feed_page(feed: dict) -> str:

@@ -447,7 +447,10 @@
   "max_inside": 1.0,
   "nan_inside": 0,
   "nan_outside_count": 7113308,
-  "status": "GENERATED AND FORMAT-VALID; published for review only, NOT promoted"
+  "status": "GENERATED AND FORMAT-VALID; published for review only, NOT promoted",
+  "published": false,
+  "audit_path": "artifacts/h66c/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+  "audit_zip_path": "artifacts/h66c/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.zip"
  },
  "validator": {
   "status": "PASSED",
@@ -546,7 +549,8 @@
   "note_chars": 115,
   "promoted": false,
   "slots_used": 0,
-  "download_status": "PUBLISHED FOR REVIEW \u2014 download yes, submit no; scientific gate NOT MET"
+  "download_status": "NOT OFFERED \u2014 scientific gate not met; bytes retained under artifacts/h66c/ for audit",
+  "published": false
  },
  "independent_reviews": {
   "status": "NOT COMPLETED",

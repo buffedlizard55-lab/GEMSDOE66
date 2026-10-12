@@ -46,6 +46,8 @@
   ],
   "frozen_best": 0.11949990245011766,
   "submission_slots_used": 0,
-  "gate": "NOT MET"
+  "gate": "NOT MET",
+  "published": false,
+  "download": "NOT OFFERED (gate not met); bytes under artifacts/h66c/ with published sha256"
  }
 }

@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="on">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="on">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a><a href="h67/index.html" class="">H67 geophysics lane</a></nav></div></header>
 <main>
 <div class="wrap">
 
@@ -162,31 +162,27 @@ It is a <b>HOLDOUT-DTI</b> result only:
 
 
 
-<h2>H66-C (2026-10-12) — the scarp-channel candidate, and why the answer is still no</h2>
-<p>Another session implemented the native-resolution LiDAR scarp-channel lane and produced a
-<b>unique, format-valid</b> GeoTIFF: <code>gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif</code>, sha256
-<code class="mono">9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a</code>. It passes the shared validator with
+<h2>H66-C (2026-10-12) — the scarp-channel candidate, and why there is no download</h2>
+<p>Another session implemented the native-resolution LiDAR scarp-channel lane end to end and
+built a <b>unique, format-valid</b> GeoTIFF (<code>gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif</code>, sha256
+<code class="mono">9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a</code>). It passes the shared validator with
 15 gating checks and zero
-failures, and its leakiest single feature reaches AUC
-0.646 against a 0.90 threshold.</p>
-<p><b>It is not promoted and this page does not recommend it.</b> On instrument N
-(SGMC off-catalogue faults inside LiDAR-covered held-out blocks) it measures
-<b>0.0979</b>, 95% CI [0.0623, 0.1219],
-against frozen baselines of 0.1195 (anderson), 0.1104 (h33-2-b2) and 0.1065 (d28). On instrument
-S it measures 0.1231 against 0.1688 (d28), but that instrument is <i>anti</i>-correlated
-(&rho; = &minus;0.708) with the owner-reported live scores, so it cannot be used to argue a win.
-Neither instrument is a validated surrogate; see
-<a href="irregularities.html">IR-66-INSTR-01</a>.</p>
-<p>If a human selector decides to spend a slot on it anyway, the procedure is identical to the
-one above — download, verify this exact SHA-256, upload on the official form, enter the name and
-the 115-character note shown on the
-<a href="index.html">overview</a>, then copy the portal receipt into <code>evidence/</code>.
-<b>No</b> leaderboard row here is <code>ORGANIZER-CONFIRMED</code>; producing the file spent no
-slot.</p>
-<p class="small">What would have to be true for it to be worth a slot: an organiser receipt for a
-candidate with a <i>different</i> field confirming the &minus;0.126-per-unit-f200 dose response is
-causal; a local instrument whose rank correlation with live scores survives partialling out dot
-count; and two independent scientific-lead reviews. None of the three exists today.</p>
+failures, and its leakiest single feature reaches AUC 0.646 against a
+0.90 threshold. <b>It is not offered here.</b></p>
+<p>The reason is the gate, not the file. On instrument N (SGMC off-catalogue faults inside
+LiDAR-covered held-out blocks) it measures <b>0.0979</b>, 95% CI
+[0.0623, 0.1219], against frozen baselines of 0.1195
+(anderson), 0.1104 (h33-2-b2) and 0.1065 (d28). On instrument S it measures 0.1231 against 0.1688
+(d28), but that instrument is <i>anti</i>-correlated (&rho; = &minus;0.708) with the owner-reported
+live scores, so it cannot be used to argue a win. Neither instrument is a validated surrogate; see
+<a href="irregularities.html">IR-66-INSTR-01</a>. Because the brief says to offer a download only
+when the gate is met, the bytes stay in <code>artifacts/h66c/</code> for audit, with their hashes
+published on the <a href="index.html">overview</a>.</p>
+<p>What would have to change for it to be worth a slot: an organiser receipt for a candidate with a
+<i>different</i> field confirming the &minus;0.126-per-unit-f200 dose response is causal; a local
+instrument whose rank correlation with live scores survives partialling out dot count; and two
+independent scientific-lead reviews. None of the three exists today, so the honest default is to
+keep the slot.</p>
 
 =======
 

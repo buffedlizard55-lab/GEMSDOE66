@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Method &amp; metric · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 &mdash; DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html">Download &amp; status</a><a href="executive-summary.html">How to submit</a><a href="results.html">Results</a><a href="hypotheses.html">Hypotheses</a><a href="method.html" class="on">Method &amp; metric</a><a href="sources.html">Sources</a><a href="irregularities.html">Irregularities</a><a href="run-card.html">Run card</a></nav></div></header>
+<main><div class="wrap">
+
+<h2>Metric</h2>
+<p>Transcribed from the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official problem page</a>:
+<code>k(d) = max(1 &minus; d/300 m, 0)</code>, &alpha; = 0.2, &beta; = 0.8,</p>
+<p class="mono">TPw = &Sigma;<sub>g</sub> max<sub>x</sub> p(x) k(d(x,g))<br>
+FPw = &Sigma;<sub>x: p&gt;0</sub> p(x) [1 &minus; max<sub>g</sub> k(d(x,g))]<br>
+FNw = &Sigma;<sub>g</sub> [1 &minus; max<sub>x</sub> p(x) k(d(x,g))]<br>
+DTI = TPw / (TPw + 0.2 FPw + 0.8 FNw)</p>
+<p>Our implementation is checked three ways: it equals a literal O(N&middot;M) brute-force
+transcription of those formulas to 3.6e-15 on random inputs; the identity
+<code>TPw + FNw = |G|</code> holds exactly; and the page's own worked example
+(5-pixel vertical truth crossed by a 5-pixel horizontal prediction) reproduces
+<b>TPw = 3.00</b> and <b>FNw = 2.00</b> exactly. The page states FPw = 1.89 where a literal
+reading of its own formula on a plain 5-pixel cross gives 2.00; that discrepancy is logged as
+<code>IR-67-METRIC-01</code> rather than tuned away.</p>
+<h2>Emission: greedy maximisation of expected DTI</h2>
+<p>Read the belief surface <code>b(x)</code> as independent Bernoulli truth probabilities. Then</p>
+<p class="mono">E[TPw](D) = &Sigma;<sub>x</sub> b(x) &middot; max<sub>y&isin;D</sub> k(d(x,y))<br>
+E[m<sub>y</sub>] = &int;<sub>0</sub><sup>1</sup> [1 &minus; &prod;<sub>j: k<sub>j</sub>&gt;t</sub> (1 &minus; b(j))] dt<br>
+E[DTI](D) = E[TPw] / (0.2 E[TPw] + 0.2 &Sigma;<sub>y&isin;D</sub>(1 &minus; E[m<sub>y</sub>]) + 0.8 &Sigma;b)</p>
+<p><code>src/gems67/emit.py</code> adds dots greedily while that ratio rises and <b>stops by
+itself</b> at break-even; the budget is only a safety cap. <code>E[m<sub>y</sub>]</code> is exact
+under independence (accumulated in log space), and is verified against a 400,000-draw Monte
+Carlo in <code>tests/test_h67_emit.py</code>. Because <code>k</code> has 3-pixel support, each
+marginal gain is a 7&times;7 local sum.</p>
+<h2>Holdout</h2>
+<p>Whole fault segments are withheld with a 300 m buffer removed from the <i>visible</i> set only
+(<code>src/gems/holdout.py</code>). Every layer that reads the withheld pool is rebuilt from the
+visible faults alone, and an assertion fails the run if a withheld pixel is still reachable
+through one. Visible faults are masked out of the eligible set pixel-exactly, per protocol.
+8-connected components are used as segment IDs and that proxy is disclosed.</p>
+<h2>Scale caveat, stated plainly</h2>
+<p>The brief asks for 2&ndash;20 m filters on native 1 m LiDAR. The finest reachable product in
+this environment is the owner's 100 m aggregate of 3DEP 1 m tiles, so the Frangi/Steger/
+structure-tensor scales here are 200&ndash;2000 m. That is a deviation, not a fulfilment, and it
+is recorded as such rather than described as the native-resolution method.</p>
+</div></main>
+<footer class="wrap"><p class="small">Built 2026-10-12T02:58:40Z
+by <code>scripts/build_site_h67.py</code>. Every number on this site is either HOLDOUT-DTI
+(internal, with its evaluator and CI) or a measurement of our own bytes. Nothing here is an
+organizer score.</p></footer>
+</body></html>

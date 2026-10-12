@@ -1,0 +1,36 @@
+{
+ "evaluator_version": "src/gems/metric.py @ arena/855725e1; vectorised == literal brute force to 3.6e-15; official worked example TPw=3.00/FNw=2.00 reproduced exactly",
+ "budget": 45000,
+ "folds": 2,
+ "standoff_px": 2,
+ "reps": 6,
+ "instruments": {
+  "C_catalogue_recover": {
+   "withheld_positive_pixels_pooled": 62383,
+   "nulls": {
+    "NULL-1_random_eligible": {
+     "mean_dti": 0.07070520953218663,
+     "sd_dti": 0.0017420703220706085,
+     "min_dti": 0.06828297856263707,
+     "max_dti": 0.07402067260912867,
+     "n": 12
+    },
+    "NULL-2_random_footprint": {
+     "mean_dti": 0.06936165810487632,
+     "sd_dti": 0.0015296415921100767,
+     "min_dti": 0.06690978854018458,
+     "max_dti": 0.07161122399736641,
+     "n": 12
+    },
+    "NULL-3_lattice_eligible": {
+     "mean_dti": 0.0728910374703284,
+     "sd_dti": 0.0005348249754150158,
+     "min_dti": 0.07235621249491338,
+     "max_dti": 0.07342586244574341,
+     "n": 2
+    }
+   }
+  }
+ },
+ "wall_seconds": 69.7
+}
