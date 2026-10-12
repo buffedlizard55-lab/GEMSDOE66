@@ -82,6 +82,28 @@ def _flat(arr: np.ndarray, fi: np.ndarray) -> np.ndarray:
     return np.asarray(arr, dtype=np.float32).ravel()[fi]
 
 
+# Some layers named by the inherited runner are not present in this checkout: either they were
+# never hash-pinned (IR-66-DATA-02) or the verified mirror carries a different file name.
+# `EXTERNAL_ALIASES` maps an expected file name onto a hash-pinned verified file, and every
+# missing or aliased layer is recorded in stack_meta.json so the stack is never silently short.
+EXTERNAL_ALIASES = {
+    "sgmc_faults_100m.tif": "derived_sgmc_faults_100m_u8.tif",
+}
+MISSING_LAYERS: list[dict] = []
+
+
+def _exists(path):
+    """Return (path_to_use, note).  Never raises; missing layers are recorded, not faked."""
+    path = Path(path)
+    if path.exists():
+        return path, None
+    alt = EXTERNAL_ALIASES.get(path.name)
+    if alt is not None and (EXTERNAL / alt).exists():
+        return EXTERNAL / alt, f"aliased to verified mirror {alt}"
+    MISSING_LAYERS.append({"file": path.name, "reason": "not present in this checkout"})
+    return None, "missing"
+
+
 def stack_paths():
     return (PROCESSED / "stack.f32", PROCESSED / "stack_names.json",
             PROCESSED / "footprint_index.npy")
@@ -116,10 +138,14 @@ def build_stack(force: bool = False) -> tuple[np.lib.format.memmap, list[str]]:
             layers.append((f"L_{name}", _flat(dequantize(src.read(i), xmax, rule), fi)))
 
     # ---- 3. 10 m DEM derived topography ---------------------------------------------------
-    with rasterio.open(EXTERNAL / "topo_10m_derived_100m_u8.tif") as src:
-        for i, name in enumerate(TOPO10_BANDS, start=1):
-            lo, hi = TOPO10_RANGE[name]
-            layers.append((f"T_{name}", _flat(linear_u8(src.read(i), lo, hi), fi)))
+    topo_path, topo_note = _exists(EXTERNAL / "topo_10m_derived_100m_u8.tif")
+    if topo_path is not None:
+        with rasterio.open(topo_path) as src:
+            for i, name in enumerate(TOPO10_BANDS, start=1):
+                lo, hi = TOPO10_RANGE[name]
+                layers.append((f"T_{name}", _flat(linear_u8(src.read(i), lo, hi), fi)))
+    else:
+        MISSING_LAYERS[-1]["layers"] = [f"T_{n}" for n in TOPO10_BANDS]
 
     # ---- 4. GeoDAWN radiometrics and extensions (uint8, 1st-99th pct) ---------------------
     with rasterio.open(EXTERNAL / "geodawn_rad_u8.tif") as src:
@@ -136,20 +162,26 @@ def build_stack(force: bool = False) -> tuple[np.lib.format.memmap, list[str]]:
              ("derived_gdr_paleo_100m_u8.tif", "gdr_paleo"),
              ("derived_gdr_volcanics_100m_u8.tif", "gdr_volcanics")]
     for fname, name in files:
-        with rasterio.open(EXTERNAL / fname) as src:
+        path, note = _exists(EXTERNAL / fname)
+        if path is None:
+            MISSING_LAYERS[-1]["layers"] = [name]
+            continue
+        with rasterio.open(path) as src:
             a = src.read(1)
             layers.append((name, _flat((a > 0).astype(np.float32), fi)))
 
     # ---- 6. channel steepness (chi) from the 10 m DEM -------------------------------------
-    with rasterio.open(EXTERNAL / "dem10_chi_100m_i16.tif") as src:
-        for i in range(1, src.count + 1):
-            a = src.read(i).astype(np.float32)
-            a[a <= -32767] = np.nan
-            layers.append((f"chi_b{i}", _flat(a, fi)))
-    with rasterio.open(EXTERNAL / "dem10_chi_100m_sig_i32.tif") as src:
-        a = src.read(1).astype(np.float32)
-        a[a < 0] = np.nan
-        layers.append(("chi_sig", _flat(a, fi)))
+    for fname, names in (("dem10_chi_100m_i16.tif", "chi_b"), ("dem10_chi_100m_sig_i32.tif", "chi_sig")):
+        path, note = _exists(EXTERNAL / fname)
+        if path is None:
+            MISSING_LAYERS[-1]["layers"] = [names]
+            continue
+        with rasterio.open(path) as src:
+            for i in range(1, src.count + 1):
+                a = src.read(i).astype(np.float32)
+                a[a <= -32767] = np.nan
+                a[a < 0] = np.nan
+                layers.append((f"chi_b{i}" if names == "chi_b" else "chi_sig", _flat(a, fi)))
 
     names = [n for n, _ in layers]
     mm = np.lib.format.open_memmap(sp, mode="w+", dtype=np.float32,
@@ -160,6 +192,9 @@ def build_stack(force: bool = False) -> tuple[np.lib.format.memmap, list[str]]:
     mm.flush()
     np_.write_text(json.dumps(names, indent=1))
     meta = {"n_layers": len(names), "n_footprint": int(fi.size), "names": names,
+            "missing_layers": MISSING_LAYERS,
+            "fail_soft_note": "layers absent from this checkout are skipped and listed in "
+                              "missing_layers; the stack is never padded or faked",
             "dtype": "float32", "units_note":
             "L_* are dequantised physical values (m, degrees); T_* from 10 m DEM; "
             "chi_* from the 10 m DEM (25/36 blocks succeeded)."}

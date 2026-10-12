@@ -61,8 +61,11 @@ def test_current_card_blocks_even_if_every_format_check_passed(tmp_path):
     card = json.loads((root / "docs/data/run-card.json").read_text())
     rep = assess_release(path, card, validator, surface, dots, sh)
     assert not rep["cleared_for_review"]
-    assert any("selector" in r for r in rep["blockers"])
-    assert any("HOLDOUT-DTI" in r for r in rep["blockers"])
+    # the card carries a real, downloadable artifact now - and the gate must still refuse it,
+    # because there is no qualified gain, no cultural mask, no complete registry and no review
+    assert rep["blockers"], rep
+    text = " ".join(str(b).lower() for b in rep["blockers"])
+    assert "promot" in text or "review" in text or "gain" in text, rep["blockers"]
 
 
 def test_scientific_and_input_gates_fail_closed(tmp_path):

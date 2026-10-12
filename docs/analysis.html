@@ -1,56 +1,14 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>H33 attribution review · GEMSDOE66</title>
-<link rel="stylesheet" href="assets/site.css"></head>
-<body><header class="top"><div class="wrap">
-<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="analysis.html" class="on">H33 attribution</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
-<main>
-<div class="wrap">
-
-<h2>H33-2-B2 (owner-reported 0.2778): audit caveat</h2>
-<div class="note"><b>The supplied value is a user/owner-reported attribution, not an
-organizer-confirmed score.</b> No receipt tied to the exact TIFF bytes or SHA-256 is present in
-this checkout, and the repository records that as IR-01. Nothing here is a leaderboard mirror.</div>
-<p>Without a receipt-to-hash mapping, the file-to-score link itself is missing, so no causal claim
-about that specific file is made. What <i>can</i> be measured is the family: 18 distinct
-owner-scored rasters with measured dot geometry and layer means. That measurement is below, and it
-is what the released candidate's design uses.</p>
-
-<h2>The measured attribution (session 66)</h2>
-<p>Method: for every distinct scored registry raster, take its emitted dots, average a layer under
-those dots, and correlate with the raster's owner-reported score. The partial column additionally
-removes the ranks of (fraction of dots within 200 m of the published catalogue, dot count). Source:
-<code>evidence66/e1_layer_scan.json</code>, written by <code>scripts66/e1_layer_scan.py</code>;
-n = 18; baseline LOO RMSE (predict the mean) =
-0.02490.</p>
-<table>
-<tr><th>layer</th><th>Spearman</th><th>partial (2 controls)</th><th>LOO RMSE</th>
-<th>mean at dots</th><th>footprint mean</th></tr>
-<tr><td><code>K</code></td><td>+0.9770</td><td>+0.9133</td><td>0.01492</td><td>99.5286</td><td>124.7312</td></tr><tr><td><code>UK</code></td><td>-0.9770</td><td>-0.8431</td><td>0.01734</td><td>113.8708</td><td>101.7463</td></tr><tr><td><code>valid</code></td><td>+0.1754</td><td>+0.6760</td><td>0.04455</td><td>194.5035</td><td>192.1002</td></tr><tr><td><code>coh100</code></td><td>-0.1044</td><td>+0.5913</td><td>0.02756</td><td>117.2939</td><td>119.5495</td></tr><tr><td><code>strike</code></td><td>-0.0313</td><td>+0.5913</td><td>0.03160</td><td>97.1331</td><td>95.3144</td></tr><tr><td><code>step_max</code></td><td>+0.6848</td><td>+0.5707</td><td>0.03147</td><td>70.9430</td><td>52.4343</td></tr><tr><td><code>downface_max</code></td><td>+0.6472</td><td>+0.5005</td><td>0.03049</td><td>61.2395</td><td>41.5653</td></tr><tr><td><code>sgmc</code></td><td>-0.7996</td><td>-0.4923</td><td>0.02229</td><td>0.0299</td><td>0.0162</td></tr><tr><td><code>lappos_max</code></td><td>+0.2944</td><td>+0.4303</td><td>0.02763</td><td>90.3296</td><td>65.4523</td></tr><tr><td><code>ex_max</code></td><td>+0.3027</td><td>+0.4241</td><td>0.02792</td><td>82.7166</td><td>63.5234</td></tr><tr><td><code>cross_max</code></td><td>+0.2985</td><td>+0.4180</td><td>0.03647</td><td>77.3822</td><td>53.9208</td></tr><tr><td><code>U</code></td><td>-0.7557</td><td>-0.4097</td><td>0.02486</td><td>103.9738</td><td>116.9040</td></tr><tr><td><code>ex_mean</code></td><td>+0.4029</td><td>+0.3870</td><td>0.03524</td><td>76.5972</td><td>60.2176</td></tr><tr><td><code>lapneg_max</code></td><td>+0.2923</td><td>+0.3829</td><td>0.02740</td><td>89.2886</td><td>65.5376</td></tr><tr><td><code>upface_max</code></td><td>+0.2797</td><td>+0.3808</td><td>0.02671</td><td>57.6859</td><td>37.8467</td></tr><tr><td><code>TMI</code></td><td>+0.7286</td><td>+0.3705</td><td>0.04810</td><td>106.8290</td><td>105.7656</td></tr><tr><td><code>Th</code></td><td>+0.5741</td><td>+0.3106</td><td>0.05151</td><td>115.1129</td><td>127.7681</td></tr><tr><td><code>TC</code></td><td>+0.5825</td><td>+0.2941</td><td>0.02366</td><td>108.0337</td><td>128.6235</td></tr><tr><td><code>UTh</code></td><td>-0.6430</td><td>-0.2755</td><td>0.03014</td><td>79.5208</td><td>73.1756</td></tr><tr><td><code>ThK</code></td><td>-0.5219</td><td>-0.0815</td><td>0.02907</td><td>123.6454</td><td>123.6608</td></tr><tr><td><code>relief</code></td><td>+0.0021</td><td>-0.0072</td><td>0.03859</td><td>51.1673</td><td>39.4777</td></tr>
-</table>
-<h3>Caveats carried by the evidence file itself</h3>
-<ul><li>owner-reported scores are not organiser receipts and no hash-to-score crosswalk exists</li><li>the rasters share one lineage, so a layer can track a hidden shared cause</li><li>n = 18; use as a lane prior, never as a score</li></ul>
-<h3>Design consequence</h3>
-<p>The released candidate (see <a href="index.html">overview</a>) is the pre-registered
-session-66 design in <code>registry66/preregistration-k66.json</code>: consensus support, K<sup>0.5</sup>
-prior, greedy metric-marginal acceptance, 32,000 dots. Its measured statistics move every
-designable quantity the direction the family's score record rewards (K mean 126.3 vs the family's
-scored band 97.1–101.0; dot count at the family floor; zero dots near the catalogue). The
-two-statistic OLS is <b>out of support</b> for it, so no extrapolated score is quoted.</p>
-<p class="small">Historical record: an earlier session reviewed the same question and concluded
-"no defensible score explanation yet" because no receipt-to-hash crosswalk existed. Both statements
-hold at once — the crosswalk is still missing, and the family-level measurement above is not a
-claim about one file's organisers score.
-<a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> ·
-<a href="sources.html">Sources</a>.</p>
-
-</div>
-</main>
-<footer><div class="wrap">
-GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
-competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
-Every number on this site is a local measurement or an owner/public report and is labelled as
-one; no organiser score exists for any artifact here.
-</div></footer></body></html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Auditable native-resolution LiDAR scarp-channel research; no candidate is currently cleared for submission.">
+<title>H33 attribution · GEMSDOE66</title><style>
+:root{color-scheme:light;--ink:#15283a;--muted:#566a7b;--paper:#f3f6f8;--card:#fff;--line:#d9e2e8;--blue:#175d83;--red:#9d302d;--redbg:#fff0ee;--amber:#845318;--amberbg:#fff7e7;--green:#276047;--greenbg:#edf8f0}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.58 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}main{max-width:1120px;margin:0 auto;padding:24px clamp(16px,4vw,48px) 64px}nav{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 28px;padding:0 0 16px;border-bottom:1px solid var(--line)}nav a{padding:6px 10px;border-radius:8px;color:var(--blue);text-decoration:none;font-size:.91rem}nav a:hover,nav a.active{background:#e4eef4;color:#123e58}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.035em;margin:.35em 0 .45em}h2{font-size:1.34rem;margin:1.45em 0 .45em}h3{font-size:1.05rem;margin:1.2em 0 .35em}p{margin:.55em 0 1em}.muted,.small{color:var(--muted)}.small{font-size:.92rem}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;font-weight:750;color:var(--blue)}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin:16px 0;box-shadow:0 4px 18px rgba(18,50,73,.035)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:12px;background:#fbfcfd}.stat b{display:block;margin-bottom:5px}.tag{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.77rem;font-weight:750;letter-spacing:.02em}.red{color:var(--red);background:var(--redbg)}.amber{color:var(--amber);background:var(--amberbg)}.green{color:var(--green);background:var(--greenbg)}.blue{color:#1d5773;background:#e8f2f7}.banner{border:1px solid #e3aaa6;background:var(--redbg);border-radius:16px;padding:18px 22px;margin:18px 0}.banner h2{margin-top:0}.banner.warn{border-color:#e5ca93;background:var(--amberbg)}.banner.ok{border-color:#a9cdb8;background:var(--greenbg)}.mono,code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{overflow-wrap:anywhere;background:#f0f3f5;padding:.12em .35em;border-radius:5px;font-size:.91em}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#101f2d;color:#e4edf4;border-radius:12px;padding:16px;overflow:auto}a{color:var(--blue)}.button{display:inline-block;border-radius:9px;padding:9px 13px;background:var(--blue);color:white;text-decoration:none;font-weight:650}.button.disabled{background:#71808b;cursor:not-allowed}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:9px 10px}th{background:#eef3f6}.item{border-left:4px solid #a7bac7;padding:3px 0 4px 15px;margin:20px 0}.item.critical,.item.high{border-color:#b74943}.item.medium{border-color:#d5a242}.item.info,.item.low{border-color:#6f9eb4}.footer{border-top:1px solid var(--line);margin-top:34px;padding-top:14px;color:var(--muted);font-size:.85rem}.kicker{font-size:.9rem;color:var(--muted)}.nowrap{white-space:nowrap}
+@media(max-width:640px){main{padding-top:14px}nav{gap:2px}nav a{font-size:.83rem;padding:5px 7px}table{display:block;overflow-x:auto}.card{padding:17px}}
+</style></head>
+<body><main><!-- superseded-banner --><div class="warn" style="margin:0 0 1rem"><b>Historical page.</b> Its status statements are superseded: the current artifact status is on <a href="index.html">the overview</a> and the numbered steps are on <a href="executive-summary.html">how to submit</a>. Content below is kept as the dated record and must not be read as the current gate state.</div><nav aria-label="Primary"><a href="index.html" class="">Overview</a><a href="feed.html" class="">Project feed</a><a href="submission-guide.html" class="">Submission workflow</a><a href="hypotheses.html" class="">Ranked hypotheses</a><a href="analysis.html" class="active">H33 attribution</a><a href="run-card.html" class="">Run card</a><a href="irregularities.html" class="">Audit findings</a><a href="sources.html" class="">Sources</a><a href="executive-summary.html" class="">Executive summary</a><a href="h66-session.html" class="">H66 archive</a></nav><div class="eyebrow">Attribution review</div><h1>H33-2-B2: no defensible score explanation yet</h1>
+<div class="banner warn"><h2>Attribution is unverified</h2><p>The supplied value is a user/owner-reported attribution, not an organizer-confirmed score. The owner-maintained GEMSDOE32 page describes the artifact as unscored and states that no organizer score exists for its artifacts. No receipt tied to the exact TIFF bytes or SHA-256 is present in this checkout.</p></div>
+<section class="card"><h2>Why the mechanism cannot be inferred</h2><p>Without a receipt-to-hash mapping, the file-to-score link itself is missing. Without the exact artifact bytes and a controlled comparison, it is impossible to know whether the alleged change came from ranking, placement, probability mass, catalogue-adjacent pruning, rasterization, or something else. Those are hypotheses, not findings.</p><p>The official distance-weighted Tversky metric rewards probability mass near labeled faults and penalizes unsupported mass; the false-negative coefficient exceeds the false-positive coefficient. This explains the metric's general trade-off, not the outcome of an unverified H33 file.</p><p>To answer causally, obtain an organizer receipt for the exact artifact hash, preserve the file, and compare controlled variants under the same valid, leakage-free spatial protocol. Do not use hidden labels or a public leaderboard row as an artifact receipt.</p><p><a href="research/metric-derivation.md">Read the metric derivation</a> · <a href="sources.html">Review the source register</a>.</p></section>
+<section class="card"><h2>Evidence disposition</h2><ul><li>Owner-maintained evidence is marked owner-reported only.</li><li>No leaderboard values are reproduced or mirrored in this site.</li><li>No organizer-confirmed numeric result is claimed.</li><li>The historical H66 holdout scalar is disqualified by the leakage and protocol audit.</li></ul></section>
+<footer class="footer">GEMSDOE66 · Maximize P(Win) · Own the Outcome · Status is repository state, not organizer acceptance. No leaderboard values are mirrored.</footer>
+</main></body></html>

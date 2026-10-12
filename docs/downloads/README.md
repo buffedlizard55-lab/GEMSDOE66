@@ -1,24 +1,22 @@
-# Downloads
+# Download folder — what is here and what it is worth
 
-## Current status: ONE cleared file
+**One file is offered for upload, with one safer-format sibling. Nothing else here is a candidate.**
 
-| file | sha256 | note |
+| file | sha256 | status |
 |---|---|---|
-| [`gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif`](gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif) | `122fcd16202ce74e7475a1856dd5e47ae235fa80ecb1122f7db204ead49bc058` | primary submission (NaN outside the footprint) |
-| [`…-nan.zip`](gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip) | `46f5d5d07ad35da9590eb8d3b6363847aa399d3b29bee4b6ea5673525eb3fb9a` | the same GeoTIFF zipped |
-| [`…-allfinite.tif`](gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif) | see [receipt](gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif.receipt.json) | identical inside the footprint, writes `0` outside instead of NaN |
+| `gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif` | `eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42` | **RECOMMENDED UPLOAD.** float32, EPSG:32611, 100 m, 3730x3292, 40,000 unit-mass dots, zero NaN, every one of the 12,279,160 cells in [0, 1]. Validator PASS. |
+| `gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif` | `1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f` | Same values inside the footprint; NaN outside (7,111,787 cells), which is the brief-exact convention but can trip a strict finite-range checker (IR-67-FORMAT-01). |
+| `*.tif.receipt.json` | — | Writer receipts: grid, range, NaN counts, dot count, the baked-in submission name and the note. Local evidence, **not** organizer acceptance. |
 
-Submission name `GEMSDOE66-K66-kanchor-consensus-32000`; note (122/140 characters)
-`GEMSDOE66 K66 | off-catalogue K^0.5-anchored consensus-support dots, metric-marginal accept, 32000 dots; local checks only`.
+Why two files exist: a previous upload was rejected with *"Predicted values must be in range [0, 1]"*.
+A strict `all(0 <= v <= 1)` test returns `False` on NaN, so the writer now offers an explicit
+`outside_fill` export and the validator an `outside_policy` switch; the runner writes both siblings from
+one dot set. Inside the footprint the files are identical pixel-for-pixel.
 
-Cleared by [`registry66/run-card-session66.json`](../../registry66/run-card-session66.json) and
-[`evidence66/e9_release.json`](../../evidence66/e9_release.json). No HOLDOUT-DTI and no
-ORGANIZER-CONFIRMED score is claimed anywhere.
+**What is NOT claimed.** No organizer score, no leaderboard comparison, no promotion. The
+pre-registered science gate is unevaluable (IR-67-INSTR-01), the pre-registered P3 and P4 were
+falsified, and the registry comparison carries an open raw-threshold exception (IR-67-GATE-02).
+Upload is the owner's decision; the honest default under the project rule is to keep the slot.
 
-## Historical artifacts — do NOT upload
-
-- **H66-1** bytes were withdrawn earlier and remain only as audit copies under
-  `evidence/archives/h66-1/`, outside the Pages document root and without site links.
-- **H66-2** is a historical negative result under `artifacts/h66-2/`.
-- **lidar_lane** is audit-only under `artifacts/lidar_lane/`; its pooled gain reversed under
-  relief matching and its raw dot overlap was recorded as a stop.
+**After uploading, write the receipt here** (submission id, timestamp, score or error text). An
+organizer receipt tied to the sha256 above is the only route to `ORGANIZER-CONFIRMED`.
