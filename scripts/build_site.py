@@ -78,6 +78,30 @@ def _current_run_card() -> dict:
     return rc
 
 
+def current_review_block() -> str:
+    """Earlier session's presence-only preflight, kept for audit and labelled as superseded."""
+    preflight = load(ROOT / "evidence" / "input_preflight_2026-10-12.json", {}) or {}
+    release = load(ROOT / "evidence" / "release_preflight_2026-10-12.json", {}) or {}
+    required = preflight.get("required_files", [])
+    missing = sum(not item.get("present", False) for item in required)
+    date = preflight.get("review_date", "2026-10-12")
+    return f"""
+<h2>Earlier review record ({esc(date)}) — superseded by the session-66 release above</h2>
+<div class="note">
+  <p class="small">Scope: this is the <b>presence-only preflight of an earlier session</b>. It made no
+  network request and copied no data, so it necessarily found <b>{missing} of {len(required)}</b>
+  required inputs absent. It does <b>not</b> describe the session-66 candidate: that candidate's
+  inputs were restored in-session from the sha256-pinned GitHub mirrors (fetch verified byte-for-byte
+  against <code>registry/data_manifest.json</code>) and its checks are the release table above.
+  The earlier session's release preflight said <code>download_allowed =
+  {str(release.get('download_allowed', False)).lower()}</code> for <i>its</i> withheld artifacts —
+  H66-1, H66-2 and lidar_lane remain withdrawn and unlinked. Read the
+  <a href="review/2026-10-12-review.md">three-pass review</a> and
+  <a href="data/run-card.json">the earlier run card</a> for that session's reasoning.</p>
+</div>
+"""
+
+
 def submission_block() -> str:
     """One-click download block, rendered from the current run card (no hand-typed numbers)."""
     rc = _current_run_card()
@@ -181,6 +205,8 @@ Everything after “Historical record” describes earlier, blocked states and i
 <h2 class="history">Historical record (superseded)</h2>
 
 {submission_block()}
+
+{current_review_block()}
 
 <h2>The one idea that matters</h2>
 <p>The metric is a <b>budget</b>. With <code>T = TP<sub>w</sub></code>, <code>S = Σp</code>,

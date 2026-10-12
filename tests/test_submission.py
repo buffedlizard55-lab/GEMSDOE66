@@ -12,9 +12,12 @@ from gemsdoe66.validate_submission import validate
 
 ROOT = Path(__file__).resolve().parent.parent
 SAMPLE_SUBMISSION = ROOT / "data" / "raw" / "sample_submission.tif"
+# The validator reads labels.tif (catalogue_mask) as well as the sample grid, so the guard must
+# require every file it touches; checking only the sample let partial local data fail, not skip.
+REQUIRED_RAW = [SAMPLE_SUBMISSION, ROOT / "data" / "raw" / "labels.tif"]
 pytestmark = pytest.mark.skipif(
-    not SAMPLE_SUBMISSION.is_file(),
-    reason="requires the authorized official sample_submission.tif, which is absent locally",
+    not all(p.is_file() for p in REQUIRED_RAW),
+    reason="requires the authorized official sample_submission.tif and labels.tif, absent locally",
 )
 
 

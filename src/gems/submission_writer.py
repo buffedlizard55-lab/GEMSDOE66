@@ -47,8 +47,14 @@ def write_submission(out_path: str | Path, prediction, footprint, reference_path
     with rasterio.open(reference_path) as ref:
         ref_shape = (ref.height, ref.width)
         crs, transform = ref.crs, ref.transform
+        resolution = ref.res
+    if crs is None or crs.to_epsg() != 32611 or transform.b != 0 or transform.d != 0 or \
+            resolution != (100.0, 100.0):
+        raise ValueError("reference must be an unrotated EPSG:32611 100 m grid")
     if pred.shape != ref_shape or fp.shape != ref_shape:
         raise ValueError(f"prediction {pred.shape} / footprint {fp.shape} != reference {ref_shape}")
+    if not fp.any() or fp.all():
+        raise ValueError("footprint must have both inside and outside cells")
     if np.isnan(pred[fp]).any():
         raise ValueError("NaN inside the footprint is not allowed")
     if np.isinf(pred[fp]).any():

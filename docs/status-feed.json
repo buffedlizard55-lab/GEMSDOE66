@@ -1,10 +1,43 @@
 {
   "schema": "gems-project-status-feed/1",
-  "generated_utc": "2026-10-11",
+  "generated_utc": "2026-10-12",
   "status": "BLOCKED — no candidate cleared for download or submission",
   "scope": "Project-state feed only. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages.",
   "external_monitoring": "Disabled. DrivenData Terms of Use restrict automated access and manual monitoring/copying without prior written consent. No leaderboard values are stored.",
   "entries": [
+    {
+      "date": "2026-10-12",
+      "kind": "three-pass-repository-review",
+      "status": "BLOCKED / NEGATIVE — NO CANDIDATE CLEARED",
+      "summary": "Three-pass review completed. The check-only input preflight returned exit 2 with all eight required competition/cache paths absent; no cached stack or native 1 m DEM is present. Four same-lane hypotheses remain untested, all blocked pending authorized exact DEM tiles, cultural mask and complete registry. No HOLDOUT-DTI, feature leakage canary, candidate raster, download or slot was generated. The H33 owner page says no organizer score exists; its user-supplied alleged value is unverified. The prompt supplies conflicting overall leaderboard claims (0.3774 and 0.3195); the board was not accessed. Local suite: 120 passed, 5 skipped for the absent official sample raster; code tests are not a science result.",
+      "links": [
+        "review/2026-10-12-review.md",
+        "data/run-card.json",
+        "data/hypotheses.json",
+        "data/irregularities.json",
+        "executive-summary.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "release-safety",
+      "status": "NEGATIVE — NO SUBMISSION CLEARED",
+      "summary": "Current checkout has none of 8 required competition/cache inputs; no raw native 1 m DEM, valid holdout, complete registry, official footprint validation or independent scientific approvals. Shared writer refuses wrong CRS/resolution and empty footprints; shared release preflight now checks pinned hashes, scientific/uniqueness/format gates and never automatically publishes. This session ran 0 experiments, created no candidate, used 0 competition slots. Owner H33 page says its artifact was UNSCORED; user-supplied association is unverified.",
+      "links": [
+        "review/2026-10-11-release-safety.md",
+        "data/run-card.json",
+        "executive-summary.html"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "kind": "offline-tests",
+      "status": "PASS — 119 passed, 5 skipped",
+      "summary": "Shared release gate, writer, validator and site regression tests passed locally. Five official-grid tests skipped because the authorized sample raster is absent; this is code verification, not a science or organizer result.",
+      "links": [
+        "review/2026-10-11-release-safety.md"
+      ]
+    },
     {
       "date": "2026-10-11",
       "kind": "experiment-h66-2",
@@ -105,10 +138,12 @@
     }
   ],
   "next_actions": [
+    "Before testing a candidate, verify the official USGS 3DEP tile inventory and exact footprint; source availability in principle is not proof that these tiles are obtainable here.",
     "Keep LIDAR-01 blocked; do not run the historical H66-2 union proposal or another experiment without authorized inputs, preserved provenance, scientific review, and an explicit approved research budget.",
     "Fix and review the buffered whole-segment holdout, LiDAR-covered evaluator, and NaN-outside shared writer in the upstream shared template before re-enabling any research runner; do not use a private fork.",
     "Obtain two independent scientific-lead reviews of the ranked same-lane hypothesis, named terrace/channel-bank/landslide mimics, and preregistered holdout protocol.",
     "Keep all artifacts unpublished unless both continuous pre-placement and final emitted-dot checks pass against a complete registry, exact official-grid/footprint validation passes, and a valid HOLDOUT-DTI with evaluator/version/count/95% CI beats the frozen best.",
-    "Complete the missing official-rules PDF section and full applicable Terms of Use review; retain the conservative stop while IR-66-RELEASE-01 remains unresolved."
+    "Complete the missing official-rules PDF section and full applicable Terms of Use review; retain the conservative stop while IR-66-RELEASE-01 remains unresolved.",
+    "Resolve the incompatible user-supplied leaderboard claims only from authorized primary evidence; do not poll, scrape, or mirror DrivenData."
   ]
 }

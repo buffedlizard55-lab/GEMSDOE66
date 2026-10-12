@@ -9,33 +9,6 @@
 <main>
 <div class="wrap">
 
-<h2>Session-66 ranked hypotheses (registry66/hypotheses66.json)</h2>
-<p>Five candidates not previously implemented, ranked by expected gain against the validated
-structural drivers and by implementation cost, each naming its layers, physical signature and the
-reason it can catch a fault the catalogue misses. Data availability was checked in-session.</p>
-<ul>
-<li><b>H66-1 K-anchored consensus-support metric-marginal emission</b> — implemented this session;
-layers: GeoDAWN radiometric K, the registry for the support region, labels.tif for the catalogue
-exclusion; signature: mean K under dots, dot count, coverage; why a missed fault: K-metasomatism /
-argillic alteration along permeable structures, and young volcanic terrain hosting the geothermal
-systems; cost LOW.</li>
-<li><b>H66-2 Thermal-discharge corridor coverage</b> — layers: GDR 1391 well/spring temperatures
-(27,092 in-footprint samples, max 296.5 °C, 1,873 rows classed Hot), GDR QFaults traces (1,126),
-SGMC fault raster (83,593 cells); signature: corridor density between thermal-discharge points and
-trace endpoints; why a missed fault: geothermal systems need permeability, so the added faults are
-the ones that explain thermal anomalies; differs from the repo, which never used the well/spring
-table for placement; cost LOW.</li>
-<li><b>H66-3 Ternary radiometric alteration discrimination</b> — layers: K/Th/U/TC and Th/K, U/K,
-U/Th; signature: high K with Th conserved and U depleted versus potash/playa K highs; cost LOW.</li>
-<li><b>H66-4 Along-strike matched filter on the 12 LiDAR scarp descriptor bands</b> — signature:
-coherent along-strike scarp amplitude with consistent downface direction and orientation coherence;
-closest to the stated lane, but the mirror bands are 100 m aggregates of the 1 m descriptors, so the
-scale deviation must be disclosed; cost MEDIUM.</li>
-<li><b>H66-5 Competition-band structural corroboration</b> — layers: the 19 organiser bands in
-training_features.tif (verified obtainable from the pinned mirror, 418,912,844 bytes, 5 parts);
-signature: shear-strain and potential-field lineaments co-located with the K-anchored support;
-cost MEDIUM.</li>
-</ul>
 <h2>Ranked same-lane hypotheses — before implementation</h2>
 <p>Ranking and hypotheses are read from <code>docs/data/hypotheses.json</code>. Expected gains
 are qualitative priors, not DTI projections. Every candidate below is unimplemented and

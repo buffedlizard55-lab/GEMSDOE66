@@ -1,10 +1,10 @@
 {
   "schema": "gems-project-site-status/2",
-  "review_date": "2026-10-11",
+  "review_date": "2026-10-12",
   "active_run": null,
   "active_lane": "native-resolution LiDAR scarp channels",
   "status": "BLOCKED — no current candidate cleared",
-  "stop_reason": "The unauthenticated official data page redirected to login; authorized competition rasters and the cached LiDAR stack are absent. The historical H66 holdout claim is disqualified because full-catalogue distance affected candidate eligibility, scoring was not restricted to LiDAR-covered held-out blocks, and the required buffered whole-segment protocol/95% CI were not established. The complete raster registry and exact official footprint validation are also unavailable. No new experiment or candidate was produced.",
+  "stop_reason": "The current local presence check found all eight required competition/cache files missing; the authorized sample grid, native 1 m DEM tiles, cached stack, and cultural mask are absent. No compliant whole-segment LiDAR-covered holdout or feature-alone canary was run. The 60 local registry TIFFs are not certified complete, and no candidate surface, final dots, or exact official-footprint validation exists. The owner-reported H33 attribution and conflicting overall-board values remain unverified. No experiment, candidate, download, or slot was produced.",
   "new_tiff_created_in_this_review": false,
   "historical_download_files_removed": true,
   "current_candidate": null,
@@ -44,11 +44,11 @@
   },
   "feed_policy": "Repository-state only; no leaderboard values copied, stored, refreshed, or monitored. No DrivenData subpage is deep-linked from the site absent written authorization.",
   "canonical_run_card": "docs/data/run-card.json",
-  "technical_audit": "docs/review/2026-10-11-audit.md",
+  "technical_audit": "docs/review/2026-10-12-review.md",
   "input_preflight_snapshot": {
-    "evidence": "evidence/h66_inputs_s0_review.json",
-    "status": "BLOCKED; one-off pre-merge s0 exited 2; 9 required roles absent, 2 pin records absent; no load/experiment followed",
-    "not_current_runner_output": true
+    "evidence": "evidence/input_preflight_2026-10-12.json",
+    "status": "BLOCKED; bash scripts/fetch_inputs.sh exited 2; eight required paths absent; check-only; no transfer or experiment followed",
+    "not_current_runner_output": false
   },
-  "release_disposition": "H66-2 is retained as a historical NEGATIVE-NOT-PROMOTED experiment from the newer main branch; no new experiment or candidate emission occurred in this PR reconciliation."
+  "release_disposition": "No candidate generated; current release preflight is blocked. No new experiment, holdout, emission, download or competition slot occurred in this review."
 }
