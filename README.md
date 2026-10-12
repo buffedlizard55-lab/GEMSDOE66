@@ -9,7 +9,8 @@ and transparent stops are valid outcomes.
 
 **Start every session here:** read this complete charter, then the canonical
 [`docs/data/run-card.json`](docs/data/run-card.json) and the newest dated file under
-[`docs/review/`](docs/review/), including the [2026-10-11 release-safety review](docs/review/2026-10-11-release-safety.md).
+[`docs/review/`](docs/review/), including the [2026-10-11 release-safety review](docs/review/2026-10-11-release-safety.md)
+and the [2026-10-12 H67 lane session review](docs/review/2026-10-12-h67-session.md).
 Do not treat inherited artifacts as candidates cleared for release. The original method and
 parallel-run prompt is preserved in Appendix A; this review retains the full intent, while the
 binding conditional **no download unless all gates pass** rule takes priority over an unconditional
@@ -30,6 +31,23 @@ DTI matches brute force; H33-2-B2 has 0 dots within 200 m of the catalogue (min 
 irregularities (`IR-S-01`–`IR-S-06`), including `existing_faults.tif` being byte-identical to
 `labels.tif`. See
 [`docs/review/2026-10-11-session-arena50d197c5-blocker-and-h33-audit.md`](docs/review/2026-10-11-session-arena50d197c5-blocker-and-h33-audit.md).
+
+**H67 native-resolution scarp lane session (`arena/9ae5a972`, 2026-10-12): NEGATIVE — no
+TIF offered, 0 submission slots used, 3/3 experiments spent.** All 23 hash-pinned
+competition/cache mirrors fetched and verified; five new same-lane hypotheses (H67-A..E)
+implemented on the pinned 1 m-derived native scarp stack, the GEMSDOE48 h52 native 1 m-tile
+scarp-height product (697/700 tiles), and TIGER-road / BLM-claim cultural layers.
+Leakage canary: no leakage (max AUC 0.5755) but no channel transfers across spatial folds
+(0.29–0.80; four folds sub-chance). Best in-lane emission (h52_h_rank, incumbent geometry,
+37,654 dots): HOLDOUT-DTI 0.12118 vs incumbent 0.09539 (+0.0258, paired 95 % CI
+[−0.0109, +0.0365]) — positive point estimate, range-front-dominated stratification, and
+77.7 % of final dots within 3 px of the GEMSDOE32 bayesopt-scarp registry raster (4.38×
+lift) → lane-drift DUPLICATE stop. Lane-separation complement emission: 83 eligible dots,
+DTI 0. Full record: [`docs/review/2026-10-12-h67-session.md`](docs/review/2026-10-12-h67-session.md),
+run card [`docs/data/run-card.json`](docs/data/run-card.json), evidence
+`evidence/h67_e1_canary.json`, `evidence/h67_e2_emit_*.json`. New irregularities
+IR-67-01…IR-67-05. Shared-tool fix: `fields.sgmc_offcatalogue` now prefers the
+hash-pinned truth (IR-67-02).
 
 ---
 

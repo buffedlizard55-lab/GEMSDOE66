@@ -199,7 +199,13 @@ def sgmc_offcatalogue(min_dist_px: float = 3.0, catalogue: np.ndarray | None = N
     from .grid import catalogue_mask
     cat = catalogue_mask() if catalogue is None else catalogue
     d = ndimage.distance_transform_edt(~cat)
-    m = load_inventory("sgmc_faults_100m.tif") & (d > min_dist_px)
+    # Prefer the hash-pinned manifest entry (registry/data_manifest.json); fall back to the
+    # unpinned GEMSDOE48 mirror.  Both are USGS SGMC digitisations; the pinned file is the
+    # family's canonical bytes (fixed 2026-10-12, see docs/review/2026-10-12-h67-session.md).
+    if (EXTERNAL / "derived_sgmc_faults_100m_u8.tif").exists():
+        m = load_inventory("derived_sgmc_faults_100m_u8.tif") & (d > min_dist_px)
+    else:
+        m = load_inventory("sgmc_faults_100m.tif") & (d > min_dist_px)
     return m, d
 
 

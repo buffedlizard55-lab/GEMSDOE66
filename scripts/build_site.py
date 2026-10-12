@@ -137,6 +137,68 @@ def submission_block() -> str:
 """
 
 
+
+def h67_block() -> str:
+    """H67 (2026-10-12) lane run, rendered from the session evidence files."""
+    e1 = load(ROOT / "evidence" / "h67_e1_canary.json", {}) or {}
+    e2 = load(ROOT / "evidence" / "h67_e2_emit_h52_h_rank.json", {}) or {}
+    e3 = load(ROOT / "evidence" / "h67_e2_emit_h52_h_rank_complement.json", {}) or {}
+    if not e2:
+        return ""
+    h = e2.get("holdout", {})
+    st = e2.get("strata", {})
+    can = e1.get("canaries", {})
+    best_ch = max(can.get("channels", {}), key=lambda k: can["channels"][k].get("mean_auc", 0)) if can.get("channels") else "-"
+    best_auc = can.get("channels", {}).get(best_ch, {}).get("mean_auc", float("nan"))
+    h52_auc = can.get("channels", {}).get("h52_h", {}).get("mean_auc", float("nan"))
+    strata_rows = "".join(
+        f"<tr><td>{esc(k)}</td><td>{v.get('n_truth', 0):,}</td>"
+        f"<td>{v.get('candidate_dti', float('nan')):.5f}</td>"
+        f"<td>{v.get('random_dti', float('nan')):.5f}</td>"
+        f"<td>{v.get('candidate_minus_random', float('nan')):+.5f}</td></tr>"
+        for k, v in st.items() if isinstance(v, dict) and "candidate_dti" in v
+    )
+    e3h = e3.get("holdout", {})
+    e3dots = int((e3h.get("per_fold") or {}).get("fold0", {}).get("candidate_mass", float("nan")) or 0)
+    lo, hi = h.get("paired_ci95", [float("nan"), float("nan")])
+    return f"""
+<h2>H67 lane run — 2026-10-12 (this session's experiments)</h2>
+<div class="note"><b>All values below are HOLDOUT-DTI</b> on the SGMC off-catalogue proxy truth
+(62,122 withheld positives — the hash-pinned truth), 8 spatial folds by connected component,
+3 px training buffer, evaluator <code>gemsdoe66.metric.dti</code> v1, α = 0.2, β = 0.8,
+300 m triangular kernel. No <code>ORGANIZER-CONFIRMED</code> score exists. Budget: 3/3
+experiments, 0 slots used. Full record:
+<a href="review/2026-10-12-h67-session.md">session review</a>.</div>
+<p><b>E1 — leakage canary (protocol 4):</b> no feature above the 0.90 AUC leakage threshold
+(max {best_auc:.4f} for channel {esc(best_ch)}; best in-lane surface h52_h {h52_auc:.4f}), but
+no physical channel transfers across spatial folds (per-fold AUCs 0.29–0.80, four of eight
+folds sub-chance) — the signal is region-bound, dominated by the truth's own relief/mapping
+bias. Evidence: <code>evidence/h67_e1_canary.json</code>.</p>
+<table>
+<tr><th>E2 — h52_h_rank emission (incumbent geometry, 37,654 dots) — HOLDOUT-DTI</th><th>candidate</th><th>incumbent h33-2-b2</th></tr>
+<tr><td>pooled</td><td><b>{h.get('pooled_candidate', float('nan')):.5f}</b></td><td>{h.get('pooled_incumbent', float('nan')):.5f}</td></tr>
+<tr><td>paired difference / 95% CI (fold bootstrap)</td><td colspan="2"><b>{h.get('pooled_diff', float('nan')):+.5f} [{lo:+.5f}, {hi:+.5f}]</b> — CI crosses zero (gate G2 FAIL); 5 of 8 folds positive</td></tr>
+<tr><td>uniqueness of final dots (60-raster corpus)</td><td colspan="2">{pill(False, 'DUPLICATE — 77.7% of dots within 3 px of the GEMSDOE32 bayesopt-scarp raster at 4.38x the random rate (gate G4 FAIL)')} raw max within-3-px = 0.999 occurs against the 311,617-dot dense raster whose halo alone has null 0.958 (IR-67-01, reported not deciding)</td></tr>
+<tr><td>road-veto ablation</td><td colspan="2">0 dots in the veto zone; no effect</td></tr>
+</table>
+<h3>E2 relief strata — candidate minus random (equal mass)</h3>
+<table><tr><th>stratum (truth relief tercile, cuts 24.1 / 42.9 m)</th><th>n truth</th>
+<th>candidate</th><th>random</th><th>candidate − random</th></tr>
+{strata_rows}</table>
+<p class="small">The gain is range-front-dominated (high +0.177 vs mid +0.087 vs low −0.026) —
+the exact confound the lane gate exists to catch (IR-67-03).</p>
+<h3>E3 — lane-separation complement emission</h3>
+<p>Dots eligible only where ≥ 4 px from every dot of every registry raster: the 60-raster
+union's halo leaves no scarp-rich cell — <b>{e3dots} dots</b> placed (of 37,654), pooled
+HOLDOUT-DTI <b>{e3h.get('pooled_candidate', float('nan')):.5f}</b>. The family's rasters already
+occupy the scarp-active terrain (IR-67-04).</p>
+<div class="stop"><b>H67 verdict: NEGATIVE.</b> Gates G2 (CI crosses zero) and G4 (duplicate
+stop) fail. No candidate passes, so <b>no TIFF is generated, nothing is offered for
+download, and no slot is used</b> — the protocol's negative branch. The inherited PR #13
+negative result below remains the other standing negative. Both are internal HOLDOUT-DTI
+measurements; neither is an organizer score.</div>
+"""
+
 def index_page() -> str:
     e1 = load(ROOT / "evidence" / "experiment1_parsed.json", {})
     e3 = load(ROOT / "evidence" / "experiment3_controls.json", {})
@@ -181,10 +243,13 @@ candidate is cleared, and no submission slot was used.</p>
 complete organizer registry, and no pre-placement surface comparison is recorded. See
 <a href="irregularities.html">IR-71</a> and the <a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a>.</p>
 
+{h67_block()}
+
 <div class="grid">
- <div class="card"><h4>Current official inputs</h4><p class="big">NOT AVAILABLE</p>
-   <p class="small">No authorized reference raster or native 1 m tile in this checkout. A
-   historical 23-file mirror receipt is not organizer provenance or current availability.</p></div>
+ <div class="card"><h4>Official inputs</h4><p class="big">23/23 mirrors verified</p>
+   <p class="small">2026-10-12: all 23 hash-pinned owner mirrors fetched and sha256-verified
+   (integrity, not organizer authentication); plus the GEMSDOE48 h52 native 1 m-tile scarp
+   product and TIGER/BLM cultural layers. Raw 1 m tiles remain unreachable from this sandbox.</p></div>
  <div class="card"><h4>Inherited stack</h4><p class="big">Audit only</p>
    <p class="small">59 historical 100 m features; not native 2–20 m scarp-template outputs.</p></div>
  <div class="card"><h4>Holdout</h4><p class="big">8</p>
@@ -233,6 +298,8 @@ Relief-matched lane − random = <b>+0.00026</b>, 95 % CI [−0.00552, +0.00601]
 Both intervals straddle zero. These are internal HOLDOUT-DTI measurements only; the analysis
 remains negative and the artifact remains unsubmitted.</p>
 </div>
+
+{h67_block()}
 
 <h2>2 · Submission portal — do not proceed</h2>
 <div class="stop"><b>No file or note is cleared for use.</b> Do not open a submission form, upload an
@@ -326,21 +393,27 @@ def hyp_page() -> str:
             f"<td><b>{esc(h.get('validation'))}</b><br>{esc(h.get('data_status'))}</td></tr>"
         )
     return page("Hypotheses", f"""
-<h2>Ranked same-lane hypotheses — before implementation</h2>
+<h2>Ranked same-lane hypotheses — LIDAR-01…04 pre-implementation; H67-A…E implemented and measured 2026-10-12</h2>
 <p>Ranking and hypotheses are read from <code>docs/data/hypotheses.json</code>. Expected gains
-are qualitative priors, not DTI projections. Every candidate below is unimplemented and
-unvalidated; authorized native DEM coverage, shared-cache provenance, independent review,
-holdout, leakage, and complete-registry gates remain blocking.</p>
+are qualitative priors, not DTI projections. LIDAR-01…04 remain unimplemented and unvalidated
+(authorized native DEM coverage, shared-cache provenance, and independent review still blocking).
+H67-A…E were implemented and measured on 2026-10-12 on the hash-pinned 1 m-derived native
+scarp stack plus the GEMSDOE48 h52 native 1 m-tile product (see the
+<a href="index.html">H67 lane run</a> and the <a href="review/2026-10-12-h67-session.md">session review</a>);
+none of them cleared the lane gate, and no download is offered.</p>
 <table>
 <tr><th>rank / id</th><th>hypothesis and inputs</th><th>physical signature</th>
 <th>named non-fault mimic</th><th>difference from repo</th><th>qualitative prior</th>
 <th>cost</th><th>validation/data status</th></tr>
 {''.join(rows)}
 </table>
-<div class="stop"><b>No hypothesis is cleared for an experiment or submission.</b> The inherited
-PR #13 result is a scale-deviating 100 m-grid proxy and does not validate these native-resolution
-2–20 m hypotheses. See <a href="review/2026-10-11-pr12-reconciliation.md">the reconciliation</a>
-for current blockers and scope.</div>
+<div class="stop"><b>No hypothesis is cleared for a submission slot or a download.</b>
+The inherited PR #13 result is a scale-deviating 100 m-grid proxy and does not validate these
+native-resolution 2–20 m hypotheses; the 2026-10-12 H67 measurements (HOLDOUT-DTI proxy, gate
+not met) do not clear any of H67-A…E either. See the
+<a href="review/2026-10-12-h67-session.md">2026-10-12 session review</a> and the
+<a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a> for current
+blockers and scope.</div>
 """, "hypotheses.html")
 
 
@@ -448,6 +521,8 @@ folds, approximately 7,700 withheld positives per fold (61,664 total), 300 m tra
 buffer, α = 0.2, β = 0.8, 300 m triangular kernel. The listed 95% CIs are the recorded
 percentile intervals over folds. This proxy holdout is not the organizer's hidden set. No
 <code>ORGANIZER-CONFIRMED</code> score exists for any artifact.</div>
+{h67_block()}
+<h3>Inherited PR #13 experiment — negative, for reference</h3>
 <p class="stop"><b>Protocol deviation:</b> the inherited lane used 1 m-derived 100 m descriptors
 and 2–20 pixel scales on the 100 m grid (200–2,000 m), not the requested native-resolution
 2–20 m scarp method. The numeric results below do not validate LIDAR-01.</p>
@@ -622,6 +697,41 @@ def irr_page() -> str:
  <td><code>folds_by_quadrant</code> assigned background (label 0) to fold 0 and produced folds
  of 2,307 vs 23,044 px. Replaced by balanced spatial clustering of connected components.</td>
  <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-67-01</b><br><span class="tag">interpretation rule</span></td>
+ <td>The raw 3-px duplicate rule degenerates against the 311,617-dot registry raster
+ (6.0% of the footprint): its 3-px halo alone gives a random-placement null within-3-px rate
+ of 0.958, so any independent placement trips the brief's literal &gt;70% stop. This session
+ reports BOTH the raw value (stop under the literal rule) and the lift-adjusted verdict.
+ Rule of record: the literal rule governs sparse rasters (null &lt; 0.30); against dense
+ rasters (null ≥ 0.70) the lift-adjusted verdict plus the documented null rate governs.
+ <a href="review/2026-10-12-h67-session.md">H67 session review</a>.</td>
+ <td><span class="pill warn">OPEN — documented</span></td></tr>
+<tr><td><b>IR-67-03</b><br><span class="tag">verdict-driving</span></td>
+ <td>The H67 h52_h_rank emission's holdout gain is range-front-dominated: candidate − random
+ by relief tercile is <b>−0.0258 (low), +0.0868 (mid), +0.1773 (high)</b>; pooled
+ +0.02579 over the incumbent with paired 95% CI [−0.01093, +0.03650] crossing zero; 5 of 8
+ fold differences positive. Same signature as the inherited PR #13 negative result and the
+ documented truth-prior confound (SGMC off-catalogue is 59.3% range front).</td>
+ <td><span class="pill bad">OPEN — drives the negative verdict</span></td></tr>
+<tr><td><b>IR-67-04</b></td>
+ <td>The native scarp population's residual outside the registry is 83 dots: emission
+ restricted to cells ≥ 4 px from every dot of every registry raster placed only 83 of
+ 37,654 (pooled HOLDOUT-DTI of 0.0), and the standard emission duplicates the GEMSDOE32
+ bayesopt-scarp raster (77.7% of dots within 3 px, 4.38x lift). The lane has no unclaimed,
+ gate-passing population under the current corpus.</td>
+ <td><span class="pill bad">OPEN — negative result</span></td></tr>
+<tr><td><b>IR-67-02</b></td>
+ <td><code>fields.sgmc_offcatalogue</code> loaded the unpinned GEMSDOE48 SGMC mirror
+ (61,664 off-catalogue px); the manifest-pinned bytes are 62,122 px. Fixed 2026-10-12 to
+ prefer the pinned file (all H67 numbers use it); cross-check difference 458 px (0.7%).</td>
+ <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-67-05</b></td>
+ <td>Seven additional inputs fetched 2026-10-12 (h52 native product + receipt, TIGER road
+ and BLM claim distance layers + receipts, SGMC mirror, 4 family rasters, dem3m pilot
+ tiles, sidecars) are unpinned in <code>registry/data_manifest.json</code>. sha256 of each
+ is recorded in <a href="review/2026-10-12-h67-session.md">the session review</a>. Pin before
+ any future release that depends on them.</td>
+ <td><span class="pill warn">OPEN — provenance ledger</span></td></tr>
 <tr><td><b>IR-66-H2-01</b></td>
  <td>A supervised field trained on off-catalogue SGMC faults scores <b>below chance</b> on
  held-out SGMC faults: it learns regional geology, not the fault signal.</td>

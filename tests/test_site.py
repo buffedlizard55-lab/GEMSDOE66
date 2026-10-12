@@ -126,17 +126,28 @@ def test_h66_2_card_is_historical_proxy_not_score_or_clearance():
 
 def test_hypotheses_are_ranked_and_meet_same_lane_review_fields():
     d = json.loads((DOCS / "data" / "hypotheses.json").read_text(encoding="utf-8"))
-    assert len(d["items"]) == 4
-    assert [h["rank"] for h in d["items"]] == [1, 2, 3, 4]
-    assert {h["lane"] for h in d["items"]} == {"native-resolution LiDAR scarp channels"}
+    items = d["items"]
+    # 2026-10-12: four pre-implementation LIDAR leads plus the five implemented-and-measured
+    # H67-A..E candidates from the H67 lane session (negative gate result; nothing cleared).
+    assert len(items) == 9
+    assert [h["rank"] for h in items] == list(range(1, len(items) + 1))
+    assert {h["lane"] for h in items} == {"native-resolution LiDAR scarp channels"}
     assert d["protocol"]["feature_scales_m"] == [2, 20]
     assert d["protocol"]["aggregation_m"] == 100
     required = ("layers", "signature", "why_off_catalogue", "named_mimic", "differs_from_repo",
                 "cost", "data_status", "validation")
-    assert all(all(h.get(field) for field in required) for h in d["items"])
-    assert all(any(word in h["expected_gain"].lower() for word in ("unknown", "unquantified", "unmeasured"))
-               for h in d["items"])
-    assert all("blocked" in h["data_status"].lower() for h in d["items"])
+    assert all(all(h.get(field) for field in required) for h in items)
+    # no quantified DTI projection is claimed as an expected gain, measured or not
+    assert all(any(word in h["expected_gain"].lower()
+                   for word in ("unknown", "unquantified", "unmeasured", "not a dti projection"))
+               for h in items)
+    # no item may claim cleared/released data; the unimplemented leads must stay blocked
+    assert all(not any(w in h["data_status"].lower() for w in ("cleared", "released")) for h in items)
+    assert all("blocked" in h["data_status"].lower() for h in items if h["id"].startswith("LIDAR"))
+    # the H67 items are measured, and the four that were not emitted claimed no holdout number
+    assert all(h["validation"].startswith("MEASURED 2026-10-12") for h in items if h["id"].startswith("H67"))
+    assert all("no holdout dti claimed" in h["validation"].lower() for h in items
+               if h["id"] in ("H67-A", "H67-B", "H67-D", "H67-E"))
 
 
 def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():

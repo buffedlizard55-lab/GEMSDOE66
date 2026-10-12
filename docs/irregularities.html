@@ -87,6 +87,41 @@
  <td><code>folds_by_quadrant</code> assigned background (label 0) to fold 0 and produced folds
  of 2,307 vs 23,044 px. Replaced by balanced spatial clustering of connected components.</td>
  <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-67-01</b><br><span class="tag">interpretation rule</span></td>
+ <td>The raw 3-px duplicate rule degenerates against the 311,617-dot registry raster
+ (6.0% of the footprint): its 3-px halo alone gives a random-placement null within-3-px rate
+ of 0.958, so any independent placement trips the brief's literal &gt;70% stop. This session
+ reports BOTH the raw value (stop under the literal rule) and the lift-adjusted verdict.
+ Rule of record: the literal rule governs sparse rasters (null &lt; 0.30); against dense
+ rasters (null ≥ 0.70) the lift-adjusted verdict plus the documented null rate governs.
+ <a href="review/2026-10-12-h67-session.md">H67 session review</a>.</td>
+ <td><span class="pill warn">OPEN — documented</span></td></tr>
+<tr><td><b>IR-67-03</b><br><span class="tag">verdict-driving</span></td>
+ <td>The H67 h52_h_rank emission's holdout gain is range-front-dominated: candidate − random
+ by relief tercile is <b>−0.0258 (low), +0.0868 (mid), +0.1773 (high)</b>; pooled
+ +0.02579 over the incumbent with paired 95% CI [−0.01093, +0.03650] crossing zero; 5 of 8
+ fold differences positive. Same signature as the inherited PR #13 negative result and the
+ documented truth-prior confound (SGMC off-catalogue is 59.3% range front).</td>
+ <td><span class="pill bad">OPEN — drives the negative verdict</span></td></tr>
+<tr><td><b>IR-67-04</b></td>
+ <td>The native scarp population's residual outside the registry is 83 dots: emission
+ restricted to cells ≥ 4 px from every dot of every registry raster placed only 83 of
+ 37,654 (pooled HOLDOUT-DTI of 0.0), and the standard emission duplicates the GEMSDOE32
+ bayesopt-scarp raster (77.7% of dots within 3 px, 4.38x lift). The lane has no unclaimed,
+ gate-passing population under the current corpus.</td>
+ <td><span class="pill bad">OPEN — negative result</span></td></tr>
+<tr><td><b>IR-67-02</b></td>
+ <td><code>fields.sgmc_offcatalogue</code> loaded the unpinned GEMSDOE48 SGMC mirror
+ (61,664 off-catalogue px); the manifest-pinned bytes are 62,122 px. Fixed 2026-10-12 to
+ prefer the pinned file (all H67 numbers use it); cross-check difference 458 px (0.7%).</td>
+ <td><span class="pill ok">FIXED</span></td></tr>
+<tr><td><b>IR-67-05</b></td>
+ <td>Seven additional inputs fetched 2026-10-12 (h52 native product + receipt, TIGER road
+ and BLM claim distance layers + receipts, SGMC mirror, 4 family rasters, dem3m pilot
+ tiles, sidecars) are unpinned in <code>registry/data_manifest.json</code>. sha256 of each
+ is recorded in <a href="review/2026-10-12-h67-session.md">the session review</a>. Pin before
+ any future release that depends on them.</td>
+ <td><span class="pill warn">OPEN — provenance ledger</span></td></tr>
 <tr><td><b>IR-66-H2-01</b></td>
  <td>A supervised field trained on off-catalogue SGMC faults scores <b>below chance</b> on
  held-out SGMC faults: it learns regional geology, not the fault signal.</td>

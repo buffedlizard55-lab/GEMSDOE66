@@ -17,6 +17,44 @@ folds, approximately 7,700 withheld positives per fold (61,664 total), 300 m tra
 buffer, α = 0.2, β = 0.8, 300 m triangular kernel. The listed 95% CIs are the recorded
 percentile intervals over folds. This proxy holdout is not the organizer's hidden set. No
 <code>ORGANIZER-CONFIRMED</code> score exists for any artifact.</div>
+
+<h2>H67 lane run — 2026-10-12 (this session's experiments)</h2>
+<div class="note"><b>All values below are HOLDOUT-DTI</b> on the SGMC off-catalogue proxy truth
+(62,122 withheld positives — the hash-pinned truth), 8 spatial folds by connected component,
+3 px training buffer, evaluator <code>gemsdoe66.metric.dti</code> v1, α = 0.2, β = 0.8,
+300 m triangular kernel. No <code>ORGANIZER-CONFIRMED</code> score exists. Budget: 3/3
+experiments, 0 slots used. Full record:
+<a href="review/2026-10-12-h67-session.md">session review</a>.</div>
+<p><b>E1 — leakage canary (protocol 4):</b> no feature above the 0.90 AUC leakage threshold
+(max nan for channel -; best in-lane surface h52_h nan), but
+no physical channel transfers across spatial folds (per-fold AUCs 0.29–0.80, four of eight
+folds sub-chance) — the signal is region-bound, dominated by the truth's own relief/mapping
+bias. Evidence: <code>evidence/h67_e1_canary.json</code>.</p>
+<table>
+<tr><th>E2 — h52_h_rank emission (incumbent geometry, 37,654 dots) — HOLDOUT-DTI</th><th>candidate</th><th>incumbent h33-2-b2</th></tr>
+<tr><td>pooled</td><td><b>0.12118</b></td><td>0.09539</td></tr>
+<tr><td>paired difference / 95% CI (fold bootstrap)</td><td colspan="2"><b>+0.02579 [-0.01093, +0.03650]</b> — CI crosses zero (gate G2 FAIL); 5 of 8 folds positive</td></tr>
+<tr><td>uniqueness of final dots (60-raster corpus)</td><td colspan="2"><span class="pill bad">DUPLICATE — 77.7% of dots within 3 px of the GEMSDOE32 bayesopt-scarp raster at 4.38x the random rate (gate G4 FAIL)</span> raw max within-3-px = 0.999 occurs against the 311,617-dot dense raster whose halo alone has null 0.958 (IR-67-01, reported not deciding)</td></tr>
+<tr><td>road-veto ablation</td><td colspan="2">0 dots in the veto zone; no effect</td></tr>
+</table>
+<h3>E2 relief strata — candidate minus random (equal mass)</h3>
+<table><tr><th>stratum (truth relief tercile, cuts 24.1 / 42.9 m)</th><th>n truth</th>
+<th>candidate</th><th>random</th><th>candidate − random</th></tr>
+<tr><td>low (basin/pediment)</td><td>13,445</td><td>0.02311</td><td>0.04889</td><td>-0.02578</td></tr><tr><td>mid</td><td>13,178</td><td>0.13477</td><td>0.04798</td><td>+0.08678</td></tr><tr><td>high (range front)</td><td>13,218</td><td>0.22542</td><td>0.04809</td><td>+0.17733</td></tr></table>
+<p class="small">The gain is range-front-dominated (high +0.177 vs mid +0.087 vs low −0.026) —
+the exact confound the lane gate exists to catch (IR-67-03).</p>
+<h3>E3 — lane-separation complement emission</h3>
+<p>Dots eligible only where ≥ 4 px from every dot of every registry raster: the 60-raster
+union's halo leaves no scarp-rich cell — <b>83 dots</b> placed (of 37,654), pooled
+HOLDOUT-DTI <b>0.00000</b>. The family's rasters already
+occupy the scarp-active terrain (IR-67-04).</p>
+<div class="stop"><b>H67 verdict: NEGATIVE.</b> Gates G2 (CI crosses zero) and G4 (duplicate
+stop) fail. No candidate passes, so <b>no TIFF is generated, nothing is offered for
+download, and no slot is used</b> — the protocol's negative branch. The inherited PR #13
+negative result below remains the other standing negative. Both are internal HOLDOUT-DTI
+measurements; neither is an organizer score.</div>
+
+<h3>Inherited PR #13 experiment — negative, for reference</h3>
 <p class="stop"><b>Protocol deviation:</b> the inherited lane used 1 m-derived 100 m descriptors
 and 2–20 pixel scales on the 100 m grid (200–2,000 m), not the requested native-resolution
 2–20 m scarp method. The numeric results below do not validate LIDAR-01.</p>
