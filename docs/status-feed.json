@@ -1,19 +1,20 @@
 {
   "schema": "gems-project-status-feed/1",
-  "generated_utc": "2026-10-12T03:00:00Z",
-  "status": "FORMAT-READY, NOT PROMOTED - one downloadable candidate (H67-1) with disclosures; no score claim",
+  "generated_utc": "2026-10-12T03:10:57Z",
+  "status": "THREE DOWNLOADABLE CANDIDATES, THREE DIFFERENT VERDICTS. H67-1 scarp sibling: FORMAT-READY, NOT PROMOTED (raw uniqueness rule falsified, IR-67-GATE-02; measured raw overlap 0.9992). session-66 k66 v2: cleared, ties the family's best-known, does not beat it. H67 geophysics lane: PROMOTE on its own 15 recomputed gates. No ORGANIZER-CONFIRMED score exists for any of them.",
   "scope": "Static project feed. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages. Every number is labelled HOLDOUT-DTI or UNVERIFIED owner-reported; not one number is ORGANIZER-CONFIRMED.",
   "external_monitoring": "Disabled. DrivenData Terms of Use restrict automated access and manual monitoring/copying without prior written consent. No leaderboard values are stored.",
   "entries": [
     {
       "date": "2026-10-12",
-      "id": "h66c",
-      "status": "negative",
-      "title": "H66-C native-resolution LiDAR scarp channels — unique GeoTIFF published for review, gate not met",
-      "summary": "Implemented the assigned lane end to end (scarplet diffusion inversion, Steger sub-pixel lines, Frangi multiscale vesselness, official TIGER 2024 road mask) after the data blocker was lifted. The artifact passes the shared validator and is unique on every density-adjusted diagnostic over 60 rasters, but HOLDOUT-DTI on instrument N is 0.0979 [0.0623, 0.1219] against a frozen best of 0.1195. Published for review; not promoted; no submission slot spent.",
+      "kind": "h67-geophysics-lane",
+      "status": "CLEARED FOR DOWNLOAD — second cleared lane; the preregistered hypothesis ranking was inverted by measurement",
+      "summary": "A third lane (geophysics/topography only, no fault inventory) was emitted, validated and cleared on 15 recomputed gates: gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z, 45,000 binary dots, validator 13 PASS / 0 FAIL / 0 SKIPPED. The decisive result is a NEGATIVE one: every layer that reads a fault inventory (given catalogue, USGS QFDB traces, SGMC state geologic map, GDR thermal springs) is an anti-signal under this repository's own spatially blocked holdout, because the protocol withholds whole fault segments and buffers the remaining inventory by 300 m, so the withheld truth sits inside a manufactured gap. Same 2 folds, same 45,000-dot budget, same eligible mask, withheld positives pooled 62,383: catalogue-distance beliefs 0.0178 [0.0147, 0.0208]; catalogue + SGMC gap 0.0178; full 62-layer stack 0.0178; uniform random placement 0.0707; fixed lattice 0.0729; inventory-free geophysics 0.17898 [0.17816, 0.17980] = 2.53x random. Paired gain over the incumbent +0.16121 [0.15735, 0.16506]. Leakage canary clear (max single-layer AUC 0.714). Hypothesis A (the SGMC cartographic gap) is NOT supported: adding the SGMC layers moved HOLDOUT-DTI by exactly 0.0000. All numbers are HOLDOUT-DTI; none is ORGANIZER-CONFIRMED and none predicts one. 0 submission slots used.",
       "links": [
-        "review/2026-10-12-h66c-verdict.md",
-        "data/run-card-h66c.json"
+        "h67/index.html",
+        "data/run-card-h67.json",
+        "review/2026-10-12-h67-offcatalogue-geophysics.md",
+        "../evidence/h67_null_control.json"
       ]
     },
     {
@@ -78,6 +79,17 @@
         "https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html",
         "https://doi.org/10.1109/34.659930",
         "https://doi.org/10.21105/joss.01066"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "id": "h66c",
+      "status": "negative",
+      "title": "H66-C native-resolution LiDAR scarp channels — unique GeoTIFF published for review, gate not met",
+      "summary": "Implemented the assigned lane end to end (scarplet diffusion inversion, Steger sub-pixel lines, Frangi multiscale vesselness, official TIGER 2024 road mask) after the data blocker was lifted. The artifact passes the shared validator and is unique on every density-adjusted diagnostic over 60 rasters, but HOLDOUT-DTI on instrument N is 0.0979 [0.0623, 0.1219] against a frozen best of 0.1195. Published for review; not promoted; no submission slot spent.",
+      "links": [
+        "review/2026-10-12-h66c-verdict.md",
+        "data/run-card-h66c.json"
       ]
     },
     {
@@ -200,6 +212,10 @@
     }
   ],
   "next_actions": [
+    "H67 geophysics lane: upload gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z manually and paste the portal receipt next to its sha256; until then its 0.17898 stays HOLDOUT-DTI.",
+    "Re-run instrument N without the circularity - a feature cannot be validated against a truth that IS the feature; the 300 m buffer guarantees a zero there.",
+    "Sweep the dot budget (20k / 30k / 45k / 60k) on instrument C; the calibration data says fewer, better-placed dots scored higher, and the emitter currently stops at the cap.",
+    "Block the CV by geology rather than by fault segment so the 300 m buffer artefact disappears instead of being worked around.",
     "Owner decision: whether to spend a weekly slot on the disclosed H67-1 sibling (no demonstrated edge; science gate unevaluable).",
     "If a slot is spent, paste the portal receipt next to the sha256 in docs/downloads/README.md; there is no route to ORGANIZER-CONFIRMED without a portal receipt.",
     "Obtain an authorised environment with native 1 m GeoDAWN/3DEP tiles and a cultural mask to run the actual 2-20 m method (G-05) and re-test the gate.",
