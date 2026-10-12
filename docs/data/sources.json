@@ -1,6 +1,6 @@
 {
   "schema": 3,
-  "verified_on": "2026-10-11 — official problem/rules/data-access status and bibliographic records rechecked for this audit. No leaderboard snapshot or values are stored. No repeated monitoring is scheduled.",
+  "verified_on": "Official competition, rules, USGS, and bibliography checks were last recorded 2026-10-11. On 2026-10-12 the owner-maintained GEMSDOE32 repository copy was checked via GitHub API; no live official competition/leaderboard or USGS page was accessed.",
   "sources": [
     {
       "id": "S01",
@@ -111,8 +111,8 @@
       "title": "GEMSDOE32 owner repository and project material",
       "url": "https://github.com/buffedlizard55-lab/GEMSDOE32",
       "supports": "Owner-maintained artifact history and method notes. The project page describes the H33 artifact as unscored and says no organizer score exists for its artifacts.",
-      "status": "OWNER-REPORTED CONTEXT ONLY — not a submission receipt",
-      "how": "No exact receipt or SHA-256-to-score mapping is present in this checkout."
+      "status": "OWNER-REPORTED CONTEXT ONLY — repository page copy rechecked 2026-10-12 via GitHub API; not a submission receipt",
+      "how": "The source-page content says no organizer score exists for repository artifacts and labels the estimate as a model. The retrieved GitHub blob SHA is recorded in evidence/h33_owner_claim_review_2026-10-12.json."
     },
     {
       "id": "S15",
