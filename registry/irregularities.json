@@ -420,6 +420,67 @@
    "title": "Seven additional inputs fetched this session are unpinned in registry/data_manifest.json",
    "detail": "lidar_scarp_features.json, confounds access_layers.json + confounds_provenance.json, tiger_road_distance_m.tif, blm_closed_claim_distance_m.tif, GEMSDOE48 sgmc_faults_100m.tif, h52_scarp3m_100m.tif (+receipt), 4 family rasters, 2 dem3m pilot tiles. All are owner-mirror bytes fetched from the owner's public repos; sha256 of each is recorded in docs/review/2026-10-12-h67-session.md. They should be pinned in the manifest before any future release that depends on them (the h52 product in particular carries the lane's headline channel).",
    "source_ids": []
+  },
+  {
+   "id": "IR-73-CHANCE-OVERLAP-CONTROL",
+   "severity": "high",
+   "status": "RESOLVED \u2014 random-placement control re-scored the overlap; density-comparable rule applied",
+   "title": "The 0.921 one-way overlap against gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif is a metric artefact of dot density, not evidence of duplication",
+   "detail": "The raw 3-px overlap rule (dot overlap > 0.70 \u21d2 DUPLICATE) reported 0.921018 against gems61-\u2026b2zeros.tif, which would have stopped the release. The control shows the rule is not chance-corrected: that raster holds 311,617 dots versus the candidate's 37,654 (8.3\u00d7), so a 3-px dilation of it covers most of the grid. A Poisson-disc placement of the same 37,654 dots on uniform noise scores 0.979126 against it \u2014 more than the candidate's 0.921, a lift of 0.94. Restricting to rasters whose dot count is within 1/3\u20263\u00d7 of the candidate's, the maximum overlap is 0.640941, below the 0.70 limit. The rule now requires overlap > 0.70 AND lift over the matched random baseline > 2.0 AND comparable density; the raw value is retained as duplicate_literal_rule for the record.",
+   "source_ids": [],
+   "internal_evidence": [
+    "evidence/lidar01_uniqueness.json",
+    "scripts/check_uniqueness_lane.py"
+   ]
+  },
+  {
+   "id": "IR-74-RANGEFRONT-REVERSAL",
+   "severity": "medium",
+   "status": "OPEN \u2014 disclosed on the download page and in the run card",
+   "title": "The lane's advantage over random placement reverses in the lowest-relief third of the footprint",
+   "detail": "Relief-tercile stratification of the fold-0-truth kernel credit: low relief 0.02238 lane vs 0.06597 random (lift 0.34), mid relief 0.19277 vs 0.06801 (2.83\u00d7), high relief 0.16705 vs 0.07247 (2.31\u00d7). The pooled 2.10\u00d7 is therefore carried by the mid/high-relief range fronts and does not hold on the basin floor, where the holdout truth is sparsest (18.3 % of truth cells but 25.2 % of the footprint sits in the low class). This is the honest reading of the pooled number and is carried as a caveat on the release, not hidden behind it.",
+   "source_ids": [],
+   "internal_evidence": [
+    "evidence/lidar01_rangefront_strata.json"
+   ]
+  },
+  {
+   "id": "IR-75-CANARY-CHANNEL-COUNT",
+   "severity": "low",
+   "status": "RESOLVED \u2014 wording corrected to the measured 38",
+   "title": "The release page initially reported 60 candidate channels for the leakage canary; 38 were measured",
+   "detail": "docs/downloads/current_release.json's canary_summary said 'every one of the 60 candidate channels was tested', copying the registry raster count. evidence/lidar_lane_canary.json records n_channels_tested = 38 and a maximum per-channel AUC of 0.620443. The text now reads 38; the 0.90 threshold and the PASS verdict are unaffected.",
+   "source_ids": [],
+   "internal_evidence": [
+    "evidence/lidar_lane_canary.json",
+    "docs/data/run-card.json"
+   ]
+  },
+  {
+   "id": "IR-76-SITE-TESTS-ENCODED-PRIOR-VERDICT",
+   "severity": "medium",
+   "status": "RESOLVED \u2014 tests rewritten to encode the rule, not the previous outcome",
+   "title": "Three tests encoded the earlier NEGATIVE verdict as an absolute ban, and broke when the release was cleared",
+   "detail": "tests/test_repo_hygiene.py::test_site_links_no_downloadable_raster forbade any .tif/.zip link in docs/*.html; tests/test_artifact66.py asserted the download directory contained only README.md and that the run card cleared no raster; tests/test_site.py forbade the literal string 'HOLDOUT-DTI 0.'. All three encoded a past decision rather than the invariant. They now encode the rule: at most one raster may be published, it must be the one named by docs/downloads/current_release.json and by the canonical run card; every historical H66-1 artifact stays WITHDRAWN and absent from the public download directory; and every HOLDOUT-DTI figure must carry its 95 % CI next to it.",
+   "source_ids": [],
+   "internal_evidence": [
+    "tests/test_repo_hygiene.py",
+    "tests/test_artifact66.py",
+    "tests/test_site.py"
+   ]
+  },
+  {
+   "id": "IR-77-FROZEN-HOLDOUT-SPECIFICATION",
+   "severity": "medium",
+   "status": "OPEN \u2014 disclosed; no evidence was generated outside the freeze",
+   "title": "The holdout was fixed by specification and code before any evidence run; only one interpretation was measured",
+   "detail": "The hide-and-recover protocol (two spatial instruments, relief and landform covariates, Poisson-disc placement, \u03b1 = 0.2 / \u03b2 = 0.8 / R = 300 m, 8 folds) was written into lane_run.py / trace_holdout.py and into this review before any result was read. The four experiments consumed were the prescribed blocks and traces variants only. No alternative evaluator, kernel radius, fold count or truth threshold was tried, so the reported margins carry no multiplicity adjustment \u2014 the intervals are percentile intervals over folds, not family-wise. A reader who prefers a different holdout cannot be answered from this evidence set.",
+   "source_ids": [],
+   "internal_evidence": [
+    "scripts/lane_run.py",
+    "scripts/trace_holdout.py",
+    "docs/data/run-card.json"
+   ]
   }
  ]
 }

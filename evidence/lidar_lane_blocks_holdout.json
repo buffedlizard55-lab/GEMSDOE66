@@ -1,0 +1,184 @@
+{
+ "generated_utc": "2026-10-12T02:11:27Z",
+ "stage": "trace-holdout",
+ "protocol": "global whole-trace holdout: whole INGENIOUS traces withheld everywhere, 300 m buffer removed from the visible catalogue, features derived from visible faults only, truth = withheld trace pixels inside LiDAR coverage, emission across the whole footprint, pooled DTI alpha=0.2 beta=0.8 R=300 m",
+ "evaluator": "src/gems/metric.py :: tversky_terms / dti_from_terms",
+ "instrument": "blocks",
+ "n_folds": 4,
+ "variants": {
+  "random|topk": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.069971,
+    0.079524,
+    0.070744,
+    0.069929
+   ],
+   "mean": 0.072542,
+   "ci95": [
+    0.067966,
+    0.077118
+   ],
+   "pooled": 0.072467,
+   "dots": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "budget_full_grid": 37654,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "separation_px": 2.8
+  },
+  "random|weighted": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.069971,
+    0.079524,
+    0.070744,
+    0.069929
+   ],
+   "mean": 0.072542,
+   "ci95": [
+    0.067966,
+    0.077118
+   ],
+   "pooled": 0.072467,
+   "dots": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "budget_full_grid": 37654,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "separation_px": 2.8
+  },
+  "distance|topk": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.621639,
+    0.605663,
+    0.575009,
+    0.552614
+   ],
+   "mean": 0.588731,
+   "ci95": [
+    0.55846,
+    0.619002
+   ],
+   "pooled": 0.588015,
+   "dots": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "budget_full_grid": 37654,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "separation_px": 2.8
+  },
+  "distance|weighted": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.074816,
+    0.079058,
+    0.06896,
+    0.070351
+   ],
+   "mean": 0.073296,
+   "ci95": [
+    0.068806,
+    0.077786
+   ],
+   "pooled": 0.073147,
+   "dots": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "budget_full_grid": 37654,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "separation_px": 2.8
+  },
+  "lane_nocat|topk": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.162388,
+    0.140975,
+    0.161259,
+    0.144874
+   ],
+   "mean": 0.152374,
+   "ci95": [
+    0.141558,
+    0.16319
+   ],
+   "pooled": 0.152543,
+   "dots": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "budget_full_grid": 37654,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "separation_px": 2.8
+  },
+  "lane_nocat|weighted": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.084614,
+    0.097627,
+    0.084916,
+    0.084717
+   ],
+   "mean": 0.087968,
+   "ci95": [
+    0.081657,
+    0.09428
+   ],
+   "pooled": 0.087854,
+   "dots": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "budget_full_grid": 37654,
+   "dots_per_fold": [
+    3274,
+    3274,
+    3284,
+    3264
+   ],
+   "separation_px": 2.8
+  }
+ }
+}

@@ -51,3 +51,8 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+
+# The cleared release raster must be publishable on GitHub Pages even though
+# raster/binary archives are otherwise kept out of Git.
+!docs/downloads/*.tif
+!docs/downloads/*.zip

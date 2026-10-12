@@ -372,6 +372,93 @@ artifacts section, so this page cannot advertise a file. Nothing is cleared for 
 """
 
 
+LIDAR01_STEM = "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z"
+
+
+def lidar01_block() -> str:
+    """The LIDAR-01 session's own release panel (docs/data/run-card-lidar01.json).
+
+    This is a *second*, independently named candidate from a parallel session. It keeps its
+    own run card and its own download pointer so that neither session's verdict is
+    overwritten by the other's.
+    """
+    rel = load(DOCS / "downloads" / "current_release.json", None)
+    if not rel or not rel.get("cleared"):
+        return ""
+    man = load(DOCS / "downloads" / rel["manifest"], {})
+    card = load(DOCS / "data" / "run-card-lidar01.json", {})
+    uni = load(ROOT / "evidence" / rel["uniqueness"], {})
+    val = man.get("validator", {})
+    n_ok = len([c for c in val.get("checks", []) if c.get("status") == "PASS"])
+    n_tot = len([c for c in val.get("checks", []) if c.get("status") != "INFO"])
+    rows = ""
+    for inst_key, label in (("blocks", "spatial-block hide-and-recover (prescribed)"),
+                            ("traces", "global whole-trace holdout")):
+        vs = (card.get("holdout_dti", {}).get("instruments", {})
+              .get(inst_key, {}).get("variants", {}) or {})
+        for k in sorted(vs):
+            v = vs[k]
+            rows += (f"<tr><td>{esc(label)} — {esc(k)}</td>"
+                     f"<td class='mono'>{v.get('mean')}</td>"
+                     f"<td class='mono'>{v.get('ci95')}</td>"
+                     f"<td class='mono'>{v.get('n_folds')} folds</td></tr>")
+    caveats = "".join(f"<li>{esc(c)}</li>" for c in rel.get("caveats", []))
+    return f"""
+<div class="go">
+<h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
+<p><code>{esc(rel["tif"])}</code> — {man.get("dots", 0):,} dots,
+{man.get("bytes", 0):,} bytes, sha256 <span class="mono">{esc(man.get("tif_sha256", ""))}</span>.
+Own run card: <a href="data/run-card-lidar01.json">run-card-lidar01.json</a> (verdict
+<b>{esc(card.get("verdict", ""))}</b>). This is a different session's candidate from the H67-1
+file above; both are listed so the difference in their verdicts is visible rather than hidden.</p>
+<p><a class="btn" href="downloads/{esc(rel["tif"])}">Download {esc(rel["tif"].rsplit(".", 1)[-1])}</a>
+   <a class="btn" href="downloads/{esc(rel["zip"])}">Download zip</a>
+   <a class="btn" href="downloads/{esc(rel["manifest"])}">Validator receipt</a></p>
+<p class="small">Format validator: <b>{n_ok}/{n_tot} PASS</b>, 0 skipped, re-read from the
+written file. Leakage canary <b>{esc(card.get("leakage_canary", {}).get("status", ""))}</b>
+(max per-channel AUC {card.get("leakage_canary", {}).get("max_auc_observed")} over
+{card.get("leakage_canary", {}).get("n_channels_tested")} channels, threshold 0.90).
+Uniqueness: max |Spearman &rho;| {uni.get("max_abs_spearman")}, density-comparable 3-px
+overlap {uni.get("max_dot_overlap_fraction_density_comparable")} — chance-corrected
+(IR-73-CHANCE-OVERLAP-CONTROL).</p>
+<table>
+<tr><th>instrument / variant</th><th>HOLDOUT-DTI mean</th><th>95 % CI</th><th>folds</th></tr>
+{rows}
+</table>
+<p class="small">Every figure above is <b>HOLDOUT-DTI</b>. No ORGANIZER-CONFIRMED score
+exists for this file and none is claimed.</p>
+<h3>Caveats</h3>
+<ul>{caveats}</ul>
+</div>
+"""
+
+
+def lidar01_exec_block() -> str:
+    """The LIDAR-01 submission recipe, appended to the executive-summary page."""
+    rel = load(DOCS / "downloads" / "current_release.json", None)
+    if not rel or not rel.get("cleared"):
+        return ""
+    man = load(DOCS / "downloads" / rel["manifest"], {})
+    return f"""
+<h2>Second candidate — LIDAR-01 ({esc(man.get("name", ""))})</h2>
+<p>A parallel session's file, cleared on its own evidence. If you prefer it to the H67-1
+candidate above, use these fields instead — the name and note are exact and the note is
+{man.get("note_chars", 0)}/140 characters.</p>
+<table>
+<tr><th>File to submit</th><td class="mono">{esc(rel["tif"])}</td></tr>
+<tr><th>Name</th><td class="mono">{esc(man.get("name", ""))}</td></tr>
+<tr><th>Note ({man.get("note_chars", 0)}/140)</th><td class="mono">{esc(man.get("note", ""))}</td></tr>
+<tr><th>sha256</th><td class="mono">{esc(man.get("tif_sha256", ""))}</td></tr>
+</table>
+<p><a class="btn" href="downloads/{esc(rel["tif"])}">Download the GeoTIFF</a>
+   <a class="btn" href="downloads/{esc(rel["zip"])}">Download the .zip</a></p>
+<p class="small"><b>No ORGANIZER-CONFIRMED score exists for this file and none is claimed.</b>
+It is a <b>HOLDOUT-DTI</b> result only:
+0.15237 [95 % CI 0.14156, 0.16319] on the prescribed spatial-block instrument against
+0.07254 [0.06797, 0.07712] for mass-matched random placement.</p>
+"""
+
+
 def index_page() -> str:
     d = h67_data()
     run, e1, e1b, e2 = d["run"], d["e1"], d["e1b"], d["e2"]
@@ -392,6 +479,8 @@ in the given public catalogue</b>, so every design choice here is aimed at that 
 recovering the 60,988 labelled pixels we were given.</p>
 
 {submission_block()}
+
+{lidar01_block()}
 
 <h2>The two facts this session measured</h2>
 <p><b>1. The official metric is a budget.</b> With <code>T = TP_w</code>, <code>S = &Sigma;p</code>,
@@ -560,6 +649,7 @@ forfeits that mass. That is the downside; the gate table above is the honest acc
 this session could and could not measure about it.</p>
 
 {h67m_block()}
+{lidar01_exec_block()}
 """, "executive-summary.html")
 
 

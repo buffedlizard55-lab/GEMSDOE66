@@ -1,0 +1,540 @@
+{
+ "schema": "gems-run-card/3",
+ "run_id": "gemsdoe66-LIDAR-01-2026-10-12",
+ "generated_utc": "2026-10-12T02:56:53Z",
+ "repo": "buffedlizard55-lab/GEMSDOE66",
+ "lane": "native-resolution LiDAR scarp channels",
+ "hypothesis": "A slope-aware antislope scarplet-template response combined with Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, used as an emission intensity rather than a ranking, will place dots on catalogue faults that were withheld from training better than mass-matched random placement and better than catalogue-distance alone.",
+ "mechanism": "A tectonic scarp step is a coherent, along-strike persistent, uphill-facing (antislope) monoclinal step; fluvial terrace risers, channel banks and field edges produce predominantly downslope- or cross-slope-facing steps. Subtracting the strongest competing step orientation from the antislope member isolates the tectonic-favouring signature, and the Hessian line measures reward along-strike persistence across scales.",
+ "named_non_fault_mimic": "Fluvial terrace riser / alluvial-fan head incision. The same signature is also produced by channel banks (cross_max), landslide headscarps, paleo-shorelines, and unmapped roads, canals and field edges; no cultural-feature mask was present in the restored inputs (see open_irregularities).",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator_version": "src/gems/metric.py :: tversky_terms (alpha=0.2, beta=0.8, triangular kernel R=300 m, eps=1e-9)",
+  "instruments": {
+   "blocks": {
+    "description": "spatial-block hide-and-recover (lane protocol)",
+    "withheld_positive_count_per_fold": 6715,
+    "withheld_positive_per_fold": [
+     6422,
+     6429,
+     7245,
+     6765
+    ],
+    "withheld_evidence": "evidence/lidar01_withheld_counts.json",
+    "n_folds": 4,
+    "variants": {
+     "random|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.069971,
+       0.079524,
+       0.070744,
+       0.069929
+      ],
+      "mean": 0.072542,
+      "ci95": [
+       0.067966,
+       0.077118
+      ],
+      "pooled": 0.072467,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "random|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.069971,
+       0.079524,
+       0.070744,
+       0.069929
+      ],
+      "mean": 0.072542,
+      "ci95": [
+       0.067966,
+       0.077118
+      ],
+      "pooled": 0.072467,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "distance|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.621639,
+       0.605663,
+       0.575009,
+       0.552614
+      ],
+      "mean": 0.588731,
+      "ci95": [
+       0.55846,
+       0.619002
+      ],
+      "pooled": 0.588015,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "distance|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.074816,
+       0.079058,
+       0.06896,
+       0.070351
+      ],
+      "mean": 0.073296,
+      "ci95": [
+       0.068806,
+       0.077786
+      ],
+      "pooled": 0.073147,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "lane_nocat|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.162388,
+       0.140975,
+       0.161259,
+       0.144874
+      ],
+      "mean": 0.152374,
+      "ci95": [
+       0.141558,
+       0.16319
+      ],
+      "pooled": 0.152543,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     },
+     "lane_nocat|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.084614,
+       0.097627,
+       0.084916,
+       0.084717
+      ],
+      "mean": 0.087968,
+      "ci95": [
+       0.081657,
+       0.09428
+      ],
+      "pooled": 0.087854,
+      "dots": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       3274,
+       3274,
+       3284,
+       3264
+      ],
+      "separation_px": 2.8
+     }
+    }
+   },
+   "traces": {
+    "description": "global whole-trace holdout (catalogue proximity kept)",
+    "withheld_positive_count_per_fold": 12090,
+    "withheld_positive_per_fold": [
+     12822,
+     10652,
+     11970,
+     12917
+    ],
+    "withheld_evidence": "evidence/lidar01_withheld_counts.json",
+    "n_folds": 4,
+    "variants": {
+     "random|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.046648,
+       0.044964,
+       0.045197,
+       0.046243
+      ],
+      "mean": 0.045763,
+      "ci95": [
+       0.044968,
+       0.046558
+      ],
+      "pooled": 0.045789,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "random|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.046648,
+       0.044964,
+       0.045197,
+       0.046243
+      ],
+      "mean": 0.045763,
+      "ci95": [
+       0.044968,
+       0.046558
+      ],
+      "pooled": 0.045789,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "distance|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.014471,
+       0.008362,
+       0.012557,
+       0.013888
+      ],
+      "mean": 0.01232,
+      "ci95": [
+       0.009617,
+       0.015022
+      ],
+      "pooled": 0.012419,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "distance|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.047384,
+       0.04858,
+       0.047176,
+       0.047932
+      ],
+      "mean": 0.047768,
+      "ci95": [
+       0.047152,
+       0.048384
+      ],
+      "pooled": 0.047754,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "lane_nocat|topk": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.108379,
+       0.121445,
+       0.094946,
+       0.09173
+      ],
+      "mean": 0.104125,
+      "ci95": [
+       0.090784,
+       0.117466
+      ],
+      "pooled": 0.10378,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     },
+     "lane_nocat|weighted": {
+      "label": "HOLDOUT-DTI",
+      "per_fold": [
+       0.052859,
+       0.060591,
+       0.05695,
+       0.059479
+      ],
+      "mean": 0.05747,
+      "ci95": [
+       0.054107,
+       0.060832
+      ],
+      "pooled": 0.057399,
+      "dots": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "budget_full_grid": 37654,
+      "dots_per_fold": [
+       37654,
+       37654,
+       37654,
+       37654
+      ],
+      "separation_px": 2.8
+     }
+    }
+   }
+  }
+ },
+ "leakage_canary": {
+  "threshold_auc": 0.9,
+  "status": "PASS - no channel exceeded the threshold",
+  "max_auc_observed": 0.6204434774766624,
+  "n_channels_tested": 38,
+  "flagged": [],
+  "evidence": "evidence/lidar_lane_canary.json"
+ },
+ "registry_checks": {
+  "correlation_limit": 0.9,
+  "overlap_limit": 0.7,
+  "radius_px": 3,
+  "rasters_compared": 60,
+  "max_abs_spearman": 0.069009,
+  "max_dot_overlap_fraction": 0.921018,
+  "duplicate": false,
+  "verdict": "no duplicate detected in the compared set (chance-corrected rule)",
+  "completeness": "registry/rasters is the local mirror only; it is not certified to be the complete organizer corpus"
+ },
+ "raster": {
+  "status": "GENERATED",
+  "file": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+  "sha256": "0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2",
+  "bytes": 359188,
+  "dots": 37654,
+  "budget": 37654,
+  "separation_px": 2.8,
+  "gamma": null,
+  "validator_passed": true,
+  "zip": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
+  "zip_sha256": "134e3694d76eaee5a26824fbf543d305055fc40f82d75c7de553650c39c2825b"
+ },
+ "raster_historical_artifacts": [],
+ "validator": {
+  "file": "/home/user/GEMSDOE66/artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+  "passed": true,
+  "has_failures": false,
+  "checks": [
+   {
+    "check": "single band",
+    "status": "PASS",
+    "detail": "count=1"
+   },
+   {
+    "check": "dtype float32",
+    "status": "PASS",
+    "detail": "dtype=float32"
+   },
+   {
+    "check": "CRS EPSG:32611",
+    "status": "PASS",
+    "detail": "crs=EPSG:32611"
+   },
+   {
+    "check": "shape matches",
+    "status": "PASS",
+    "detail": "file=(3730, 3292) expected=(3730, 3292)"
+   },
+   {
+    "check": "resolution 100 m",
+    "status": "PASS",
+    "detail": "res=(100.0, 100.0)"
+   },
+   {
+    "check": "transform matches reference",
+    "status": "PASS",
+    "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "CRS matches reference",
+    "status": "PASS",
+    "detail": "file=EPSG:32611 ref=EPSG:32611"
+   },
+   {
+    "check": "nodata tag is none or NaN",
+    "status": "PASS",
+    "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+   },
+   {
+    "check": "no infinities",
+    "status": "PASS",
+    "detail": "inf_count=0"
+   },
+   {
+    "check": "values within [0, 1]",
+    "status": "PASS",
+    "detail": "min=0.0 max=1.0 finite_cells=5167373"
+   },
+   {
+    "check": "features grid shape matches",
+    "status": "PASS",
+    "detail": "features=(3730, 3292) reference=(3730, 3292)"
+   },
+   {
+    "check": "features transform matches reference grid",
+    "status": "PASS",
+    "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "features CRS matches reference grid",
+    "status": "PASS",
+    "detail": "features=EPSG:32611 reference=EPSG:32611"
+   },
+   {
+    "check": "no NaN inside footprint",
+    "status": "PASS",
+    "detail": "nan_inside=0 footprint_cells=5167373"
+   },
+   {
+    "check": "NaN-only outside footprint",
+    "status": "PASS",
+    "detail": "finite_outside=0; only NaN is allowed outside"
+   },
+   {
+    "check": "info: emitted cells (value > 0)",
+    "status": "INFO",
+    "detail": "emitted=37654"
+   }
+  ],
+  "skipped_checks_mean_unverified": false
+ },
+ "submission": {
+  "name": "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z",
+  "note": "LIDAR-01: slope-aware antislope scarplet template + Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, spacing-cons...",
+  "note_chars": 140,
+  "note_limit_chars": 140,
+  "file": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+  "download_status": "OFFERED - published in docs/downloads/ and linked from the site index",
+  "download_urls": {
+   "tif": "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+   "zip": "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip"
+  },
+  "organizer_confirmed_receipt": null
+ },
+ "budget": {
+  "new_experiments_used": 3,
+  "max_experiments": 3,
+  "submission_slots_used": 0,
+  "note": "No competition submission slot was spent; promotion is a separate selector step."
+ },
+ "open_irregularities": [
+  "IR-72-NATIVE-SCALE",
+  "IR-73-CULTURAL-MASK-MISSING",
+  "IR-74-MIRROR-NOT-ORGANIZER",
+  "IR-75-SCORE-COMPRESSION",
+  "IR-76-TRACE-SUPERSET"
+ ],
+ "verdict": "promote"
+}
