@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Download &amp; status · GEMSDOE66</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="wrap">
+<h1 class="logo">GEMSDOE66 &mdash; DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html" class="on">Download &amp; status</a><a href="executive-summary.html">How to submit</a><a href="results.html">Results</a><a href="hypotheses.html">Hypotheses</a><a href="method.html">Method &amp; metric</a><a href="sources.html">Sources</a><a href="irregularities.html">Irregularities</a><a href="run-card.html">Run card</a></nav></div></header>
+<main><div class="wrap">
+<div class="banner go">
+<h2>&#9989; DOWNLOAD READY &mdash; OK TO SUBMIT</h2>
+<p><b>All 15 release gates pass on the bytes that are published here.</b>
+Re-verified from disk at build time, not copied from an older receipt.</p>
+<div class="dl">
+<a href="../downloads/gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif" download>&#11015; Download the submission .tif</a>
+<a class="alt" href="../downloads/gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.zip" download>&#11015; Download the .zip</a>
+</div>
+<table class="kv">
+<tr><th>file</th><td class="mono">gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif</td></tr>
+<tr><th>sha256</th><td class="mono">512fda025b830209abb013190aa320e58eaa03de2ba212510805fff6e97ad578</td></tr>
+<tr><th>size</th><td>356,131 bytes (zip 244,842)</td></tr>
+<tr><th>grid</th><td>3730 &times; 3292, EPSG:32611, 100 m, single band
+float32 &mdash; identical to <code>sample_submission.tif</code></td></tr>
+<tr><th>values</th><td>min 0.0000 &middot; max 1.0000 &middot;
+45,000 pixels &gt; 0 &middot; 7,111,787 NaN cells, all outside the footprint</td></tr>
+<tr><th>submission name</th><td class="mono">gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan</td></tr>
+<tr><th>note (119/140 chars)</th>
+<td class="mono">H67 inventory-free geophysics/topography belief, metric-native max-coverage emission; 45000 dots; NaN outside footprint</td></tr>
+</table>
+<h3>Gate detail</h3><table><tr><th>single float32 band</th><td><span class="pill ok">PASS</span> <span class="small">count=1 dtype=float32</span></td></tr><tr><th>EPSG:32611 and CRS matches the official reference</th><td><span class="pill ok">PASS</span> <span class="small">EPSG:32611 vs EPSG:32611</span></td></tr><tr><th>shape matches the official reference</th><td><span class="pill ok">PASS</span> <span class="small">(3730, 3292) vs (3730, 3292)</span></td></tr><tr><th>geotransform matches the official reference</th><td><span class="pill ok">PASS</span> <span class="small">(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) vs (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)</span></td></tr><tr><th>all finite values in [0, 1]</th><td><span class="pill ok">PASS</span> <span class="small">min=0.0 max=1.0</span></td></tr><tr><th>no NaN inside the footprint</th><td><span class="pill ok">PASS</span> <span class="small">nan_inside=0 of 5,167,373 reference-mask cells; features-mask disagreement=(3061, 1540)</span></td></tr><tr><th>NaN only outside the footprint</th><td><span class="pill ok">PASS</span> <span class="small">finite_outside=0</span></td></tr><tr><th>official validator reports no failures and no skipped checks</th><td><span class="pill ok">PASS</span> <span class="small">passed=True failures=False skipped=False</span></td></tr><tr><th>submission note is at most 140 characters</th><td><span class="pill ok">PASS</span> <span class="small">119 chars</span></td></tr><tr><th>rank correlation with every registry raster below 0.90</th><td><span class="pill ok">PASS</span> <span class="small">max |rho| = 0.2241 over 72 rasters</span></td></tr><tr><th>no registry raster is duplicated (within-3px and null lift judged per raster)</th><td><span class="pill ok">PASS</span> <span class="small">max within-3px = 0.9997 (unconditional null lift 6.03; neighbourhood-conditioned null 0.9985, lift 1.00); rasters failing BOTH the 0.70 overlap rule and a 3x neighbourhood-null lift = 0 of 72</span></td></tr><tr><th>not byte-identical to any registry raster</th><td><span class="pill ok">PASS</span> <span class="small">0 sha256 twins; max coincident dots with one raster = 6,801</span></td></tr><tr><th>holdout evidence exists for the emitted recipe</th><td><span class="pill ok">PASS</span> <span class="small">h67_holdout_C.json / R3|k1.0|s2</span></td></tr><tr><th>emitted recipe beats the random-placement null on the same folds and budget</th><td><span class="pill ok">PASS</span> <span class="small">HOLDOUT-DTI 0.1790 vs null 0.0707</span></td></tr><tr><th>run card promotion decision is promote</th><td><span class="pill ok">PASS</span> <span class="small">promote</span></td></tr></table>
+<p class="small">No organizer score is claimed for this file. Nothing has been uploaded by this
+repository; uploading is a manual step described in
+<a href="executive-summary.html">How to submit</a>.</p>
+</div>
+<h2>What this project is</h2>
+<p>An auditable pipeline that produces one GeoTIFF of fault predictions for the
+<a href="https://www.drivendata.org/">DOE GEMS Prize</a> (DrivenData competition 306). The scored truth is
+<b>faults that are not in the public USGS database</b>, so every design choice here targets
+that population rather than the 60,988 labelled pixels we were given.</p>
+<p>The single most important measurement in this repository is the structure of the official
+metric. It is a <b>budget</b>, not a segmentation score: every emitted pixel costs
+&alpha;&nbsp;=&nbsp;0.2 whether or not it earns credit. That is why the emitted file is a sparse
+dot set and not a dense probability map. See <a href="method.html">Method &amp; metric</a>.</p>
+
+<h2>This session's finding</h2>
+<p><b>95.2% of the USGS SGMC state-geologic-map fault pixels in the study area lie outside the
+given catalogue</b> (79,615 of 83,593; 62,122 of them more than 300 m from any catalogue pixel).
+The given labels come from the USGS <i>Quaternary</i> fault database and INGENIOUS, so bedrock
+geologic-map faults are precisely the population that database omits &mdash; and precisely what an
+expert panel would add. No earlier session in this family emitted an SGMC-anchored candidate;
+the layer was carried as "proxy only, not used in the factorial".</p>
+
+<h2>Holdout evidence (HOLDOUT-DTI, never an organizer score)</h2>
+<table><tr><th>instrument</th><th>key</th><th>belief recipe</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>folds</th><th>withheld px</th><th>dots</th></tr><tr><td>C_catalogue_recover</td><td class='mono'>R3|k1.0|s2</td><td>geophysics/topography only, no fault inventory</td><td>0.1790</td><td>0.1782 &ndash; 0.1798</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R1|k1.0|s2</td><td>catalogue distance only (the incumbent signal)</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R4|k1.0|s2</td><td>catalogue + SGMC gap</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R5|k1.0|s2</td><td>full 62-layer stack</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr></table><p class='small'>Evaluator: <code>src/gems/metric.py @ arena/855725e1; vectorised == literal brute force to 3.6e-15; TPw+FNw=|G| asserted; official worked example TPw=3.00/FNw=2.00 reproduced exactly</code>. Withheld truth is a proxy. Instrument N uses SGMC geologic-map faults &gt;300 m off the given catalogue, NOT the organiser&#x27;s hidden expert set. No number here is ORGANIZER-CONFIRMED.</p>
+
+<h2>Leakage canary</h2>
+<h3>C_catalogue_recover</h3><table><tr><th>layer</th><th>max AUC alone</th><th>verdict</th></tr><tr><td class='mono'>d_visible_catalogue_m</td><td>0.714</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_qfaults_m</td><td>0.691</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_sgmc_m</td><td>0.677</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_sgmc_off_visible_m</td><td>0.594</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_lappos_max</td><td>0.587</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_lapneg_max</td><td>0.580</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_relief</td><td>0.579</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>det_elev_grad</td><td>0.576</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_step_max</td><td>0.575</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_ex_max</td><td>0.573</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_upface_max</td><td>0.569</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>det_elev_slope</td><td>0.566</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>geod_2ndinv</td><td>0.565</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>geod_shearrate</td><td>0.565</td><td><span class="pill ok">ok</span></td></tr></table><p class='small'>Flagged above the 0.90 leakage threshold: none</p>
+
+<h2>Files and provenance</h2>
+<table>
+<tr><th>input</th><th>source</th></tr>
+<tr><td>training_features.tif (19 bands)</td><td>organiser, via hash-pinned mirror
+(<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem page</a>)</td></tr>
+<tr><td>labels.tif / existing_faults.tif</td><td>organiser, via hash-pinned mirror; the two are
+byte-identical (logged as an irregularity)</td></tr>
+<tr><td>sample_submission.tif</td><td>organiser grid template &mdash; the only source of the
+official CRS, shape and geotransform</td></tr>
+<tr><td>SGMC faults</td><td><a href="https://mrdata.usgs.gov/geology/state/">USGS state geologic map compilation</a></td></tr>
+<tr><td>Quaternary fault traces, wells/springs</td><td><a href="https://gdr.openei.org/submissions/1391">GDR submission 1391</a>,
+CC BY 4.0</td></tr>
+<tr><td>GeoDAWN radiometrics</td><td><a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a>, DOI 10.5066/P93LGLVQ</td></tr>
+<tr><td>LiDAR scarp descriptors</td><td>owner CI from <a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP 1 m DEM</a>,
+aggregated to 100 m &mdash; <b>not</b> the 2&ndash;20 m native scales the original brief asks for</td></tr>
+</table>
+
+<h2>Honest limits</h2>
+<ul>
+<li>The withheld truth in the holdout is a <b>proxy</b>. It is not the organiser's hidden expert set,
+so every number here is HOLDOUT-DTI and none is ORGANIZER-CONFIRMED.</li>
+<li>The LiDAR lane could not be run at native resolution: only the 100 m aggregate is reachable
+from this environment, so the scarplet/Steger/Frangi filters here run at 200&ndash;2000 m, not 2&ndash;20 m.</li>
+<li>No organizer receipt ties any byte in this repository to a leaderboard value.</li>
+</ul>
+
+</div></main>
+<footer class="wrap"><p class="small">Built 2026-10-12T03:06:37Z
+by <code>scripts/build_site_h67.py</code>. Every number on this site is either HOLDOUT-DTI
+(internal, with its evaluator and CI) or a measurement of our own bytes. Nothing here is an
+organizer score.</p></footer>
+</body></html>

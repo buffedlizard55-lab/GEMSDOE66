@@ -1,0 +1,492 @@
+{
+ "schema": "gems-h67-run/1",
+ "generated_utc": "2026-10-12T01:09:16Z",
+ "seconds": 150.9,
+ "args": {
+  "dots": 40000,
+  "minsep": 3.0,
+  "exclude_px": 4.0,
+  "hedge": 0.15,
+  "dry_run": false,
+  "tag": "gems66-h67-scarp-lane-novelty-40000dots-v2"
+ },
+ "dot_profile": {
+  "n_dots": 40000,
+  "mean_d_mapped_px": 23.358213424682617,
+  "frac_within_3px_of_mapped": 0.0,
+  "lidar_valid_fraction": 0.85,
+  "row_mean": 1416.094275,
+  "col_mean": 1498.8208,
+  "row_std": 1034.8208712077778,
+  "col_std": 639.3123281991049,
+  "nn_median_px": 5.656854249492381,
+  "block_density_mean": 0.0076746947945456985,
+  "block_density_cv": 0.31560652020553365
+ },
+ "dot_geometry": {
+  "n": 40000,
+  "nn_median_px": 5.656854249492381,
+  "nn_p10_px": 3.605551275463989,
+  "nn_p90_px": 9.433981132056603,
+  "nn_min_px": 1.4142135623730951,
+  "frac_touching_8conn": 0.0
+ },
+ "leakage_canary": {
+  "scarp_pixel_fraction": {
+   "auc": 0.4447753974973976,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "snr_weighted_amplitude": {
+   "auc": 0.5664007948874794,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "orientation_coherence": {
+   "auc": 0.39288460303918094,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "dominant_strike_deg": {
+   "auc": 0.495138120208523,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "step_fraction": {
+   "auc": 0.4449374347252181,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "relief_mean": {
+   "auc": 0.5821543931296481,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "scale_persistence": {
+   "auc": 0.7125864442548533,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "tensor_coherence": {
+   "auc": 0.38337788051468613,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "strike_concordance": {
+   "auc": 0.44194462745350555,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "lidar_valid": {
+   "auc": 0.443664467338463,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  }
+ },
+ "holdout_negative_control": {
+  "evidence_class": "HOLDOUT-DTI",
+  "positive_control": false,
+  "truth": "SGMC 100 m derived faults > 300 m from the competition catalogue, LiDAR-covered",
+  "withheld_positive_pixels": 62122,
+  "evaluator_version": "h67-pooled-quadrant-v1",
+  "pooled_dti": 0.0,
+  "ci95": [
+   0.0,
+   0.0
+  ],
+  "pooled_terms": {
+   "tpw": 0.0,
+   "fpw": 34000.0,
+   "fnw": 62122.0,
+   "n_truth": 62122
+  },
+  "per_quadrant": {
+   "foldN00": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 15634.0,
+    "fnw": 23130.0,
+    "n_truth": 23130,
+    "mass": 15634.0
+   },
+   "foldN01": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 5435.0,
+    "fnw": 23192.0,
+    "n_truth": 23192,
+    "mass": 5435.0
+   },
+   "foldN10": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 5705.0,
+    "fnw": 2353.0,
+    "n_truth": 2353,
+    "mass": 5705.0
+   },
+   "foldN11": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 7226.0,
+    "fnw": 13447.0,
+    "n_truth": 13447,
+    "mass": 7226.0
+   }
+  },
+  "stratified": {
+   "near_front": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 3956.0,
+    "n_truth": 62122,
+    "dots": 3956
+   },
+   "off_front": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 36044.0,
+    "n_truth": 62122,
+    "dots": 36044
+   }
+  },
+  "known_limitation": "this instrument is anti-correlated with the owner-reported outcome (see evidence/h67_e2_proxy_concordance.json); it is reported as a negative control and is NOT a promotion gate",
+  "negative_control_reason": "the organiser truth is defined as faults absent from the public fault databases, so SGMC-mapped faults are by construction not truth and mass near them is charged FP"
+ },
+ "uniqueness": {
+  "verdict": "UNIQUE",
+  "reason": "below every duplicate threshold",
+  "max_abs_spearman_rho": 0.2860919643930307,
+  "argmax_rho": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "max_frac_dots_within_3px": 0.9992,
+  "max_lift_over_random": 1.377672585663749,
+  "argmax_lift": "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
+  "top_by_lift": [
+   {
+    "jaccard": 0.0046937519236688215,
+    "overlap_frac_of_candidate": 0.007625,
+    "spearman_rho": -0.12600602443640496,
+    "frac_candidate_dots_within_3px": 0.010325,
+    "null_within_3px_random_placement": 0.007494523813163865,
+    "lift_over_random": 1.377672585663749,
+    "n_candidate": 40000,
+    "n_other": 25285,
+    "registry_file": "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
+    "identical_pixels": false
+   },
+   {
+    "jaccard": 0.007257484280664435,
+    "overlap_frac_of_candidate": 0.0232,
+    "spearman_rho": -0.20771693587767426,
+    "frac_candidate_dots_within_3px": 0.031425,
+    "null_within_3px_random_placement": 0.025733772266875257,
+    "lift_over_random": 1.2211579271823487,
+    "n_candidate": 40000,
+    "n_other": 88796,
+    "registry_file": "gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
+    "identical_pixels": false
+   },
+   {
+    "jaccard": 0.004709576138147566,
+    "overlap_frac_of_candidate": 0.009375,
+    "spearman_rho": -0.15598754564423578,
+    "frac_candidate_dots_within_3px": 0.244125,
+    "null_within_3px_random_placement": 0.21216428541156213,
+    "lift_over_random": 1.150641351000427,
+    "n_candidate": 40000,
+    "n_other": 40000,
+    "registry_file": "gems61c-gravstep-liveband-40k-20261011.tif",
+    "identical_pixels": false
+   },
+   {
+    "jaccard": 0.0047474316143779356,
+    "overlap_frac_of_candidate": 0.00945,
+    "spearman_rho": -0.15590209621821033,
+    "frac_candidate_dots_within_3px": 0.101725,
+    "null_within_3px_random_placement": 0.09120340257999568,
+    "lift_over_random": 1.1153640886454395,
+    "n_candidate": 40000,
+    "n_other": 40000,
+    "registry_file": "gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif",
+    "identical_pixels": false
+   },
+   {
+    "jaccard": 0.0047637623083560884,
+    "overlap_frac_of_candidate": 0.010075,
+    "spearman_rho": -0.1640879262765053,
+    "frac_candidate_dots_within_3px": 0.187725,
+    "null_within_3px_random_placement": 0.1772540902311484,
+    "lift_over_random": 1.059072880942815,
+    "n_candidate": 40000,
+    "n_other": 45000,
+    "registry_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "identical_pixels": false
+   }
+  ],
+  "identical_to": [],
+  "thresholds": {
+   "max_rho": 0.9,
+   "max_within3": 0.7,
+   "min_lift": 1.5,
+   "within_px": 3.0
+  },
+  "n_compared": 60,
+  "candidate_sha256": "1c314c249a7acabb5e16f3308cb3bdb835197fe1a8d793649f0bf9db2618dc56"
+ },
+ "dry_run": false,
+ "artifacts": {
+  "nan": {
+   "path": "docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+   "receipt": {
+    "file": "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+    "sha256": "1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f",
+    "shape_hw": [
+     3730,
+     3292
+    ],
+    "crs": "EPSG:32611",
+    "footprint_cells": 5167373,
+    "emitted_cells_gt0": 40000,
+    "min_inside": 0.0,
+    "max_inside": 1.0,
+    "nan_inside": 0,
+    "nan_outside_count": 7111787,
+    "outside_fill": null,
+    "finite_outside_count": 0,
+    "all_values_in_0_1": false,
+    "name": "gems66-h67-scarp-lane-novelty-40000dots-v2-nan",
+    "note": "H67-1 scarp-lane novelty field, LiDAR-derived scarp channels + scale persistence, mapped-fault exclusion; see GEMSDOE66 run card",
+    "note_chars": 128,
+    "reference": "sample_submission.tif",
+    "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+   },
+   "validator": {
+    "file": "/home/user/GEMSDOE66/docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+    "sha256": "1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f",
+    "passed": true,
+    "has_failures": false,
+    "checks": [
+     {
+      "check": "single band",
+      "status": "PASS",
+      "detail": "count=1"
+     },
+     {
+      "check": "dtype float32",
+      "status": "PASS",
+      "detail": "dtype=float32"
+     },
+     {
+      "check": "CRS EPSG:32611",
+      "status": "PASS",
+      "detail": "crs=EPSG:32611"
+     },
+     {
+      "check": "shape matches",
+      "status": "PASS",
+      "detail": "file=(3730, 3292) expected=(3730, 3292)"
+     },
+     {
+      "check": "resolution 100 m",
+      "status": "PASS",
+      "detail": "res=(100.0, 100.0)"
+     },
+     {
+      "check": "transform matches reference",
+      "status": "PASS",
+      "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+     },
+     {
+      "check": "CRS matches reference",
+      "status": "PASS",
+      "detail": "file=EPSG:32611 ref=EPSG:32611"
+     },
+     {
+      "check": "nodata tag is none or NaN",
+      "status": "PASS",
+      "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+     },
+     {
+      "check": "no infinities",
+      "status": "PASS",
+      "detail": "inf_count=0"
+     },
+     {
+      "check": "values within [0, 1]",
+      "status": "PASS",
+      "detail": "min=0.0 max=1.0 finite_cells=5167373"
+     },
+     {
+      "check": "features grid shape matches",
+      "status": "PASS",
+      "detail": "features=(3730, 3292) reference=(3730, 3292)"
+     },
+     {
+      "check": "features transform matches reference grid",
+      "status": "PASS",
+      "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+     },
+     {
+      "check": "features CRS matches reference grid",
+      "status": "PASS",
+      "detail": "features=EPSG:32611 reference=EPSG:32611"
+     },
+     {
+      "check": "no NaN inside footprint",
+      "status": "PASS",
+      "detail": "nan_inside=0 footprint_cells=5167373"
+     },
+     {
+      "check": "NaN-only outside footprint",
+      "status": "PASS",
+      "detail": "finite_outside=0; only NaN is allowed outside under outside_policy='nan'"
+     },
+     {
+      "check": "info: emitted cells (value > 0)",
+      "status": "INFO",
+      "detail": "emitted=40000"
+     }
+    ],
+    "skipped_checks_mean_unverified": false
+   },
+   "sha256": "1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f"
+  },
+  "zeros": {
+   "path": "docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+   "receipt": {
+    "file": "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+    "sha256": "eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42",
+    "shape_hw": [
+     3730,
+     3292
+    ],
+    "crs": "EPSG:32611",
+    "footprint_cells": 5167373,
+    "emitted_cells_gt0": 40000,
+    "min_inside": 0.0,
+    "max_inside": 1.0,
+    "nan_inside": 0,
+    "nan_outside_count": 0,
+    "outside_fill": 0.0,
+    "finite_outside_count": 7111787,
+    "all_values_in_0_1": true,
+    "name": "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros",
+    "note": "H67-1 scarp-lane novelty field, LiDAR-derived scarp channels + scale persistence, mapped-fault exclusion; see GEMSDOE66 run card",
+    "note_chars": 128,
+    "reference": "sample_submission.tif",
+    "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+   },
+   "validator": {
+    "file": "/home/user/GEMSDOE66/docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+    "sha256": "eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42",
+    "passed": true,
+    "has_failures": false,
+    "checks": [
+     {
+      "check": "single band",
+      "status": "PASS",
+      "detail": "count=1"
+     },
+     {
+      "check": "dtype float32",
+      "status": "PASS",
+      "detail": "dtype=float32"
+     },
+     {
+      "check": "CRS EPSG:32611",
+      "status": "PASS",
+      "detail": "crs=EPSG:32611"
+     },
+     {
+      "check": "shape matches",
+      "status": "PASS",
+      "detail": "file=(3730, 3292) expected=(3730, 3292)"
+     },
+     {
+      "check": "resolution 100 m",
+      "status": "PASS",
+      "detail": "res=(100.0, 100.0)"
+     },
+     {
+      "check": "transform matches reference",
+      "status": "PASS",
+      "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+     },
+     {
+      "check": "CRS matches reference",
+      "status": "PASS",
+      "detail": "file=EPSG:32611 ref=EPSG:32611"
+     },
+     {
+      "check": "nodata tag is none or NaN",
+      "status": "PASS",
+      "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+     },
+     {
+      "check": "no infinities",
+      "status": "PASS",
+      "detail": "inf_count=0"
+     },
+     {
+      "check": "values within [0, 1]",
+      "status": "PASS",
+      "detail": "min=0.0 max=1.0 finite_cells=12279160"
+     },
+     {
+      "check": "features grid shape matches",
+      "status": "PASS",
+      "detail": "features=(3730, 3292) reference=(3730, 3292)"
+     },
+     {
+      "check": "features transform matches reference grid",
+      "status": "PASS",
+      "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+     },
+     {
+      "check": "features CRS matches reference grid",
+      "status": "PASS",
+      "detail": "features=EPSG:32611 reference=EPSG:32611"
+     },
+     {
+      "check": "no NaN inside footprint",
+      "status": "PASS",
+      "detail": "nan_inside=0 footprint_cells=5167373"
+     },
+     {
+      "check": "NaN-only outside footprint",
+      "status": "PASS",
+      "detail": "finite_outside=7111787 of 7111787 outside cells; accepted under outside_policy='either' because every written value is finite and inside [0, 1]"
+     },
+     {
+      "check": "info: emitted cells (value > 0)",
+      "status": "INFO",
+      "detail": "emitted=40000"
+     }
+    ],
+    "skipped_checks_mean_unverified": false
+   },
+   "sha256": "eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42"
+  }
+ },
+ "base_name": "gems66-h67-scarp-lane-novelty-40000dots-v2"
+}

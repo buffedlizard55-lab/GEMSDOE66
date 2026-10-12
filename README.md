@@ -1,36 +1,91 @@
 # GEMSDOE66 — DOE GEMS Prize (DrivenData #306)
 
-**Current verdict (session `arena/855725e1`, 2026-10-12): ONE candidate is CLEARED and published
-as a download.** File
-`gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif`
-(sha256 `512fda025b830209abb01319…`; the full run card is
-[`docs/data/run-card-h67.json`](docs/data/run-card-h67.json)), 45,000 binary dots, float32,
-EPSG:32611, 100 m, NaN only outside the footprint. All 15 release gates are recomputed from the
-bytes on disk at build time by [`scripts/build_site_h67.py`](scripts/build_site_h67.py); the
-site shows one banner, either **✅ DOWNLOAD READY — OK TO SUBMIT** or **❌ NOT CLEARED**, never
-both. **No organizer score is claimed for this file. Nothing has been uploaded; uploading is a
-manual step.** Keep **Maximize P(Win)** and **Own the Outcome** central.
+**START HERE, EVERY SESSION.** Read this file top to bottom, then the full governing brief in
+[Standing brief (binding)](#standing-brief-binding), then the canonical run card
+[`docs/data/run-card.json`](docs/data/run-card.json) and the newest dated file under
+[`docs/review/`](docs/review/). Keep **Maximize P(Win)** and **Own the Outcome** central;
+negative results and disclosed stops are valid outcomes.
 
-**Start every session here.** Read this charter, then, in order:
-[`docs/data/run-card-h67.json`](docs/data/run-card-h67.json) (the current lane),
-[`docs/data/h67_hypotheses.json`](docs/data/h67_hypotheses.json) (the five hypotheses *and their
-measured outcomes*), the newest file under [`docs/review/`](docs/review/), and
-[`docs/data/run_card.json`](docs/data/run_card.json) (the historical `lidar_lane` verdict, still
-negative, deliberately not overwritten). The original method and parallel-run prompt is Appendix A.
+## 0. SESSION-66 STANDING CHARTER — parallel session, merged from `main`
+>
+> **Highest urgency.** MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION. Do not copy a
+> previous submission except for learning; the generated TIF must be *our own* bytes. It must be
+> **obvious whether it is OK to download and submit**. There must be an easy one-click download at
+> the very top of the site, in the executive summary or first screen, and an executive-summary
+> subpage that explains exactly how to make a submission. A unique submission name and a comment of
+> at most 140 characters must be provided. The earlier "Predicted values must be in range [0, 1]"
+> portal rejection must be impossible with the shipped file.
+>
+> **Lane (single method paragraph).** Native-resolution lidar scarp channels: scarplet template
+> matching (Sare & Hilley, JOSS 2018, doi:10.21105/joss.01066) extended with slope-aware templates
+> (AGU 2015 poster T31A-2838); Steger sub-pixel ridge/valley lines (IEEE TPAMI 20(2):113–125, 1998)
+> and Frangi multiscale Hessian line measures (MICCAI 1998, LNCS 1496:130–137) at 2–20 m on a
+> slope-detrended surface; aggregate to 100 m cells as scarp-pixel fraction, SNR-weighted amplitude,
+> structure-tensor orientation coherence and dominant strike; mask roads, canals and field edges;
+> retrain under spatial CV; gate on DTI gain in lidar-covered holdout blocks that is not confined to
+> range fronts; normalise to [0,1]; write float32 EPSG:32611 100 m with NaN only outside the
+> footprint; pass `validate_submission.py`; hash/pixel-agreement check against all prior rasters;
+> offer the download if the gate is met, otherwise log the negative result. If a raw 1 m DEM is not
+> reachable from the sandbox, the nearest *verifiable* substitute must be named and the deviation
+> disclosed — never silently substituted.
+>
+> **Parallel-run protocol.** (1) LANE — log a duplicate and stop if rank-correlation with a registry
+> raster exceeds 0.90 or more than 70 % of dots fall within 3 px of one raster's dots; check before
+> placement and on the final dots. (2) REUSE, DON'T REBUILD — use the template's cached stack,
+> `evaluate_holdout.py`, `submission_writer.py`; fix a shared tool once, never fork privately.
+> (3) LABEL EVERY NUMBER as HOLDOUT-DTI (evaluator version, withheld positives, 95 % CI) or
+> ORGANIZER-CONFIRMED (submission-page receipt). A projection is never written as a score.
+> (4) LEAKAGE CANARY — test each feature alone on the holdout; AUC above 0.90 is leakage until
+> disproven. (5) RUN CARD — end with one JSON card: hypothesis; mechanism; the named non-fault
+> process that could mimic it; holdout DTI + CI; correlation/overlap vs the registry; raster
+> sha256; validator output; submission name + ≤140-character note; verdict promote/negative.
+> (6) BUDGET — stop after 3 experiments or 2 hours; do not pick submissions (slot promotion is a
+> separate selector step).
+>
+> **Before implementing new ideas.** Rank 3–5 candidate geological hypotheses not yet tried, each
+> naming the specific layers, the physical signature targeted, why it could catch a fault that the
+> USGS/INGENIOUS catalogue misses rather than one already in it, and how it differs from everything
+> already in this repository; rank by expected DTI improvement and implementation cost; validate the
+> top candidate on the spatially blocked holdout before touching a weekly slot; if a candidate needs
+> new external data, name the specific free official source and check it is obtainable first.
+>
+> **Core values — keep them central.** *Maximize P(Win).* Weigh trade-offs, assess risk, choose the
+> path that maximises the probability of winning; set emotions aside. *Own the Outcome.* Own results
+> end to end, act when problems arise without waiting for permission, treat failure and success as
+> signals, stay accountable for the final outcome.
+>
+> **Evidence discipline.** Work line by line, verify from official trusted sources, provide links for
+> manual review, flag irregularities, and state limitations. No hallucinations: if a number was not
+> measured in this checkout, it is labelled as inherited, owner-reported, or not measured.
+>
+> The original long-form briefs are preserved verbatim in
+> [Appendix A](#appendix-a--original-project-brief-preserved-verbatim-as-historical-source-text) and
+> [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
+> session-66 design.
 
----
+## H67 geophysics lane (branch `arena/855725e1`, 2026-10-12) — ONE candidate CLEARED
 
-## This session in one paragraph
+Pages: [`docs/h67/`](https://buffedlizard55-lab.github.io/GEMSDOE66/h67/) · run card
+[`docs/data/run-card-h67.json`](docs/data/run-card-h67.json) · full review
+[`docs/review/2026-10-12-h67-offcatalogue-geophysics.md`](docs/review/2026-10-12-h67-offcatalogue-geophysics.md)
+
+**Cleared for download:** `gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif`
+(sha256 `512fda025b830209abb01319…`), 45,000 binary dots, float32, EPSG:32611, 100 m, NaN only
+outside the footprint. `scripts/build_site_h67.py` recomputes **all 15 release gates from the bytes
+on disk** at build time and publishes or withdraws `docs/downloads/` accordingly, so the lane shows
+exactly one banner: **✅ DOWNLOAD READY — OK TO SUBMIT** or **❌ NOT CLEARED**, never both.
+Validator: 13 PASS · 0 FAIL · 0 SKIPPED. **No organizer score is claimed, and nothing has been
+uploaded — 0 submission slots used.**
 
 The decisive measurement is a **negative** one that inverted the preregistered hypothesis ranking.
 Every layer that reads a fault *inventory* — the given catalogue, the USGS QFDB traces, the SGMC
-state geologic map, the GDR thermal springs — is an **anti-signal** under the repository's own
+state geologic map, the GDR thermal springs — is an **anti-signal** under this repository's own
 spatially blocked holdout, because that protocol withholds whole fault segments and buffers the
 remaining inventory by 300 m. The withheld truth therefore sits inside a manufactured gap, and
-"distance to the remaining inventory" learns *"gap means no fault"*. On the same 2 folds, the same
-45,000-dot budget and the same eligible mask:
+"distance to the remaining inventory" learns *"gap means no fault"*. Same 2 folds, same 45,000-dot
+budget, same eligible mask, withheld positives pooled **62,383**:
 
-| belief | HOLDOUT-DTI | 95% CI | vs. its own null |
+| belief | HOLDOUT-DTI | 95% CI | null-adjusted |
 |---|---|---|---|
 | R1 catalogue distance only | 0.0178 | 0.0147 – 0.0208 | 0.25× random |
 | R4 catalogue + SGMC gap | 0.0178 | 0.0147 – 0.0208 | 0.25× random |
@@ -39,30 +94,35 @@ remaining inventory by 300 m. The withheld truth therefore sits inside a manufac
 | fixed 100 m lattice (null) | 0.0729 | — | 1.03× |
 | **R3 geophysics/topography, no inventory** | **0.17898** | **0.17816 – 0.17980** | **2.53× random** |
 
-Withheld positives pooled = 62,383; segments = 3,199 (8-connected proxy); leakage canary clear
-(strongest single layer AUC 0.714, threshold 0.90). Paired gain of R3 over the incumbent R1 =
-**+0.16121, 95% CI [0.15735, 0.16506]**, so the promotion is uncertainty-bounded and not a coin
-flip. Every number in that table is **HOLDOUT-DTI** from
-[`src/gems/metric.py`](src/gems/metric.py) (vectorised == literal brute force to 3.6e-15; the
-official worked example's `TPw=3.00` and `FNw=2.00` reproduce exactly). **None of them is an
-organizer score, and none is a prediction of one.**
+Leakage canary clear (strongest single layer AUC 0.714 vs a 0.90 threshold). Paired gain R3 − R1 =
+**+0.16121, 95% CI [0.15735, 0.16506]**, so the promotion is uncertainty-bounded. Every number
+above is **HOLDOUT-DTI** from [`src/gems/metric.py`](src/gems/metric.py); none is an organizer score
+and none predicts one. **Hypothesis A (the SGMC cartographic gap) is NOT supported**: the gap is
+real as a fact — 79,615 of 83,593 SGMC fault pixels (95.2%) lie outside the given catalogue, 62,122
+of them more than 300 m from it — and it carries no measurable incremental predictive signal, since
+adding the SGMC layers moved HOLDOUT-DTI by exactly 0.0000.
 
-Three protocol defects were found and fixed on the way, and all three are now regression-tested:
+Three protocol defects were found in review and fixed, each now regression-tested:
 
 * **`IR-67-FOOTPRINT-01`** — `sample_submission.tif` is finite on 5,167,373 cells while
-  `training_features.tif` band 1 is finite on 5,165,852; they disagree by 3,061 cells one way and
-  1,540 the other. The validator used the features mask and therefore **failed an artifact whose
-  NaN convention is byte-identical to all 12 owner artifacts the organizer actually scored**. The
-  reference (sample-submission) mask is now authoritative, the features mask is reported as a
-  cross-check, and no dot may lie outside the features bounds under either reading.
-* **`IR-66-GATE-01`, extended** — raw within-3px overlap against a dense registry raster is
-  meaningless (a 5-px lattice covers the whole grid, so its null is 0.9985). The audit now reports
-  a *second* null drawn from the 1 km neighbourhood the candidate's own dots occupy, which
-  separates "shares a geological target" from "copies the same dots". The worst comparator's
-  unconditional lift of 3.07 falls to **1.37** under it; zero rasters are flagged as duplicates.
-* **A private fork of the layer-exclusion list** — `INVENTORY_LAYERS` was duplicated in two
-  scripts. It now lives once in [`src/gems67/design.py`](src/gems67/design.py), with the
-  measurement that justifies it in the docstring.
+  `training_features.tif` band 1 is finite on 5,165,852 (disagreement 3,061 / 1,540). The validator
+  used the features mask and so **failed an artifact whose NaN convention is byte-identical to all
+  12 owner artifacts the organizer actually scored**. The reference (sample-submission) mask is now
+  authoritative — but only when its band is floating point, since an integer label raster encodes no
+  footprint — the features mask is an INFO cross-check, and no dot may lie outside the features
+  bounds under either reading. This is the defect class behind the earlier *"Predicted values must
+  be in range [0, 1]"* rejection.
+* **`IR-66-GATE-01`, extended** — raw within-3px overlap is dominated by comparator density (a 5-px
+  lattice has a 0.9985 random null, so every candidate looks like a copy of it). The audit now also
+  draws a null from the **1 km neighbourhood the candidate's own dots occupy**, which separates
+  "shares a geological target" from "copies the same dots": the worst comparator's 3.07
+  unconditional lift falls to **1.37**. Over 72 comparators: 0 sha256 twins, max coincident dots
+  6,799 of 45,000, max |Spearman ρ| 0.2241 (stop > 0.90), 0 duplicate-flagged rasters.
+* **A private fork of the layer-exclusion list** — `INVENTORY_LAYERS` was duplicated in two scripts;
+  it now lives once in [`src/gems67/design.py`](src/gems67/design.py) with the measurement that
+  justifies it. `scripts/fetch_mirrors.py` also no longer aborts on manifest entries with
+  `repo: null`, so `data/restore_receipt.json` is finally written: 23 verified, 2 no-mirror,
+  0 failed.
 
 **Reproduce:**
 
@@ -75,36 +135,121 @@ python3 scripts/h67_null_control.py --instruments C                # the placeme
 python3 scripts/h67_submit.py   --recipe R3_geophysical_only --standoff-px 2 --budget 45000
 python3 scripts/h67_run_card.py --holdout evidence/h67_holdout_C.json evidence/h67_holdout_C_R3.json
 python3 scripts/build_site_h67.py                      # recomputes all 15 gates, then publishes
-python3 -m pytest -q                                   # 134 passed
+python3 -m pytest -q
 ```
 
+**Blocked here:** no DrivenData credentials, so nothing can be uploaded and the data tab cannot be
+auto-downloaded; egress is limited to `github.com`, `api.github.com` and `pypi.org`, so USGS 3DEP,
+ScienceBase, the GDR endpoints and the DrivenData 1 m DEM links all return HTTP 000
+(`IR-66-DATA-01`) and the brief's native-resolution lidar lane cannot be run. `IR-67-METRIC-01`:
+the official worked example's `FPw = 1.89` does not reproduce — any 5-px line prediction against
+that truth gives `FPw = 2.00`, while `TPw` and `FNw` reproduce exactly.
+
+## Session 66 status — a unique candidate IS cleared for download
+
+**Download: [`gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif`](docs/downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif)**
+(sha256 `dbee66e6cd030ad3c619d5aa9b04a4b3a2717cffe1b591c3ef281726af66b638`, 335,449 bytes) — also shipped as
+[`…-nan.zip`](docs/downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip) and as an all-finite sibling that
+writes `0` outside the footprint
+([`…-allfinite.tif`](docs/downloads/gems66-k66c-kbalance-31999-20261012T020000Z-allfinite.tif)).
+Submission name `GEMSDOE66-K66C-kbalance-reliefarea-31999`; note (129/140 chars)
+`GEMSDOE66 K66C | K prior, lidar-covered, relief-area-balanced dots; ties the family's best-known on our frozen holdout, no margin`.
+
+| gate | result (all numbers are LOCAL measurements unless labelled otherwise) |
+|---|---|
+| frozen holdout — **HOLDOUT-DTI** | **0.04880** 95% CI [0.02950, 0.07327] over 8 folds, 39,863 withheld positives; buffered whole-segment hide-and-recover, lidar-covered; SGMC faults > 300 m from the catalogue; 8 component folds; 3 px buffer; alpha 0.2 / beta 0.8; 300 m triangular kernel. Same folds: owner-reported-0.2778 incumbent **0.04888**, chance 0.03416, withdrawn first candidate 0.03765. **Margin -0.00008 — ties the family's best-known design, does not beat it.** |
+| format validator | **PASS 10 checks** against `sample_submission.tif`; the single `SKIPPED` line is the footprint check that needs the login-walled `training_features.tif`, and the same footprint is verified directly (5,167,373 cells inside, 7,111,787 NaNs outside, 0 NaNs inside) |
+| bytes / uniqueness | 31,999 unit dots, NaN outside the footprint, 0 NaN inside, byte-unique vs all 60 registry rasters, max \|Spearman\| 0.021 (limit 0.90) |
+| 3-px dot rule | **degenerate — logged, not a pass** (the incumbent 0.2778 raster itself measures 1.000; 0 footprint cells are >3 px from every registry dot) |
+| ORGANIZER-CONFIRMED score | **not claimed** |
+
+**What changed today.** The earlier k66 candidate (`…kanchor-consensus-32000…`, sha256 `122fcd16…`)
+was scored on the project's own frozen buffered, lidar-covered novelty holdout and **lost**
+(0.03765 [0.03087, 0.04440] vs 0.04888 [0.04425, 0.05415]) — it is withdrawn and kept in
+`artifacts66/`. E12 screened five pre-registered variants; the one that appeared to win (0.06058)
+used the withheld truth's stratum masses, and its truth-free twin fell to 0.04408, so it is logged
+as leakage and excluded. The published file is the best clean variant.
+## 1. Answer first — status of the current artifact (2026-10-12)
+
+| question | answer |
+|---|---|
+| Is a file downloadable right now? | **Yes.** [`docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif`](docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif) — sha256 `eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42` — plus the NaN-outside sibling `…-v2-nan.tif` (sha256 `1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f`). One click from the top block of [`docs/index.html`](docs/index.html) or the [executive summary](docs/executive-summary.html). |
+| Is it format-valid? | **Yes.** The shared validator passes every check on both siblings, re-read from disk. The `-zeros` sibling has **zero NaN and all 12,279,160 cells inside [0, 1]**, which removes the prior portal rejection `Predicted values must be in range [0, 1]` (IR-67-FORMAT-01). |
+| Is it unique against the registry? | **UNIQUE under the implemented rule**: max \|rho\| 0.286, max lift 1.378 < 1.5. **But the pre-registered raw rule is falsified**: 0.9992 of the dots lie within 3 px of one registry raster whose own 3 px dilation already covers ~96 % of the eligible band (matched lift 1.04). Disclosed as **IR-67-GATE-02**, not waived. |
+| Does it beat the incumbent? | **No claim, no demonstration.** The pre-registered science gate is **UNEVALUABLE** (IR-67-INSTR-01) and 2 of 4 pre-registered predictions failed (P3 block-density CV 0.32 vs the 0.45–0.58 band; P4 raw 70 % rule). Nothing here is compared to the owner-reported 0.3774 / 0.3195 / 0.2778 values, which remain UNVERIFIED and mutually inconsistent (IR-67-SCORE-01). |
+| Should a weekly submission slot be spent? | **Owner's decision; the honest default is no.** The project rule is not to spend a slot on a candidate that has not beaten the current best on a qualified holdout, and no qualified holdout exists for this target. The file is offered because it is format-valid, lane-clean under the lift rule, and because a negative result is a deliverable — not because an edge is proven. |
+| Submission slots used to date | **0** |
+| Organizer-confirmed scores | **Zero.** 78 owner-typed scores are recorded as `UNVERIFIED` (relative ranking instrument only). |
+
+Session record: [`docs/review/2026-10-12-h67-1-session.md`](docs/review/2026-10-12-h67-1-session.md) (what ran, the gate table, all 15 new irregularities, three-pass review, and the remaining work). Shared-verifier output for the offered file: [`evidence/h67_verify.json`](evidence/h67_verify.json) (`validator_ok: true`, `rho_max 0.0055`, `overlap_max 0.3167`, 60 rasters scanned) — note that this tool measures the raw overlap clause in the opposite direction from its own docstring (IR-67-VERIFY-01).
+
+Method in one line: `z_combined = 0.55·clip(lane_z,±3) + 0.45·clip(habitat_z,±3)·novelty`, field
+`exp(0.60·clip(z,±2.5))`, then a density-equalising systematic sample with 3 px minimum separation
+and a 400 m exclusion around every mapped fault, emitting exactly 40,000 unit-mass dots (85 % on
+LiDAR-valid cells, 15 % on an off-band hedge). Full mechanism, deviations and open irregularities:
+[`docs/data/run-card.json`](docs/data/run-card.json) and [`docs/irregularities.html`](docs/irregularities.html).
+
 ---
 
-## What is still blocked, and what access would unblock it
+## 2. Submission status — one file, two siblings, disclosed exceptions
 
-* **No DrivenData credentials**, so the data tab cannot be auto-downloaded and **no submission can
-  be uploaded from here**. The upload is a manual step; the exact clicks are on
-  [`docs/executive-summary.html`](https://buffedlizard55-lab.github.io/GEMSDOE66/executive-summary.html).
-* **Egress is limited to `github.com`, `api.github.com` and `pypi.org`.** USGS 3DEP, ScienceBase,
-  the GDR download endpoints and the DrivenData 1 m DEM links all return HTTP 000
-  (`IR-66-DATA-01`). The full native-resolution lidar scarp lane in the brief — Sare & Hilley
-  scarplet template matching, Steger sub-pixel ridges, Frangi multiscale Hessian at 2–20 m —
-  **cannot be run here**; only the owner-derived 100 m `lidar_scarp_features_u8` layer exists, and
-  its channels reached AUC 0.580–0.587, i.e. weak.
-* **Two manifest entries have `repo: null`** (`topo_10m_derived_100m_u8.tif`,
-  `lidar_scarp_features.json`) and are not obtainable; `fetch_mirrors.py` now reports them as
-  `no_mirror` instead of aborting before the receipt is written.
-* **The three reachable GDR CSVs all carry a label-derived `dist_known_fault_px` column**, so they
-  are unusable as features without leakage.
-* **`IR-67-METRIC-01`** — the official worked example's `FPw = 1.89` does not reproduce; any 5-px
-  line prediction against that truth gives `FPw = 2.00`. `TPw` and `FNw` reproduce exactly.
-* **A score inconsistency inside the project brief** (0.2778 / 0.3774 / 0.3195 are each called
-  "highest"). None may be quoted as organizer-confirmed without a receipt; see
-  [`evidence/h67_truth_size.json`](evidence/h67_truth_size.json) for what the 12 owner-scored
-  mirrors do identify: `T/|G| = 0.2565` and `(N−M)/|G| = 0.6758`, with `|G|` itself **not**
-  identified.
+**Do not upload any historical artifact.** The inherited PR #13 `lidar_lane` experiment stays
+withdrawn under [`artifacts/lidar_lane/`](artifacts/lidar_lane/README.md): its relief-matched
+advantage reversed, its raw final-dot overlap is 0.990386, and the experiment is scale-deviating
+from the requested native-resolution method (IR-71-LIDAR-RAW-OVERLAP). Nothing in
+`docs/downloads/` other than the two H67-1 siblings is offered.
 
----
+**Recommended upload:** the `-zeros` sibling, with the baked-in submission name
+`gems66-h67-scarp-lane-novelty-40000dots-v2-zeros` and note
+"H67-1 scarp-lane novelty field, LiDAR-derived scarp channels + scale persistence, mapped-fault
+exclusion; see GEMSDOE66 run card" (128 characters). The two siblings are pixel-identical inside
+the footprint; only the outside-footprint convention differs. Record the portal receipt next to
+the hash in [`docs/downloads/README.md`](docs/downloads/README.md): an organizer receipt is the only
+thing that can promote a number here to `ORGANIZER-CONFIRMED`.
+
+## 3. Status of this session, gate by gate
+
+| gate | result |
+|---|---|
+| owner-supplied hash-pinned mirrors | **23/25 present locally**, sha-verified; owner mirrors are not organizer-authenticated (2 entries intentionally unpinned) |
+| metric transcription / unit tests | **local verification only**; not an organizer score |
+| scarp-lane field (LIDAR-01 → H67-1) | **emitted**; 100 m cell scale, 1 m-derived aggregate channels (native 2–20 m execution impossible here: IR-67-DATA-01) |
+| pre-registered predictions | **P1 met marginally (2,340 m > 2,000 m floor), P2 met, P3 FALSIFIED, P4 FALSIFIED on the raw rule** |
+| pooled holdout DTI | **degenerate by construction, 0.0 [0.0, 0.0] — not a measurement** (IR-67-INSTR-02); evaluator `h67-pooled-quadrant-v1`, 62,122 withheld positives, truth = SGMC off-catalogue |
+| lane / duplicate gate | **UNIQUE under the lift rule; raw 70 % rule falsified** (IR-67-GATE-02); 60 rasters compared, registry completeness uncertified |
+| leakage canary | **PASS**, worst feature-alone AUC 0.713 (scale persistence of the radius) vs the 0.90 stop |
+| format gate | **PASS** on both siblings; `-zeros` is fully finite and in range |
+| independent scientific review | **0 of 2** — unchanged since the 2026-10-11 audit |
+| experiments used | **3 of 3** (E1 credit regression, E1b robustness, E2 proxy-vs-live concordance) |
+
+## H67 lane measurement (branch `arena/9ae5a972`, 2026-10-12) — NEGATIVE, no slot used,
+independent of the H67-1 and session-66 artifacts above
+
+A parallel session ran the same assigned lane as a *measurement* (five new hypotheses, three
+experiments, no emission): 23/23 hash-pinned mirrors re-fetched and sha256-verified; H67-A…E
+implemented in `src/gems66/h67_layers.py` / `h67_hypotheses.py` with runner
+`scripts/run_h67_lane.py` on the pinned 1 m-derived native scarp stack, the GEMSDOE48 h52
+native 1 m-tile scarp-height product (697/700 tiles) and TIGER-road / BLM-claim cultural
+layers (unpinned additions ledgered with hashes — IR-67-05).
+
+| exp | measured (all HOLDOUT-DTI, SGMC off-catalogue proxy, 62,122 px, 8 spatial folds, 3 px buffer) |
+|---|---|
+| E1 leakage canary | no leakage (max AUC 0.5755 ≤ 0.90); no cross-fold transfer (per-fold AUC 0.29–0.80, four folds sub-chance) |
+| E2 h52_h_rank emission (37,654 dots, incumbent geometry) | pooled 0.12118 vs incumbent 0.09539 (+0.0258, paired 95 % CI [−0.0109, +0.0365] — gate G2 FAIL); gain range-front-dominated (low −0.026 / mid +0.087 / high +0.177 — IR-67-03); **final dots duplicate the sparse GEMSDOE32 bayesopt-scarp registry raster: 77.7 % within 3 px at 4.38× the random rate (null 0.177) → lane-drift DUPLICATE stop (gate G4 FAIL)**; raw 0.999 vs the 311,617-dot dense raster is the same degeneracy IR-67-01/IR-67-GATE-02 record |
+| E3 lane-separation complement (dots ≥ 4 px from every registry dot) | 83 eligible dots (the 60-raster union's halo leaves no scarp-rich cell), pooled HOLDOUT-DTI of 0.0 (IR-67-04) |
+
+**Verdict NEGATIVE** — the lane gate (transferable DTI gain, not range-front-confined, on a
+lane-unique dot set) is not met; no TIFF is generated from this branch, nothing is offered
+for download, and the negative result is the deliverable (consistent with the H67-1 finding
+that the scarp lane's dot population is saturated by the registry). The review doc answers
+"why h33-2-b2 scores what it scores and what would be needed to beat it" (budget geometry:
+sparse dots, zero mass on known faults, habitat ~2 km off the catalogue; beatablity requires
+a cross-fold-transferable field, a lane-unique population, and relief-de-confounded gain).
+Shared-tool fix (once, in the template): `fields.sgmc_offcatalogue` now prefers the
+hash-pinned SGMC truth (62,122 px) with fallback (IR-67-02). Full record:
+[`docs/review/2026-10-12-h67-session.md`](docs/review/2026-10-12-h67-session.md), session run
+card [`docs/data/run-card-h67.json`](docs/data/run-card-h67.json), evidence
+`evidence/h67_e1_canary.json` + `evidence/h67_e2_emit_*.json`.
 
 ## Historical context — inherited `lidar_lane` session (`arena/7d2c4a3b`)
 
@@ -133,7 +278,7 @@ and data-access limitations below.
 
 ---
 
-## Submission status — NO DOWNLOAD; nothing is cleared
+## Submission status (pre-session-66 historical record; superseded by the download block above)
 
 **Do not upload a historical artifact.** There is no current TIFF or ZIP cleared for
 submission; [`docs/downloads/README.md`](docs/downloads/README.md) explains the audit-only
@@ -156,23 +301,6 @@ The canonical project-status card is [`docs/data/run-card.json`](docs/data/run-c
 not a competing project-status card. **No `ORGANIZER-CONFIRMED` score or successful scientific
 result is claimed.** The local format checks and all-finite/NaN policy questions do not override
 the negative scientific and uniqueness gates.
-
----
-
-## Status of this session
-
-| gate | result |
-|---|---|
-| owner-supplied, hash-pinned GitHub mirrors | **23/23 locally verified** ([receipt](data/restore_receipt.json)); not organizer-authenticated |
-| metric transcription/unit tests | **Local verification only** (1e-9); not an organizer score |
-| scarp-lane field | Historical proxy computed on 100 m-derived layers; not the requested native 2–20 m method and not promoted |
-| 8-fold novelty holdout | `HOLDOUT-DTI` is reported only in the inherited run card with evaluator, withheld-positive count and CI; SGMC truth is an internal proxy, not the organizer's hidden set |
-| duplicate / lane-drift gate | **STOP / NOT CERTIFIED**: raw final-dot overlap 0.990386 (>0.70) against an accessible raster; 60 rasters scanned, full-registry completeness and pre-placement surface check unverified |
-| local format checks | Historical sidecars only; they do not clear the artifact or establish official upload acceptance |
-
-**No organizer receipt tied to an exact artifact hash is present in this checkout.** Any
-historical owner/public leaderboard claim is unverified, explicitly attributed where retained,
-and is not used as a score, target, or release signal.
 
 ---
 
@@ -461,6 +589,25 @@ obvious at the very top, with an executive-summary subpage explaining exactly ho
 recur the prior rejection `Predicted values must be in range [0, 1]`.
 
 **Core values.** Maximize P(Win); Own the Outcome.
+
+### Governing-brief updates, 2026-10-12
+
+* The brief's citation **"AGU 2015 poster T31A-2838, Surprise Valley" is verified**: Sare & Hilley,
+  *Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis*,
+  AGU Fall Meeting 2015, session T31A, 16 December 2015 —
+  <https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html>. The abstract presents "new wavelet
+  templates incorporating initial scarp slope and above- and below-scarp surface angles" and analyses
+  sites "in Surprise Valley … and near Jenny Lake". Nuance for honest reading: that abstract is about
+  **wavelet curvature templates**; the slope-aware template family used in this checkout derives from the
+  Sare & Hilley **scarplet** package (doi:10.21105/joss.01066). Steger's detector is verified as IEEE
+  TPAMI 20(2):113–125, 1998, doi:10.1109/34.659930. Logged as IR-67-SRC-01.
+* **The gate sentence cannot be measured here.** "A DTI gain on the LiDAR-covered holdout not confined
+  to range fronts" presupposes a truth layer that is not itself range-front-confined; the only available
+  truth layer is, and the internal instrument is anti-correlated with the owner-reported outcome
+  (IR-67-INSTR-01). The gate is therefore recorded as *unevaluable*, which under this project's rules
+  means **not promoted** — the download is offered with that sentence printed above it.
+* **A merge to `main` is the closing step of the session** (brief item 9), followed by
+  `scripts/verify66.py` and the `tests/` suite under `.venv`.
 
 ## Historical H66-2 audit note (2026-10-11) — negative, not published
 

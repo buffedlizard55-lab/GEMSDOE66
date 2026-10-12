@@ -29,13 +29,22 @@ NOTE_MAX_CHARS = 140  # brief: note must be at most 140 characters
 
 
 def write_submission(out_path: str | Path, prediction, footprint, reference_path: str | Path,
-                     overwrite: bool = False, name: str | None = None, note: str | None = None) -> dict:
+                     overwrite: bool = False, name: str | None = None, note: str | None = None,
+                     outside_fill: float | None = None) -> dict:
     import rasterio
 
     if name is not None and (not name.strip() or len(name) > 120):
         raise ValueError("name must be non-empty and at most 120 characters")
     if note is not None and len(note) > NOTE_MAX_CHARS:
         raise ValueError(f"note is {len(note)} characters; the limit is {NOTE_MAX_CHARS}")
+    # ``outside_fill`` is an explicit opt-in export mode.  The default (None) writes NaN outside
+    # the footprint, which is the competition contract used everywhere else in this repository.
+    # A fully finite sibling is offered because a strict ``all(0 <= v <= 1)`` upload checker
+    # returns False on NaN and the owner observed exactly that rejection (IR-67-FORMAT-01).
+    if outside_fill is not None:
+        outside_fill = float(outside_fill)
+        if not (0.0 <= outside_fill <= 1.0):
+            raise ValueError("outside_fill must lie in [0, 1]")
     out_path = Path(out_path)
     if out_path.suffix.lower() not in (".tif", ".tiff"):
         raise ValueError("output must be a .tif file")
@@ -65,7 +74,8 @@ def write_submission(out_path: str | Path, prediction, footprint, reference_path
     above = int((inside > 1.0 + CLIP_TOLERANCE).sum())
     if below or above:
         raise ValueError(f"{below + above} values outside [0, 1] (refusing to clip silently)")
-    out = np.full(ref_shape, np.nan, dtype=np.float32)
+    out = np.full(ref_shape, np.nan if outside_fill is None else outside_fill,
+                  dtype=np.float32)
     out[fp] = np.clip(inside, 0.0, 1.0).astype(np.float32)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -88,6 +98,9 @@ def write_submission(out_path: str | Path, prediction, footprint, reference_path
         "max_inside": float(out[fp].max()) if fp.any() else None,
         "nan_inside": int(np.isnan(out[fp]).sum()),
         "nan_outside_count": int(np.isnan(out[~fp]).sum()),
+        "outside_fill": outside_fill,
+        "finite_outside_count": int(np.isfinite(out[~fp]).sum()),
+        "all_values_in_0_1": bool(np.all((out >= 0.0) & (out <= 1.0))),
         "name": name or out_path.stem,
         "note": note or "",
         "note_chars": len(note or ""),

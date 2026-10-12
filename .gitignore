@@ -5,6 +5,11 @@
 *.tif
 *.tiff
 *.zip
+# Exception: the two disclosed H67-1 siblings ARE the deliverable and must be served by
+# GitHub Pages, so they are tracked on purpose (they are ~0.3 MB each). Nothing else in
+# docs/downloads is published; see docs/downloads/README.md for the disclosure text.
+!docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif
+!docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif
 
 # Generated/model outputs stay local.
 /outputs/

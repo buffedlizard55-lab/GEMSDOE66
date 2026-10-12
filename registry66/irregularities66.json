@@ -1,0 +1,51 @@
+{
+ "schema": "gems66-irregularities/1",
+ "review_date": "2026-10-12",
+ "items": [
+  {
+   "id": "IR-66-E7-HOLDOUT-LOSS",
+   "severity": "high",
+   "status": "LOGGED \u2014 the earlier released file was withdrawn",
+   "title": "The first released session-66 candidate loses to the family's incumbent on the project's own frozen holdout",
+   "detail": "E11 scored the E7 design on the frozen buffered whole-segment, lidar-covered novelty holdout: 0.03765 [0.03087, 0.04440] against the owner-reported-0.2778 incumbent's 0.04888 [0.04425, 0.05415], and negative in all three relief strata. The file was withdrawn from the download page; its bytes stay in artifacts66/ for audit."
+  },
+  {
+   "id": "IR-66-TRUTH-SHARE-LEAKAGE",
+   "severity": "medium",
+   "status": "LOGGED \u2014 variant excluded from selection",
+   "title": "A budget split by the withheld truth's stratum masses scored 0.06058; its truth-free twin scored 0.04408",
+   "detail": "The apparent win of variant V3 was the instrument's own truth leaking into the design. The truth-free control V6 (same prior, shares from footprint area) collapses to the no-split value, so V3 is excluded and only clean variants are eligible."
+  },
+  {
+   "id": "IR-66-DOTOVERLAP-DEGENERATE",
+   "severity": "high",
+   "status": "LOGGED \u2014 protocol rule proven unsatisfiable in this registry; rank-correlation half passes",
+   "title": "The >70%-of-dots-within-3-px lane-drift rule cannot be satisfied by any candidate in this family",
+   "detail": "Measured with the repository's own dot-overlap definition. (a) The incumbent h33-h33-2-b2 raster (owner-reported 0.2778) has 100.0% of its dots within 3 px of 19GEMSDOE__h19-5-powerlaw-budget-multiline.tif's dots, i.e. the rule as literally written condemns the highest-scoring published member of the family. (b) The set of footprint cells that are more than 3 px from EVERY registry dot is empty (0 of 776,915 consensus-support cells), so a compliant placement does not exist inside any registry-adjacent region. (c) The registry also contains a 311,617-cell raster (gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif) whose positive cells blanket the footprint, which makes the criterion degenerate for any candidate. Measured for this candidate: 0.999 against that raster, exact-cell Jaccard 0.1695 against the closest registry raster, new byte hash, dot count 32,000 absent from the registry, max |Spearman| 0.289 (limit 0.90).",
+   "recommended_action": "Replace the dot rule with a density-matched comparison (compare against rasters of comparable dot count and comparable covered area) and a decoded-pixel Jaccard limit, and certify registry completeness before any rule is treated as a release gate."
+  },
+  {
+   "id": "IR-66-METRIC-INVERSION-NEGATIVE",
+   "severity": "medium",
+   "status": "NEGATIVE RESULT RECORDED",
+   "title": "A prior+published-metric model cannot reproduce the family's score ordering",
+   "detail": "A 7-parameter density model (rho = g*softmax(b.z) with z in {K, step_max, distance-to-catalogue, lidar-valid, SGMC}; Poisson-approximated FPw) fitted to the 18 distinct owner-reported scores reached in-sample RMSE 0.093 and stayed anti-correlated with observation at every tested prior exponent (Spearman -0.61 to -0.86). It therefore cannot be used to design or rank emissions, and is recorded as evidence that the family's smaller, sharper dot sets score better for a reason this model does not encode.",
+   "evidence": "evidence66/e2_inversion.json, evidence66/e3_model_calibration.json"
+  },
+  {
+   "id": "IR-66-SCORE-ATTRIBUTION",
+   "severity": "medium",
+   "status": "UNATTRIBUTED \u2014 inherited from earlier sessions, re-flagged",
+   "title": "Every leaderboard value used in this session is owner-reported, not an organiser receipt",
+   "detail": "The 18 scores in evidence66/e1_layer_scan.json are copied from scripts/calibrate_live.py, which carries the same caveat. No hash-to-score crosswalk exists in this checkout. All conclusions that rest on them (the K and dot-count drivers, and therefore the design direction) inherit that limitation; they are labelled LOCAL-CORRELATION-vs-OWNER-REPORTED-SCORES throughout.",
+   "evidence": "evidence66/e1_layer_scan.json, evidence66/e4_structure_scan.json"
+  },
+  {
+   "id": "IR-66-VALIDATOR-SKIP",
+   "severity": "low",
+   "status": "DISCLOSED",
+   "title": "validate_submission.py cannot run its footprint check without training_features.tif",
+   "detail": "The published candidate passes 9/9 runnable checks; the footprint check is SKIPPED because the 418,912,844-byte login-walled features mirror is not restored in this checkout. The same property is verified directly against sample_submission.tif: the footprint is the identical 5,167,373-cell finite mask and the other 7,111,787 cells are NaN. SKIPPED is not treated as PASS anywhere in this repository."
+  }
+ ]
+}

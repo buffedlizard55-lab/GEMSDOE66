@@ -1,0 +1,257 @@
+{
+ "schema": "gems-h67-run/1",
+ "generated_utc": "2026-10-12T01:02:32Z",
+ "seconds": 146.6,
+ "args": {
+  "dots": 40000,
+  "minsep": 3.0,
+  "exclude_px": 4.0,
+  "hedge": 0.15,
+  "dry_run": true,
+  "tag": null
+ },
+ "dot_profile": {
+  "n_dots": 40384,
+  "mean_d_mapped_px": 23.393224716186523,
+  "frac_within_3px_of_mapped": 0.0,
+  "lidar_valid_fraction": 0.844047147385103,
+  "row_mean": 1410.9276446117274,
+  "col_mean": 1500.3115095087164,
+  "row_std": 1033.7050282092691,
+  "col_std": 644.8471782527811,
+  "nn_median_px": 5.656854249492381,
+  "block_density_mean": 0.00775878184475444,
+  "block_density_cv": 0.30346002016691537
+ },
+ "dot_geometry": {
+  "n": 40384,
+  "nn_median_px": 5.656854249492381,
+  "nn_p10_px": 3.605551275463989,
+  "nn_p90_px": 9.433981132056603,
+  "nn_min_px": 1.0,
+  "frac_touching_8conn": 4.9524564183835184e-05
+ },
+ "leakage_canary": {
+  "scarp_pixel_fraction": {
+   "auc": 0.4447753974973976,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "snr_weighted_amplitude": {
+   "auc": 0.5664007948874794,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "orientation_coherence": {
+   "auc": 0.39288460303918094,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "dominant_strike_deg": {
+   "auc": 0.495138120208523,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "step_fraction": {
+   "auc": 0.4449374347252181,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "relief_mean": {
+   "auc": 0.5821543931296481,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "scale_persistence": {
+   "auc": 0.7125864442548533,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "tensor_coherence": {
+   "auc": 0.38337788051468613,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "strike_concordance": {
+   "auc": 0.44194462745350555,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  },
+  "lidar_valid": {
+   "auc": 0.443664467338463,
+   "leakage_flag": false,
+   "n_pos": 62122,
+   "n_neg_sampled": 150000,
+   "note": "sampled-fold AUC; the truth layer is an inventory, so it is a negative control, not a promotion criterion"
+  }
+ },
+ "holdout_negative_control": {
+  "evidence_class": "HOLDOUT-DTI",
+  "positive_control": false,
+  "truth": "SGMC 100 m derived faults > 300 m from the competition catalogue, LiDAR-covered",
+  "withheld_positive_pixels": 62122,
+  "evaluator_version": "h67-pooled-quadrant-v1",
+  "pooled_dti": 0.0,
+  "ci95": [
+   0.0,
+   0.0
+  ],
+  "pooled_terms": {
+   "tpw": 0.0,
+   "fpw": 34086.0,
+   "fnw": 62122.0,
+   "n_truth": 62122
+  },
+  "per_quadrant": {
+   "foldN00": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 15683.0,
+    "fnw": 23130.0,
+    "n_truth": 23130,
+    "mass": 15683.0
+   },
+   "foldN01": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 5445.0,
+    "fnw": 23192.0,
+    "n_truth": 23192,
+    "mass": 5445.0
+   },
+   "foldN10": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 5729.0,
+    "fnw": 2353.0,
+    "n_truth": 2353,
+    "mass": 5729.0
+   },
+   "foldN11": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 7229.0,
+    "fnw": 13447.0,
+    "n_truth": 13447,
+    "mass": 7229.0
+   }
+  },
+  "stratified": {
+   "near_front": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 3956.0,
+    "n_truth": 62122,
+    "dots": 3956
+   },
+   "off_front": {
+    "dti": 0.0,
+    "tpw": 0.0,
+    "fpw": 36428.0,
+    "n_truth": 62122,
+    "dots": 36428
+   }
+  },
+  "known_limitation": "this instrument is anti-correlated with the owner-reported outcome (see evidence/h67_e2_proxy_concordance.json); it is reported as a negative control and is NOT a promotion gate",
+  "negative_control_reason": "the organiser truth is defined as faults absent from the public fault databases, so SGMC-mapped faults are by construction not truth and mass near them is charged FP"
+ },
+ "uniqueness": {
+  "verdict": "UNIQUE",
+  "reason": "below every duplicate threshold",
+  "max_abs_spearman_rho": 0.2872241810654648,
+  "argmax_rho": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "max_frac_dots_within_3px": 0.9991580824088748,
+  "max_lift_over_random": 1.3645726878602902,
+  "argmax_lift": "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
+  "top_by_lift": [
+   {
+    "jaccard": 0.004666177100544643,
+    "overlap_frac_of_candidate": 0.007552496038034865,
+    "spearman_rho": -0.1265968152336735,
+    "frac_candidate_dots_within_3px": 0.010226822503961966,
+    "null_within_3px_random_placement": 0.007494523813163865,
+    "lift_over_random": 1.3645726878602902,
+    "n_candidate": 40384,
+    "n_other": 25285,
+    "registry_file": "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
+    "identical_pixels": false
+   },
+   {
+    "jaccard": 0.007235754608115273,
+    "overlap_frac_of_candidate": 0.022979397781299524,
+    "spearman_rho": -0.20870729786282446,
+    "frac_candidate_dots_within_3px": 0.031126188589540412,
+    "null_within_3px_random_placement": 0.025733772266875257,
+    "lift_over_random": 1.2095462828668273,
+    "n_candidate": 40384,
+    "n_other": 88796,
+    "registry_file": "gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
+    "identical_pixels": false
+   },
+   {
+    "jaccard": 0.004737203924754703,
+    "overlap_frac_of_candidate": 0.009384904912836767,
+    "spearman_rho": -0.1565851297647053,
+    "frac_candidate_dots_within_3px": 0.24373514263074486,
+    "null_within_3px_random_placement": 0.21216428541156213,
+    "lift_over_random": 1.148803825101575,
+    "n_candidate": 40384,
+    "n_other": 40000,
+    "registry_file": "gems61c-gravstep-liveband-40k-20261011.tif",
+    "identical_pixels": false
+   },
+   {
+    "jaccard": 0.004737203924754703,
+    "overlap_frac_of_candidate": 0.009384904912836767,
+    "spearman_rho": -0.1565851297647053,
+    "frac_candidate_dots_within_3px": 0.10083201267828844,
+    "null_within_3px_random_placement": 0.09120340257999568,
+    "lift_over_random": 1.1055729262934832,
+    "n_candidate": 40384,
+    "n_other": 40000,
+    "registry_file": "gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif",
+    "identical_pixels": false
+   },
+   {
+    "jaccard": 0.004754059778771476,
+    "overlap_frac_of_candidate": 0.010003961965134707,
+    "spearman_rho": -0.16480645432446872,
+    "frac_candidate_dots_within_3px": 0.18601426307448493,
+    "null_within_3px_random_placement": 0.1772540902311484,
+    "lift_over_random": 1.049421555417496,
+    "n_candidate": 40384,
+    "n_other": 45000,
+    "registry_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "identical_pixels": false
+   }
+  ],
+  "identical_to": [],
+  "thresholds": {
+   "max_rho": 0.9,
+   "max_within3": 0.7,
+   "min_lift": 1.5,
+   "within_px": 3.0
+  },
+  "n_compared": 60,
+  "candidate_sha256": "91291277fe7c2592f854dee8a09b5b075dbac0592731678cc92b81da469280b6"
+ },
+ "dry_run": true
+}

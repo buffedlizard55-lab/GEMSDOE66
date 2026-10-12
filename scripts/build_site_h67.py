@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 DOCS = ROOT / "docs"
+SITE = DOCS / "h67"        # this lane's pages; docs/*.html belong to build_site.py
 DL = DOCS / "downloads"
 ART = ROOT / "artifacts" / "h67"
 EVID = ROOT / "evidence"
@@ -302,8 +303,8 @@ not an error.</p></div>"""
 <p><b>All {len(a['gates'])} release gates pass on the bytes that are published here.</b>
 Re-verified from disk at build time, not copied from an older receipt.</p>
 <div class="dl">
-<a href="downloads/{html.escape(r['path'].name)}" download>&#11015; Download the submission .tif</a>
-<a class="alt" href="downloads/{html.escape(r['zip'].name)}" download>&#11015; Download the .zip</a>
+<a href="../downloads/{html.escape(r['path'].name)}" download>&#11015; Download the submission .tif</a>
+<a class="alt" href="../downloads/{html.escape(r['zip'].name)}" download>&#11015; Download the .zip</a>
 </div>
 <table class="kv">
 <tr><th>file</th><td class="mono">{html.escape(r['path'].name)}</td></tr>
@@ -376,23 +377,25 @@ def canary_table(a: dict, limit: int = 14) -> str:
 
 def main() -> int:
     DOCS.mkdir(exist_ok=True)
+    SITE.mkdir(exist_ok=True)
     DL.mkdir(exist_ok=True)
-    (DOCS / "assets").mkdir(exist_ok=True)
-    (DOCS / "assets" / "site.css").write_text(css())
+    (SITE / "assets").mkdir(exist_ok=True)
+    (SITE / "assets" / "site.css").write_text(css())
     (DOCS / ".nojekyll").write_text("")
 
     card_path = newest(str(ART / "run-card-*.json"))
     a = assess(card_path)
 
-    # publish or withdraw the download bytes according to the recomputed verdict
-    for f in DL.glob("*.tif"):
-        f.unlink()
-    for f in DL.glob("*.zip"):
+    # Publish or withdraw THIS lane's download bytes according to the recomputed verdict.
+    # docs/downloads/ is shared with the other lanes on main, so only our own prefix is touched --
+    # a blanket *.tif unlink here deleted the session-66 and H67-1 candidates during the merge.
+    for f in list(DL.glob("gems66-h67-geophys-maxcov-*.tif")) + \
+             list(DL.glob("gems66-h67-geophys-maxcov-*.zip")):
         f.unlink()
     if a["cleared"]:
         shutil.copy2(a["raster"]["path"], DL / a["raster"]["path"].name)
         shutil.copy2(a["raster"]["zip"], DL / a["raster"]["zip"].name)
-    (DL / "README.md").write_text(
+    (SITE / "DOWNLOADS.md").write_text(
         "# Submission downloads\n\n" +
         (f"**CLEARED:** `{a['raster']['path'].name}` "
          f"(sha256 `{a['raster']['sha256']}`).\n" if a["cleared"] else
@@ -461,7 +464,7 @@ from this environment, so the scarplet/Steger/Frangi filters here run at 200&nda
 <li>No organizer receipt ties any byte in this repository to a leaderboard value.</li>
 </ul>
 """
-    (DOCS / "index.html").write_text(page("Download & status", "index.html", idx))
+    (SITE / "index.html").write_text(page("Download & status", "index.html", idx))
 
     note = c.get("submission", {}).get("note", "")
     name = c.get("submission", {}).get("name", "")
@@ -516,7 +519,7 @@ not published here and must not be uploaded.</div>
 <li><a href="{TVERSKY}">Tversky index</a> &middot; <a href="{EPSG}">EPSG:32611</a></li>
 </ul>
 """
-    (DOCS / "executive-summary.html").write_text(page("How to submit", "executive-summary.html", exe))
+    (SITE / "executive-summary.html").write_text(page("How to submit", "executive-summary.html", exe))
 
     ts = a.get("holdout") or {}
     results = f"""<h2>Results</h2>
@@ -548,7 +551,7 @@ each one costs 0.2 whether or not it earns credit.</div>
 and user-reported public values were used only to invert the metric algebra in section 1, and
 are labelled as such.</p>
 """
-    (DOCS / "results.html").write_text(page("Results", "results.html", results))
+    (SITE / "results.html").write_text(page("Results", "results.html", results))
 
     hyp = json.loads((ROOT / "docs" / "data" / "h67_hypotheses.json").read_text()) \
         if (ROOT / "docs" / "data" / "h67_hypotheses.json").exists() else {"items": []}
@@ -559,7 +562,7 @@ are labelled as such.</p>
         f"<td>{html.escape(h['named_mimic'])}</td><td>{html.escape(h['differs_from_repo'])}</td>"
         f"<td>{html.escape(h['cost'])}</td><td>{html.escape(h['status'])}</td></tr>"
         for h in hyp.get("items", []))
-    (DOCS / "hypotheses.html").write_text(page("Hypotheses", "hypotheses.html", f"""
+    (SITE / "hypotheses.html").write_text(page("Hypotheses", "hypotheses.html", f"""
 <h2>Ranked hypotheses for this lane</h2>
 <p>Ranked by expected DTI improvement per unit of implementation cost. Expected gain is
 <b>not</b> quantified before measurement; the holdout decides.</p>
@@ -567,7 +570,7 @@ are labelled as such.</p>
 <th>why it should catch an off-catalogue fault</th><th>named non-fault mimic</th>
 <th>how it differs from this repo</th><th>cost</th><th>status</th></tr>{rows}</table>"""))
 
-    (DOCS / "method.html").write_text(page("Method & metric", "method.html", f"""
+    (SITE / "method.html").write_text(page("Method & metric", "method.html", f"""
 <h2>Metric</h2>
 <p>Transcribed from the <a href="{PROBLEM}">official problem page</a>:
 <code>k(d) = max(1 &minus; d/300 m, 0)</code>, &alpha; = 0.2, &beta; = 0.8,</p>
@@ -623,7 +626,7 @@ is recorded as such rather than described as the native-resolution method.</p>""
     rows = "".join(f"<tr><td>{i}</td><td>{html.escape(t)}</td>"
                    f"<td class='mono'><a href='{html.escape(u)}'>{html.escape(u)}</a></td>"
                    f"<td>{html.escape(s)}</td></tr>" for i, t, u, s in src)
-    (DOCS / "sources.html").write_text(page("Sources", "sources.html", f"""
+    (SITE / "sources.html").write_text(page("Sources", "sources.html", f"""
 <h2>Sources used, with status</h2>
 <table><tr><th>id</th><th>what</th><th>link</th><th>status</th></tr>{rows}</table>
 <p class="small">Competition bytes are login-walled at drivendata.org. The only copies used here
@@ -657,10 +660,10 @@ not organiser authentication.</p>"""))
     rows = "".join(f"<tr><td class='mono'>{i}</td><td>{html.escape(d)}</td>"
                    f"<td><span class='pill {'ok' if s == 'fixed' else 'warn'}'>{s}</span></td></tr>"
                    for i, d, s in irr)
-    (DOCS / "irregularities.html").write_text(page("Irregularities", "irregularities.html", f"""
+    (SITE / "irregularities.html").write_text(page("Irregularities", "irregularities.html", f"""
 <h2>Irregularity register</h2><table><tr><th>id</th><th>what</th><th>status</th></tr>{rows}</table>"""))
 
-    (DOCS / "run-card.html").write_text(page("Run card", "run-card.html", f"""
+    (SITE / "run-card.html").write_text(page("Run card", "run-card.html", f"""
 <h2>Run card</h2><pre class="mono">{html.escape(json.dumps(c, indent=1) if c else '{}')}</pre>"""))
 
     print(f"site built: cleared={a['cleared']}  reasons={a['reasons']}")

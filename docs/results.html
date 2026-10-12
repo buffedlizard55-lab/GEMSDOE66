@@ -4,41 +4,110 @@
 <title>Results · GEMSDOE66</title>
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
-<h1 class="logo">GEMSDOE66 &mdash; DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html">Download &amp; status</a><a href="executive-summary.html">How to submit</a><a href="results.html" class="on">Results</a><a href="hypotheses.html">Hypotheses</a><a href="method.html">Method &amp; metric</a><a href="sources.html">Sources</a><a href="irregularities.html">Irregularities</a><a href="run-card.html">Run card</a></nav></div></header>
-<main><div class="wrap">
-<h2>Results</h2>
-<h3>1. Metric structure, recovered from the official formula</h3>
-<p>Because every artifact in the pinned scored mirror is strictly binary
-(<code>p &isin; {0,1}</code>, asserted before use), the official DTI collapses to</p>
-<p class="mono">DTI = T / (0.2 T + 0.2 (N &minus; M) + 0.8 |G|)</p>
-<p>with <code>N</code> emitted cells, <code>T</code> = TP<sub>w</sub>, <code>M</code> the emitted
-mass that lands within 300 m of truth, and <code>|G|</code> the hidden positive count. Writing
-&rho; = T/|G| (kernel-weighted recall) and x = (N&minus;M)/|G| (wasted mass),</p>
-<p class="mono">DTI = &rho; / (0.2 &rho; + 0.2 x + 0.8)</p>
-<p>Inverting the two scored thinning levels of one belief surface
-(<code>h25-1-dotted-h19-5</code> at 60,069 dots &rarr; 0.2477 and 44,090 dots &rarr; 0.2600)
-identifies <b>&rho; = 0.2565</b> and <b>x = 0.676</b> for that family, and these two ratios are
-invariant to the single nuisance (the wasted-mass fraction). <code>|G|</code> itself is only
-bounded (&le; 65,241); that is stated rather than guessed. See
-<code>evidence/h67_truth_size.json</code>.</p>
-<div class="note"><b>Consequence.</b> There are exactly two levers: raise &rho;, or cut x. Both are
-measurable on the holdout. Adding dots to a fixed belief surface only ever lowers DTI, because
-each one costs 0.2 whether or not it earns credit.</div>
-<h3>2. HOLDOUT-DTI</h3>
-<table><tr><th>instrument</th><th>key</th><th>belief recipe</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>folds</th><th>withheld px</th><th>dots</th></tr><tr><td>C_catalogue_recover</td><td class='mono'>R3|k1.0|s2</td><td>geophysics/topography only, no fault inventory</td><td>0.1790</td><td>0.1782 &ndash; 0.1798</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R1|k1.0|s2</td><td>catalogue distance only (the incumbent signal)</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R4|k1.0|s2</td><td>catalogue + SGMC gap</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R5|k1.0|s2</td><td>full 62-layer stack</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr></table><p class='small'>Evaluator: <code>src/gems/metric.py @ arena/855725e1; vectorised == literal brute force to 3.6e-15; TPw+FNw=|G| asserted; official worked example TPw=3.00/FNw=2.00 reproduced exactly</code>. Withheld truth is a proxy. Instrument N uses SGMC geologic-map faults &gt;300 m off the given catalogue, NOT the organiser&#x27;s hidden expert set. No number here is ORGANIZER-CONFIRMED.</p>
-<h3>3. Leakage canary (every layer alone)</h3>
-<h3>C_catalogue_recover</h3><table><tr><th>layer</th><th>max AUC alone</th><th>verdict</th></tr><tr><td class='mono'>d_visible_catalogue_m</td><td>0.714</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_qfaults_m</td><td>0.691</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_sgmc_m</td><td>0.677</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_sgmc_off_visible_m</td><td>0.594</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_lappos_max</td><td>0.587</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_lapneg_max</td><td>0.580</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_relief</td><td>0.579</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>det_elev_grad</td><td>0.576</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_step_max</td><td>0.575</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_ex_max</td><td>0.573</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_upface_max</td><td>0.569</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>det_elev_slope</td><td>0.566</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>geod_2ndinv</td><td>0.565</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>geod_shearrate</td><td>0.565</td><td><span class="pill ok">ok</span></td></tr></table><p class='small'>Flagged above the 0.90 leakage threshold: none</p>
-<h3>4. Registry uniqueness</h3>
-<p>Compared against <b>72</b> reachable prior rasters (60 registry + 12 scored mirrors). Stop thresholds: |&rho;| &gt; 0.90, or &gt; 70% of candidate dots within 3 px of one raster's dots.</p><p class='small'>The random-null column is essential: a registry raster with 300,000 dots covers so much of the footprint that a <i>uniformly random</i> dot set already lands within 3 px of it most of the time. Only the lift above that null is evidence of lane drift. Worst rows shown.</p><table><tr><th>registry raster</th><th>Spearman &rho; (surface)</th><th>cand dots within 3 px</th><th>random null</th><th>lift</th><th>its dots</th></tr><tr><td class='mono'>scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif</td><td>0.0000</td><td>0.9997</td><td>0.9985</td><td>1.00</td><td>206,895</td></tr><tr><td class='mono'>rasters/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</td><td>-0.0176</td><td>0.9951</td><td>0.9597</td><td>1.04</td><td>311,617</td></tr><tr><td class='mono'>scored/gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif</td><td>0.2241</td><td>0.8044</td><td>0.2618</td><td>3.07</td><td>174,232</td></tr><tr><td class='mono'>scored/gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif</td><td>0.1283</td><td>0.7904</td><td>0.2712</td><td>2.91</td><td>69,281</td></tr><tr><td class='mono'>scored/8GEMSDOE_Hedge-v2_submission.tif</td><td>0.2058</td><td>0.5701</td><td>0.2817</td><td>2.02</td><td>227,507</td></tr><tr><td class='mono'>scored/gemsdoe-ens12-adopted-7f00890a.tif</td><td>0.1500</td><td>0.5692</td><td>0.2429</td><td>2.34</td><td>172,974</td></tr><tr><td class='mono'>scored/gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif</td><td>0.1382</td><td>0.4965</td><td>0.2103</td><td>2.36</td><td>123,939</td></tr><tr><td class='mono'>rasters/19GEMSDOE__h19-4-multiline-corroborated.tif</td><td>0.1372</td><td>0.4893</td><td>0.2049</td><td>2.39</td><td>123,779</td></tr></table>
-<h3>5. Scores claimed</h3>
-<p><b>None.</b> No ORGANIZER-CONFIRMED score is attached to any byte in this repository. Owner-
-and user-reported public values were used only to invert the metric algebra in section 1, and
-are labelled as such.</p>
+<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="on">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a><a href="h67/index.html" class="">H67 geophysics lane</a></nav></div></header>
+<main>
+<div class="wrap">
 
-</div></main>
-<footer class="wrap"><p class="small">Built 2026-10-12T02:58:40Z
-by <code>scripts/build_site_h67.py</code>. Every number on this site is either HOLDOUT-DTI
-(internal, with its evaluator and CI) or a measurement of our own bytes. Nothing here is an
-organizer score.</p></footer>
-</body></html>
+<h2>Results &mdash; one emitted artifact, no demonstrated gain</h2>
+<div class="note"><b>Label policy.</b> Every number below is either
+<code>HOLDOUT-DTI</code>/<code>INTERNAL-INSTRUMENT</code> (with its evaluator, withheld-positive
+count and CI where applicable) or <code>UNVERIFIED owner-reported</code>. No <code>ORGANIZER-CONFIRMED</code> number exists in this repository.</div>
+
+<h2>H67 lane measurement (branch <code>arena/9ae5a972</code>) — separate negative result</h2>
+<div class="note"><b>All values below are HOLDOUT-DTI</b> on the SGMC off-catalogue proxy truth
+(62,122 withheld positives — the hash-pinned truth), 8 spatial folds by connected component,
+3 px training buffer, evaluator <code>gemsdoe66.metric.dti</code> v1, α = 0.2, β = 0.8,
+300 m triangular kernel. This is a <b>measurement, not an emitted candidate</b>: it is
+independent of the H67-1 artifact above and of the session-66 K66 release, and it clears no
+gate. No <code>ORGANIZER-CONFIRMED</code> score exists. Budget: 3/3 experiments, 0 slots used.
+Full record: <a href="review/2026-10-12-h67-session.md">session review</a>.</div>
+<p><b>E1 — leakage canary (protocol 4):</b> no feature above the 0.90 AUC leakage threshold
+(max nan for channel -; best in-lane surface h52_h nan), but
+no physical channel transfers across spatial folds (per-fold AUCs 0.29–0.80, four of eight
+folds sub-chance) — the signal is region-bound, dominated by the truth's own relief/mapping
+bias. Evidence: <code>evidence/h67_e1_canary.json</code>.</p>
+<table>
+<tr><th>E2 — h52_h_rank emission (37,654 dots, incumbent geometry) — HOLDOUT-DTI</th><th>candidate</th><th>incumbent h33-2-b2</th></tr>
+<tr><td>pooled</td><td><b>0.12118</b></td><td>0.09539</td></tr>
+<tr><td>paired difference / 95% CI (fold bootstrap)</td><td colspan="2"><b>+0.02579 [-0.01093, +0.03650]</b> — CI crosses zero (gate G2 FAIL); 5 of 8 folds positive</td></tr>
+<tr><td>uniqueness of final dots (60-raster corpus)</td><td colspan="2"><span class="pill bad">DUPLICATE — 77.7% of dots within 3 px of the GEMSDOE32 bayesopt-scarp raster at 4.38x the random rate (gate G4 FAIL)</span> raw max within-3-px = 0.999 occurs against the 311,617-dot dense raster (IR-67-01, the same degeneracy the H67-1 row above records as 0.9992)</td></tr>
+<tr><td>road-veto ablation</td><td colspan="2">0 dots in the veto zone; no effect</td></tr>
+</table>
+<h3>E2 relief strata — candidate minus random (equal mass)</h3>
+<table><tr><th>stratum (truth relief tercile, cuts 24.1 / 42.9 m)</th><th>n truth</th>
+<th>candidate</th><th>random</th><th>candidate − random</th></tr>
+<tr><td>low (basin/pediment)</td><td>13,445</td><td>0.02311</td><td>0.04889</td><td>-0.02578</td></tr><tr><td>mid</td><td>13,178</td><td>0.13477</td><td>0.04798</td><td>+0.08678</td></tr><tr><td>high (range front)</td><td>13,218</td><td>0.22542</td><td>0.04809</td><td>+0.17733</td></tr></table>
+<p class="small">The gain is range-front-dominated (high +0.177 vs mid +0.087 vs low −0.026) —
+the exact confound the lane gate exists to catch (IR-67-03).</p>
+<h3>E3 — lane-separation complement emission</h3>
+<p>Dots eligible only where ≥ 4 px from every dot of every registry raster: the 60-raster
+union's halo leaves no scarp-rich cell — <b>83 dots</b> placed (of 37,654), pooled
+HOLDOUT-DTI of <b>0.00000</b>. The family's rasters
+already occupy the scarp-active terrain (IR-67-04).</p>
+<div class="stop"><b>H67-measurement verdict: NEGATIVE.</b> Gates G2 (CI crosses zero) and G4
+(duplicate stop) fail. No TIFF is generated from this branch, nothing is offered for download,
+and no slot is used — the protocol's negative branch. This measurement does not change the
+status of the H67-1 or K66 artifacts.</div>
+
+
+<h3>1 &middot; The artifact</h3>
+<table>
+<tr><th>run</th><td class="mono">gems-h67-run/1 &middot; gemsdoe66-h67-1-scarp-lane-novelty-2026-10-12</td></tr>
+<tr><th>dots</th><td>40,000 unit-mass positive cells; nearest-neighbour median
+5.66 px</td></tr>
+<tr><th>placement</th><td>85.0 % of dots on LiDAR-valid
+cells; mean distance to a mapped fault 2,336 m;
+0.00 % within 300 m of a mapped fault</td></tr>
+<tr><th>uniformity</th><td>block-density CV 0.32 (pre-registered
+band 0.45&ndash;0.58 &rarr; P3 falsified)</td></tr>
+<tr><th>files</th><td class="mono">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif
+&amp; the NaN sibling; validator PASS on both</td></tr>
+</table>
+
+<h3>2 &middot; Lane discipline against the 60 registry rasters</h3>
+<p>Verdict <b>UNIQUE</b> under the implemented rule
+(below every duplicate threshold); max |&rho;| 0.286
+(gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif); max lift 1.378.
+<b>The raw rule is falsified:</b> 0.9992 of the dots lie
+within 3 px of one raster, but that raster's own 3 px dilation covers ~96 % of the eligible band,
+so the matched lift is ~1.0. Worst five by raw overlap, with both nulls:</p>
+<table><tr><th>registry raster</th><th>raw within 3 px</th><th>matched null</th><th>lift</th>
+<th>&rho;</th></tr><tr><td class="mono">gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</td><td>0.9992</td><td>0.9604</td><td>1.040</td><td>-0.286</td></tr><tr><td class="mono">gems61c-gravstep-liveband-40k-20261011.tif</td><td>0.2441</td><td>0.1763</td><td>1.385</td><td>-0.156</td></tr><tr><td class="mono">gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif</td><td>0.1877</td><td>0.3181</td><td>0.590</td><td>-0.164</td></tr><tr><td class="mono">gems32-bayesopt-dilation-scarp-d28-20261004-zeros.tif</td><td>0.1877</td><td>0.3181</td><td>0.590</td><td>-0.164</td></tr><tr><td class="mono">19GEMSDOE__h19-4-multiline-corroborated.tif</td><td>0.1802</td><td>0.2573</td><td>0.700</td><td>-0.238</td></tr></table>
+
+<h3>3 &middot; Negative control &mdash; degenerate, not a measurement</h3>
+<p>Truth: SGMC 100 m derived faults &gt; 300 m from the competition catalogue, LiDAR-covered; withheld positives
+62,122; evaluator <code>h67-pooled-quadrant-v1</code>.
+Pooled DTI <b>0.0000</b>, CI [0.0, 0.0]. The value is
+identically zero because the 4 px exclusion removes every dot inside the credit radius of a truth
+layer that is the exclusion's own complement &mdash; a property of the construction, not evidence
+about placement (IR-67-INSTR-02).</p>
+
+<h3>4 &middot; Leakage canary (rule: any feature alone, AUC &gt; 0.90 is a stop)</h3>
+<table><tr><th>feature</th><th>AUC vs the control truth</th><th>flag</th></tr><tr><td>scale_persistence</td><td>0.713</td><td><span class="pill ok">clear</span></td></tr><tr><td>tensor_coherence</td><td>0.383</td><td><span class="pill ok">clear</span></td></tr><tr><td>orientation_coherence</td><td>0.393</td><td><span class="pill ok">clear</span></td></tr><tr><td>relief_mean</td><td>0.582</td><td><span class="pill ok">clear</span></td></tr><tr><td>snr_weighted_amplitude</td><td>0.566</td><td><span class="pill ok">clear</span></td></tr><tr><td>strike_concordance</td><td>0.442</td><td><span class="pill ok">clear</span></td></tr><tr><td>lidar_valid</td><td>0.444</td><td><span class="pill ok">clear</span></td></tr><tr><td>scarp_pixel_fraction</td><td>0.445</td><td><span class="pill ok">clear</span></td></tr><tr><td>step_fraction</td><td>0.445</td><td><span class="pill ok">clear</span></td></tr><tr><td>dominant_strike_deg</td><td>0.495</td><td><span class="pill ok">clear</span></td></tr></table>
+
+<h3>5 &middot; Why the owner-reported ordering is not a target to optimize</h3>
+<p>Owner-reported scores (class <code>UNVERIFIED</code>, n = 14 matched
+artifacts, spread only 0.2376&ndash;0.2778) co-vary with layer dot-means and,
+more strongly, with <i>where</i> the dots sit: <code>col_mean</code> &rho;
+-0.890, <code>row_std</code> &rho;
+-0.832. Top raw covariate readings from
+<code>evidence/h67_e1_credit_regression.json</code> (all p &lt; 1e-5, but see the guardrails):</p>
+<table><tr><th>layer dot-mean</th><th>Spearman &rho; vs owner-reported score</th><th>p</th></tr>
+<tr><td class="mono">tmi_hg</td><td>+0.953</td><td><0.001</td></tr><tr><td class="mono">geod_2ndinv</td><td>+0.886</td><td><0.001</td></tr><tr><td class="mono">ieq_n100a15</td><td>-0.828</td><td><0.001</td></tr><tr><td class="mono">sgmc_faults</td><td>-0.792</td><td><0.001</td></tr><tr><td class="mono">rtp</td><td>-0.771</td><td><0.001</td></tr><tr><td class="mono">ext_UK</td><td>-0.739</td><td>0.002</td></tr><tr><td class="mono">geod_shearrate</td><td>+0.735</td><td>0.002</td></tr><tr><td class="mono">iso_grav_anom_hg</td><td>-0.717</td><td>0.003</td></tr></table>
+<p class="small">n = 15 matched artefacts; the score spread is 0.1894-0.2778. The available truth proxies are anti-correlated with the same scores
+(catalogue -0.554, SGMC-all -0.872); a proxy that ranks this family backwards cannot be
+used as a gate. Detail: <a href="research.html">research</a>, <a href="data/run-card.json">run card</a>,
+<a href="irregularities.html">irregularities</a>.</p>
+<p class="small">The inherited relief-matched `lidar_lane` numbers and their reversal are retained in
+the evidence JSON and in <a href="irregularities.html">IR-66-CONFOUND-01</a>; they are historical and
+do not describe the emitted artifact.</p>
+
+</div>
+</main>
+<footer><div class="wrap">
+GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
+competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
+Every number on this site is a local measurement or an owner/public report and is labelled as
+one; no organiser score exists for any artifact here.
+</div></footer></body></html>

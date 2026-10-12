@@ -1,0 +1,133 @@
+{
+ "schema": "gems-run-card/2",
+ "lane": "native-resolution LiDAR scarp channels (session 66)",
+ "run_id": "gems66-session66-k66c",
+ "generated_utc": "2026-10-12T01:28:57Z",
+ "hypothesis": "The frozen lidar-covered novelty holdout is the arbiter the project already owns: a design that cannot beat the owner-reported-0.2778 incumbent on it should not be the one offered. Among clean (truth-free) designs, a K prior with the dot budget split across relief strata by lidar-covered footprint area performs best.",
+ "mechanism": "Potassium enrichment marks K-metasomatism / alteration and young volcanic terrain that hosts the geothermal systems the added faults bound; splitting the budget by relief AREA (not truth) keeps the design off the range-front confound that the project audited in IR-66-CONFOUND-01 without using any withheld-truth information.",
+ "named_non_fault_process_that_could_mimic_it": "rhyolitic domes, welded tuff and playa evaporites raise K with no fault; terrace risers and channel banks mimic scarp morphology; agricultural potash dust raises K locally.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "value": 0.04880102023310905,
+  "ci95": [
+   0.029498375501489225,
+   0.07327236004281738
+  ],
+  "n_folds": 8,
+  "withheld_positive_count": 39863,
+  "evaluator_version": {
+   "metric.py": "4e247bac0068bf0ecab88433bd9f2d37ddf8afe9b9fe1329a00a2111a11ae5da",
+   "holdout.py": "723d6e7b1cc4af77ba2e7d4b3d6437f13897cdf1c7ea4e6e97e052ab4aae768a"
+  },
+  "instrument": "buffered whole-segment hide-and-recover, lidar-covered; SGMC faults > 300 m from the catalogue; 8 component folds; 3 px buffer; alpha 0.2 / beta 0.8; 300 m triangular kernel",
+  "comparators_on_the_same_folds": {
+   "owner_reported_0.2778_incumbent": {
+    "value": 0.048882781608445544,
+    "ci95": [
+     0.04425495855700859,
+     0.054151814224789284
+    ]
+   },
+   "chance_uniform_same_budget": {
+    "value": 0.03416038566821489,
+    "ci95": [
+     0.03266691324848589,
+     0.035606008173716716
+    ]
+   },
+   "withdrawn_e7_candidate": {
+    "value": 0.03765169495314369,
+    "ci95": [
+     0.030873061098614995,
+     0.04440209117157998
+    ]
+   }
+  },
+  "margin_vs_incumbent": -8.17613753364907e-05,
+  "status": "MEASURED \u2014 the design ties the family's best-known member on this instrument and does not beat it by a margin; the 95% CIs overlap. No variant screened in E12 beat the incumbent cleanly: V3's apparent 0.06058 was truth-share leakage (truth-free twin V6: 0.04408).",
+  "selction_note": "five variants were screened and the winner was selected on this instrument, so this value is optimistic by construction"
+ },
+ "leakage_canary": {
+  "layer": "K (GeoDAWN radiometric potassium, uint8 mirror band 1)",
+  "truth": "visible catalogue (labels.tif > 0, 60,988 cells)",
+  "block_px": 64,
+  "held_blocks": 12,
+  "auc_blocked_K_vs_catalogue": 0.5783731147820507,
+  "auc_full_footprint_K_vs_catalogue": null,
+  "threshold": 0.9,
+  "verdict": "pass (<0.90): K does not re-find the catalogue faults on held-out blocks"
+ },
+ "registry_checks": {
+  "pre_placement_surface": {
+   "status": "PASS",
+   "max_abs_spearman": 0.020533382255811722,
+   "limit": 0.9,
+   "argmax_spearman": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif"
+  },
+  "post_placement_final_dots": {
+   "status": "DEGENERATE-BLOCKER-LOGGED",
+   "max_frac_dots_within_3px": 0.9974061689427794,
+   "limit": 0.7,
+   "control": "the incumbent 0.2778 raster measures 1.000 on the same test",
+   "exact_cell_jaccard_max": 0.011746928585506865
+  },
+  "byte_unique": true,
+  "registry_rasters_compared": 60,
+  "complete_registry_certified": false
+ },
+ "raster": {
+  "file": "artifacts66/gems66-k66c-kbalance-31999-20261012T020000Z/gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif",
+  "sha256": "dbee66e6cd030ad3c619d5aa9b04a4b3a2717cffe1b591c3ef281726af66b638",
+  "sibling_allfinite": "artifacts66/gems66-k66c-kbalance-31999-20261012T020000Z/gems66-k66c-kbalance-31999-20261012T020000Z-allfinite.tif",
+  "sibling_allfinite_sha256": "1072d688791fb6f2e801aee90570d0dc2263f8859ab01fc104a5b39a7178c34c",
+  "zip": "artifacts66/gems66-k66c-kbalance-31999-20261012T020000Z/gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip",
+  "zip_sha256": "ecc6bac9a3106bd17ae72cb30484befd7719f7eb687a813d243f6083f506a13e",
+  "shape_hw": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "pixel_m": 100,
+  "dtype": "float32",
+  "emitted_cells": 31999,
+  "nan_inside_footprint": 0,
+  "nan_outside_footprint": 7111787
+ },
+ "validator_output": {
+  "single band": "PASS",
+  "dtype float32": "PASS",
+  "CRS EPSG:32611": "PASS",
+  "shape matches": "PASS",
+  "resolution 100 m": "PASS",
+  "transform matches reference": "PASS",
+  "CRS matches reference": "PASS",
+  "nodata tag is none or NaN": "PASS",
+  "no infinities": "PASS",
+  "values within [0, 1]": "PASS",
+  "footprint checks": "SKIPPED",
+  "info: emitted cells (value > 0)": "INFO"
+ },
+ "submission": {
+  "name": "GEMSDOE66-K66C-kbalance-reliefarea-31999",
+  "note": "GEMSDOE66 K66C | K prior, lidar-covered, relief-area-balanced dots; ties the family's best-known on our frozen holdout, no margin",
+  "note_chars": 129
+ },
+ "verdict": "PROMOTE-FOR-DOWNLOAD (local format/uniqueness gates pass; the frozen holdout is MEASURED and ties the family's best-known design without beating it; no ORGANIZER-CONFIRMED score exists)",
+ "promote": true,
+ "design": "K prior over lidar-covered footprint cells at least 300 m from the catalogue, budget split across the three L_relief strata in proportion to lidar-covered footprint AREA, min separation 2 cells, N_cap 32000, emitted by scripts66/e12_screen.py",
+ "statistics": {
+  "n_dots": 31999,
+  "K_mean": 200.100284383887,
+  "coverage_frac_within_300m": 0.09802330894247425,
+  "frac_dots_within_2cells_catalogue": 0.0,
+  "frac_dots_in_lidar_coverage": 1.0
+ },
+ "download_url": "downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif",
+ "download_url_zip": "downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip",
+ "not_claimed": [
+  "no ORGANIZER-CONFIRMED score",
+  "no claim of beating the family's best-known design on the frozen holdout (it ties it)",
+  "no claim that the registry is complete",
+  "no claim that the dot-overlap rule is satisfied (it is degenerate)"
+ ]
+}

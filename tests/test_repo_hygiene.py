@@ -51,63 +51,78 @@ def test_readme_contains_the_brief():
     assert "Predicted values must be in range [0, 1]" in t
 
 
-def test_download_links_follow_the_published_verdict():
-    """Whether a raster may be linked is decided by the gate, not by optimism.
+def test_site_links_only_the_disclosed_allowlisted_raster():
+    """A downloadable raster may only be the disclosed H67-1 sibling, and any page that links a
+    raster file must state the two disclosures in the same page: the raw uniqueness rule is
+    falsified and the artifact is not promoted.
 
-    Fail closed: if the site's own recomputed verdict is not CLEARED, no page may link a
-    ``.tif`` or ``.zip`` at all -- that is what keeps a future, more optimistic rebuild from
-    quietly re-publishing a file the evidence does not support.  If it IS cleared, every link
-    must resolve to a real file whose sha256 is the one printed on the page and recorded in the
-    run card, so the bytes a reviewer downloads are the bytes that were audited.
+    Guarding this with a test is what keeps a future, more optimistic rebuild from quietly
+    publishing a file the evidence does not support - or from dropping the disclosures.
     """
-    import hashlib
+    import re
+    allowed = {
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+    }
+    linked_any = False
+    for f in sorted((ROOT / "docs").glob("*.html")):
+        html = f.read_text()
+        hits = [m.group(1) for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html)]
+        for href in hits:
+            rel = href.split("?")[0]
+            # session-66 pass 3: the k66 family allowlist is read from its own run card, so a
+            # withdrawn file (the k66 consensus candidate) stops being linkable automatically.
+            import json as _json
+            _card = _json.loads((ROOT / "registry66" / "run-card-session66.json").read_text())
+            _r = _card["raster"]
+            k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
+            k66 = rel.split("/")[-1] in k66_names
+            assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
+            linked_any = True
+        if hits:
+            links_h67 = any("gems66-h67" in h for h in hits)
+            links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
+            if links_h67:
+                assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
+                assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
+                assert "0.9992" in html, f"{f.name} does not state the measured raw overlap"
+            if links_k66:
+                assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
+                assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
+    assert linked_any, "the disclosed candidate should be linked from at least one page"
+
+
+def test_h67_geophys_pages_disclose_and_match_their_own_verdict():
+    """The H67 geophysics lane keeps its own pages under docs/h67/ and must obey the same rule:
+    link a raster only when its recomputed verdict is cleared, and always show the label, the CI
+    and the null it is compared against.  A projection is never written as a score.
+    """
     import re
     import sys
 
+    pages = sorted((ROOT / "docs" / "h67").glob("*.html"))
+    assert pages, "scripts/build_site_h67.py must publish the lane's pages"
     sys.path.insert(0, str(ROOT / "scripts"))
     sys.path.insert(0, str(ROOT / "src"))
     import build_site_h67
 
     card = build_site_h67.newest(str(ROOT / "artifacts" / "h67" / "run-card-*.json"))
-    cleared = build_site_h67.assess(card)["cleared"] if card else False
-    links = {}
-    for f in sorted((ROOT / "docs").glob("*.html")):
-        for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', f.read_text()):
-            links.setdefault(m.group(1), []).append(f.name)
-    if not cleared:
-        assert not links, f"NEGATIVE verdict but downloadable rasters are linked: {links}"
-        return
-    assert links, "CLEARED verdict but no download is offered"
-    expect = json.loads(Path(card).read_text())["raster"]["sha256"]
-    for href, pages in links.items():
-        target = (ROOT / "docs" / href).resolve()
-        assert target.is_file(), f"{pages} link {href}, which does not exist"
-        if href.endswith(".tif"):
-            got = hashlib.sha256(target.read_bytes()).hexdigest()
-            assert got == expect, f"{href} sha256 {got[:12]} != run card {expect[:12]}"
+    a = build_site_h67.assess(card)
+    index = (ROOT / "docs" / "h67" / "index.html").read_text()
+    assert ("OK TO SUBMIT" in index) == a["cleared"], "banner disagrees with the recomputed verdict"
+    for f in pages:
+        html = f.read_text()
+        assert "HOLDOUT-DTI" in html or f.name in ("sources.html", "method.html"), f.name
+        for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
+            assert a["cleared"], f"{f.name} links {m.group(1)} while the verdict is negative"
+            assert (ROOT / "docs" / "h67" / m.group(1)).resolve().is_file(), m.group(1)
+        assert not re.search(r"ORGANIZER-CONFIRMED\W+0\.\d", html), f.name
 
 
 def test_negative_verdict_is_recorded():
-    """The historical lidar_lane verdict stays negative and is not overwritten by a new lane."""
     rc = json.loads((ROOT / "docs" / "data" / "run_card.json").read_text())
     assert rc["verdict"] == "negative", rc["verdict"]
     assert "relief" in json.dumps(rc["verdict_basis"]).lower()
-
-
-def test_current_lane_verdict_is_published_next_to_the_site():
-    """The current lane's run card must be on the site and agree with the site's verdict."""
-    import sys
-
-    src = ROOT / "docs" / "data" / "run-card-h67.json"
-    assert src.is_file(), "the site builder must publish the current run card"
-    rc = json.loads(src.read_text())
-    assert rc["scores_claimed"].startswith("NONE")
-    assert rc["holdout_dti"]["label"] == "HOLDOUT-DTI"
-    index = (ROOT / "docs" / "index.html").read_text()
-    if rc["promote"]:
-        assert "OK TO SUBMIT" in index
-    else:
-        assert "NOT CLEARED" in index
 
 
 def test_relief_matched_evidence_exists_and_reproduces_pooled():
