@@ -282,3 +282,42 @@ def test_all_local_links_resolve():
                 continue
             target = (path.parent / parsed.path).resolve()
             assert target.exists(), f"{name}: broken local link {href}"
+
+
+H66C_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
+
+
+def test_h66c_negative_result_is_logged_and_never_offered_as_a_download():
+    """The H66-C gate is not met, so its bytes must not be in the download path.
+
+    The brief is unconditional: offer the download only if the gate is met, else log the
+    negative result. The measurement, the hashes and the audit path still have to be on the
+    page, and the run card has to say `promote: false`.
+    """
+    assert not list((DOCS / "downloads").glob(H66C_STEM + "*")), \
+        "the unmet-gate candidate must not be published in docs/downloads"
+    text = (DOCS / "index.html").read_text(encoding="utf-8")
+    low = text.lower()
+    assert H66C_STEM in text
+    assert "gate not met" in low or "gate is not met" in low
+    assert "not offered" in low or "there is no h66-c download" in low
+    # the hashes and the audit path are published so the bytes stay verifiable
+    card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
+    assert card["promote"] is False
+    assert card["promotion_decision"] == "negative"
+    assert card["submission"]["slots_used"] == 0
+    assert card["raster"]["sha256"] in text
+    assert "artifacts/h66c/" in text
+    for name in PAGES:
+        for href in _links(DOCS / name):
+            assert H66C_STEM not in href or not href.lower().endswith((".tif", ".zip")), \
+                f"{name} offers the unmet-gate candidate: {href}"
+
+
+def test_h66c_audit_bytes_still_verify_if_rebuilt():
+    """If the audit copy exists locally it must match the published hash."""
+    audit = ROOT / "artifacts" / "h66c" / (H66C_STEM + ".tif")
+    if not audit.is_file():
+        return
+    card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
+    assert hashlib.sha256(audit.read_bytes()).hexdigest() == card["raster"]["sha256"]

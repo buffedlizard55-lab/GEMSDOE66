@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+H66C_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
+
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -67,6 +69,7 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         # and named by docs/downloads/current_release.json.
         "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
         "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
+        # H66-C is deliberately absent: its gate is not met, so it is never offered here.
     }
     linked_any = False
     for f in sorted((ROOT / "docs").glob("*.html")):

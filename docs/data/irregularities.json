@@ -481,6 +481,89 @@
     "scripts/trace_holdout.py",
     "docs/data/run-card.json"
    ]
+  },
+  {
+   "id": "IR-66-FOOT-01",
+   "severity": "high",
+   "status": "open \u2014 convention chosen and disclosed",
+   "title": "sample_submission.tif and training_features.tif disagree on the footprint by 4,601 cells",
+   "detail": "The finite mask of sample_submission.tif has 5,167,373 cells; band 1 of training_features.tif above the nodata sentinel has 5,165,852. Neither is a subset of the other: 1,540 cells are inside the features footprint but NaN in sample_submission, and 3,061 are finite in sample_submission but outside the features footprint. The writer now uses the features convention, which is what the shared validator and the reference solution use; if the organiser instead tests against the sample_submission mask, 1,540 cells would be NaN inside the expected area.",
+   "source_ids": [
+    "S01",
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-66-FRANGI-01",
+   "severity": "medium",
+   "status": "fixed",
+   "title": "Frangi vesselness was numerically degenerate when c was estimated from image intensity",
+   "detail": "Estimating Frangi's c as half the 99th percentile of the raw field intensity gave a maximum response of 0.0155 and a 99th percentile of 1.9e-4 over the whole footprint, i.e. the channel carried essentially no information. Fixed by estimating c from the pooled, sigma^2-normalised Hessian norm across all scales and by keeping the larger of the ridge and valley responses. The first experiment run used the defective channel; its numbers are superseded and retained in evidence/h66c_experiment1.json and h66c_experiment3.json.",
+   "source_ids": [
+    "S11"
+   ]
+  },
+  {
+   "id": "IR-66-CLAIM-01",
+   "severity": "medium",
+   "status": "mitigated \u2014 veto disabled",
+   "title": "The BLM closed-claim raster is an administrative status, not a disturbance mask",
+   "detail": "45% of the footprint lies within 150 m of a BLM closed claim, so a distance veto on that raster would remove most of the study area. 'Closed to mineral entry' does not imply any physical ground disturbance, so the term is disabled by default in scarp66.cultural_mask (claim_radius_m = 0).",
+   "source_ids": [
+    "S31"
+   ]
+  },
+  {
+   "id": "IR-66-INSTR-01",
+   "severity": "high",
+   "status": "open \u2014 structural",
+   "title": "No local holdout instrument is a validated surrogate for the hidden score",
+   "detail": "Instrument N (SGMC off-catalogue, held blocks) correlates +0.644 (p = 0.0071) with the owner-reported live scores over 16 registry rasters, but rho(dots, live) is -0.844 on the same set and the partial correlation is not identified. Instrument S (withheld catalogue segments) correlates -0.708 (p = 0.0021): it measures rediscovery of the public catalogue, which the scored truth excludes by construction. The brief's gate can therefore not be met in any demonstrably predictive way. Any future session must establish an instrument whose correlation survives partialling out dot count before trusting a gain.",
+   "source_ids": [
+    "S14",
+    "S15",
+    "S33"
+   ]
+  },
+  {
+   "id": "IR-66-CALIB-01",
+   "severity": "medium",
+   "status": "open \u2014 owner-reported only",
+   "title": "The catalogue-gap dose response rests on owner-reported scores, not organizer receipts",
+   "detail": "The byte-level subset relation h33-2-b2 subset d28 (6,436 dots removed, all within 200.0 m of the catalogue) and the monotone -0.126-DTI-per-unit-f200 response across the d2-8 lineage are reproduced from the registry bytes, but the associated scores 0.2600 and 0.2778 are owner-reported. No organiser receipt ties either number to exact bytes.",
+   "source_ids": [
+    "S14",
+    "S33"
+   ]
+  },
+  {
+   "id": "IR-66-CONST-01",
+   "severity": "low",
+   "status": "open \u2014 mitigated by rank-only use",
+   "title": "The diffusion-inversion constants are defined only up to the upstream LoG normalisation",
+   "detail": "The sidecar pins neither the LoG kernel nor its normalisation, so a_hat and kt_hat carry an unknown dimensionless constant. Both are used only through rank/percentile transforms, which are invariant to a positive constant; no absolute scarp height or age is claimed.",
+   "source_ids": [
+    "S09"
+   ]
+  },
+  {
+   "id": "IR-66-UNIQ-01",
+   "severity": "medium",
+   "status": "open \u2014 density-adjusted pass, literal raw rule trips",
+   "title": "The literal >70% within-3 px duplicate rule trips on the H66-C candidate against a dense registry raster",
+   "detail": "Raw maximum fraction of candidate dots within 3 px of one registry raster is 0.994, against gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif which carries 311,350 dots (6.0% of the footprint). Random placement already gives 0.958 against that raster, so the lift over random is 1.04x. Over the full 60-raster accessible set the maximum lift is 2.46x and the worst within-3 px fraction among the 48 rasters exceeding 1.5x random is 0.341, below the 0.70 stop. Rank correlation is at most |rho|=0.290. The literal rule therefore trips on density, not similarity (the same failure mode as IR-66-GATE-01). Following the stricter precedent set in IR-71 for the lidar_lane artifact, the density-adjusted UNIQUE verdict is reported explicitly as NOT overriding the raw rule; both numbers are shown on the site and in the run card. Full per-raster table: evidence/uniqueness_h66c_full.json.",
+   "source_ids": [
+    "IR-66-GATE-01",
+    "IR-71"
+   ]
+  },
+  {
+   "id": "IR-66-SITE-01",
+   "severity": "low",
+   "status": "fixed in this session",
+   "title": "Hand-edited Pages HTML was silently revertible by scripts/build_site.py",
+   "detail": "docs/index.html, docs/executive-summary.html and docs/results.html were patched or rewritten by hand while the site generator still emitted the older negative-only content; any later builder run would have discarded the H66-C pages. Fixed by adding docs/data/release-h66c.json, docs/data/executive-summary-sections.json and docs/data/results-h66c-section.json, consumed by the generator, so a rebuild now reproduces the same pages.",
+   "source_ids": []
   }
  ]
 }

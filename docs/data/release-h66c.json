@@ -1,0 +1,90 @@
+{
+ "schema": "gems-site-release/1",
+ "note_file": "Consumed by scripts/build_site.py; do not hand-edit docs/index.html.",
+ "date": "2026-10-12",
+ "slug": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59",
+ "rel_tif": "",
+ "rel_zip": "",
+ "sha256_tif": "9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a",
+ "sha256_zip": "1564930414a31044a4fce73ce57d74dbe5289260cf7ffc9285307ba3381edd5a",
+ "size_bytes": 378581,
+ "grid": "3730 x 3292, float32, 1 band, EPSG:32611, 100 m, transform (100, 0, 243350, 0, -100, 4508550)",
+ "n_dots": 42000,
+ "footprint_cells": 5165852,
+ "note": "h66c lidar scarp diffusion inversion + Steger/Frangi lines, TIGER-road masked, 200 m catalogue-gap gate, d4 spacing",
+ "validator": {
+  "ok": true,
+  "checks": {
+   "single band": true,
+   "dtype float32": true,
+   "CRS EPSG:32611": true,
+   "shape matches": true,
+   "resolution 100 m": true,
+   "transform matches reference": true,
+   "CRS matches reference": true,
+   "nodata tag is none or NaN": true,
+   "no infinities": true,
+   "values within [0, 1]": true,
+   "features grid shape matches": true,
+   "features transform matches reference grid": true,
+   "features CRS matches reference grid": true,
+   "no NaN inside footprint": true,
+   "NaN-only outside footprint": true
+  },
+  "failures": [],
+  "skipped": [],
+  "informational": [
+   "info: emitted cells (value > 0)"
+  ],
+  "command": "python3 -m gems.validate_submission --submission <tif> --reference data/raw/labels.tif --features data/raw/training_features.tif"
+ },
+ "uniqueness_dots": {
+  "max_abs_spearman_rho": 0.28960453267729125,
+  "raw_max_frac_dots_within_3px": 0.9941190476190476,
+  "raw_argmax": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "raw_other_dots": 311350,
+  "raw_null_within_3px_random_placement": 0.9580173802888662,
+  "raw_lift_over_random": 1.0376837289938265,
+  "max_lift_over_random": 2.462248006677689,
+  "n_above_1p5x_random": 48,
+  "worst_within_3px_above_1p5x_random": 0.3406904761904762,
+  "argmax_within_3px_above_1p5x": "19GEMSDOE__h19-4-multiline-corroborated.tif",
+  "n_compared": 60,
+  "verdict": "UNIQUE on all density-adjusted diagnostics over the full accessible set; the literal raw >0.70 rule trips on a dense raster (IR-66-UNIQ-01, cf. IR-66-GATE-01)"
+ },
+ "uniqueness_surface": {
+  "max_abs_spearman_rho": 0.07983119644200447,
+  "n_compared": 60,
+  "verdict": "UNIQUE"
+ },
+ "holdout": {
+  "instrument": "N",
+  "dti": 0.09794704598530801,
+  "ci_lo": 0.06229577770273584,
+  "ci_hi": 0.12194197554626449,
+  "n_withheld_positives": 2355,
+  "frozen_best": 0.11949990245011766
+ },
+ "baselines": [
+  {
+   "name": "anderson_38854_gate200",
+   "n": 0.11949990245011766
+  },
+  {
+   "name": "h33-2-b2_37654_gate200",
+   "n": 0.11039671786807462
+  },
+  {
+   "name": "d28_44090_nogate",
+   "n": 0.1065499028038387
+  }
+ ],
+ "canary_max_auc": 0.6459,
+ "n_features": 63,
+ "promote": false,
+ "promotion_decision": "negative",
+ "published": false,
+ "published_files": [],
+ "audit_tif": "artifacts/h66c/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+ "audit_zip": "artifacts/h66c/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.zip"
+}

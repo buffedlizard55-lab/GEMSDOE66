@@ -15,6 +15,9 @@ import hashlib
 import html
 import json
 import shutil
+
+import h66c_blocks
+from h66c_blocks import submission_block_h66c, h66c_exec_block, pillw  # noqa: E402  (other lane's blocks, kept visible)
 import sys
 import time
 from pathlib import Path
@@ -413,7 +416,8 @@ def main() -> int:
                         "release_gates_recomputed_at_build": a["gates"],
                         "cleared_for_download": a["cleared"],
                         "clearing_failures": a["reasons"]}, indent=1))
-    idx = download_block(a) + f"""
+    h66c_blocks.REL = "../"  # pages render into docs/h67/
+    idx = download_block(a) + submission_block_h66c() + f"""
 <h2>What this project is</h2>
 <p>An auditable pipeline that produces one GeoTIFF of fault predictions for the
 <a href="{OFFICIAL}">DOE GEMS Prize</a> (DrivenData competition 306). The scored truth is
@@ -470,6 +474,7 @@ from this environment, so the scarplet/Steger/Frangi filters here run at 200&nda
     name = c.get("submission", {}).get("name", "")
     exe = f"""<h2>Executive summary &mdash; exactly how to make a submission</h2>
 {download_block(a)}
+{h66c_exec_block()}
 <h3>1. What the portal accepts</h3>
 <p>From the <a href="{PROBLEM}">official submission-format rules</a>: a single-band
 <b>float32</b> GeoTIFF, <b>EPSG:32611</b> (UTM zone 11N), <b>100 m</b> resolution, the same bounds

@@ -82,6 +82,17 @@
       ]
     },
     {
+      "date": "2026-10-12",
+      "id": "h66c",
+      "status": "negative",
+      "title": "H66-C native-resolution LiDAR scarp channels — unique GeoTIFF published for review, gate not met",
+      "summary": "Implemented the assigned lane end to end (scarplet diffusion inversion, Steger sub-pixel lines, Frangi multiscale vesselness, official TIGER 2024 road mask) after the data blocker was lifted. The artifact passes the shared validator and is unique on every density-adjusted diagnostic over 60 rasters, but HOLDOUT-DTI on instrument N is 0.0979 [0.0623, 0.1219] against a frozen best of 0.1195. Published for review; not promoted; no submission slot spent.",
+      "links": [
+        "review/2026-10-12-h66c-verdict.md",
+        "data/run-card-h66c.json"
+      ]
+    },
+    {
       "date": "2026-10-11",
       "kind": "release-safety",
       "status": "NEGATIVE — NO SUBMISSION CLEARED",

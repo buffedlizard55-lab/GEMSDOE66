@@ -33,6 +33,29 @@ float32 &mdash; identical to <code>sample_submission.tif</code></td></tr>
 repository; uploading is a manual step described in
 <a href="executive-summary.html">How to submit</a>.</p>
 </div>
+
+<h2>H66-C (2026-10-12) — the scarp-channel candidate, and why there is no download</h2>
+<p>Another session implemented the native-resolution LiDAR scarp-channel lane end to end and
+built a <b>unique, format-valid</b> GeoTIFF (<code>gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif</code>, sha256
+<code class="mono">9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a</code>). It passes the shared validator with
+15 gating checks and zero
+failures, and its leakiest single feature reaches AUC 0.646 against a
+0.90 threshold. <b>It is not offered here.</b></p>
+<p>The reason is the gate, not the file. On instrument N (SGMC off-catalogue faults inside
+LiDAR-covered held-out blocks) it measures <b>0.0979</b>, 95% CI
+[0.0623, 0.1219], against frozen baselines of 0.1195
+(anderson), 0.1104 (h33-2-b2) and 0.1065 (d28). On instrument S it measures 0.1231 against 0.1688
+(d28), but that instrument is <i>anti</i>-correlated (&rho; = &minus;0.708) with the owner-reported
+live scores, so it cannot be used to argue a win. Neither instrument is a validated surrogate; see
+<a href="irregularities.html">IR-66-INSTR-01</a>. Because the brief says to offer a download only
+when the gate is met, the bytes stay in <code>artifacts/h66c/</code> for audit, with their hashes
+published on the <a href="index.html">overview</a>.</p>
+<p>What would have to change for it to be worth a slot: an organiser receipt for a candidate with a
+<i>different</i> field confirming the &minus;0.126-per-unit-f200 dose response is causal; a local
+instrument whose rank correlation with live scores survives partialling out dot count; and two
+independent scientific-lead reviews. None of the three exists today, so the honest default is to
+keep the slot.</p>
+
 <h3>1. What the portal accepts</h3>
 <p>From the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official submission-format rules</a>: a single-band
 <b>float32</b> GeoTIFF, <b>EPSG:32611</b> (UTM zone 11N), <b>100 m</b> resolution, the same bounds
@@ -83,7 +106,7 @@ not published here and must not be uploaded.</div>
 </ul>
 
 </div></main>
-<footer class="wrap"><p class="small">Built 2026-10-12T03:12:25Z
+<footer class="wrap"><p class="small">Built 2026-10-12T03:36:43Z
 by <code>scripts/build_site_h67.py</code>. Every number on this site is either HOLDOUT-DTI
 (internal, with its evaluator and CI) or a measurement of our own bytes. Nothing here is an
 organizer score.</p></footer>

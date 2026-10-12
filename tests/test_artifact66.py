@@ -52,12 +52,16 @@ LIDAR01_FILES = [
 ]
 
 # The only files this project may offer: the two disclosed H67-1 siblings and their receipts.
+H66C_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
+
 PUBLISHED = sorted([
     "README.md",
     "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
     "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
     "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
     "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
+    # H66-C is deliberately absent: gate not met, so its bytes are audit-only under
+    # artifacts/h66c/ and must never appear in the public download path.
 ])
 
 

@@ -53,6 +53,9 @@ one; no organiser score exists for any artifact here.
 """
 
 
+from h66c_blocks import submission_block_h66c, h66c_exec_block, pillw  # noqa: E402  (site blocks)
+
+
 def load(p: Path, default=None):
     try:
         return json.loads(p.read_text())
@@ -63,6 +66,11 @@ def load(p: Path, default=None):
 def pill(ok: bool, text: str = None) -> str:
     cls = "ok" if ok else "bad"
     return f'<span class="pill {cls}">{esc(text or ("PASS" if ok else "FAIL"))}</span>'
+
+
+def pillw(text: str = "WARN") -> str:
+    """Neither a pass nor a fail: a diagnostic whose rule and its own null disagree."""
+    return f'<span class="pill warn">{esc(text)}</span>'
 
 
 # ------------------------------------------------------------------------------------------
@@ -481,7 +489,13 @@ recovering the 60,988 labelled pixels we were given.</p>
 
 {submission_block()}
 
+<<<<<<< HEAD
 {lidar01_block()}
+
+{submission_block_h66c()}
+=======
+{lidar01_block()}
+>>>>>>> origin/main
 
 <h2>The two facts this session measured</h2>
 <p><b>1. The official metric is a budget.</b> With <code>T = TP_w</code>, <code>S = &Sigma;p</code>,
@@ -650,7 +664,13 @@ forfeits that mass. That is the downside; the gate table above is the honest acc
 this session could and could not measure about it.</p>
 
 {h67m_block()}
+<<<<<<< HEAD
 {lidar01_exec_block()}
+
+{h66c_exec_block()}
+=======
+{lidar01_exec_block()}
+>>>>>>> origin/main
 """, "executive-summary.html")
 
 
@@ -893,6 +913,8 @@ used as a gate. Detail: <a href="research.html">research</a>, <a href="data/run-
 <p class="small">The inherited relief-matched `lidar_lane` numbers and their reversal are retained in
 the evidence JSON and in <a href="irregularities.html">IR-66-CONFOUND-01</a>; they are historical and
 do not describe the emitted artifact.</p>
+
+{load(ROOT / "docs" / "data" / "results-h66c-section.json", {}).get("html", "")}
 """, "results.html")
 
 

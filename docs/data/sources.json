@@ -152,6 +152,14 @@
    "supports": "Two int16 (decimetre) 3 m tiles (x40y427, x42y425) with source URLs (prd-tnm.s3.amazonaws.com .../NV_WestCentral_EarthMRI_2020_D20), sha256 and grid receipts. Demonstrates the native-resolution path and the datum/CRS (EPSG:26911 -> 32611) handling; the raw S3 hosts are unreachable from this sandbox.",
    "status": "Fetched + hashed 2026-10-12",
    "how": "gh api raw blob from the owner's public repo."
+  },
+  {
+   "id": "S33",
+   "title": "GEMSDOE66 family registry \u2014 owner-reported submission outcomes and raster corpus",
+   "url": "https://github.com/buffedlizard55-lab/GEMSDOE66/tree/main/registry",
+   "kind": "owner-maintained registry",
+   "status": "OWNER-REPORTED CONTEXT ONLY \u2014 every number taken from it is labelled as such; no entry is an organizer receipt and none is used as a score",
+   "review_date": "2026-10-12"
   }
  ]
 }

@@ -1,0 +1,895 @@
+{
+ "generated_utc": "2026-10-12T01:36:51Z",
+ "args": {
+  "block": 200,
+  "fraction": 0.25,
+  "buffer": 3,
+  "seed": 20261012,
+  "budget": 42000,
+  "sep": 3,
+  "gap_ref": 600.0,
+  "gap_hard": 200.0,
+  "neg_ratio": 6,
+  "train_on": "catalogue",
+  "bootstrap": 120,
+  "out": "evidence/h66c_experiment2.json",
+  "cache": "data/processed/scarp_channels.npz"
+ },
+ "lane": "H66-C native-resolution LiDAR scarp channels",
+ "split": {
+  "block_px": 200,
+  "holdout_fraction": 0.25,
+  "buffer_px": 3,
+  "seed": 20261012,
+  "eligible_blocks": 55,
+  "held_blocks": 14,
+  "held_block_cells": 560000,
+  "withheld_fault_cells": 8648,
+  "scored_fault_cells": 6976,
+  "visible_fault_cells": 52303,
+  "buffer_dropped_cells": 37
+ },
+ "features": [
+  "mag_anom",
+  "rtp",
+  "tmi_hg",
+  "geod_2ndinv",
+  "iso_grav_anom_slope",
+  "tc",
+  "geod_shearrate",
+  "geod_dilaterate",
+  "tmi_vg",
+  "deq_n100a15",
+  "iso_grav_anom_vg",
+  "det_elev",
+  "iso_grav_anom",
+  "tmi",
+  "depth_to_base_surf",
+  "ieq_n100a15",
+  "cond_surf",
+  "iso_grav_anom_hg",
+  "det_elev_slope",
+  "T_slope_p90",
+  "T_slope_max",
+  "T_steep_frac",
+  "T_slope_std",
+  "T_relief_local",
+  "T_curv_prof_absmax",
+  "T_aspect_coherence",
+  "T_hs_lineament",
+  "T_dem_mean",
+  "rad_K",
+  "rad_Th",
+  "rad_U",
+  "rad_TC",
+  "ext_ThK",
+  "ext_UK",
+  "ext_UTh",
+  "ext_TMI_up150",
+  "chi_b1",
+  "chi_b2",
+  "chi_b3",
+  "chi_b4",
+  "chi_b5",
+  "chi_sig",
+  "sc_amp",
+  "sc_frac",
+  "sc_snr",
+  "sc_amp_snr",
+  "sc_a_hat",
+  "sc_kt_hat",
+  "sc_dipole",
+  "sc_facing",
+  "sc_coh_cell",
+  "sc_frangi_amp",
+  "sc_frangi_det",
+  "sc_steger_amp",
+  "sc_steger_det",
+  "sc_coh_line",
+  "sc_relief",
+  "cat_dist_m",
+  "cat_gap",
+  "cat_density",
+  "sc_votes",
+  "sc_corroboration",
+  "sc_subtle_index"
+ ],
+ "leakage_canary": {
+  "threshold_auc": 0.9,
+  "instrument": "S (held-block mapping gaps)",
+  "n_pos": 7132,
+  "n_ctrl": 200000,
+  "feature_results": [
+   {
+    "name": "mag_anom",
+    "auc": 0.5044,
+    "flag": "ok"
+   },
+   {
+    "name": "rtp",
+    "auc": 0.5578,
+    "flag": "ok"
+   },
+   {
+    "name": "tmi_hg",
+    "auc": 0.5314,
+    "flag": "ok"
+   },
+   {
+    "name": "geod_2ndinv",
+    "auc": 0.547,
+    "flag": "ok"
+   },
+   {
+    "name": "iso_grav_anom_slope",
+    "auc": 0.5195,
+    "flag": "ok"
+   },
+   {
+    "name": "tc",
+    "auc": 0.4101,
+    "flag": "ok"
+   },
+   {
+    "name": "geod_shearrate",
+    "auc": 0.5391,
+    "flag": "ok"
+   },
+   {
+    "name": "geod_dilaterate",
+    "auc": 0.5345,
+    "flag": "ok"
+   },
+   {
+    "name": "tmi_vg",
+    "auc": 0.4932,
+    "flag": "ok"
+   },
+   {
+    "name": "deq_n100a15",
+    "auc": 0.4503,
+    "flag": "ok"
+   },
+   {
+    "name": "iso_grav_anom_vg",
+    "auc": 0.5731,
+    "flag": "ok"
+   },
+   {
+    "name": "det_elev",
+    "auc": 0.5542,
+    "flag": "ok"
+   },
+   {
+    "name": "iso_grav_anom",
+    "auc": 0.4503,
+    "flag": "ok"
+   },
+   {
+    "name": "tmi",
+    "auc": 0.5123,
+    "flag": "ok"
+   },
+   {
+    "name": "depth_to_base_surf",
+    "auc": 0.4958,
+    "flag": "ok"
+   },
+   {
+    "name": "ieq_n100a15",
+    "auc": 0.5438,
+    "flag": "ok"
+   },
+   {
+    "name": "cond_surf",
+    "auc": 0.4294,
+    "flag": "ok"
+   },
+   {
+    "name": "iso_grav_anom_hg",
+    "auc": 0.5595,
+    "flag": "ok"
+   },
+   {
+    "name": "det_elev_slope",
+    "auc": 0.5916,
+    "flag": "ok"
+   },
+   {
+    "name": "T_slope_p90",
+    "auc": 0.5839,
+    "flag": "ok"
+   },
+   {
+    "name": "T_slope_max",
+    "auc": 0.5821,
+    "flag": "ok"
+   },
+   {
+    "name": "T_steep_frac",
+    "auc": 0.5886,
+    "flag": "ok"
+   },
+   {
+    "name": "T_slope_std",
+    "auc": 0.5753,
+    "flag": "ok"
+   },
+   {
+    "name": "T_relief_local",
+    "auc": 0.5897,
+    "flag": "ok"
+   },
+   {
+    "name": "T_curv_prof_absmax",
+    "auc": 0.5651,
+    "flag": "ok"
+   },
+   {
+    "name": "T_aspect_coherence",
+    "auc": 0.5042,
+    "flag": "ok"
+   },
+   {
+    "name": "T_hs_lineament",
+    "auc": 0.5733,
+    "flag": "ok"
+   },
+   {
+    "name": "T_dem_mean",
+    "auc": 0.5564,
+    "flag": "ok"
+   },
+   {
+    "name": "rad_K",
+    "auc": 0.3933,
+    "flag": "ok"
+   },
+   {
+    "name": "rad_Th",
+    "auc": 0.4369,
+    "flag": "ok"
+   },
+   {
+    "name": "rad_U",
+    "auc": 0.444,
+    "flag": "ok"
+   },
+   {
+    "name": "rad_TC",
+    "auc": 0.4099,
+    "flag": "ok"
+   },
+   {
+    "name": "ext_ThK",
+    "auc": 0.4939,
+    "flag": "ok"
+   },
+   {
+    "name": "ext_UK",
+    "auc": 0.5444,
+    "flag": "ok"
+   },
+   {
+    "name": "ext_UTh",
+    "auc": 0.5386,
+    "flag": "ok"
+   },
+   {
+    "name": "ext_TMI_up150",
+    "auc": 0.5121,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b1",
+    "auc": 0.5237,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b2",
+    "auc": 0.525,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b3",
+    "auc": 0.6855,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b4",
+    "auc": 0.4729,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_b5",
+    "auc": 0.5542,
+    "flag": "ok"
+   },
+   {
+    "name": "chi_sig",
+    "auc": 0.6013,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_amp",
+    "auc": 0.5589,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_frac",
+    "auc": 0.5441,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_snr",
+    "auc": 0.5572,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_amp_snr",
+    "auc": 0.5478,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_a_hat",
+    "auc": 0.5275,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_kt_hat",
+    "auc": 0.4392,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_dipole",
+    "auc": 0.5728,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_facing",
+    "auc": 0.5017,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_coh_cell",
+    "auc": 0.4755,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_frangi_amp",
+    "auc": 0.5098,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_frangi_det",
+    "auc": 0.4657,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_steger_amp",
+    "auc": 0.4765,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_steger_det",
+    "auc": 0.4933,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_coh_line",
+    "auc": 0.4659,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_relief",
+    "auc": 0.5854,
+    "flag": "ok"
+   },
+   {
+    "name": "cat_dist_m",
+    "auc": 0.383,
+    "flag": "ok"
+   },
+   {
+    "name": "cat_gap",
+    "auc": 0.495,
+    "flag": "ok"
+   },
+   {
+    "name": "cat_density",
+    "auc": 0.5153,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_votes",
+    "auc": 0.5065,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_corroboration",
+    "auc": 0.4983,
+    "flag": "ok"
+   },
+   {
+    "name": "sc_subtle_index",
+    "auc": 0.4986,
+    "flag": "ok"
+   }
+  ]
+ },
+ "arms": {
+  "field_catalogue_nogap": {
+   "emission": {
+    "dots": 42000,
+    "gap_applied": false,
+    "min_separation_cells": 3,
+    "median_nn_cells": 4.123105625617661,
+    "median_dist_to_visible_catalogue_m": 608.2762451171875,
+    "frac_dots_within_200m_of_visible_catalogue": 0.23045238095238096,
+    "frac_dots_on_lidar": 0.7442619047619048,
+    "median_road_dist_m": 640.3124389648438,
+    "median_L_ex_max_at_dots": 0.18832537531852722,
+    "median_a_hat_at_dots": 7.432916164398193
+   },
+   "scores": {
+    "S": {
+     "tp": 374.7193030133272,
+     "fp": 914.5367277511747,
+     "fn": 6757.280696986672,
+     "dti": 0.06283598038441915,
+     "n_truth": 7132,
+     "emitted": 1046.0
+    },
+    "S_ci": {
+     "ci95": [
+      0.03432237632431352,
+      0.09092208210877481
+     ],
+     "n_blocks": 14,
+     "boot_mean": 0.06329140413018326,
+     "boot_sd": 0.016305012017443547
+    },
+    "N": {
+     "tp": 93.39209754477342,
+     "fp": 966.1294042685608,
+     "fn": 2057.6079024552264,
+     "dti": 0.04832197948087574,
+     "n_truth": 2151,
+     "emitted": 1006.0
+    },
+    "N_ci": {
+     "ci95": [
+      0.03159752848487259,
+      0.06325370548756229
+     ],
+     "n_blocks": 13,
+     "boot_mean": 0.048140853578458986,
+     "boot_sd": 0.009176435481962071
+    },
+    "C": {
+     "tp": 572.224440189382,
+     "fp": 38776.83519662164,
+     "fn": 8075.775559810618,
+     "dti": 0.038694633468876166,
+     "n_truth": 8648,
+     "emitted": 38981.0
+    }
+   },
+   "model": {
+    "type": "HistGradientBoostingClassifier",
+    "max_iter": 300,
+    "learning_rate": 0.08,
+    "train_truth": "catalogue",
+    "n_train_pos": 45355,
+    "n_train_neg": 272130,
+    "negative_sampling": "half >600 m from any known fault, half 300-1500 m from a mapped fault (hard negatives for line localisation)",
+    "dropped_from_model": [
+     "cat_dist_m",
+     "cat_gap",
+     "cat_density"
+    ],
+    "dropped_reason": "catalogue-derived; applied as an explicit gate at emission time rather than being learned"
+   }
+  },
+  "field_catalogue_gap": {
+   "emission": {
+    "dots": 42000,
+    "gap_applied": true,
+    "min_separation_cells": 3,
+    "median_nn_cells": 4.123105625617661,
+    "median_dist_to_visible_catalogue_m": 1389.244384765625,
+    "frac_dots_within_200m_of_visible_catalogue": 0.0,
+    "frac_dots_on_lidar": 0.7306428571428571,
+    "median_road_dist_m": 670.8203735351562,
+    "median_L_ex_max_at_dots": 0.18832537531852722,
+    "median_a_hat_at_dots": 7.396167755126953
+   },
+   "scores": {
+    "S": {
+     "tp": 584.9526762214604,
+     "fp": 1652.956468618238,
+     "fn": 6547.04732377854,
+     "dti": 0.09506507242602939,
+     "n_truth": 7132,
+     "emitted": 1861.0
+    },
+    "S_ci": {
+     "ci95": [
+      0.05506050881137783,
+      0.1325186806136444
+     ],
+     "n_blocks": 14,
+     "boot_mean": 0.0954839357724044,
+     "boot_sd": 0.0218639048955381
+    },
+    "N": {
+     "tp": 153.00940864436234,
+     "fp": 1722.029630639381,
+     "fn": 1997.9905913556377,
+     "dti": 0.07300736645349291,
+     "n_truth": 2151,
+     "emitted": 1786.0
+    },
+    "N_ci": {
+     "ci95": [
+      0.054196305987662466,
+      0.09385351943528611
+     ],
+     "n_blocks": 13,
+     "boot_mean": 0.07347188830726219,
+     "boot_sd": 0.011181943779718005
+    },
+    "C": {
+     "tp": 805.2811238822205,
+     "fp": 41712.290630079704,
+     "fn": 7842.7188761177795,
+     "dti": 0.05221667722728551,
+     "n_truth": 8648,
+     "emitted": 42000.0
+    }
+   },
+   "model": {
+    "type": "HistGradientBoostingClassifier",
+    "max_iter": 300,
+    "learning_rate": 0.08,
+    "train_truth": "catalogue",
+    "n_train_pos": 45355,
+    "n_train_neg": 272130,
+    "negative_sampling": "half >600 m from any known fault, half 300-1500 m from a mapped fault (hard negatives for line localisation)",
+    "dropped_from_model": [
+     "cat_dist_m",
+     "cat_gap",
+     "cat_density"
+    ],
+    "dropped_reason": "catalogue-derived; applied as an explicit gate at emission time rather than being learned"
+   }
+  },
+  "field_sgmc_nogap": {
+   "emission": {
+    "dots": 42000,
+    "gap_applied": false,
+    "min_separation_cells": 3,
+    "median_nn_cells": 4.123105625617661,
+    "median_dist_to_visible_catalogue_m": 2507.9873046875,
+    "frac_dots_within_200m_of_visible_catalogue": 0.0663095238095238,
+    "frac_dots_on_lidar": 1.0,
+    "median_road_dist_m": 900.0,
+    "median_L_ex_max_at_dots": 0.3237336277961731,
+    "median_a_hat_at_dots": 11.331903457641602
+   },
+   "scores": {
+    "S": {
+     "tp": 492.2315304558375,
+     "fp": 2573.160180406219,
+     "fn": 6639.768469544162,
+     "dti": 0.07790102673378473,
+     "n_truth": 7132,
+     "emitted": 2757.0
+    },
+    "S_ci": {
+     "ci95": [
+      0.04829187956151776,
+      0.10502725644025881
+     ],
+     "n_blocks": 14,
+     "boot_mean": 0.0779120779939286,
+     "boot_sd": 0.01614636107435695
+    },
+    "N": {
+     "tp": 719.4823171055984,
+     "fp": 2411.658610599116,
+     "fn": 1431.5176828944016,
+     "dti": 0.3065503522870841,
+     "n_truth": 2151,
+     "emitted": 2698.0
+    },
+    "N_ci": {
+     "ci95": [
+      0.27133716485170045,
+      0.3269572674310786
+     ],
+     "n_blocks": 13,
+     "boot_mean": 0.306902955514403,
+     "boot_sd": 0.013643558237361963
+    },
+    "C": {
+     "tp": 707.719137006821,
+     "fp": 41080.76391153298,
+     "fn": 7940.280862993179,
+     "dti": 0.04632853241822384,
+     "n_truth": 8648,
+     "emitted": 41344.0
+    }
+   },
+   "model": {
+    "type": "HistGradientBoostingClassifier",
+    "max_iter": 300,
+    "learning_rate": 0.08,
+    "train_truth": "sgmc",
+    "n_train_pos": 34333,
+    "n_train_neg": 205998,
+    "negative_sampling": "half >600 m from any known fault, half 300-1500 m from a mapped fault (hard negatives for line localisation)",
+    "dropped_from_model": [
+     "cat_dist_m",
+     "cat_gap",
+     "cat_density"
+    ],
+    "dropped_reason": "catalogue-derived; applied as an explicit gate at emission time rather than being learned"
+   }
+  },
+  "field_sgmc_gap": {
+   "emission": {
+    "dots": 42000,
+    "gap_applied": true,
+    "min_separation_cells": 3,
+    "median_nn_cells": 4.123105625617661,
+    "median_dist_to_visible_catalogue_m": 2801.78515625,
+    "frac_dots_within_200m_of_visible_catalogue": 0.0,
+    "frac_dots_on_lidar": 1.0,
+    "median_road_dist_m": 905.5385131835938,
+    "median_L_ex_max_at_dots": 0.3237336277961731,
+    "median_a_hat_at_dots": 11.302450180053711
+   },
+   "scores": {
+    "S": {
+     "tp": 585.3981038744939,
+     "fp": 3180.7351090217426,
+     "fn": 6546.601896125506,
+     "dti": 0.09063536401723768,
+     "n_truth": 7132,
+     "emitted": 3400.0
+    },
+    "S_ci": {
+     "ci95": [
+      0.05756409128366348,
+      0.12115834610803299
+     ],
+     "n_blocks": 14,
+     "boot_mean": 0.09094148246337176,
+     "boot_sd": 0.01672455810645223
+    },
+    "N": {
+     "tp": 749.7380065180278,
+     "fp": 3038.6109146877325,
+     "fn": 1401.2619934819722,
+     "dti": 0.30250036183002205,
+     "n_truth": 2151,
+     "emitted": 3338.0
+    },
+    "N_ci": {
+     "ci95": [
+      0.26749708256193105,
+      0.3287708881875181
+     ],
+     "n_blocks": 13,
+     "boot_mean": 0.3031731716016501,
+     "boot_sd": 0.014626492433075922
+    },
+    "C": {
+     "tp": 815.4128430362695,
+     "fp": 41697.027005182594,
+     "fn": 7832.58715696373,
+     "dti": 0.05287716535139662,
+     "n_truth": 8648,
+     "emitted": 42000.0
+    }
+   },
+   "model": {
+    "type": "HistGradientBoostingClassifier",
+    "max_iter": 300,
+    "learning_rate": 0.08,
+    "train_truth": "sgmc",
+    "n_train_pos": 34333,
+    "n_train_neg": 205998,
+    "negative_sampling": "half >600 m from any known fault, half 300-1500 m from a mapped fault (hard negatives for line localisation)",
+    "dropped_from_model": [
+     "cat_dist_m",
+     "cat_gap",
+     "cat_density"
+    ],
+    "dropped_reason": "catalogue-derived; applied as an explicit gate at emission time rather than being learned"
+   }
+  }
+ },
+ "model": {
+  "type": "HistGradientBoostingClassifier",
+  "max_iter": 300,
+  "learning_rate": 0.08,
+  "train_truth": "catalogue",
+  "n_train_pos": 45355,
+  "n_train_neg": 272130,
+  "negative_sampling": "half >600 m from any known fault, half 300-1500 m from a mapped fault (hard negatives for line localisation)",
+  "dropped_from_model": [
+   "cat_dist_m",
+   "cat_gap",
+   "cat_density"
+  ],
+  "dropped_reason": "catalogue-derived; applied as an explicit gate at emission time rather than being learned"
+ },
+ "scores": {
+  "baselines": {
+   "d28_44090_nogate": {
+    "S": {
+     "tp": 1030.1862007002278,
+     "fp": 4293.38714351182,
+     "fn": 6101.813799299773,
+     "dti": 0.15216223338053753,
+     "n_truth": 7132,
+     "emitted": 4711.0
+    },
+    "S_ci": {
+     "ci95": [
+      0.1090975470805678,
+      0.1993994983734159
+     ],
+     "n_blocks": 14,
+     "boot_mean": 0.15323847639655075,
+     "boot_sd": 0.023706080940783615
+    },
+    "N": {
+     "tp": 250.94294671453966,
+     "fp": 4593.942274394651,
+     "fn": 1900.0570532854604,
+     "dti": 0.0932950733792306,
+     "n_truth": 2151,
+     "emitted": 4711.0
+    },
+    "N_ci": {
+     "ci95": [
+      0.06227596983911905,
+      0.12218434821075523
+     ],
+     "n_blocks": 13,
+     "boot_mean": 0.0928689202873222,
+     "boot_sd": 0.016101354579642364
+    },
+    "C": {
+     "tp": 1297.1458465122819,
+     "fp": 43567.90466049271,
+     "fn": 7350.854153487719,
+     "dti": 0.0816255976175357,
+     "n_truth": 8648,
+     "emitted": 44090.0
+    }
+   },
+   "h33-2-b2_37654_gate200": {
+    "S": {
+     "tp": 43.302888256490746,
+     "fp": 4008.6094620175727,
+     "fn": 7088.69711174351,
+     "dti": 0.00664564222747515,
+     "n_truth": 7132,
+     "emitted": 4040.0
+    },
+    "S_ci": {
+     "ci95": [
+      0.004325030396202293,
+      0.00905329353923627
+     ],
+     "n_blocks": 14,
+     "boot_mean": 0.0064762921421072156,
+     "boot_sd": 0.0013523613558635125
+    },
+    "N": {
+     "tp": 247.55534476020347,
+     "fp": 3927.479950856826,
+     "fn": 1903.4446552397965,
+     "dti": 0.09685995031448637,
+     "n_truth": 2151,
+     "emitted": 4040.0
+    },
+    "N_ci": {
+     "ci95": [
+      0.06417085542503963,
+      0.12575280665859412
+     ],
+     "n_blocks": 13,
+     "boot_mean": 0.09662410253807814,
+     "boot_sd": 0.017024041006017326
+    },
+    "C": {
+     "tp": 55.49576271188262,
+     "fp": 37614.13272697937,
+     "fn": 8592.504237288118,
+     "dti": 0.0038399191847576287,
+     "n_truth": 8648,
+     "emitted": 37654.0
+    }
+   },
+   "anderson_38854_gate200": {
+    "S": {
+     "tp": 43.302888256490746,
+     "fp": 4047.6094620175727,
+     "fn": 7088.69711174351,
+     "dti": 0.006637696528854414,
+     "n_truth": 7132,
+     "emitted": 4079.0
+    },
+    "S_ci": {
+     "ci95": [
+      0.004313414417245006,
+      0.009040670217558295
+     ],
+     "n_blocks": 14,
+     "boot_mean": 0.0064687934550379505,
+     "boot_sd": 0.001353238607222584
+    },
+    "N": {
+     "tp": 247.55534476020347,
+     "fp": 3966.479950856826,
+     "fn": 1903.4446552397965,
+     "dti": 0.09656524539480532,
+     "n_truth": 2151,
+     "emitted": 4079.0
+    },
+    "N_ci": {
+     "ci95": [
+      0.0641082748090724,
+      0.12575280665859412
+     ],
+     "n_blocks": 13,
+     "boot_mean": 0.09658652766502557,
+     "boot_sd": 0.017025286999588406
+    },
+    "C": {
+     "tp": 56.00505072688276,
+     "fp": 38813.623438964365,
+     "fn": 8591.994949273118,
+     "dti": 0.0038118574198731546,
+     "n_truth": 8648,
+     "emitted": 38854.0
+    }
+   }
+  }
+ },
+ "relief_stratification": {
+  "arm": "field_catalogue_gap",
+  "strata": {
+   "basin_floor_relief_lt_10m": {
+    "tp": 69.41474480988524,
+    "fp": 399.14391586228777,
+    "fn": 2644.585255190115,
+    "dti": 0.030647880809217536,
+    "n_truth": 2714,
+    "emitted": 427.0
+   },
+   "piedmont_10_30m": {
+    "tp": 245.81550927355562,
+    "fp": 961.5946501438009,
+    "fn": 2541.1844907264444,
+    "dti": 0.0994768713064917,
+    "n_truth": 2787,
+    "emitted": 1074.0
+   },
+   "range_front_gt_30m": {
+    "tp": 71.75830462446166,
+    "fp": 312.9716115528254,
+    "fn": 1403.2416953755383,
+    "dti": 0.05708941003152276,
+    "n_truth": 1475,
+    "emitted": 343.0
+   }
+  }
+ },
+ "elapsed_s": 535.4
+}

@@ -6,6 +6,21 @@
 [`docs/review/`](docs/review/). Keep **Maximize P(Win)** and **Own the Outcome** central;
 negative results and disclosed stops are valid outcomes.
 
+**Three candidates now live on the site; none of them is `ORGANIZER-CONFIRMED`, and the site does
+not rank them against each other.**
+
+| candidate | lane | status | download |
+|---|---|---|---|
+| `gems66-h67-scarp-lane-novelty-40000dots-v2` | H67-1 scarp-lane novelty | disclosed, not promoted | yes |
+| k66 `K^0.5` consensus (parallel session 66) | K-anchored consensus | listed with its own register | yes |
+| `gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59` | **H66-C native-resolution LiDAR scarp channels** | **NOT offered — scientific gate NOT MET (0.0979 vs frozen best 0.1195); bytes kept under `artifacts/h66c/` with published hashes** | no |
+
+The H66-C file is unique and format-valid, but its gate is not met, so per the brief it is
+**not offered for download**; the bytes stay under `artifacts/h66c/` with their sha256 published
+and it spent no submission slot. See
+[`docs/review/2026-10-12-h66c-verdict.md`](docs/review/2026-10-12-h66c-verdict.md) and
+[`docs/data/run-card-h66c.json`](docs/data/run-card-h66c.json).
+
 ## 0. SESSION-66 STANDING CHARTER — parallel session, merged from `main`
 >
 > **Highest urgency.** MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION. Do not copy a
@@ -774,3 +789,68 @@ There is no current submission file. When — and only when — the run card say
 7. Include the required generative-AI disclosure in the submission narrative, describing actual use across all submission elements. Edit any draft to match the facts; do not copy a template blindly.
 
 A current stop/no-download state is also a valid project result. Do not turn it into a speculative GeoTIFF merely to satisfy a file-shaped deliverable.
+
+---
+
+## H66-C session record — 2026-10-12 (branch `arena/e7d32f78`)
+
+**Lane, implemented end to end.** `src/gemsdoe66/scarp66.py`: diffused-scarp template inversion on
+the 2 m-computed LiDAR descriptors (`z = (a/2)[1 + erf(x/(2√(κt)))]`, so `max|z'| = a/(2√(πκt))`
+and `max|z''| = 0.12096·a/(κt)`; eliminating `κt` gives `a_hat = 1.5203·S²/C` and
+`κt_hat = 1.5203²·a_hat²/(4πS²)`), Steger sub-pixel ridge/valley lines (IEEE TPAMI 20(2):113–125,
+1998), Frangi multiscale vesselness (MICCAI 1998, LNCS 1496:130–137) at σ = 1.0–3.0 cells, an
+official US Census **TIGER 2024** road mask, and a cultural veto. `src/gemsdoe66/experiment66c.py`
+holds the instruments (S/N/C), the leakage canary, the relief strata and the 20 km block bootstrap;
+`scripts/run_h66c.py` and `scripts/build_h66c_submission.py` drive the experiment and build the
+artifact on the **training-features** footprint.
+
+**Data blocker lifted.** All 23 hash-pinned owner mirrors restore
+(`python3 scripts/fetch_mirrors.py`). Five further inputs were recovered from sibling owner
+repositories with `git` sparse checkouts and are grid-verified: the LiDAR quantisation sidecar, the
+10 m topo stack, the official TIGER 2024 road-distance raster, the GeoDAWN acquisition blocks, and
+the INGENIOUS/GDR trace-segment table.
+
+**Headline findings.**
+
+1. `h33-2-b2` is a **byte-exact subset** of `d28`: 6,436 dots removed, every one within 200.0 m of
+   the catalogue (max removed distance exactly 200.0 m; min kept 223.607 m). Owner-reported
+   0.2600 → 0.2778. The only byte-verified controlled comparison in the family registry.
+2. **No local instrument is a validated surrogate.** Instrument N (SGMC off-catalogue) has
+   Spearman ρ = +0.644 (p = 0.0071) with the owner-reported live scores but is confounded with dot
+   count (ρ = −0.844); instrument S is anti-correlated (ρ = −0.708, p = 0.0021) because it scores
+   rediscovery of the catalogue, which the scored truth excludes. `IR-66-INSTR-01`.
+3. Candidate 0.0979 [0.0623, 0.1219] on instrument N vs frozen best 0.1195 → **gate NOT MET**.
+   Relief strata (instrument S): basin 0.0274, piedmont 0.1386, range front 0.0620 — not confined
+   to range fronts. Leakage canary clean (max AUC 0.646 of 63 features).
+
+**Defects found and fixed.** `IR-66-FRANGI-01` (Frangi `c` was degenerate when estimated from
+intensity; now from the Hessian norm), `IR-66-FOOT-01` (the `sample_submission` and
+`training_features` footprints disagree on 4,601 cells — submissions must use
+`footprint_from_features`), `IR-66-CLAIM-01` (the BLM closed-claim veto removed 45 % of the
+footprint and is disabled), `IR-66-SITE-01` (hand-edited Pages HTML was silently revertible; page
+content now lives in `docs/data/*.json`), `IR-66-UNIQ-01` (the literal >70 % within-3 px rule trips
+at 0.994 against a 311,350-dot raster whose random-placement null is 0.958 — reported as a WARN
+next to the density-adjusted pass, not silently converted).
+
+**Reproduce.**
+```bash
+.venv/bin/python scripts/fetch_mirrors.py
+.venv/bin/python -m gemsdoe66.features
+.venv/bin/python scripts/run_h66c.py
+.venv/bin/python scripts/build_h66c_submission.py
+.venv/bin/python scripts/build_site.py
+```
+
+## Next session
+
+1. **Establish a valid instrument before running another experiment.** Partial dot count out of the
+   DTI_N / live-score relation; if it does not survive, stop tuning on DTI_N and say so.
+2. **Two independent scientific-lead reviews** of `registry/run_card_h66c.json` — the mechanical
+   release gate returns `cleared_for_review = False` until they exist.
+3. **Push the catalogue-gap geometry further, cheaply.** The dose response is the only byte-verified
+   lever. A soft gap weight that *relocates* near-catalogue dots instead of deleting them keeps the
+   44 k budget while capturing the f200 effect; that is the highest-value untested variant.
+4. **Obtain the raw 1 m 3DEP tiles** on an unrestricted host (`prd-tnm.s3.amazonaws.com`) and re-run
+   the scarplet template on profiles at 2–20 m, which is what the lane actually asks for.
+5. **Fill the 10 m-DEM chi coverage gap** (25 of 36 blocks succeeded) and re-check whether the
+   tectonic-geomorphology term changes field quality.
