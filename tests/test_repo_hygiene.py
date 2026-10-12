@@ -70,13 +70,25 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         hits = [m.group(1) for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html)]
         for href in hits:
             rel = href.split("?")[0]
-            k66 = rel.split("/")[-1].startswith("gems66-k66-kanchor-consensus-")
+            # session-66 pass 3: the k66 family allowlist is read from its own run card, so a
+            # withdrawn file (the k66 consensus candidate) stops being linkable automatically.
+            import json as _json
+            _card = _json.loads((ROOT / "registry66" / "run-card-session66.json").read_text())
+            _r = _card["raster"]
+            k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
+            k66 = rel.split("/")[-1] in k66_names
             assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
-            assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
-            assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
-            assert "0.9992" in html, f"{f.name} does not state the measured raw overlap"
+            links_h67 = any("gems66-h67" in h for h in hits)
+            links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
+            if links_h67:
+                assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
+                assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
+                assert "0.9992" in html, f"{f.name} does not state the measured raw overlap"
+            if links_k66:
+                assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
+                assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
     assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 

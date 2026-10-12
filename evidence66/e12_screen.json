@@ -1,0 +1,184 @@
+{
+ "evidence_class": "HOLDOUT-DTI screening of pre-registered variants (local proxy instrument)",
+ "instrument": {
+  "name": "buffered whole-segment hide-and-recover, lidar-covered (E11 instrument, reused)",
+  "folds": 8,
+  "buffer_px": 3.0,
+  "alpha": 0.2,
+  "beta": 0.8,
+  "kernel": "300 m triangular",
+  "truth_px_total": 39863,
+  "truth": "SGMC > 300 m from catalogue, restricted to lidar-covered cells",
+  "selection_rule": "highest pooled holdout DTI; release only if above the incumbent's pooled value",
+  "multiple_comparisons_note": "five variants were screened and the winner is selected on this instrument, so its value is optimistic by construction; the per-variant CIs are reported unadjusted",
+  "evaluator_version": {
+   "metric.py": "4e247bac0068bf0ecab88433bd9f2d37ddf8afe9b9fe1329a00a2111a11ae5da",
+   "holdout.py": "723d6e7b1cc4af77ba2e7d4b3d6437f13897cdf1c7ea4e6e97e052ab4aae768a"
+  },
+  "stratifier": "L_relief band of the lidar mirror (declared substitution, see E11)",
+  "strata_cuts_m": [
+   24.105649948120117,
+   42.85448455810547
+  ],
+  "truth_share_by_stratum": {
+   "low_relief": 0.3265434111833028,
+   "mid_relief": 0.32872588616009835,
+   "high_relief_range_front": 0.34473070265659883
+  },
+  "area_share_by_stratum": {
+   "0": 0.722707686048232,
+   "1": 0.1479190297710049,
+   "2": 0.1293732841807631
+  },
+  "runtime_s": 53.2
+ },
+ "variants": {
+  "V1_e7_reference": "prior K^0.5 on the consensus support (the E7 design already released)",
+  "V2_lane_composite": "z(K)+z(step_max)+z(coh100)-z(UK) over lidar-covered, >=300 m from catalogue cells",
+  "V3_lane_relief_balanced": "V2 prior, budget split across L_relief strata in proportion to withheld truth mass",
+  "V4_K_relief_balanced": "K prior, same balanced split",
+  "V5_lane_no_range_front": "V2 prior with the high-relief stratum zeroed",
+  "V6_lane_area_balanced": "V2 prior, budget split across L_relief strata by lidar-covered footprint AREA (truth-free; V3 uses the withheld truth's stratum shares, so V3 is truth-share-dependent and V6 is the clean control)"
+ },
+ "results": {
+  "V1_e7_reference": {
+   "n_dots": 26883,
+   "holdout_dti_mean_over_folds": 0.03765169495314369,
+   "ci95_bootstrap_over_folds": [
+    0.030873061098614995,
+    0.04440209117157998
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "per_fold_dti": [
+    0.055018441205396625,
+    0.027889331088199736,
+    0.04074099561647641,
+    0.04575426663949818,
+    0.04110479946377609,
+    0.02778293279822426,
+    0.02281129157690525,
+    0.04011150123667299
+   ]
+  },
+  "V2_lane_composite": {
+   "n_dots": 32000,
+   "holdout_dti_mean_over_folds": 0.044148694995847795,
+   "ci95_bootstrap_over_folds": [
+    0.0236160327312087,
+    0.07032942664013404
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "per_fold_dti": [
+    0.1301919607465828,
+    0.020960103486167794,
+    0.015202459304773276,
+    0.05271952810183251,
+    0.014541501131257052,
+    0.060591876864523234,
+    0.03580250696338167,
+    0.023179623368264044
+   ]
+  },
+  "V3_lane_relief_balanced": {
+   "n_dots": 31999,
+   "holdout_dti_mean_over_folds": 0.06057609508812917,
+   "ci95_bootstrap_over_folds": [
+    0.04187936071501562,
+    0.08671359386594372
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "per_fold_dti": [
+    0.14561857884759316,
+    0.03933983041556213,
+    0.030198667366771986,
+    0.06322061823347544,
+    0.037866066543545095,
+    0.06893129511273854,
+    0.06199553977726036,
+    0.03743816440808661
+   ]
+  },
+  "V4_K_relief_balanced": {
+   "n_dots": 31999,
+   "holdout_dti_mean_over_folds": 0.04880102023310905,
+   "ci95_bootstrap_over_folds": [
+    0.029498375501489225,
+    0.07327236004281738
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "per_fold_dti": [
+    0.1297138835117856,
+    0.03060977227202178,
+    0.03779836673251583,
+    0.05995648580671238,
+    0.01519289020315455,
+    0.05830083263003904,
+    0.024113183584974312,
+    0.03472274712366896
+   ]
+  },
+  "V6_lane_area_balanced": {
+   "n_dots": 32000,
+   "holdout_dti_mean_over_folds": 0.044083777171282874,
+   "ci95_bootstrap_over_folds": [
+    0.023838968901542266,
+    0.07013921856981026
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "per_fold_dti": [
+    0.1291053961464845,
+    0.021724495831000553,
+    0.01577495340723743,
+    0.0517556647639551,
+    0.014986149208757243,
+    0.0612173833364958,
+    0.033992307697512505,
+    0.024113866978819867
+   ]
+  },
+  "V5_lane_no_range_front": {
+   "n_dots": 32000,
+   "holdout_dti_mean_over_folds": 0.020498188845296098,
+   "ci95_bootstrap_over_folds": [
+    0.011797737800635732,
+    0.030807814981637854
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "per_fold_dti": [
+    0.04108063771896924,
+    0.008824586854478319,
+    0.006782483770192833,
+    0.033743361115232136,
+    0.008986866152799828,
+    0.04060169728878547,
+    0.013707022178949459,
+    0.01025885568296149
+   ]
+  }
+ },
+ "incumbent_0.2778_pooled_holdout_dti": 0.048882781608445544,
+ "chance_uniform_pooled_holdout_dti": 0.03416038566821489,
+ "ranking": [
+  "V3_lane_relief_balanced",
+  "V4_K_relief_balanced",
+  "V2_lane_composite",
+  "V6_lane_area_balanced",
+  "V1_e7_reference",
+  "V5_lane_no_range_front"
+ ],
+ "leakage_excluded": [
+  "V3_lane_relief_balanced"
+ ],
+ "selection_amendment": "declared before release: variants whose budget shares come from the withheld truth's stratum masses (V3) are leakage against this instrument and are excluded from selection; V3: 0.06058 (leakage), its truth-free twin V6: 0.04408",
+ "winner": "V4_K_relief_balanced",
+ "verdict": "CLEAN-WINNER-DOES-NOT-BEAT-INCUMBENT",
+ "release_design_file": "evidence66/dots_release.npy",
+ "labels": "all values are HOLDOUT-DTI on a local proxy instrument with evaluator hashes, withheld counts and 95% bootstrap CIs over folds; no ORGANIZER-CONFIRMED score exists for any variant",
+ "runtime_s": 53.2
+}

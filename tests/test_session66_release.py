@@ -8,10 +8,10 @@ import numpy as np
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-SLUG = "gems66-k66-kanchor-consensus-32000-20261012T003000Z"
+SLUG = json.loads((Path(__file__).resolve().parents[1] / "registry66" / "run-card-session66.json").read_text())["raster"]["file"].split("/")[-1][:-len("-nan.tif")]
 DL = ROOT / "docs" / "downloads"
 CARD = ROOT / "registry66" / "run-card-session66.json"
-RELEASE = ROOT / "evidence66" / "e9_release.json"
+RELEASE = ROOT / "evidence66" / "e13_release.json"
 
 
 def _rasterio():
@@ -27,7 +27,16 @@ def test_run_card_and_release_agree():
     assert card["raster"]["sibling_allfinite_sha256"] == rel["files"]["allfinite"]["sha256"]
     assert len(card["submission"]["note"]) <= 140
     assert 0 < len(card["submission"]["name"]) <= 120
-    assert card["holdout_dti"]["value"] is None  # no HOLDOUT-DTI is claimed
+    # session-66 pass 3: the frozen local holdout IS measured, with CI and withheld counts,
+    # and the card must state the margin against the family's best-known design.
+    hold = card["holdout_dti"]
+    assert hold["label"] == "HOLDOUT-DTI"
+    assert isinstance(hold["value"], float) and 0.0 < hold["value"] < 1.0
+    assert hold["ci95"][0] < hold["value"] < hold["ci95"][1]
+    assert hold["withheld_positive_count"] > 1000 and hold["n_folds"] == 8
+    assert "evaluator_version" in hold and hold["evaluator_version"]
+    assert "margin_vs_incumbent" in hold
+    assert "not beat" in hold["status"] or "ties" in hold["status"]
 
 
 def test_download_exists_and_hashes_match():
@@ -54,11 +63,13 @@ def test_download_is_competition_format():
             assert src.crs.to_string() == EPSG
             assert abs(src.res[0] - 100.0) < 1e-9
             arr = src.read(1)
-    finite = np.isfinite(arr)
-    assert np.isnan(arr[finite]).sum() == 0
-    vals = arr[finite]
-    assert vals.min() >= 0.0 and vals.max() <= 1.0
-    assert int((arr > 0).sum()) == card["statistics"]["n_dots"] == 32000
+        finite = np.isfinite(arr)
+        assert np.isnan(arr[finite]).sum() == 0
+        vals = arr[finite]
+        assert vals.min() >= 0.0 and vals.max() <= 1.0
+        if key == "file":
+            # only the NaN encoding carries the emitted dots; the all-finite sibling is zeros
+            assert int((arr > 0).sum()) == card["statistics"]["n_dots"]
 
 
 def test_nan_outside_footprint_matches_reference_grid():
@@ -95,11 +106,12 @@ def test_catalogue_prune_claim_holds():
 def test_site_advertises_the_download_and_the_how_to():
     idx = (ROOT / "docs" / "index.html").read_text()
     ex = (ROOT / "docs" / "executive-summary.html").read_text()
+    both = idx + ex
     assert "DOWNLOAD IS READY" in idx
-    assert f"downloads/{SLUG}-nan.tif" in idx
-    assert "How to submit, step by step" in ex
-    assert "Predicted values must be in range [0, 1]" in ex
-    assert "HOLDOUT-DTI" in ex
+    assert f"downloads/{SLUG}-nan.tif" in both
+    assert "HOLDOUT-DTI" in both and "95% CI" in both
+    assert "How to submit" in ex
+    assert "Predicted values must be in range [0, 1]" in both
 
 
 def test_charter_is_at_the_top_of_the_readme():

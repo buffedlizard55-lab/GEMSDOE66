@@ -1,0 +1,347 @@
+{
+ "evidence_class": "HOLDOUT-DTI (local proxy instrument; NOT an organizer score)",
+ "instrument": {
+  "name": "buffered whole-segment hide-and-recover, lidar-covered",
+  "folds": 8,
+  "fold_unit": "connected component of the truth mask",
+  "buffer_px": 3.0,
+  "alpha": 0.2,
+  "beta": 0.8,
+  "kernel": "300 m triangular",
+  "truth": "SGMC fault pixels > 300 m (3 px) from the given catalogue, restricted to lidar-covered cells",
+  "truth_px_total_all_folds": 39863,
+  "scoring_domain": "lidar-covered footprint cells only (prediction zeroed outside)",
+  "declared_substitution": "the frozen relief-stratified version strata by T_relief_local from topo_10m_derived_100m_u8.tif, whose mirror has no sha256/size pin and is absent; this run strata by the lidar mirror's own L_relief band",
+  "stratifier_cuts_m": [
+   24.105649948120117,
+   42.85448455810547
+  ],
+  "evaluator_version": {
+   "metric.py": "4e247bac0068bf0ecab88433bd9f2d37ddf8afe9b9fe1329a00a2111a11ae5da",
+   "holdout.py": "723d6e7b1cc4af77ba2e7d4b3d6437f13897cdf1c7ea4e6e97e052ab4aae768a"
+  }
+ },
+ "fields": {
+  "candidate": {
+   "n_dots": 26883
+  },
+  "incumbent_0.2778": {
+   "n_dots": 28775
+  },
+  "chance_uniform": {
+   "n_dots": 32000
+  }
+ },
+ "instrument_N_pooled": {
+  "candidate": {
+   "holdout_dti_mean_over_folds": 0.03765169495314369,
+   "ci95_bootstrap_over_folds": [
+    0.030873061098614995,
+    0.04440209117157998
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "withheld_positives_per_fold": [
+    4988,
+    5077,
+    4997,
+    4879,
+    4801,
+    5027,
+    5037,
+    5057
+   ],
+   "per_fold_dti": [
+    0.055018441205396625,
+    0.027889331088199736,
+    0.04074099561647641,
+    0.04575426663949818,
+    0.04110479946377609,
+    0.02778293279822426,
+    0.02281129157690525,
+    0.04011150123667299
+   ]
+  },
+  "incumbent_0.2778": {
+   "holdout_dti_mean_over_folds": 0.048882781608445544,
+   "ci95_bootstrap_over_folds": [
+    0.04425495855700859,
+    0.054151814224789284
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "withheld_positives_per_fold": [
+    4988,
+    5077,
+    4997,
+    4879,
+    4801,
+    5027,
+    5037,
+    5057
+   ],
+   "per_fold_dti": [
+    0.05044537422927893,
+    0.048433386508080815,
+    0.06546675773208115,
+    0.050457770849828894,
+    0.05023719913021129,
+    0.040638705792577175,
+    0.03933736587851612,
+    0.04604569274698996
+   ]
+  },
+  "chance_uniform": {
+   "holdout_dti_mean_over_folds": 0.03416038566821489,
+   "ci95_bootstrap_over_folds": [
+    0.03266691324848589,
+    0.035606008173716716
+   ],
+   "n_folds": 8,
+   "withheld_positives_total": 39863,
+   "withheld_positives_per_fold": [
+    4988,
+    5077,
+    4997,
+    4879,
+    4801,
+    5027,
+    5037,
+    5057
+   ],
+   "per_fold_dti": [
+    0.0349728492072449,
+    0.037627452746519664,
+    0.0306243516826325,
+    0.031443028389139725,
+    0.03383606574407246,
+    0.03562956552655363,
+    0.03568875786960203,
+    0.03346101417995418
+   ]
+  }
+ },
+ "instrument_N_stratified": {
+  "low_relief": {
+   "n_truth": 13445,
+   "weight_lidar_footprint": 0.722470894552775,
+   "fields": {
+    "candidate": {
+     "holdout_dti_mean_over_folds": 0.028698142836454752,
+     "ci95_bootstrap_over_folds": [
+      0.022842119813347165,
+      0.03454335058043122
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13445,
+     "per_fold_dti": [
+      0.021992462353138825,
+      0.034866865077040066,
+      0.040489920921408615,
+      0.021974619045738202,
+      0.03416306922908052,
+      0.03745044781740722,
+      0.015536456917075146,
+      0.023111301330749408
+     ]
+    },
+    "incumbent_0.2778": {
+     "holdout_dti_mean_over_folds": 0.034892371008205234,
+     "ci95_bootstrap_over_folds": [
+      0.03032733978756679,
+      0.03943647825527083
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13445,
+     "per_fold_dti": [
+      0.023829921849085414,
+      0.04208896839518026,
+      0.04212731095862102,
+      0.030753654066801858,
+      0.03427665003079013,
+      0.043221699686237826,
+      0.03198613277020591,
+      0.03085463030871949
+     ]
+    },
+    "chance_uniform": {
+     "holdout_dti_mean_over_folds": 0.015201594681597704,
+     "ci95_bootstrap_over_folds": [
+      0.014151322689466894,
+      0.01615273818767493
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13445,
+     "per_fold_dti": [
+      0.012227392352666922,
+      0.014990548503527448,
+      0.016156173995498752,
+      0.013624242783652511,
+      0.016722822946860037,
+      0.015042831689021104,
+      0.016767455704861007,
+      0.016081289476693864
+     ]
+    }
+   }
+  },
+  "mid_relief": {
+   "n_truth": 13178,
+   "weight_lidar_footprint": 0.14787056485366393,
+   "fields": {
+    "candidate": {
+     "holdout_dti_mean_over_folds": 0.016568621611251413,
+     "ci95_bootstrap_over_folds": [
+      0.014196203188810187,
+      0.019743830741690182
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13178,
+     "per_fold_dti": [
+      0.011960966998448999,
+      0.01597279368325763,
+      0.014353204486241078,
+      0.017531130092419422,
+      0.017670445719227046,
+      0.02628389477311895,
+      0.013085957487790527,
+      0.015690579649507642
+     ]
+    },
+    "incumbent_0.2778": {
+     "holdout_dti_mean_over_folds": 0.023284823271504596,
+     "ci95_bootstrap_over_folds": [
+      0.018571217398090995,
+      0.02916226999463451
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13178,
+     "per_fold_dti": [
+      0.0181847053601782,
+      0.019687454874287618,
+      0.018004485073960533,
+      0.030256690545377073,
+      0.025667571026216068,
+      0.04066498895806737,
+      0.016295733769031852,
+      0.017516956564918064
+     ]
+    },
+    "chance_uniform": {
+     "holdout_dti_mean_over_folds": 0.014925434247315638,
+     "ci95_bootstrap_over_folds": [
+      0.014218755013904051,
+      0.015592287587265347
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13178,
+     "per_fold_dti": [
+      0.0139354880917105,
+      0.015784262195146715,
+      0.014876304634917075,
+      0.01608374746267071,
+      0.016109264873640155,
+      0.015363806176866848,
+      0.013840336766865498,
+      0.013410263776707591
+     ]
+    }
+   }
+  },
+  "high_relief (range front)": {
+   "n_truth": 13218,
+   "weight_lidar_footprint": 0.12933089568258502,
+   "fields": {
+    "candidate": {
+     "holdout_dti_mean_over_folds": 0.007328039452322744,
+     "ci95_bootstrap_over_folds": [
+      0.005639776247110458,
+      0.009015639316109618
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13218,
+     "per_fold_dti": [
+      0.007677148452564939,
+      0.011885717134050474,
+      0.008820962841855212,
+      0.008007403185026716,
+      0.007890338214500189,
+      0.003907564775386426,
+      0.006810489766799823,
+      0.0036246912483981707
+     ]
+    },
+    "incumbent_0.2778": {
+     "holdout_dti_mean_over_folds": 0.009197997187344518,
+     "ci95_bootstrap_over_folds": [
+      0.007026297078877786,
+      0.012204640980398715
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13218,
+     "per_fold_dti": [
+      0.007085832299410584,
+      0.018827269990740112,
+      0.009036249707110876,
+      0.009690611652578245,
+      0.005572962441038282,
+      0.006515571459877606,
+      0.009259107585994849,
+      0.007596372362005591
+     ]
+    },
+    "chance_uniform": {
+     "holdout_dti_mean_over_folds": 0.015919558437846024,
+     "ci95_bootstrap_over_folds": [
+      0.015120779104650262,
+      0.01666365820890418
+     ],
+     "n_folds": 8,
+     "withheld_positives_total": 13218,
+     "per_fold_dti": [
+      0.016925028441692247,
+      0.013591080338089295,
+      0.016109598995642488,
+      0.015014107717047157,
+      0.016521549901743926,
+      0.017632595169951835,
+      0.01586241859505884,
+      0.015700088343542397
+     ]
+    }
+   }
+  }
+ },
+ "differences_and_verdict": {
+  "candidate_minus_incumbent": {
+   "pooled_fold_mean": -0.011231086655301856,
+   "relief_weighted": -0.005710121410240267,
+   "per_stratum": {
+    "low_relief": -0.006194228171750481,
+    "mid_relief": -0.0067162016602531835,
+    "high_relief (range front)": -0.0018699577350217737
+   },
+   "range_front_only": -0.0018699577350217737
+  },
+  "candidate_minus_chance_uniform": {
+   "pooled_fold_mean": 0.0034913092849288008,
+   "relief_weighted": 0.008882693416808106,
+   "per_stratum": {
+    "low_relief": 0.013496548154857048,
+    "mid_relief": 0.0016431873639357747,
+    "high_relief (range front)": -0.00859151898552328
+   },
+   "range_front_only": -0.00859151898552328
+  },
+  "verdict": {
+   "gate_question": "does the candidate's HOLDOUT-DTI gain exist and survive outside range fronts?",
+   "pooled_gain_vs_incumbent": -0.011231086655301856,
+   "relief_weighted_gain_vs_incumbent": -0.005710121410240267,
+   "range_front_only_gain_vs_incumbent": -0.0018699577350217737,
+   "reading": "POSITIVE if the relief-weighted and the pooled gains both exceed zero and the range-front-only gain is not the whole of it; NEGATIVE if a gain exists only on range fronts; INCONCLUSIVE if the signs disagree.  The CIs printed above are over folds and are the only uncertainty statement made here.",
+   "verdict": "NEGATIVE-NO-POOLED-GAIN"
+  }
+ },
+ "labels": "every HOLDOUT-DTI here is a local proxy measurement with an evaluator version, withheld-positive counts and 95% bootstrap CIs over 8 folds; no ORGANIZER-CONFIRMED score exists for any field",
+ "runtime_s": 185.2
+}

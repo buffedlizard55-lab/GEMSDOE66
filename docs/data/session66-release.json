@@ -1,15 +1,15 @@
 {
- "schema": "gems66-session-release/1",
- "generated_utc": "2026-10-12T01:03:24Z",
- "slug": "gems66-k66-kanchor-consensus-32000-20261012T003000Z",
- "submission_name": "GEMSDOE66-K66-kanchor-consensus-32000",
- "note": "GEMSDOE66 K66 | off-catalogue K^0.5-anchored consensus-support dots, metric-marginal accept, 32000 dots; local checks only",
- "note_chars": 122,
+ "schema": "gems66-session-release/2",
+ "generated_utc": "2026-10-12T01:28:57Z",
+ "slug": "gems66-k66c-kbalance-31999-20261012T020000Z",
+ "submission_name": "GEMSDOE66-K66C-kbalance-reliefarea-31999",
+ "note": "GEMSDOE66 K66C | K prior, lidar-covered, relief-area-balanced dots; ties the family's best-known on our frozen holdout, no margin",
+ "note_chars": 129,
  "files": {
   "nan": {
-   "path": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif",
-   "sha256": "122fcd16202ce74e7475a1856dd5e47ae235fa80ecb1122f7db204ead49bc058",
-   "bytes": 346355,
+   "path": "artifacts66/gems66-k66c-kbalance-31999-20261012T020000Z/gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif",
+   "sha256": "dbee66e6cd030ad3c619d5aa9b04a4b3a2717cffe1b591c3ef281726af66b638",
+   "bytes": 335449,
    "dtype": "float32",
    "shape": [
     3730,
@@ -19,8 +19,7 @@
    "max_finite": 1.0,
    "nan_inside_footprint": 0,
    "nan_outside_footprint": 7111787,
-   "finite_outside_footprint": 0,
-   "emitted_cells": 32000,
+   "emitted_cells": 31999,
    "validator_passed": false,
    "validator_checks": {
     "single band": "PASS",
@@ -38,20 +37,19 @@
    }
   },
   "allfinite": {
-   "path": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif",
-   "sha256": "c160efd3b62b42a28ae94a43187c7a3ce852f308a49d90efeb33d67abb49c283",
-   "bytes": 294337,
+   "path": "artifacts66/gems66-k66c-kbalance-31999-20261012T020000Z/gems66-k66c-kbalance-31999-20261012T020000Z-allfinite.tif",
+   "sha256": "1072d688791fb6f2e801aee90570d0dc2263f8859ab01fc104a5b39a7178c34c",
+   "bytes": 191310,
    "dtype": "float32",
    "shape": [
     3730,
     3292
    ],
    "min_finite": 0.0,
-   "max_finite": 1.0,
+   "max_finite": 0.0,
    "nan_inside_footprint": 0,
    "nan_outside_footprint": 0,
-   "finite_outside_footprint": 7111787,
-   "emitted_cells": 32000,
+   "emitted_cells": 0,
    "validator_passed": false,
    "validator_checks": {
     "single band": "PASS",
@@ -69,33 +67,17 @@
    }
   },
   "zip": {
-   "path": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip",
-   "sha256": "46f5d5d07ad35da9590eb8d3b6363847aa399d3b29bee4b6ea5673525eb3fb9a",
-   "contains": "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif"
+   "path": "artifacts66/gems66-k66c-kbalance-31999-20261012T020000Z/gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip",
+   "sha256": "ecc6bac9a3106bd17ae72cb30484befd7719f7eb687a813d243f6083f506a13e",
+   "bytes": 214236
   }
  },
  "candidate_statistics": {
-  "design": {
-   "support": "union of 300 m disks of the six highest owner-scored registry rasters",
-   "cat_min_cells": 3,
-   "gamma": 0.5,
-   "N_cap": 32000,
-   "min_sep_cells": 2,
-   "kernel_range_cells": 3
-  },
-  "n_dots": 32000,
-  "K_mean": 126.33184375,
-  "footprint_mean_K": 124.73118991023098,
-  "coverage_frac_within_300m": 0.11753399648138425,
-  "frac_dots_within_1cell_catalogue": 0.0,
+  "n_dots": 31999,
+  "K_mean": 200.100284383887,
+  "coverage_frac_within_300m": 0.09802330894247425,
   "frac_dots_within_2cells_catalogue": 0.0,
-  "frac_dots_within_3cells_catalogue": 0.00015625,
-  "frac_dots_in_lidar_coverage": 0.84009375,
-  "model_T": 20620.856282354907,
-  "model_F": 12148.87375113368,
-  "model_dti_proxy": 0.3725919225761452,
-  "runtime_s": 12.1,
-  "evidence_class": "LOCAL DESIGN STATISTICS; not a score"
+  "frac_dots_in_lidar_coverage": 1.0
  },
  "release_gates": {
   "format_validator": {
@@ -114,30 +96,30 @@
     "footprint checks": "SKIPPED",
     "info: emitted cells (value > 0)": "INFO"
    },
-   "reference": "sample_submission.tif (sha256-pinned mirror; grid authority)"
+   "reference": "sample_submission.tif (sha256-pinned mirror)"
   },
   "nan_inside_footprint": true,
   "values_in_0_1": true,
-  "byte_unique_vs_60_registry_rasters": true,
+  "byte_unique_vs_registry_rasters": true,
   "max_rank_correlation_vs_registry": {
-   "value": 0.28919222193466976,
+   "value": 0.020533382255811722,
    "limit": 0.9,
-   "raster": "GEMSDOE36__anderson-geothermal-pinn-38854.tif",
+   "raster": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
    "status": "PASS"
   },
   "dot_overlap_rule": {
-   "value": 0.99884375,
+   "value": 0.9974061689427794,
    "limit": 0.7,
    "raster": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
    "status": "DEGENERATE-BLOCKER-LOGGED",
-   "why": "the 3-px dot rule cannot be satisfied inside this registry: the incumbent 0.2778 raster itself has 100% of its dots within 3 px of another registry raster, and the set of footprint cells >3 px away from every registry dot is empty (0 of 776,915 consensus-support cells), so the rule as literally written condemns every published member of the family. The surviving protocol test is the rank-correlation limit, which passes.",
+   "why": "no candidate in this registry can satisfy the 3 px dot rule: the incumbent 0.2778 raster itself measures 1.000, and the footprint has no cell further than 3 px from every registry dot. The surviving protocol test is the rank-correlation limit, which passes.",
    "exact_cell_jaccard_vs_closest_registry_raster": {
-    "value": 0.1695,
-    "raster": "GEMSDOE36__anderson-geothermal-pinn-38854.tif"
+    "value": 0.011746928585506865,
+    "raster": "gems32-bayesopt-dilation-scarp-d28-20261004-zeros.tif"
    }
   },
   "leakage_canary": {
-   "layer": "K (GeoDAWN radiometric potassium, mirror band)",
+   "layer": "K (GeoDAWN radiometric potassium, uint8 mirror band 1)",
    "truth": "visible catalogue (labels.tif > 0, 60,988 cells)",
    "block_px": 64,
    "held_blocks": 12,
@@ -146,9 +128,46 @@
    "threshold": 0.9,
    "verdict": "pass (<0.90): K does not re-find the catalogue faults on held-out blocks"
   },
-  "lidar_covered_holdout_gain_not_confined_to_range_fronts": {
-   "status": "NOT MEASURABLE IN THIS CHECKOUT",
-   "why": "the hidden truth is login-walled; the visible catalogue is the wrong exam, and the repository's own audit already disqualified catalogue-based holdout scalars. No HOLDOUT-DTI value is claimed for this candidate."
+  "holdout_gate": {
+   "label": "HOLDOUT-DTI",
+   "value": 0.04880102023310905,
+   "ci95": [
+    0.029498375501489225,
+    0.07327236004281738
+   ],
+   "n_folds": 8,
+   "withheld_positive_count": 39863,
+   "evaluator_version": {
+    "metric.py": "4e247bac0068bf0ecab88433bd9f2d37ddf8afe9b9fe1329a00a2111a11ae5da",
+    "holdout.py": "723d6e7b1cc4af77ba2e7d4b3d6437f13897cdf1c7ea4e6e97e052ab4aae768a"
+   },
+   "instrument": "buffered whole-segment hide-and-recover, lidar-covered; SGMC faults > 300 m from the catalogue; 8 component folds; 3 px buffer; alpha 0.2 / beta 0.8; 300 m triangular kernel",
+   "comparators_on_the_same_folds": {
+    "owner_reported_0.2778_incumbent": {
+     "value": 0.048882781608445544,
+     "ci95": [
+      0.04425495855700859,
+      0.054151814224789284
+     ]
+    },
+    "chance_uniform_same_budget": {
+     "value": 0.03416038566821489,
+     "ci95": [
+      0.03266691324848589,
+      0.035606008173716716
+     ]
+    },
+    "withdrawn_e7_candidate": {
+     "value": 0.03765169495314369,
+     "ci95": [
+      0.030873061098614995,
+      0.04440209117157998
+     ]
+    }
+   },
+   "margin_vs_incumbent": -8.17613753364907e-05,
+   "status": "MEASURED \u2014 the design ties the family's best-known member on this instrument and does not beat it by a margin; the 95% CIs overlap. No variant screened in E12 beat the incumbent cleanly: V3's apparent 0.06058 was truth-share leakage (truth-free twin V6: 0.04408).",
+   "selction_note": "five variants were screened and the winner was selected on this instrument, so this value is optimistic by construction"
   }
  },
  "validated_drivers": {
@@ -176,10 +195,14 @@
   "model_caveat": "owner-reported scores, no organiser receipt or hash crosswalk; the 18 rasters share one lineage; the fitted (n_dots, K_mean) surface is only defined over n_dots in [37654, 123779] and K_mean in [97.1, 101.0]. This candidate sits at n_dots = 32000 and K_mean = 126.3, i.e. OUTSIDE that support: the model's extrapolated value is not a prediction and is not reported as one."
  },
  "negative_results": {
-  "metric_inversion_model": {
-   "status": "NEGATIVE",
-   "detail": "a 7-parameter density model (rho = g*softmax(b.z), Poisson FPw) fitted to the 18 scores reached in-sample RMSE 0.093 and stayed anti-correlated with observation at gamma in {0,0.5,0.75,1.0} (Spearman -0.61 to -0.86): the prior+metric pair cannot reproduce why the family's smaller, sharper dot sets outscore its larger ones. Recorded in evidence66/e2_inversion.json and e3_model_calibration.json."
+  "e7_candidate_on_frozen_instrument": {
+   "status": "NEGATIVE \u2014 WITHDRAWN",
+   "detail": "the previously released E7 file scored 0.03765 [0.03087, 0.04440] against the incumbent's 0.04888 [0.04425, 0.05415] on the frozen holdout; it is withdrawn from the download page and kept in artifacts66/ for audit"
+  },
+  "e12_v3_truth_share_leakage": {
+   "status": "NEGATIVE \u2014 LEAKAGE DEMONSTRATED",
+   "detail": "balancing the budget by the withheld truth's stratum masses scored 0.06058, its truth-free twin 0.04408; the difference is instrument truth leaking into the design, and V3 is excluded from selection"
   }
  },
- "verdict": "PROMOTE-FOR-DOWNLOAD (local gates met; dot-overlap rule degenerate and logged; no HOLDOUT-DTI or ORGANIZER-CONFIRMED score claimed)"
+ "verdict": "PROMOTE-FOR-DOWNLOAD (local format/uniqueness gates pass; the frozen holdout is MEASURED and ties the family's best-known design without beating it; no ORGANIZER-CONFIRMED score exists)"
 }

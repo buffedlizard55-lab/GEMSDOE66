@@ -86,12 +86,13 @@ def parallel_block() -> str:
     return """
 <div class="note">
 <h3>DOWNLOAD IS READY &mdash; the parallel session's candidate (listed, not hidden)</h3>
-<p>A second session (branch <code>arena/64fe3477-gemsdoe66</code>, PRs #17/#18) merged its own
-candidate to <code>main</code> before this one. It stays downloadable here with its own register:
+<p>A second session (branch <code>arena/64fe3477-gemsdoe66</code>, PRs #17/#18/#21) merged its own
+candidate to <code>main</code>. It stays downloadable here with its own register:
 lane <b>%s</b>, verdict <code>%s</code>, %s emitted cells, and its own run card at
 <code>registry66/run-card-session66.json</code>. Its holdout block is labelled <code>%s</code> with
-value <b>%s</b> and status &ldquo;%s&rdquo; &mdash; i.e. that session also claims no measured holdout
-score.</p>
+value <b>%s</b> and status &ldquo;%s&rdquo;. That session's first file (the k66 K^0.5 consensus
+candidate) scored below the family incumbent on the same frozen holdout and was <b>withdrawn</b>;
+the file listed here is its replacement, which ties the incumbent and does not beat it.</p>
 <p>%s</p>
 <table><tr><th>file</th><th>sha256</th></tr>%s</table>
 <p class="small">Two candidates from two sessions are offered. Not one number here is

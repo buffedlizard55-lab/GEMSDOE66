@@ -1,0 +1,20 @@
+{
+  "file": "gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif",
+  "sha256": "dbee66e6cd030ad3c619d5aa9b04a4b3a2717cffe1b591c3ef281726af66b638",
+  "shape_hw": [
+    3730,
+    3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5167373,
+  "emitted_cells_gt0": 31999,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 7111787,
+  "name": "GEMSDOE66-K66C-kbalance-reliefarea-31999",
+  "note": "GEMSDOE66 K66C | K prior, lidar-covered, relief-area-balanced dots; ties the family's best-known on our frozen holdout, no margin",
+  "note_chars": 129,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+}

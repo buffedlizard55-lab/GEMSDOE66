@@ -8,12 +8,16 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 CARD_PATH = DOCS / "data" / "run-card.json"
 
-K66_FILES = sorted([
-    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif",
-    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif",
-    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif.receipt.json",
-    "gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip",
-])
+def _k66_files():
+    """Whatever the session-66 run card clears, by its own filenames."""
+    card = json.loads((Path(__file__).resolve().parents[1] / "registry66"
+                       / "run-card-session66.json").read_text())
+    r = card["raster"]
+    return sorted({Path(r["file"]).name, Path(r["sibling_allfinite"]).name,
+                   Path(r["zip"]).name, Path(r["file"]).name + ".receipt.json"})
+
+
+K66_FILES = _k66_files()
 
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 # The only files this project may offer: the two disclosed H67-1 siblings and their receipts.
@@ -42,7 +46,12 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     with zipfile.ZipFile(zip_path) as archive:
         assert len(archive.namelist()) == 1
         assert archive.testzip() is None
-    assert sorted(path.name for path in (DOCS / "downloads").iterdir()) == sorted(PUBLISHED + K66_FILES)
+    # pass 3 policy: the downloads folder may hold the current candidates (H67 + K66 v2) but
+    # never a withdrawn historical artifact.
+    historical_names = {item["file"] for item in historical}
+    names = {path.name for path in (DOCS / "downloads").iterdir()}
+    assert not (names & historical_names)
+    assert names <= set(PUBLISHED + K66_FILES), names - set(PUBLISHED + K66_FILES)
 
 
 def test_current_run_card_cannot_clear_a_historical_artifact():
