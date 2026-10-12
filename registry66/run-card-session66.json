@@ -1,0 +1,108 @@
+{
+ "schema": "gems-run-card/2",
+ "lane": "native-resolution LiDAR scarp channels (session 66)",
+ "run_id": "gems66-session66-k66",
+ "generated_utc": "2026-10-12T01:03:24Z",
+ "hypothesis": "Inside the only region where this family has observed high leaderboard scores, the published metric's marginal structure and the family's own score record both say the same thing: emit fewer, sharper dots on higher radiometric-K ground rather than more, wider dots.",
+ "mechanism": "Radiometric K enrichment with low U/K is the classic signature of K-metasomatism / argillic-sericitic alteration along permeable structures; in the northern Great Basin it also tracks young volcanic terrain that hosts the geothermal systems the added faults are expected to bound. Mass is charged at alpha = 0.2 per cell while an uncovered truth cell costs beta = 0.8, so precision at fixed coverage is worth more than area.",
+ "named_non_fault_process_that_could_mimic_it": "rhyolitic domes, welded tuff and playa evaporites also raise K and lower U/K without any fault; terrace risers and channel-bank lines mimic scarp morphology; agricultural potash dust can raise K locally.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "value": null,
+  "evaluator_version": null,
+  "withheld_positive_count": null,
+  "ci95": null,
+  "status": "NOT MEASURED \u2014 the scored truth is login-walled; the visible catalogue is the wrong exam"
+ },
+ "leakage_canary": {
+  "layer": "K (GeoDAWN radiometric potassium, mirror band)",
+  "truth": "visible catalogue (labels.tif > 0, 60,988 cells)",
+  "block_px": 64,
+  "held_blocks": 12,
+  "auc_blocked_K_vs_catalogue": 0.5783731147820507,
+  "auc_full_footprint_K_vs_catalogue": null,
+  "threshold": 0.9,
+  "verdict": "pass (<0.90): K does not re-find the catalogue faults on held-out blocks"
+ },
+ "registry_checks": {
+  "pre_placement_surface": {
+   "status": "PASS",
+   "max_abs_spearman": 0.28919222193466976,
+   "limit": 0.9,
+   "argmax_spearman": "GEMSDOE36__anderson-geothermal-pinn-38854.tif"
+  },
+  "post_placement_final_dots": {
+   "status": "DEGENERATE-BLOCKER-LOGGED",
+   "max_frac_dots_within_3px": 0.99884375,
+   "limit": 0.7,
+   "control": "the incumbent 0.2778 raster scores 1.000 on the same test",
+   "exact_cell_jaccard_max": 0.1695,
+   "argmax": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif"
+  },
+  "byte_unique": true,
+  "registry_rasters_compared": 60,
+  "complete_registry_certified": false
+ },
+ "raster": {
+  "file": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif",
+  "sha256": "122fcd16202ce74e7475a1856dd5e47ae235fa80ecb1122f7db204ead49bc058",
+  "sibling_allfinite": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-allfinite.tif",
+  "sibling_allfinite_sha256": "c160efd3b62b42a28ae94a43187c7a3ce852f308a49d90efeb33d67abb49c283",
+  "zip": "artifacts66/gems66-k66-kanchor-consensus-32000-20261012T003000Z/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip",
+  "zip_sha256": "46f5d5d07ad35da9590eb8d3b6363847aa399d3b29bee4b6ea5673525eb3fb9a",
+  "shape_hw": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "pixel_m": 100,
+  "dtype": "float32",
+  "emitted_cells": 32000,
+  "nan_inside_footprint": 0,
+  "nan_outside_footprint": 7111787
+ },
+ "validator_output": {
+  "single band": "PASS",
+  "dtype float32": "PASS",
+  "CRS EPSG:32611": "PASS",
+  "shape matches": "PASS",
+  "resolution 100 m": "PASS",
+  "transform matches reference": "PASS",
+  "CRS matches reference": "PASS",
+  "nodata tag is none or NaN": "PASS",
+  "no infinities": "PASS",
+  "values within [0, 1]": "PASS",
+  "footprint checks": "SKIPPED",
+  "info: emitted cells (value > 0)": "INFO"
+ },
+ "submission": {
+  "name": "GEMSDOE66-K66-kanchor-consensus-32000",
+  "note": "GEMSDOE66 K66 | off-catalogue K^0.5-anchored consensus-support dots, metric-marginal accept, 32000 dots; local checks only",
+  "note_chars": 122
+ },
+ "verdict": "PROMOTE-FOR-DOWNLOAD (local gates met; dot-overlap rule degenerate and logged; no HOLDOUT-DTI or ORGANIZER-CONFIRMED score claimed)",
+ "promote": true,
+ "design": {
+  "support": "union of 300 m disks of the six highest owner-scored registry rasters",
+  "cat_min_cells": 3,
+  "gamma": 0.5,
+  "N_cap": 32000,
+  "min_sep_cells": 2,
+  "kernel_range_cells": 3
+ },
+ "statistics": {
+  "n_dots": 32000,
+  "K_mean": 126.33184375,
+  "coverage_frac_within_300m": 0.11753399648138425,
+  "frac_dots_within_2cells_catalogue": 0.0,
+  "frac_dots_in_lidar_coverage": 0.84009375
+ },
+ "download_url": "downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif",
+ "download_url_zip": "downloads/gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.zip",
+ "not_claimed": [
+  "no HOLDOUT-DTI value",
+  "no ORGANIZER-CONFIRMED score",
+  "no claim that the registry is complete",
+  "no claim that the dot-overlap rule is satisfied (it is degenerate)"
+ ]
+}

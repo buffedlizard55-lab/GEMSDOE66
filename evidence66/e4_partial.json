@@ -1,0 +1,13 @@
+{
+ "partial_rho_K_given_n": 0.8513931888544891,
+ "partial_rho_n_given_K": -0.5727554179566564,
+ "partial_rho_n_given_K_cov": -0.10216718266253869,
+ "partial_rho_K_given_n_cov": 0.8823529411764706,
+ "ols_coefs": {
+  "n_dots": -6.09962124189358e-07,
+  "K_mean": 0.009647227381083498,
+  "intercept": -0.6739988155496192
+ },
+ "ols_in_sample_rmse": 0.0019617895669166337,
+ "n_rasters": 18
+}
