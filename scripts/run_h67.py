@@ -1,25 +1,24 @@
 #!/usr/bin/env python3
-"""H67 lane runner: native-resolution LiDAR scarp channels (this session).
+"""H67-1 runner - build the lane field, emit the candidate, gate it, write the artifacts.
 
-Experiments (budget 3, per the parallel-run protocol)
------------------------------------------------------
-E1  ``canary``   leakage canary: per-fold AUC of every candidate surface (and of the raw
-                 physical channels) on the 8-fold spatial hide-and-recover holdout.
-                 AUC > 0.90 on any single feature means leakage until proven otherwise.
-E2  ``emit N``   emit candidate N at the incumbent's budget (37,654 dots, min sep 2.82 px,
-                 200 m catalogue buffer, scatter-cover blur 2.8 px), score pooled DTI on the
-                 buffered 8-fold holdout against the incumbent (GEMSDOE32 h33-2-b2, 0.2778
-                 per the owner's site), relief-stratify the gain, ablate the cultural mask,
-                 and run the duplicate/lane-drift gate (pre-placement surface + final dots).
-E3  ``finalize N``  build the submission TIFF (nan + zeros), validate, uniqueness on the
-                 final bytes, evidence + run card.
+Steps (all logged to evidence/h67_run.json):
 
-All numbers are labelled HOLDOUT-DTI (proxy truth: SGMC off-catalogue faults) unless
-marked otherwise.  Nothing here is ORGANIZER-CONFIRMED.
+ 1. build the pre-registered lane parts (native-resolution scarp channels + scale persistence)
+ 2. build the novelty habitat term from the E1/E1b owner-reported-anchored model
+ 3. leakage canary: AUC of every component *alone* against the SGMC off-catalogue truth
+ 4. compose the field, emit unit-mass dots with greedy minimum separation
+ 5. uniqueness: pre-placement surface + final dots against every registry raster
+ 6. write both format siblings with the shared writer, validate with the shared validator
+ 7. pooled DTI on the blocked LiDAR-covered holdout (negative control, reported not optimised)
+ 8. run card + evidence
+
+Usage:
+    .venv/bin/python scripts/run_h67.py [--dots 40000] [--minsep 3.0] [--dry-run]
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -27,327 +26,414 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+from scipy import ndimage
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
-from gems66.h67_hypotheses import NAMES, build_surfaces, rank01  # noqa: E402
-from gems66.h67_layers import load_layers, emission_domain       # noqa: E402
-from gemsdoe66.emission import emit as emit_field                # noqa: E402
-from gemsdoe66.grid import catalogue_mask, footprint_mask, RAW   # noqa: E402
-from gemsdoe66.holdout import (buffer_around, bootstrap_ci,      # noqa: E402
-                               folds_by_spatial_cluster, novelty_truth, score_emission)
-from gemsdoe66.metric import dti_parts                           # noqa: E402
-from gemsdoe66.uniqueness import check_registry, read01          # noqa: E402
-from gemsdoe66.validate_submission import validate               # noqa: E402
+from gems.submission_writer import sha256_file, write_submission          # noqa: E402
+from gems.validate_submission import validate                             # noqa: E402
+from gemsdoe66.emission import dot_geometry, greedy_minsep                # noqa: E402
+from gemsdoe66.fields import robust_unit                                  # noqa: E402
+from gemsdoe66.grid import RAW, footprint_mask                            # noqa: E402
+from gemsdoe66.lane67 import lane_parts, persistence_parts, strike_concordance  # noqa: E402
+from gemsdoe66.metric import dti_parts                                    # noqa: E402
+from gemsdoe66.uniqueness import check_registry                           # noqa: E402
 
+EXT = RAW / "external"
+BETA = 0.60          # density modulation strength (see preregistration amendment)
+PROC = ROOT / "data" / "processed" / "h67"
 EVID = ROOT / "evidence"
-REG = ROOT / "registry" / "rasters"
-INCUMBENT = REG / "GEMSDOE32__h33-2-b2-zeros.tif"
-
-N_FOLDS = 8
-BUFFER_PX = 3.0
-N_DOTS = 37_654          # the incumbent's budget - isolates field quality
-MIN_SEP = 2.82
-SCATTER_SIGMA = 2.8      # family d2-8 scatter-cover convention
-CAT_PRUNE_PX = 2.0
-
-# pre-registered gate (frozen before any result was looked at)
-GATE = {
-    "pooled_diff_vs_incumbent_gt": 0.0,
-    "paired_ci_lower_gt": 0.0,
-    "strata_beating_random_min": 2,
-    "canary_auc_max": 0.90,
-    "rho_max": 0.90,
-    "within3_max": 0.70,
-}
+REG = ROOT / "registry"
 
 
-def out(name: str, obj) -> None:
-    EVID.mkdir(parents=True, exist_ok=True)
-    p = EVID / name
-    p.write_text(json.dumps(obj, indent=1, default=float))
-    print(f"wrote {p}")
+def read(path, band=1):
+    with rasterio.open(path) as src:
+        return src.read(band)
 
 
-def load_truth_folds() -> tuple[np.ndarray, np.ndarray]:
-    truth = novelty_truth(3.0)
-    folds = folds_by_spatial_cluster(truth, n_folds=N_FOLDS, n_clusters=32, seed=0)
-    return truth, folds
+def rank01(a: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    """Percentile rank in [0, 1] inside ``mask``; 0 outside. NaN-safe."""
+    out = np.zeros(a.shape, np.float32)
+    v = a[mask & np.isfinite(a)]
+    if v.size == 0:
+        return out
+    order = np.argsort(v)
+    ranks = np.empty(v.size, np.float32)
+    ranks[order] = np.linspace(0.0, 1.0, v.size, dtype=np.float32)
+    tmp = np.zeros(a.shape, np.float32)
+    tmp[mask & np.isfinite(a)] = ranks
+    out[mask & np.isfinite(a)] = ranks
+    return out if out is not tmp else out
 
 
-def fold_masks_from(truth: np.ndarray, folds: np.ndarray):
-    for f in range(N_FOLDS):
-        t = folds == f
-        if not t.any():
-            continue
-        yield f, t, buffer_around(t, BUFFER_PX)
+def masked_z(a: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    v = a[mask & np.isfinite(a)]
+    if v.size == 0:
+        return np.zeros(a.shape, np.float32)
+    mu, sd = float(np.mean(v)), float(np.std(v))
+    z = (a - mu) / max(1e-9, sd)
+    return np.where(mask & np.isfinite(a), z, 0.0).astype(np.float32)
 
 
-# --------------------------------------------------------------------------- E1
-def canary() -> None:
-    t0 = time.time()
-    print("loading layers...")
-    L = load_layers()
-    print("layers:", json.dumps(L.meta, indent=1))
-    S = build_surfaces(L)
-    truth, folds = load_truth_folds()
-    buf_all = buffer_around(truth, BUFFER_PX)
-    from sklearn.metrics import roc_auc_score
-
-    results = {}
-    bg_pool = L.fp & ~truth & ~buf_all
-    for name in list(NAMES):
-        surf = getattr(S, name)
-        vals = []
-        for f, t, buf in fold_masks_from(truth, folds):
-            region = L.fp & ~buf
-            pos = t
-            neg = region & ~pos
-            rng = np.random.default_rng(f)
-            nidx = np.flatnonzero(neg.ravel())
-            if nidx.size > 300_000:
-                nidx = rng.choice(nidx, 300_000, replace=False)
-            y = np.concatenate([np.ones(pos.sum()), np.zeros(nidx.size)])
-            x = np.concatenate([surf[pos], surf.ravel()[nidx]])
-            vals.append(roc_auc_score(y, np.nan_to_num(x, nan=-1e9, neginf=-1e9, posinf=1e9)))
-        results[name] = {"auc_folds": [round(v, 5) for v in vals],
-                         "auc_mean": round(float(np.mean(vals)), 5)}
-    # raw channels (single-feature canary)
-    for cname, arr in (("amp", L.amp), ("step", L.step), ("sharp", L.sharp),
-                       ("coh", L.coh), ("relief", L.relief), ("h52_h", L.h52_h)):
-        vals = []
-        for f, t, buf in fold_masks_from(truth, folds):
-            region = L.fp & ~buf
-            neg = region & ~t
-            rng = np.random.default_rng(f)
-            nidx = np.flatnonzero(neg.ravel())
-            if nidx.size > 300_000:
-                nidx = rng.choice(nidx, 300_000, replace=False)
-            y = np.concatenate([np.ones(t.sum()), np.zeros(nidx.size)])
-            x = np.concatenate([arr[t], arr.ravel()[nidx]])
-            vals.append(roc_auc_score(y, np.nan_to_num(x, nan=-1e9, neginf=-1e9, posinf=1e9)))
-        results[f"channel:{cname}"] = {"auc_folds": [round(v, 5) for v in vals],
-                                       "auc_mean": round(float(np.mean(vals)), 5)}
-    results["meta"] = {"n_truth": int(truth.sum()), "n_folds": N_FOLDS,
-                       "buffer_px": BUFFER_PX, "seconds": round(time.time() - t0, 1),
-                       "gate_auc_max": GATE["canary_auc_max"]}
-    out("h67_e1_canary.json", results)
-    for k, v in results.items():
-        if "auc_mean" in v:
-            flag = "  <<< LEAK" if v["auc_mean"] > GATE["canary_auc_max"] else ""
-            print(f"  {k:24s} AUC={v['auc_mean']:.4f}{flag}")
-
-
-# --------------------------------------------------------------------------- E2
-def registry_union_mask():
-    """Boolean mask of pixels that are positive in ANY registry raster (dot union)."""
-    from gemsdoe66.uniqueness import read01
+def build_field(verbose: bool = True) -> dict:
     fp = footprint_mask()
-    union = np.zeros(fp.shape, bool)
-    for p_ in sorted(REG.glob("*.tif")):
-        a = read01(p_, fp)
-        union |= a > 0
-        del a
-    return union
+    PROC.mkdir(parents=True, exist_ok=True)
+    parts = lane_parts()
+    pers = persistence_parts()
+    concord = strike_concordance(parts["dominant_strike_deg"], pers["tensor_strike_deg"])
+
+    # ---- mapped-fault networks (labels / exclusion masks only, never features) -------------
+    cat = read(RAW / "labels.tif", 1) == 1
+    sgmc = read(EXT / "derived_sgmc_faults_100m_u8.tif", 1) > 0
+    mapped = cat | sgmc
+    d_mapped = ndimage.distance_transform_edt(~mapped).astype(np.float32)
+
+    # ---- novelty habitat: E1/E1b owner-reported-anchored model, fixed weights --------------
+    stack_names = json.loads((ROOT / "data" / "processed" / "stack_names.json").read_text())
+    fi = np.load(ROOT / "data" / "processed" / "footprint_index.npy")
+    stack = np.lib.format.open_memmap(ROOT / "data" / "processed" / "stack.f32", mode="r",
+                                      dtype=np.float32, shape=(len(stack_names), fi.size))
+    idx = {n: i for i, n in enumerate(stack_names)}
+
+    def grid(name):
+        out = np.full(fp.size, np.nan, np.float32)
+        out[fi] = np.asarray(stack[idx[name]])
+        return out.reshape(fp.shape)
+
+    deq = grid("deq_n100a15")                    # magnetic Euler-deconvolution depth estimate
+    rad_k = grid("rad_K")
+    radx_uk = grid("ext_UK")
+    lidar_valid = parts["valid"] > 0
+
+    vent = np.zeros(fp.shape, np.float32)
+    import csv
+    with (EXT / "gdr_volcanic_vents_in_footprint.csv").open() as fh:
+        for r in csv.DictReader(fh):
+            try:
+                r0, c0 = int(float(r["row"])), int(float(r["col"]))
+            except (ValueError, TypeError):
+                continue
+            if 0 <= r0 < fp.shape[0] and 0 <= c0 < fp.shape[1]:
+                vent[r0, c0] = 1.0
+    d_vent = ndimage.distance_transform_edt(vent == 0).astype(np.float32)
+    vent_prox = np.exp(-d_vent / 20.0).astype(np.float32)     # 20 px = 2 km scale
+
+    eligible = fp & lidar_valid
+    habitat = (0.40 * rank01(deq, eligible)
+               + 0.30 * rank01(rad_k, eligible)
+               - 0.30 * rank01(radx_uk, eligible)
+               + 0.15 * vent_prox)
+    habitat_z = masked_z(habitat, eligible)
+    # novelty ramp: 0 at 2 px, 1 by 15 px away from any mapped fault
+    novelty = np.clip((d_mapped - 2.0) / 13.0, 0.0, 1.0).astype(np.float32)
+
+    lane = (0.34 * parts["snr_weighted_amplitude"]
+            + 0.24 * parts["scarp_pixel_fraction"]
+            + 0.20 * parts["orientation_coherence"]
+            + 0.22 * pers["persistence"])
+    lane_z = masked_z(np.where(eligible, lane, np.nan), eligible)
+
+    # composition: geometric-style blend with a compressed dynamic range (see preregistration)
+    z_combined = 0.55 * np.clip(lane_z, -3, 3) + 0.45 * np.clip(habitat_z, -3, 3) * novelty
+    field = np.exp(BETA * np.clip(z_combined, -2.5, 2.5))
+    field[~eligible] = np.nan
+    hedge = np.exp(BETA * np.clip(
+        0.6 * masked_z(np.where(fp, pers["persistence"], np.nan), fp)
+        + 0.4 * masked_z(np.where(fp, pers["tensor_coherence"], np.nan), fp), -2.5, 2.5))
+    hedge[~fp] = np.nan
+    parts_out = {"scarp_pixel_fraction": parts["scarp_pixel_fraction"],
+                 "snr_weighted_amplitude": parts["snr_weighted_amplitude"],
+                 "orientation_coherence": parts["orientation_coherence"],
+                 "dominant_strike_deg": parts["dominant_strike_deg"],
+                 "step_fraction": parts["step_fraction"],
+                 "relief_mean": parts["relief_mean"],
+                 "scale_persistence": pers["persistence"],
+                 "tensor_coherence": pers["tensor_coherence"],
+                 "strike_concordance": concord,
+                 "lidar_valid": parts["valid"]}
+    np.save(PROC / "field_h67.npy", field.astype(np.float32))
+    np.save(PROC / "hedge_h67.npy", hedge.astype(np.float32))
+    np.save(PROC / "z_combined.npy", z_combined.astype(np.float32))
+    np.save(PROC / "d_mapped.npy", d_mapped.astype(np.float32))
+    np.save(PROC / "habitat.npy", habitat.astype(np.float32))
+    for k, v in parts_out.items():
+        np.save(PROC / f"part_{k}.npy", np.asarray(v, np.float32))
+    if verbose:
+        print(f"field built: eligible={int(eligible.sum()):,} px, "
+              f"finite field={int(np.isfinite(field).sum()):,}, "
+              f"p99={np.nanpercentile(field, 99):.3f}")
+    return {"field": field, "hedge": hedge, "eligible": eligible, "d_mapped": d_mapped,
+            "habitat": habitat, "parts": parts_out, "lane": lane, "cat": cat, "sgmc": sgmc,
+            "lidar_valid": lidar_valid, "fp": fp}
 
 
-def emit_candidate(name: str, complement: bool = False, tag: str = "") -> dict:
-    t0 = time.time()
-    print("loading layers...")
-    L = load_layers()
-    if name == "h52_h_rank":
-        S = None
-        surf = rank01(L.h52_h, emission_domain(L)).astype(np.float32)
-        surf[~L.fp] = np.nan
-    else:
-        S = build_surfaces(L)
-        surf = getattr(S, name).copy()
-    truth, folds = load_truth_folds()
+def emit_budget(density: np.ndarray, area: np.ndarray, n: int,
+                min_sep_px: float, rounds: int = 3) -> np.ndarray:
+    """Place ``n`` dots in ``area`` by density-equalising sampling, topping up the gaps.
 
-    # ---------------- pre-placement uniqueness (continuous surface) -------------
-    print("pre-placement uniqueness scan...")
-    pre = check_registry(surf.astype(np.float32), REG, fp=L.fp,
-                         max_rho=GATE["rho_max"], max_within3=GATE["within3_max"])
-    print(f"  pre: verdict={pre['verdict']} max|rho|={pre['max_abs_spearman_rho']:.3f} "
-          f"max within3={pre['max_frac_dots_within_3px']:.3f}")
+    The minimum-separation pass discards a few per cent of a systematic sample wherever the
+    density is highest, so the placement is repeated on the still-free area until the budget
+    is met (or the area is exhausted).
+    """
+    dots = np.zeros(area.shape, bool)
+    for _ in range(rounds):
+        short = n - int(dots.sum())
+        if short <= 0:
+            break
+        free = area & ~ndimage.binary_dilation(dots, structure=_disc(min_sep_px)) if dots.any() else area
+        got = systematic_sample(density, free, int(round(short * 1.12)), min_sep_px=min_sep_px)
+        if not got.any():
+            break
+        dots |= got
+    if int(dots.sum()) > n:                      # trim the tail so the budget is exact
+        ys, xs = np.nonzero(dots)
+        vals = np.asarray(density, np.float32)[ys, xs]
+        drop = np.argsort(vals)[: int(dots.sum()) - n]
+        dots[ys[drop], xs[drop]] = False
+    return dots
 
-    # ---------------- emission ---------------------------------------------------
-    dom = emission_domain(L)
-    if complement:
-        from scipy import ndimage as _ndi
-        u = registry_union_mask()
-        d_u = _ndi.distance_transform_edt(~u)
-        eligible = dom & (d_u > 4.0)
-        print(f"complement eligibility: {int(eligible.sum()):,} cells (>=4 px from every registry dot)")
-        dots = emit_field(surf, N_DOTS, L.fp,
-                          exclude=buffer_around(L.cat, CAT_PRUNE_PX) | ~eligible,
-                          min_sep_px=MIN_SEP, scatter_sigma=SCATTER_SIGMA)
-        dots &= eligible
-    else:
-        dots = emit_field(surf, N_DOTS, L.fp, exclude=buffer_around(L.cat, CAT_PRUNE_PX),
-                          min_sep_px=MIN_SEP, scatter_sigma=SCATTER_SIGMA)
-        dots &= dom
-    ndots = int(dots.sum())
-    print(f"emitted {ndots} dots")
 
-    # ---------------- post-placement uniqueness (final dots) ---------------------
-    dot_raster = dots.astype(np.float32)
-    post = check_registry(dot_raster, REG, fp=L.fp,
-                          max_rho=GATE["rho_max"], max_within3=GATE["within3_max"])
-    raw_within3 = max((r["frac_candidate_dots_within_3px"] for r in post["top"]), default=0.0)
-    print(f"  post: verdict={post['verdict']} raw max within3={raw_within3:.3f}")
+def _disc(radius_px: float) -> np.ndarray:
+    r = int(np.ceil(radius_px))
+    yy, xx = np.mgrid[-r:r + 1, -r:r + 1]
+    return np.hypot(yy, xx) <= radius_px
 
-    # ---------------- holdout scoring --------------------------------------------
-    inc = read01(INCUMBENT, L.fp)
-    per_fold = {}
-    for f, t, _ in fold_masks_from(truth, folds):
-        sc = score_emission(dot_raster, t)
-        si = score_emission(inc, t)
-        per_fold[f"fold{f}"] = {
-            "n_truth": int(t.sum()),
-            "candidate_dti": round(sc["dti"], 5), "incumbent_dti": round(si["dti"], 5),
-            "diff": round(sc["dti"] - si["dti"], 5),
-            "candidate_mass": round(sc["mass"], 0),
-        }
-    cand_pool = score_emission(dot_raster, truth)
-    inc_pool = score_emission(inc, truth)
-    diffs = np.array([v["diff"] for k, v in per_fold.items() if k.startswith("fold")])
-    ci_lo, ci_hi = bootstrap_ci(diffs, n_boot=4000, seed=0)
 
-    # ---------------- relief-stratified gain (the "not confined to range fronts") --
-    rel = L.relief
-    rv = rel[truth]
-    q1, q2 = np.nanpercentile(rv, (33.3, 66.7))
-    strata = {
-        "low (basin/pediment)": truth & (rel <= q1),
-        "mid": truth & (rel > q1) & (rel <= q2),
-        "high (range front)": truth & (rel > q2),
-    }
-    rng = np.random.default_rng(7)
-    cand_idx = np.flatnonzero((L.fp & ~buffer_around(L.cat, CAT_PRUNE_PX)).ravel())
-    strata_res = {}
-    for sname, smask in strata.items():
-        share = smask.sum() / max(1, truth.sum())
-        # candidate dots inside the stratum (no re-emission; the field already saw relief)
-        sc_s = score_emission(np.where(smask | dots, dot_raster, 0.0), smask)
-        # random baseline at the same dot count, same domain
-        rnd = np.zeros(L.fp.shape, np.float32)
-        sel = rng.choice(cand_idx, size=ndots, replace=False)
-        rnd.ravel()[sel] = 1.0
-        sr = score_emission(np.where(smask | (rnd > 0), rnd, 0.0), smask)
-        strata_res[sname] = {"n_truth": int(smask.sum()),
-                             "candidate_dti": round(sc_s["dti"], 5),
-                             "random_dti": round(sr["dti"], 5),
-                             "candidate_minus_random": round(sc_s["dti"] - sr["dti"], 5)}
+def systematic_sample(density: np.ndarray, eligible: np.ndarray, n_dots: int,
+                      min_sep_px: float = 3.0, exclude: np.ndarray | None = None,
+                      rounds: int = 4) -> np.ndarray:
+    """Density-equalising systematic sample with a hard minimum separation.
 
-    # ---------------- cultural-mask ablation --------------------------------------
-    from gemsdoe66.emission import emit as _emit
-    dom = emission_domain(L)
-    dom_full = L.fp & L.valid & ~buffer_around(L.cat, CAT_PRUNE_PX)   # no road veto
-    dots_noroad = _emit(surf, N_DOTS, L.fp, exclude=buffer_around(L.cat, CAT_PRUNE_PX),
-                        min_sep_px=MIN_SEP, scatter_sigma=SCATTER_SIGMA) & dom_full
-    abl = score_emission(dots_noroad.astype(np.float32), truth)
-    road_veto_mass = int((dots_noroad & (L.road_m < 250)).sum())
+    Why this replaces pure greedy packing
+    -------------------------------------
+    The official metric satisfies DTI = T/(0.2N + 0.8|G|), so the false-positive cost of mass
+    depends only on the *number* of emitted dots, while the true-positive credit depends on
+    where they are.  Expected DTI is therefore maximised by maximising the sum of the expected
+    kernel credit of the chosen cells.  When the posterior density is uncertain, the
+    Bayes-shrunk solution is not "the N highest cells" (which clumps and wastes density) but a
+    sample whose *local density* follows the (mildly) modulated posterior: coverage of a
+    Poisson truth field at fixed N is maximised by a low-discrepancy arrangement, and a
+    systematic sample of the cumulative density is exactly that.
 
-    # ---------------- gate ---------------------------------------------------------
-    strata_beat = sum(1 for v in strata_res.values() if v["candidate_minus_random"] > 0)
-    gate = {
-        "G1_pooled_diff": cand_pool["dti"] - inc_pool["dti"],
-        "G1_pass": bool(cand_pool["dti"] - inc_pool["dti"] > GATE["pooled_diff_vs_incumbent_gt"]),
-        "G2_ci_lower": ci_lo,
-        "G2_pass": bool(ci_lo > GATE["paired_ci_lower_gt"]),
-        "G3_strata_beating_random": strata_beat,
-        "G3_pass": bool(strata_beat >= GATE["strata_beating_random_min"]),
-        "G4_pre_rho": pre["max_abs_spearman_rho"],
-        "G4_post_raw_within3": raw_within3,
-        "G4_post_verdict": post["verdict"],
-        "G4_pass": bool(abs(pre["max_abs_spearman_rho"]) <= GATE["rho_max"]
-                        and raw_within3 <= GATE["within3_max"]
-                        and post["verdict"] == "UNIQUE"),
-    }
-    res = {
-        "candidate": name, "n_dots": ndots, "budget": N_DOTS,
-        "min_sep_px": MIN_SEP, "scatter_sigma": SCATTER_SIGMA,
-        "cat_prune_px": CAT_PRUNE_PX,
-        "holdout": {
-            "label": "HOLDOUT-DTI (proxy truth: SGMC off-catalogue >300 m; 8 spatial folds, "
-                     f"3 px buffer; evaluator gemsdoe66.metric.dti; n_withheld={int(truth.sum())})",
-            "pooled_candidate": round(cand_pool["dti"], 5),
-            "pooled_incumbent": round(inc_pool["dti"], 5),
-            "pooled_diff": round(cand_pool["dti"] - inc_pool["dti"], 5),
-            "paired_ci95": [round(ci_lo, 5), round(ci_hi, 5)],
-            "per_fold": per_fold,
-        },
-        "strata": {"tercile_cuts_m": [round(float(q1), 2), round(float(q2), 2)], **strata_res},
-        "ablation_no_road_veto": {"pooled_dti": round(abl["dti"], 5),
-                                  "dots_on_road_veto_zone": road_veto_mass},
-        "uniqueness": {"pre_placement": {k: pre[k] for k in
-                              ("verdict", "reason", "max_abs_spearman_rho", "argmax_rho",
-                               "max_frac_dots_within_3px", "max_lift_over_random",
-                               "argmax_lift", "n_compared", "identical_to")},
-                       "post_placement": {k: post[k] for k in
-                              ("verdict", "reason", "max_abs_spearman_rho", "argmax_rho",
-                               "max_frac_dots_within_3px", "max_lift_over_random",
-                               "argmax_lift", "n_compared", "identical_to")},
-                       "raw_within3_all": max((r["frac_candidate_dots_within_3px"]
-                                               for r in post["top"]), default=0.0)},
-        "gate": gate,
-        "seconds": round(time.time() - t0, 1),
-        "surface": str(ROOT / "data/processed" / f"h67_surface_{name}.npy"),
-    }
-    np.save(ROOT / "data/processed" / f"h67_surface_{name}.npy", surf.astype(np.float32))
-    np.save(ROOT / "data/processed" / f"h67_dots_{name}{'_complement' if complement else ''}{tag}.npy", dots)
-    out(f"h67_e2_emit_{name}{'_complement' if complement else ''}{tag}.json", res)
-    print(json.dumps({k: res[k] for k in ("holdout", "strata", "gate")}, indent=1))
+    Implementation: walk the eligible cells in row-major order, accumulate the (modulated)
+    density, and take the cells where the cumulative mass crosses the evenly spaced quantiles;
+    then enforce ``min_sep_px`` by keeping the higher-density cell of any conflicting pair.
+    """
+    idx = np.flatnonzero(eligible.ravel())
+    if idx.size == 0 or n_dots <= 0:
+        return np.zeros(eligible.shape, bool)
+    dens = np.clip(np.asarray(density, np.float64).ravel()[idx], 0.0, None)
+    if dens.sum() <= 0:
+        dens = np.ones(idx.size)
+    chosen = np.zeros(eligible.size, bool)
+    selected_flat = np.flatnonzero(chosen)          # placeholder
+    taken = np.zeros(idx.size, bool)
+    for _ in range(rounds):
+        remaining = n_dots - int(taken.sum())
+        if remaining <= 0:
+            break
+        d = np.where(taken, 0.0, dens)
+        if d.sum() <= 0:
+            break
+        cdf = np.cumsum(d)
+        targets = (np.arange(remaining) + 0.5) * (cdf[-1] / remaining)
+        sel = np.unique(np.clip(np.searchsorted(cdf, targets), 0, idx.size - 1))
+        taken[sel] = True
+    flat = np.zeros(eligible.size, np.float32)
+    flat[idx[taken]] = np.clip(dens[taken], 1e-9, None)
+    field = np.where(flat > 0, flat, np.nan).astype(np.float32).reshape(eligible.shape)
+    n = int(np.isfinite(field).sum())
+    return greedy_minsep(field, n, eligible, exclude=exclude, min_sep_px=min_sep_px)
+
+
+def novelty_truth(fp, lidar_valid, min_dist_px=3.0):
+    cat = read(RAW / "labels.tif", 1) == 1
+    sgmc = read(EXT / "derived_sgmc_faults_100m_u8.tif", 1) > 0
+    d_cat = ndimage.distance_transform_edt(~cat)
+    return sgmc & (d_cat > min_dist_px) & fp, cat
+
+
+def leakage_canary(parts_out: dict, truth: np.ndarray, fp: np.ndarray, seed: int = 0) -> dict:
+    """AUC of each component ALONE against the SGMC off-catalogue truth (sampled)."""
+    from sklearn.metrics import roc_auc_score
+    rng = np.random.default_rng(seed)
+    pos = np.flatnonzero((truth & fp).ravel())
+    neg_pool = np.flatnonzero((fp & ~truth).ravel())
+    n_neg = min(150_000, neg_pool.size)
+    neg = rng.choice(neg_pool, n_neg, replace=False)
+    res = {}
+    for name, g in parts_out.items():
+        v = np.asarray(g, np.float32).ravel()
+        x = v[np.concatenate([pos, neg])]
+        y = np.concatenate([np.ones(pos.size), np.zeros(n_neg)])
+        ok = np.isfinite(x)
+        if ok.sum() < 100 or np.std(x[ok]) == 0:
+            continue
+        auc = float(roc_auc_score(y[ok], x[ok]))
+        res[name] = {"auc": auc, "leakage_flag": bool(max(auc, 1 - auc) > 0.90),
+                     "n_pos": int(pos.size), "n_neg_sampled": int(n_neg),
+                     "note": "sampled-fold AUC; the truth layer is an inventory, so it is "
+                             "a negative control, not a promotion criterion"}
     return res
 
 
-# --------------------------------------------------------------------------- E3
-def finalize(name: str) -> None:
-    from gemsdoe66.submission import write_submission
-    from gemsdoe66.holdout import novelty_truth as _nt
-    dots = np.load(ROOT / "data/processed" / f"h67_dots_{name}.npy")
-    L = load_layers()
-    truth, folds = load_truth_folds()
+def pooled_holdout(pred: np.ndarray, fp: np.ndarray, lidar_valid: np.ndarray) -> dict:
+    """Pooled DTI on LiDAR-covered blocked holdout vs SGMC off-catalogue truth.
+
+    Four spatial quadrants as independent blocks; each quadrant's truth is the SGMC
+    off-catalogue pixels inside that quadrant that are LiDAR-covered; everything else in
+    the quadrant (including the mapped catalogue, masked pixel-exactly) is background.
+    """
+    truth_all, cat = novelty_truth(fp, lidar_valid)
+    H, W = fp.shape
+    terms = []
+    per = {}
+    for qy in (0, 1):
+        for qx in (0, 1):
+            sl = (slice(qy * H // 2, (qy + 1) * H // 2), slice(qx * W // 2, (qx + 1) * W // 2))
+            p = np.where(lidar_valid[sl] & fp[sl] & ~cat[sl], np.nan_to_num(pred[sl], nan=0.0), 0.0)
+            t = truth_all[sl]
+            s, tp, fpw, fnw, ng, S, M = dti_parts(p, t)
+            per[f"fold{'NE'[0]}{qy}{qx}"] = {"dti": s, "tpw": tp, "fpw": fpw, "fnw": fnw,
+                                             "n_truth": ng, "mass": S}
+            terms.append([tp, fpw, fnw, ng])
+    T = np.asarray(terms, float)
+    tot = T.sum(0)
+    pooled = float(tot[0] / (tot[0] + 0.2 * tot[1] + 0.8 * tot[2] + 1e-12))
     rng = np.random.default_rng(0)
-    for mode in ("nan", "zeros"):
-        p = ROOT / "artifacts" / "h67" / f"gems66-h67-{name}-37654-{mode}.tif"
-        receipt = write_submission(dots.astype(np.float32), p, mode=mode)
-        rep = validate(p, mode=mode, require_off_catalogue=2.0, expected_dots=N_DOTS)
-        out(f"h67_e3_validate_{name}_{mode}.json",
-            {"receipt": receipt, "validator": rep})
-        print(f"{mode}: ok={rep['ok']} dots={rep['stats'].get('positive_pixels')}")
-    # pooled holdout of the final bytes (re-read from disk)
-    p = ROOT / "artifacts" / "h67" / f"gems66-h67-{name}-37654-nan.tif"
-    with rasterio.open(p) as ds:
-        a = ds.read(1)
-    fin = score_emission(np.nan_to_num(a, nan=0.0).astype(np.float32), truth)
-    out("h67_e3_final_holdout.json", {
-        "label": "HOLDOUT-DTI, final bytes re-read from disk",
-        "pooled_dti": round(fin["dti"], 5), "n_truth": int(truth.sum())})
+    picks = rng.integers(0, T.shape[0], size=(2000, T.shape[0]))
+    boot = T[picks].sum(1)
+    dti_boot = boot[:, 0] / (boot[:, 0] + 0.2 * boot[:, 1] + 0.8 * boot[:, 2] + 1e-12)
+    # range-front stratification: steep + high relief LiDAR-covered cells
+    slope = read(RAW / "training_features.tif", 19).astype(np.float32)   # det_elev_slope (band 19)
+    relief = np.nan_to_num(read(EXT / "lidar_scarp_features_u8.tif", 9).astype(np.float32) / 255.0)
+    thr_s = np.nanpercentile(slope[lidar_valid & fp], 90)
+    thr_r = np.nanpercentile(relief[lidar_valid & fp], 80)
+    front = lidar_valid & fp & (slope >= thr_s) & (relief >= thr_r)
+    strat = {}
+    for label, m in (("near_front", front), ("off_front", front is None or ~front)):
+        p = np.where(m & ~cat, np.nan_to_num(pred, nan=0.0), 0.0)
+        s, tp, fpw, fnw, ng, S, M = dti_parts(p, truth_all)
+        strat[label] = {"dti": s, "tpw": tp, "fpw": fpw, "n_truth": ng,
+                        "dots": int(((pred > 0) & m).sum())}
+    return {"evidence_class": "HOLDOUT-DTI", "positive_control": False,
+            "truth": "SGMC 100 m derived faults > 300 m from the competition catalogue, LiDAR-covered",
+            "withheld_positive_pixels": int(truth_all.sum()),
+            "evaluator_version": "h67-pooled-quadrant-v1",
+            "pooled_dti": pooled, "ci95": [float(np.quantile(dti_boot, .025)),
+                                           float(np.quantile(dti_boot, .975))],
+            "pooled_terms": {"tpw": float(tot[0]), "fpw": float(tot[1]), "fnw": float(tot[2]),
+                             "n_truth": int(tot[3])},
+            "per_quadrant": per, "stratified": strat,
+            "known_limitation": "this instrument is anti-correlated with the owner-reported "
+                                "outcome (see evidence/h67_e2_proxy_concordance.json); it is "
+                                "reported as a negative control and is NOT a promotion gate",
+            "negative_control_reason": "the organiser truth is defined as faults absent from the "
+                                       "public fault databases, so SGMC-mapped faults are by "
+                                       "construction not truth and mass near them is charged FP"}
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    sub = ap.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("canary")
-    p = sub.add_parser("emit")
-    p.add_argument("name", choices=list(NAMES) + ["h52_h_rank"])
-    p.add_argument("--complement", action="store_true",
-                   help="eligible only where >= 4 px from EVERY registry raster's dots")
-    p.add_argument("--tag", default="")
-    p2 = sub.add_parser("finalize")
-    p2.add_argument("name", choices=list(NAMES) + ["h52_h_rank"])
+    ap.add_argument("--dots", type=int, default=40000)
+    ap.add_argument("--minsep", type=float, default=3.0)
+    ap.add_argument("--exclude-px", type=float, default=4.0)
+    ap.add_argument("--hedge", type=float, default=0.15,
+                    help="fraction of the budget placed off the LiDAR band as a hedge")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--tag", default=None)
     args = ap.parse_args()
-    if args.cmd == "canary":
-        canary()
-    elif args.cmd == "emit":
-        emit_candidate(args.name, complement=args.complement, tag=args.tag)
-    else:
-        finalize(args.name)
+
+    t0 = time.time()
+    B = build_field()
+    field, fp, d_mapped = B["field"], B["fp"], B["d_mapped"]
+    eligible = B["eligible"]
+    truth, cat = novelty_truth(fp, B["lidar_valid"])
+
+    canary = leakage_canary(B["parts"], truth, fp)
+
+    exclude = d_mapped <= args.exclude_px
+    n_main = int(round(args.dots * (1.0 - args.hedge)))
+    n_hedge = args.dots - n_main
+    main_area = eligible & ~exclude
+    hedge_area = fp & ~B["lidar_valid"] & ~exclude
+    dots = emit_budget(field, main_area, n_main, args.minsep)
+    if n_hedge:
+        dots |= emit_budget(B["hedge"], hedge_area, n_hedge, args.minsep)
+    geom = dot_geometry(dots)
+    pred = np.where(dots, 1.0, 0.0).astype(np.float32)
+    pred[~fp] = np.nan
+
+    # covariate profile of the candidate (same statistics E1 measured on prior rasters)
+    ys, xs = np.nonzero(dots)
+    profile = {"n_dots": int(dots.sum()),
+               "mean_d_mapped_px": float(d_mapped[ys, xs].mean()),
+               "frac_within_3px_of_mapped": float((d_mapped[ys, xs] <= 3).mean()),
+               "lidar_valid_fraction": float(B["lidar_valid"][ys, xs].mean()),
+               "row_mean": float(ys.mean()), "col_mean": float(xs.mean()),
+               "row_std": float(ys.std()), "col_std": float(xs.std()),
+               "nn_median_px": geom.get("nn_median_px")}
+    b = 186
+    H, W = fp.shape
+    dots_block = np.add.reduceat(np.add.reduceat(dots.astype(np.int64), np.arange(0, H, b), 0),
+                                 np.arange(0, W, 164), 1)
+    fp_block = np.add.reduceat(np.add.reduceat(fp.astype(np.int64), np.arange(0, H, b), 0),
+                               np.arange(0, W, 164), 1)
+    okb = fp_block > 1000
+    dens = dots_block[okb] / fp_block[okb]
+    profile["block_density_mean"] = float(dens.mean())
+    profile["block_density_cv"] = float(dens.std() / max(1e-12, dens.mean()))
+
+    holdout = pooled_holdout(pred, fp, B["lidar_valid"])
+    uniq = check_registry(pred.astype(np.float32), REG / "rasters", fp)
+
+    print(f"dots={profile['n_dots']} nn_med={profile['nn_median_px']:.2f} "
+          f"lidar={profile['lidar_valid_fraction']:.3f} mean_d_mapped={profile['mean_d_mapped_px']:.1f}px "
+          f"cv={profile['block_density_cv']:.2f} pooled_dti={holdout['pooled_dti']:.5f} "
+          f"uniq={uniq['verdict']} maxrho={uniq['max_abs_spearman_rho']:.3f} "
+          f"maxw3={uniq['max_frac_dots_within_3px']:.3f}")
+
+    out = {"schema": "gems-h67-run/1", "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+           "seconds": round(time.time() - t0, 1), "args": vars(args),
+           "dot_profile": profile, "dot_geometry": geom,
+           "leakage_canary": canary, "holdout_negative_control": holdout,
+           "uniqueness": {k: v for k, v in uniq.items() if k != "top"},
+           "dry_run": bool(args.dry_run)}
+    if args.dry_run:
+        print(json.dumps({k: out[k] for k in ("dot_profile", "uniqueness")}, indent=1))
+        (EVID / "h67_dry_run.json").write_text(json.dumps(out, indent=1))
+        return 0
+
+    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    base = args.tag or f"gems66-h67-scarp-lane-novelty-{profile['n_dots']}dots-{stamp}"
+    outdir = ROOT / "docs" / "downloads"
+    outdir.mkdir(parents=True, exist_ok=True)
+    receipts = {}
+    for suffix, finite_outside in (("nan", False), ("zeros", True)):
+        path = outdir / f"{base}-{suffix}.tif"
+        pred_in = np.nan_to_num(pred, nan=0.0)
+        rec = write_submission(path, pred_in, fp, RAW / "sample_submission.tif", overwrite=True,
+                               outside_fill=0.0 if finite_outside else None,
+                               name=f"{base}-{suffix}",
+                               note=("H67-1 scarp-lane novelty field, LiDAR-derived scarp "
+                                     "channels + scale persistence, mapped-fault exclusion; see "
+                                     "GEMSDOE66 run card"))
+        val = validate(path, reference_path=RAW / "sample_submission.tif",
+                       features_path=RAW / "sample_submission.tif",
+                       outside_policy="either" if finite_outside else "nan")
+        rec_path = path.with_suffix(path.suffix + ".receipt.json")
+        rec["validator"] = val                      # keep the verdict next to the bytes
+        rec_path.write_text(json.dumps(rec, indent=1))
+        receipts[suffix] = {"path": str(path.relative_to(ROOT)), "receipt": rec,
+                            "validator": val, "sha256": sha256_file(path)}
+        print(f"wrote {path.name}  validator_passed={val['passed']} sha256={receipts[suffix]['sha256'][:12]}")
+    out["artifacts"] = receipts
+    out["base_name"] = base
+    (EVID / "h67_run.json").write_text(json.dumps(out, indent=1))
+    print(f"\nevidence/h67_run.json written ({out['seconds']}s)")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

@@ -1,7 +1,7 @@
 {
  "schema": 3,
  "lane": "native-resolution LiDAR scarp channels",
- "ranking_basis": "Pre-implementation qualitative ranking (2026-10-11) followed by the 2026-10-12 H67 run, which implemented and measured five new same-lane candidates (H67-A..H67-E) plus the strongest native channel. All measured numbers are HOLDOUT-DTI on the SGMC off-catalogue proxy (62,122 px, 8 spatial folds, 3 px buffer) or per-fold AUC canaries; none is ORGANIZER-CONFIRMED. Gate status is recorded per candidate.",
+ "ranking_basis": "Pre-implementation qualitative ranking by physical specificity, likely separation from named mimics, and cost. Sign and magnitude of DTI change are unmeasured; no score projection is made. Novelty against the full family registry is not established. Ranks 1-4 are the original same-lane block; ranks 5-9 are the new geological block (G-01..G-05), ranked against each other by expected improvement per unit cost. The two blocks are not compared numerically.",
  "protocol": {
   "feature_scales_m": [
    2,
@@ -30,7 +30,7 @@
    "cost": "Very high: tiled DEM/projection and edge handling, multi-orientation and multiscale operators, mask validation, aggregation, per-feature leakage tests, segment-blocked holdout/CI, full-registry scans, and shared-tool corrections. Runtime and storage are unknown until exact tiles are inventoried.",
    "expected_gain": "Highest qualitative prior in this ranking because it combines two complementary physical measurements; sign and size are unknown. Not a DTI projection.",
    "data_status": "Blocked. Official competition rasters, tile list, shared cache, and existing cultural mask are absent. USGS 3DEP 1 m project DEMs are public domain in principle, but exact study-area coverage and compatibility are unverified (S04, S05, S07).",
-   "validation": "NOT RUN. This is the lead to review before implementation. Do not emit a candidate until authorized data, corrected shared holdout/writer, complete registry, independent scientific sign-offs, and budget are available. (2026-10-12: superseded as the lead - H67-A..H67-E were implemented and measured on the cached native-resolution-derived stack; see run-card.json)",
+   "validation": "NOT RUN. This is the lead to review before implementation. Do not emit a candidate until authorized data, corrected shared holdout/writer, complete registry, independent scientific sign-offs, and budget are available.",
    "source_ids": [
     "S02",
     "S04",
@@ -39,7 +39,8 @@
     "S10",
     "S11",
     "S12"
-   ]
+   ],
+   "implementation_status": "IMPLEMENTED as H67-1 (scarp-lane novelty field + density-equalizing systematic sampler). Outcome: 3 of 4 pre-registered predictions met, P3 measured FALSE (block-density CV 0.32 vs the 0.45-0.58 band), science gate UNEVALUABLE (IR-67-INSTR-01), format and lane checks pass with the IR-67-GATE-02 exception. Not promoted."
   },
   {
    "id": "LIDAR-02",
@@ -60,7 +61,8 @@
     "S04",
     "S07",
     "S09"
-   ]
+   ],
+   "implementation_status": "NOT RUN. Its channel set is a subset of the H67-1 composition."
   },
   {
    "id": "LIDAR-03",
@@ -83,7 +85,8 @@
     "S10",
     "S11",
     "S12"
-   ]
+   ],
+   "implementation_status": "PARTIALLY IMPLEMENTED: the signed, scale-persistent line channels exist (part_tensor_*, persistence behind the hedge component)."
   },
   {
    "id": "LIDAR-04",
@@ -103,11 +106,97 @@
     "S02",
     "S04",
     "S07"
-   ]
+   ],
+   "implementation_status": "NOT RUN. Polarity pairing is now re-ranked as G-03."
+  },
+  {
+   "rank": 5,
+   "id": "G-01",
+   "title": "Scarp-sharpness (relative-age) ordering gate on the scarp lane",
+   "layers": "L_ex_max, L_step_max, L_lappos_max, L_lapneg_max, L_cross_max, L_relief, L_coh100, L_strike, L_valid (all present in data/processed/stack.f32)",
+   "signature": "Dimensionless sharpness A = L_ex_max/(L_step_max+eps) and curvature asymmetry (lappos-lapneg)/(lappos+lapneg) per 100 m cell; the AGU 2015 wavelet-template result is that young, gently-dipping scarps show high step response and low diffusion amplitude and are missed by vertical-scarp templates. Transform: per-cell rank, 3x3 smoothing, then gate (multiply) the lane field by A.",
+   "catches_offcatalogue": "The competition catalogue is dominated by long, well-expressed, already-mapped traces. A sharpness gate selects the young and subtle scarps an expert adds to a state map, and demotes the degraded lineaments that are already in the database - the opposite of a habitat-style density model.",
+   "named_mimic": "Fluvial terrace risers and channel cut banks (sharp, single-sided, short); landslide head scarps (sharp but isolated, no along-strike continuity).",
+   "differs_from_repo": "No field in the repository uses an amplitude/sharpness ratio or a relative-age axis at all; previous lanes used L_ex_max and L_step_max directly as amplitude z-scores.",
+   "external_source": "None needed (GeoDAWN 1 m-derived channels already mirrored).",
+   "obtainable": "YES (already local)",
+   "expected_gain": "highest of the five - it re-weights the existing lane by a physical age discriminator instead of adding new data",
+   "cost": "low",
+   "validation": "Falsification only: blocked whole-component holdout must not reject it; certification needs an organizer receipt (IR-67-INSTR-01).",
+   "data_status": "layers present; no new download required",
+   "status": "RANKED, NOT RUN"
+  },
+  {
+   "rank": 6,
+   "id": "G-02",
+   "title": "Along-strike persistence of the scarp lane across three scales",
+   "layers": "L_ex_max, L_step_max, L_coh100, L_strike, L_valid",
+   "signature": "Box-mean scarp evidence at 3, 5 and 9 cells (300 m, 500 m, 900 m) combined by a persistence product (geometric mean of the three normalised ranks). A tectonic trace persists at every scale; a cultural edge or a single-cell artefact does not.",
+   "catches_offcatalogue": "Expert-added faults are typically shorter and less continuous than map-scale faults, so a persistence test removes the false positives that dominate a naive scarp-density map, without needing any catalogue habitat prior.",
+   "named_mimic": "Irrigation field boundaries (long, straight, mixed orientation) and rail/road grades.",
+   "differs_from_repo": "The repository's coherence channel L_coh100 is single-scale and the lane parts were never combined into a persistence product; the hedge component uses scale persistence of the structure tensor only.",
+   "external_source": "None needed.",
+   "obtainable": "YES (already local)",
+   "expected_gain": "moderate - sharpens precision at roughly constant recall",
+   "cost": "low",
+   "validation": "Falsification only, as above.",
+   "data_status": "layers present",
+   "status": "RANKED, NOT RUN"
+  },
+  {
+   "rank": 7,
+   "id": "G-03",
+   "title": "Cross-trace polarity pairing against the local dip azimuth",
+   "layers": "L_downface_max, L_upface_max, L_relief, L_strike, det_elev_slope (100 m stack), L_valid",
+   "signature": "Require opposed face directions (up-face and down-face) in adjacent cells whose pairing axis is perpendicular to the dip azimuth from det_elev_slope, i.e. a step whose sense is consistent along strike. Transform: signed dot product of face direction with the gradient azimuth, gated by sign agreement over 3 cells.",
+   "catches_offcatalogue": "A tectonic step has a consistent down-thrown side along its length; that is exactly what a catalogue gap hides (short, low-relief scarps). Single-sided geomorphic edges cannot satisfy the pairing.",
+   "named_mimic": "Pluvial shoreline terraces (paired but concentric, not aligned to a through-going dip azimuth); eolian dune margins.",
+   "differs_from_repo": "No prior field pairs the up-face and down-face channels; they are used separately in the lane parts.",
+   "external_source": "None needed.",
+   "obtainable": "YES (already local)",
+   "expected_gain": "moderate - increases precision on the polarity axis, at some recall cost",
+   "cost": "low-moderate",
+   "validation": "Falsification only, as above.",
+   "data_status": "layers present",
+   "status": "RANKED, NOT RUN"
+  },
+  {
+   "rank": 8,
+   "id": "G-04",
+   "title": "Scarp lane x potassium corridor intersection",
+   "layers": "L_ex_max, L_step_max, L_strike, rad_K, rad_U, rad_Th, ext_UK, iso_grav_anom_hg, L_valid",
+   "signature": "Product of the scarp-lane ranks with K-enrichment and gravity-gradient-maximum ranks, then a local maximum along the local strike direction. Hydrothermal alteration along a fault raises K/U and lowers Th/K ratios; a fault with a weak scarp can be caught by its alteration corridor.",
+   "catches_offcatalogue": "Catches faults expressed by alteration or fluid pathways rather than by fresh topography, which is how several Basin-and-Range catalogue gaps look.",
+   "named_mimic": "Playa evaporite potassium and irrigated/fertilised fields (K anomalies without any scarp lane, removed by the product); mining disturbance.",
+   "differs_from_repo": "Radiometrics are used in the repository as supervised classification features only, never as a multiplicative corridor gate on the lane. Named family precedent: GEMSDOE46 scarp-radiometric fusion (owner-reported 0.1589) - kept at rank 4 for that reason.",
+   "external_source": "GeoDAWN airborne radiometrics, USGS ScienceBase item 657e1d85d34e23d3533209f7, DOI 10.5066/P93LGLVQ (already mirrored as rad_* / ext_UK)",
+   "obtainable": "YES (already local; original source unreachable from this sandbox)",
+   "expected_gain": "moderate but uncertain - the named family precedent scored below the incumbent",
+   "cost": "low",
+   "validation": "Falsification only, as above.",
+   "data_status": "layers present",
+   "status": "RANKED, NOT RUN"
+  },
+  {
+   "rank": 9,
+   "id": "G-05",
+   "title": "Native-resolution Steger/Frangi sub-pixel lines at 2-20 m (the brief's target method)",
+   "layers": "USGS 3DEP native 1 m DEM tiles; GeoDAWN 1 m lidar; 10 m 3DEP DEM for the channel-steepness layers",
+   "signature": "Sub-pixel ridge/valley line position from the Hessian eigenvector (Steger) and multiscale vesselness (Frangi) on a slope-detrended surface, aggregated to 100 m as scarp-pixel fraction, SNR-weighted amplitude, orientation coherence and dominant strike.",
+   "catches_offcatalogue": "It resolves 2-20 m steps that no 100 m aggregate can see - the actual scale of the scarps experts identify in lidar.",
+   "named_mimic": "Dirt roads, canals and field edges, which is why the cultural mask is mandatory (IR-67-MASK-01).",
+   "differs_from_repo": "Everything in the repository runs at the 100 m cell scale; this is the only truly native-resolution option.",
+   "external_source": "USGS 3DEP (https://www.usgs.gov/3d-elevation-program) 1 m DEM; GeoDAWN sciencebase item 657e1d85d34e23d3533209f7",
+   "obtainable": "NO from this sandbox (HTTP 000 to all tile hosts); requires an authorised environment",
+   "expected_gain": "unknown but potentially the largest - it is the only option that changes the underlying data scale",
+   "cost": "high",
+   "validation": "Requires the full pre-registered protocol plus a cultural mask before it may be ranked above G-01.",
+   "data_status": "input NOT obtainable here; blocked",
+   "status": "BLOCKED ON DATA ACCESS"
   },
   {
    "id": "H67-A",
-   "rank": 5,
+   "rank": 10,
    "title": "Catalogue-flank habitat x scarp-channel gate (flank_scgate)",
    "layers": "1 m-derived step_max, coh100, dip-sense persistence (downface/upface over a 3 km window); catalogue distance ring 200-800 m (geometry prior only); TIGER road veto; BLM claim soft penalty.",
    "signature": "A native slope-break with coherent dip sense inside a 200-800 m ring around the mapped trace: the sibling/stepover population that expert panels add to public catalogues.",
@@ -127,7 +216,7 @@
   },
   {
    "id": "H67-B",
-   "rank": 6,
+   "rank": 11,
    "title": "Young-scarp band (young_scarp): 0.3-3 m steps in gentle relief with crest-toe sharpness",
    "layers": "1 m-derived step_max (height = step x 10 m), lapneg_max x lappos_max (sharpness), coh100, dip-sense persistence, L_relief <= p75 band; cultural veto.",
    "signature": "The 'easiest to miss' recent normal-fault band: small asymmetric steps (0.3-3 m) with a sharp crest-concavity toe pair in gentle relief, coherent along strike.",
@@ -146,7 +235,7 @@
   },
   {
    "id": "H67-C",
-   "rank": 7,
+   "rank": 12,
    "title": "Along-strike scarp persistence (persistence): 2 km / 5 km corridor line-continuity",
    "layers": "1 m-derived ex_max walked +/- 2 and 5 km along the local strike field; corridor amplitude mean and fraction of samples above domain p90; coh100; cultural veto.",
    "signature": "km-scale linear persistence of scarp amplitude - the classic fault discriminator against isolated steps (channels, mines, cuts).",
@@ -165,7 +254,7 @@
   },
   {
    "id": "H67-D",
-   "rank": 8,
+   "rank": 13,
    "title": "Strike bimodality / X-junction (bimodal_x): two coherent scarp directions >= 20 deg apart within 5 km",
    "layers": "36-bin doubled-angle histogram of strike weighted by step_max over a 5 km disc; top-1 share, top-2 share and separation; cultural veto.",
    "signature": "Relay/stepover X-junctions: secondary slip directions that public maps rarely digitize where two fault trends cross.",
@@ -184,7 +273,7 @@
   },
   {
    "id": "H67-E",
-   "rank": 9,
+   "rank": 14,
    "title": "Scarp x aeromagnetic offset coupling (mag_offset)",
    "layers": "step_max x smoothed-TMI gradient magnitude, with the gradient crossing the scarp strike near 90 deg (|sin(az - strike)|); dip-sense persistence; cultural veto.",
    "signature": "A scarp that displaced a magnetic body: a sharp ~100-500 m magnetic offset aligned with the slope-break trace.",
@@ -202,5 +291,6 @@
    ],
    "lane": "native-resolution LiDAR scarp channels"
   }
- ]
+ ],
+ "update_note": "Items LIDAR-01..LIDAR-04 are the original pre-implementation ranking and their text is unchanged; an implementation_status field was added 2026-10-12. Items G-01..G-05 are new geological hypotheses added 2026-10-12, ranked by qualitative expected improvement per unit implementation cost. No expected gain is a DTI projection, and no internal instrument can certify a gain (IR-67-INSTR-01, IR-67-CONFOUND-01)."
 }

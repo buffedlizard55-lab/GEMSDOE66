@@ -5,85 +5,95 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="on">Research</a><a href="results.html" class="">Results</a><a href="analysis.html" class="">H33 attribution</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="on">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
 <main>
 <div class="wrap">
 
-<h2>Research protocol and limitations</h2>
+<h2>Research protocol, what was actually run, and its limits</h2>
 
-<h3>1 · Metric transcription</h3>
+<h3>1 &middot; Metric transcription</h3>
 <p>The official problem description defines distance-weighted Tversky scoring. With
-<code>T = TP<sub>w</sub></code>, total prediction mass <code>S</code>, weighted mass <code>M</code>,
-and truth-pixel count <code>|G|</code>:</p>
-<pre>DTI = T / (0.2T + 0.2(S − M) + 0.8|G|)</pre>
-<p>The project tests the transcription in <code>tests/test_metric.py</code>. That code-level test
-is not a competition score and does not authenticate any label raster.</p>
+<code>T = TP<sub>w</sub></code>, prediction mass <code>S</code>, weighted mass <code>M</code> and
+truth count <code>|G|</code>: <code>DTI = T / (0.2T + 0.2(S &minus; M) + 0.8|G|)</code>, kernel
+<code>k(d) = max(1 &minus; d/300 m, 0)</code>. A dot of unit mass raises the score while its
+expected kernel credit exceeds <code>0.2 &times; DTI</code> &mdash; at DTI 0.28 that is a credit bar
+of about 0.056, i.e. roughly 283 m. The project tests the transcription in
+<code>tests/test_metric.py</code>; that is a code test, not a competition score.</p>
 
-<h3>2 · Target method versus inherited proxy</h3>
-<p>The requested method is native-resolution scarp evidence: slope-aware templates; Steger
-sub-pixel and Frangi ridge/valley measures at <b>2–20 m</b>; 100 m aggregation of scarp fraction,
-SNR-weighted amplitude, orientation coherence and dominant strike; the existing cultural mask;
-and spatially blocked validation. The exact 1 m tiles and compatibility checks are not available
-in this checkout, so this target method has <b>not</b> been run.</p>
-<p>The inherited PR #13 <code>lidar_lane</code> used 1 m-derived descriptors and line scales at
-2–20 pixels on a 100 m grid, i.e. 200–2,000 m. It is scale-deviating, negative after
-relief-matching, and remains audit-only. Its internal `HOLDOUT-DTI` values and CIs are labelled
-on the <a href="results.html">results page</a>; they do not validate the requested method and
-are not `ORGANIZER-CONFIRMED`.</p>
+<h3>2 &middot; What this session ran</h3>
+<p>Lane: <b>native-resolution lidar scarp channels (executed at the 100 m cell scale - IR-67-DATA-01)</b>. Hypothesis, mechanism and mimic are recorded verbatim
+in <code>registry/preregistration-h67.json</code> and restated in the
+<a href="data/run-card.json">run card</a>. Three pre-registered experiments were used, all of them
+instrument-building rather than submission-tuning:</p>
+<ol>
+<li><b>E1 credit regression</b> &mdash; layer dot-means versus the 14 matched owner-reported scores
+(<code>evidence/h67_e1_credit_regression.json</code>).</li>
+<li><b>E1b robustness</b> &mdash; spatial confound, partial correlations controlling
+<code>col_mean</code>, leave-one-out, and the credit-vs-|G| implied scale
+(<code>evidence/h67_e1b_robustness.json</code>).</li>
+<li><b>E2 proxy-vs-live concordance</b> &mdash; does any available truth proxy rank this artifact
+family the way the owner-reported scores do? Answer: <b>no</b>
+(<code>evidence/h67_e2_proxy_concordance.json</code>).</li>
+</ol>
 
-<h3>3 · Holdout, leakage, and release criteria</h3>
+<h3>3 &middot; Why no internal number can decide this &mdash; measured, not asserted</h3>
+<p>The internal instrument is the SGMC off-catalogue inventory, scored with the shared evaluator
+(<code>gems57-pooled-hide-v2</code>, 62,122 withheld positives, 300 m training-only buffer,
+alpha = 0.2, beta = 0.8). Its proxy DTI versus the owner-reported outcome:</p>
+<table><tr><th>truth layer</th><th>mean proxy DTI</th><th>Spearman &rho; vs live</th><th>p</th>
+<th>truth px</th></tr>
+<tr><td>catalogue (labels.tif)</td><td>0.08703</td><td>-0.554</td><td>0.042</td><td>14</td></tr>
+<tr><td>SGMC, all faults</td><td>0.11921</td><td>-0.872</td><td><0.001</td><td>14</td></tr>
+<tr><td>SGMC &amp;gt; 300 m from the catalogue</td><td>0.09817</td><td>-0.276</td><td>0.330</td><td>14</td></tr>
+<tr><td>SGMC off-catalogue, LiDAR-covered</td><td>0.09762</td><td>-0.170</td><td>0.559</td><td>14</td></tr>
+<tr><td>SGMC off-catalogue &amp;gt; 500 m, LiDAR-covered</td><td>0.08853</td><td>-0.015</td><td>0.959</td><td>14</td></tr>
+</table>
+<p>The live anchor is an <code>UNVERIFIED</code> relative-ranking instrument, so even a positive
+&rho; would not certify a submission; but a <b>negative</b> one does establish that optimizing this
+proxy cannot be assumed to raise the owner-reported score. On top of that, geography dominates the
+live readings: <code>col_mean</code> &rho; -0.890,
+<code>row_std</code> &rho; -0.832. Consequently the
+H67-1 run uses the instrument only as a <b>negative control</b>, and its pooled value is degenerate
+by construction (IR-67-INSTR-02).</p>
+
+<h3>4 &middot; Holdout, leakage and release criteria (unchanged rules)</h3>
 <ul>
-<li>Withhold whole fault segments with a buffer. Derive catalogue features only from visible
-faults and mask visible faults pixel-exactly.</li>
-<li>Score pooled DTI on LiDAR-covered held-out blocks with α = 0.2, β = 0.8 and a 300 m
-triangular kernel; report evaluator version, withheld-positive count and 95% CI.</li>
-<li>Run feature-alone leakage canaries; AUC above 0.90 is a stop pending proof otherwise.</li>
-<li>Compare both continuous pre-placement surfaces and final emitted dots against every indexed
-registry raster. Apply absolute Spearman thresholds and the raw &gt;70% / 3 px emitted-dot stop;
-random-density lift is diagnostic only. Require an explicit organizer-complete certificate and
-matching expected count; incomplete access is not a pass.</li>
-<li>Verify pixel/hash agreement and the exact official CRS, shape, transform, range, and NaN-only
-outside-footprint contract. A local format receipt is not organizer acceptance.</li>
+<li>Withhold whole fault segments with a buffer; derive catalogue features from visible faults only;
+mask visible faults pixel-exactly.</li>
+<li>Report pooled DTI with evaluator version, withheld-positive count and a 95 % CI, or report
+<i>why</i> the instrument cannot measure the target (this session: IR-67-INSTR-01).</li>
+<li>Leakage canary per feature; AUC above 0.90 is a stop. This session's worst: 0.713
+(scale persistence).</li>
+<li>Compare pre-placement surfaces and final dots against every indexed registry raster on both the
+rank and the raw 3 px rule &mdash; and disclose when the lift exception, not the raw rule, is what
+produces the pass (IR-67-GATE-02).</li>
 </ul>
 
-<h3>3b · The session-66 lane (released) and its limits</h3>
-<p>The released candidate does <b>not</b> use the native-resolution scarp method. It is the
-K-anchored consensus-support design: the region is the union of 300 m disks of the six
-highest owner-scored registry rasters, restricted to cells at least 300 m from the catalogue with
-positive radiometric K; dots are packed greedily under a prior proportional to K<sup>0.5</sup>
-with the published metric's own first-order acceptance test; the design is frozen in
-<a href="../registry66/preregistration-k66.json"><code>registry66/preregistration-k66.json</code></a>.
-Its released status rests on <i>local</i> measurements only: format/range/footprint re-read from
-disk, byte-uniqueness against all 60 indexed rasters, rank correlation 0.289 against a 0.90 limit,
-and a leakage canary. It has <b>no HOLDOUT-DTI</b>: the buffered whole-segment, LiDAR-covered
-holdout still needs the login-walled feature stack, so the release verdict is
-<code>PROMOTE-FOR-DOWNLOAD</code> with <code>holdout_dti = NOT MEASURED</code>. The >70&nbsp;% /
-3&nbsp;px lane-drift rule is degenerate in this registry and is logged as
-<a href="irregularities.html">IR-66-DOTOVERLAP-DEGENERATE</a> rather than claimed as passed.</p>
-
-<h3>4 · Evidence status</h3>
-<p>Official competition inputs and exact DEM-tile coverage remain unverified in this environment.
-Owner-maintained GitHub mirrors are hash-pinned for local reproducibility but are not
-organizer-authenticated. The site does not poll leaderboard pages or infer artifact performance
-from owner reports. No organizer receipt in this checkout confirms a score for any raster.</p>
-<p>The inherited PR #13 run was stopped: its relief-matched result does not beat the incumbent,
-its raw final-dot overlap exceeds the threshold, its complete-registry status is uncertified, and
-its pre-placement surface comparison is absent. No experiment or submission slot was used in the
-PR #12 reconciliation.</p>
-
-<h3>5 · Trusted method references</h3>
+<h3>5 &middot; Trusted method references, with what was verified in session</h3>
 <ul>
-<li><b>[official]</b> <a href="https://www.drivendata.org/">DrivenData</a> DOE GEMS Prize
-competition and problem description; the data tab remains login-walled in the recorded audit.</li>
-<li><b>[official]</b> <a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP</a> and
-<a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a>; product context does not prove exact tile coverage.</li>
-<li><b>[literature]</b> <a href="https://doi.org/10.21105/joss.01066">Sare &amp; Hilley,
-Scarplet (JOSS)</a>, <a href="https://doi.org/10.1109/34.659930">Steger (IEEE TPAMI)</a>,
-and <a href="https://research.manchester.ac.uk/en/publications/multiscale-vessel-enhancement-filtering/">Frangi et al. (MICCAI)</a>. These establish methods, not competition performance.</li>
+<li><b>[official, verified 2026-10-12]</b>
+<a href="https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html">AGU FM15 T31A-2838</a>,
+Sare &amp; Hilley, &ldquo;Mapping of normal fault scarps in airborne laser swath mapping data using
+wavelet analysis&rdquo; &mdash; slope-aware wavelet templates, Surprise Valley and Jenny Lake.
+Note the wavelet/scarplet distinction (IR-67-SRC-01).</li>
+<li><b>[verified]</b> <a href="https://doi.org/10.1109/34.659930">Steger 1998</a>, IEEE TPAMI
+20(2):113&ndash;125. <b>[literature]</b>
+<a href="https://doi.org/10.21105/joss.01066">Sare &amp; Hilley 2018, Scarplet (JOSS)</a>;
+<a href="https://doi.org/10.1007/BFb0056195">Frangi et al. 1998</a>, MICCAI LNCS 1496:130&ndash;137.</li>
+<li><b>[official]</b> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData
+#306</a> problem description (data tab login-walled; not scraped), and the
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules PDF</a> (AI-use disclosure,
+three feedback submissions per week).</li>
+<li><b>[official]</b> <a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP</a>;
+<a href="https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7">GeoDAWN ScienceBase
+item</a> (DOI 10.5066/P93LGLVQ, airborne magnetics/radiometrics);
+<a href="https://gdr.openei.org/submissions/1391">GDR submission 1391</a> (CC BY 4.0 wells, springs,
+fault traces, vents).</li>
 </ul>
-<p>See the <a href="analysis.html">H33 attribution review</a>,
-<a href="sources.html">source register</a>, <a href="irregularities.html">irregularities</a>, and the
-<a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a>.</p>
+<p class="small">These links are provided for manual review. Access limits from this sandbox are
+recorded in <a href="irregularities.html">IR-66-DATA-01 / IR-67-DATA-01</a>: only github.com,
+api.github.com, pypi.org and their CDNs are reachable, so no USGS/GDR/DrivenData page could be
+fetched directly here.</p>
 
 </div>
 </main>

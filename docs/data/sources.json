@@ -1,6 +1,6 @@
 {
  "schema": 3,
- "verified_on": "2026-10-12 - session-66: mirrors restored and byte-verified for the cleared release. H67 session (branch arena/9ae5a972): 23/23 sha256 PASS re-check plus owner-mirror inputs S30-S32 (unpinned, ledgered in the H67 review). No leaderboard values mirrored; no monitoring.",
+ "verified_on": "2026-10-12 H67-lane-measurement session (branch arena/9ae5a972): 23/23 sha256 re-check plus owner-mirror inputs S30-S32 (unpinned, ledgered in the H67 review). No leaderboard values mirrored; no monitoring.",
  "sources": [
   {
    "id": "S01",
@@ -111,8 +111,8 @@
    "title": "GEMSDOE32 owner repository and project material",
    "url": "https://github.com/buffedlizard55-lab/GEMSDOE32",
    "supports": "Owner-maintained artifact history and method notes. The project page describes the H33 artifact as unscored and says no organizer score exists for its artifacts.",
-   "status": "OWNER-REPORTED CONTEXT ONLY \u2014 repository page copy rechecked 2026-10-12 via GitHub API; not a submission receipt",
-   "how": "The source-page content says no organizer score exists for repository artifacts and labels the estimate as a model. The retrieved GitHub blob SHA is recorded in evidence/h33_owner_claim_review_2026-10-12.json."
+   "status": "OWNER-REPORTED CONTEXT ONLY \u2014 not a submission receipt",
+   "how": "No exact receipt or SHA-256-to-score mapping is present in this checkout."
   },
   {
    "id": "S15",
@@ -121,6 +121,13 @@
    "supports": "Owner-reported status for H33 artifacts; not organizer-confirmed scoring.",
    "status": "OWNER-MAINTAINED; no receipt/hash attribution",
    "how": "Use only to identify the owner claim and its caveat, never as an organizer score."
+  },
+  {
+   "id": "S16",
+   "title": "AGU FM15 T31A-2838 - Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis (Sare & Hilley)",
+   "url": "https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html",
+   "accessed": "2026-10-12",
+   "status": "VERIFIED in session: slope-aware wavelet templates with initial scarp slope and above/below-scarp surface angles; sites in Surprise Valley and near Jenny Lake. The checkout's template family is the scarplet package (S10), not this wavelet code."
   },
   {
    "id": "S30",

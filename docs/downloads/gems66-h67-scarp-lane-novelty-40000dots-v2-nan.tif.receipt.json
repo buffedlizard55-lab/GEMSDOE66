@@ -1,0 +1,113 @@
+{
+ "file": "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+ "sha256": "1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f",
+ "shape_hw": [
+  3730,
+  3292
+ ],
+ "crs": "EPSG:32611",
+ "footprint_cells": 5167373,
+ "emitted_cells_gt0": 40000,
+ "min_inside": 0.0,
+ "max_inside": 1.0,
+ "nan_inside": 0,
+ "nan_outside_count": 7111787,
+ "outside_fill": null,
+ "finite_outside_count": 0,
+ "all_values_in_0_1": false,
+ "name": "gems66-h67-scarp-lane-novelty-40000dots-v2-nan",
+ "note": "H67-1 scarp-lane novelty field, LiDAR-derived scarp channels + scale persistence, mapped-fault exclusion; see GEMSDOE66 run card",
+ "note_chars": 128,
+ "reference": "sample_submission.tif",
+ "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt",
+ "validator": {
+  "file": "/home/user/GEMSDOE66/docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+  "sha256": "1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f",
+  "passed": true,
+  "has_failures": false,
+  "checks": [
+   {
+    "check": "single band",
+    "status": "PASS",
+    "detail": "count=1"
+   },
+   {
+    "check": "dtype float32",
+    "status": "PASS",
+    "detail": "dtype=float32"
+   },
+   {
+    "check": "CRS EPSG:32611",
+    "status": "PASS",
+    "detail": "crs=EPSG:32611"
+   },
+   {
+    "check": "shape matches",
+    "status": "PASS",
+    "detail": "file=(3730, 3292) expected=(3730, 3292)"
+   },
+   {
+    "check": "resolution 100 m",
+    "status": "PASS",
+    "detail": "res=(100.0, 100.0)"
+   },
+   {
+    "check": "transform matches reference",
+    "status": "PASS",
+    "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "CRS matches reference",
+    "status": "PASS",
+    "detail": "file=EPSG:32611 ref=EPSG:32611"
+   },
+   {
+    "check": "nodata tag is none or NaN",
+    "status": "PASS",
+    "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+   },
+   {
+    "check": "no infinities",
+    "status": "PASS",
+    "detail": "inf_count=0"
+   },
+   {
+    "check": "values within [0, 1]",
+    "status": "PASS",
+    "detail": "min=0.0 max=1.0 finite_cells=5167373"
+   },
+   {
+    "check": "features grid shape matches",
+    "status": "PASS",
+    "detail": "features=(3730, 3292) reference=(3730, 3292)"
+   },
+   {
+    "check": "features transform matches reference grid",
+    "status": "PASS",
+    "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "features CRS matches reference grid",
+    "status": "PASS",
+    "detail": "features=EPSG:32611 reference=EPSG:32611"
+   },
+   {
+    "check": "no NaN inside footprint",
+    "status": "PASS",
+    "detail": "nan_inside=0 footprint_cells=5167373"
+   },
+   {
+    "check": "NaN-only outside footprint",
+    "status": "PASS",
+    "detail": "finite_outside=0; only NaN is allowed outside under outside_policy='nan'"
+   },
+   {
+    "check": "info: emitted cells (value > 0)",
+    "status": "INFO",
+    "detail": "emitted=40000"
+   }
+  ],
+  "skipped_checks_mean_unverified": false
+ },
+ "validator_source": "same run; also stored in evidence/h67_run.json['artifacts']['nan']['validator']"
+}
