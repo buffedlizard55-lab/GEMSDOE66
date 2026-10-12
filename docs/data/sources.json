@@ -1,6 +1,6 @@
 {
  "schema": 3,
- "verified_on": "2026-10-11 \u2014 official problem/rules/data-access status and bibliographic records rechecked for this audit. No leaderboard snapshot or values are stored. No repeated monitoring is scheduled.",
+ "verified_on": "2026-10-12 H67-lane-measurement session (branch arena/9ae5a972): 23/23 sha256 re-check plus owner-mirror inputs S30-S32 (unpinned, ledgered in the H67 review). No leaderboard values mirrored; no monitoring.",
  "sources": [
   {
    "id": "S01",
@@ -124,26 +124,41 @@
   },
   {
    "id": "S16",
-   "title": "GEMSDOE66 family registry \u2014 owner-reported submission outcomes",
+   "title": "AGU FM15 T31A-2838 - Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis (Sare & Hilley)",
+   "url": "https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html",
+   "accessed": "2026-10-12",
+   "status": "VERIFIED in session: slope-aware wavelet templates with initial scarp slope and above/below-scarp surface angles; sites in Surprise Valley and near Jenny Lake. The checkout's template family is the scarplet package (S10), not this wavelet code."
+  },
+  {
+   "id": "S30",
+   "title": "GEMSDOE48 owner mirror - h52_scarp3m_100m.tif (7-band native 1 m-tile scarp-height product)",
+   "url": "https://github.com/buffedlizard55-lab/GEMSDOE48/blob/main/data/external/h52_scarp3m_100m.json",
+   "supports": "h_all/h_gate07/h_gate12 scarp-height estimates, sigma_mean, facing_at, strike_at, cover from 697/700 USGS 1 m EarthMRI D20 tiles (owner CI workflow run 37565284104). Owner mirror; integrity recorded in docs/review/2026-10-12-h67-session.md; NOT organizer-authenticated; unpinned in the manifest (IR-67-05).",
+   "status": "Fetched + hashed 2026-10-12",
+   "how": "gh api raw blob from the owner's public repo."
+  },
+  {
+   "id": "S31",
+   "title": "GEMSDOE24 owner mirror - cultural-feature distance layers (TIGER roads, BLM closed claims)",
+   "url": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/audit_sources/tiger_road_receipt.json",
+   "supports": "tiger_road_distance_m.tif (78,440 road features, 0-13,083 m) and blm_closed_claim_distance_m.tif (35,818 claims, 0-15,440 m) - the existing cultural-feature mask for roads / field edges required by the lane brief.",
+   "status": "Fetched + hashed 2026-10-12",
+   "how": "gh api raw blob from the owner's public repo."
+  },
+  {
+   "id": "S32",
+   "title": "GEMSDOE48 owner mirror - 3 m pilot tiles of USGS 1 m EarthMRI D20 DEMs",
+   "url": "https://github.com/buffedlizard55-lab/GEMSDOE48/blob/main/data/pilot/dem3m/dem_pilot_receipt.json",
+   "supports": "Two int16 (decimetre) 3 m tiles (x40y427, x42y425) with source URLs (prd-tnm.s3.amazonaws.com .../NV_WestCentral_EarthMRI_2020_D20), sha256 and grid receipts. Demonstrates the native-resolution path and the datum/CRS (EPSG:26911 -> 32611) handling; the raw S3 hosts are unreachable from this sandbox.",
+   "status": "Fetched + hashed 2026-10-12",
+   "how": "gh api raw blob from the owner's public repo."
+  },
+  {
+   "id": "S33",
+   "title": "GEMSDOE66 family registry \u2014 owner-reported submission outcomes and raster corpus",
    "url": "https://github.com/buffedlizard55-lab/GEMSDOE66/tree/main/registry",
    "kind": "owner-maintained registry",
    "status": "OWNER-REPORTED CONTEXT ONLY \u2014 every number taken from it is labelled as such; no entry is an organizer receipt and none is used as a score",
-   "review_date": "2026-10-12"
-  },
-  {
-   "id": "S20",
-   "title": "Frangi, Niessen, Vincken & Viergever \u2014 Multiscale vessel enhancement filtering (MICCAI 1998, LNCS 1496:130-137)",
-   "url": "https://doi.org/10.1007/BFb0056195",
-   "kind": "bibliography",
-   "status": "BIBLIOGRAPHY VERIFIED 2026-10-12 \u2014 method established; the filter's c parameter must be estimated from the Hessian norm, not from raw intensity",
-   "review_date": "2026-10-12"
-  },
-  {
-   "id": "S21",
-   "title": "BLM Mineral & Land Records \u2014 closed mining claim density raster (local derived layer)",
-   "url": "https://github.com/buffedlizard55-lab/GEMSDOE66/blob/main/data/raw/external/blm_closed_claim_distance_m.tif",
-   "kind": "owner mirror / derived cultural feature",
-   "status": "REVIEWED 2026-10-12 \u2014 administrative status, not a disturbance mask; used only as a candidate cultural veto and left disabled by default",
    "review_date": "2026-10-12"
   }
  ]

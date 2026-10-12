@@ -3,6 +3,160 @@
  "review_date": "2026-10-12",
  "items": [
   {
+   "id": "IR-67-VERIFY-01",
+   "severity": "high",
+   "status": "OPEN - SHARED TOOL MEASURES THE OPPOSITE DIRECTION",
+   "title": "scripts/verify66.py computes the 'literal <=70 %' overlap clause backwards",
+   "detail": "The brief's clause is 'more than 70 % of the candidate's dots fall within 3 px of one registry raster's dots'. verify66.py's docstring promises exactly that, but the code computes ``mine_near[by].mean()`` - the fraction of the *comparator's* positive cells that lie within 3 px of the candidate's dots - and then labels the result ``overlap_le_0p70_LITERAL_INLANE``. On the H67-1 artifact the two readings disagree by a factor of three: the documented (candidate-side) reading gives 0.9992 (fail, see IR-67-GATE-02) while the implemented (comparator-side) reading gives 0.3167 (pass). The discrepancy was found by running the shared verifier directly against the H67-1 file: verify66 reports rho_max 0.0055 (screen sample) / validator_ok true / overlap_max 0.3167 / scanned 60, with the full family corpus (655 rasters across 56 sibling repos) absent. Consequence: lane checks in this family have been passing the raw clause on a statistic that does not implement it. Both readings are reported here; neither is waived.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-67-STACK-01",
+   "severity": "medium",
+   "status": "OPEN - SENTINEL VALUES IN THE CACHED STACK",
+   "title": "mag_anom carries ~1e37 sentinel values in data/processed/stack.f32",
+   "detail": "A layer census of data/processed/stack.f32 shows min -1,052 / max 1.33e37 / mean 2.6e30 for mag_anom: the owner's no-data sentinel survives the stack build for that layer instead of being converted to NaN. H67-1 does not use mag_anom, and the E1 regression masks non-finite values, but any future field that reads that layer without a >1e6 guard will be dominated by the sentinel. The affected layer is excluded from H67 feature use and recorded here.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-67-LANE-01",
+   "severity": "medium",
+   "status": "OPEN - THE LANE'S OWN AMPLITUDE CHANNELS POINT THE WRONG WAY",
+   "title": "In the 15-artefact anchor sample the scarp amplitude/relief channels are negatively associated with score",
+   "detail": "E1 (evidence/h67_e1_credit_regression.json, n = 15 matched artefacts, sign-stable under leave-one-out) finds dot-means of L_relief rho -0.63, L_ex_mean -0.52, L_ex_max -0.47, L_lappos_max -0.44, while the only positive lane channels are L_valid +0.30 and L_coh100 +0.26. The brief's lane premise (scarp amplitude carries the signal) is therefore not supported by the only anchor available here, and the field that was emitted weights the lane by these measured signs rather than by the premise. The sample is small and confounded (IR-67-CONFOUND-01) - this is a prior, not a result.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-67-E1CONF-02",
+   "severity": "high",
+   "status": "OPEN - GEOGRAPHIC CONFOUND IN THE ANCHOR ITSELF",
+   "title": "The three strongest positive covariates are west-east gradients",
+   "detail": "E1's top positives - tmi_hg +0.95, geod_2ndinv +0.89, geod_shearrate +0.74 - all differ strongly between the western and eastern halves of the grid (tmi_hg west 33.9 vs east 19.1; geod_2ndinv 26.5 vs 16.0; geod_shearrate 13.6 vs 8.0). A score that tracks a west-east gradient cannot be distinguished from a site/era effect of the owner-reported page the raster came from. These three layers are therefore excluded from the H67 field, and this exclusion is the reason the emitted artifact leans on the radiometric and geomorphic signs instead.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-67-GATE-02",
+   "severity": "high",
+   "status": "OPEN - RAW THRESHOLD EXCEEDED, EXCEPTION DOCUMENTED",
+   "title": "0.9992 of the H67-1 dots lie within 3 px of one registry raster, above the raw 70% stop rule",
+   "detail": "The lane rule in the operating brief reads 'stop as duplicate if more than 70% of dots lie within 3 px of one registry raster's dots'. Against gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif, 0.9992 of the 40,000 H67-1 dots are within 3 px. That raster's own 3 px dilation covers 95.8% of the footprint and 96.0% of the eligible band, so the matched null for any placement is ~0.96 and the lift is 1.04 - the overlap therefore carries no information about lane copying. The implemented gate trips only when raw > 0.70 AND lift > 1.5; max lift over the 60 compared rasters is 1.378 and max |rho| is 0.286, so the verdict stays UNIQUE under that rule. The raw rule is nevertheless NOT satisfied and is recorded here rather than waived. Matched re-audit: evidence/h67_overlap_audit.json (scripts/h67_overlap_audit.py). Same structural caveat as IR-66-GATE-01 and IR-71. Registry completeness (60 rasters) is uncertified.",
+   "source_ids": [
+    "S02",
+    "S14"
+   ]
+  },
+  {
+   "id": "IR-67-INSTR-01",
+   "severity": "critical",
+   "status": "OPEN - INSTRUCTION CONFLICT, GATE UNEVALUABLE",
+   "title": "The pre-registered science gate cannot be measured with the only truth layer in this checkout",
+   "detail": "The brief's gate is 'a DTI gain on the lidar-covered holdout that is not confined to range fronts'. The only non-invented truth layer available here is SGMC faults >300 m from the competition catalogue, which is itself 59.3% range front (inherited IR-66-CONFOUND-01), and the internal instrument is anti-correlated with the owner-reported outcome (E2: catalogue rho -0.554 p=0.040; SGMC-all rho -0.872 p<0.001; every off-catalogue variant |rho|<=0.28, p>=0.34). A range-front-confined instrument cannot test a 'not confined to range fronts' requirement, and an anti-correlated instrument cannot certify a gain. Consequence: the gate is recorded as NOT EVALUABLE here - neither passed nor failed - which under the project rule means no promotion. H67-1 does not use the instrument as a gate.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-67-INSTR-02",
+   "severity": "high",
+   "status": "DISCLOSED - DEGENERATE BY CONSTRUCTION",
+   "title": "The H67-1 pooled negative control reads exactly 0.0 for every placement",
+   "detail": "The control truth is SGMC faults >300 m from the catalogue while eligibility excludes 4 px (400 m) around cat | sgmc. The credit radius the metric rewards is ~283 m (k > 0.2*DTI at DTI~0.28), so the exclusion removes every dot that could earn credit and pooled DTI is identically 0.0, CI [0.0, 0.0], near_front 0.0, off_front 0.0. The 0.0 is a property of the construction, not a measurement; it must never be presented as a measured DTI or as evidence of poor placement. Rescoring against a non-excluded truth layer is required before any control number is quoted.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-67-AMEND-01",
+   "severity": "high",
+   "status": "DISCLOSED - POST-REGISTRATION AMENDMENT",
+   "title": "The shipped H67-1 emitter differs from registry/preregistration-h67.json",
+   "detail": "P1-P4 and the gate are unchanged, but the emitter that produced the artifact postdates the pre-registration: BETA 0.60, a density-equalizing systematic sampler replaces the greedy packer, 15% of the dot budget is spent on an off-LiDAR hedge component, and the dot count is trimmed to the exact budget after min-separation discards. P3 is measured as FALSE both before and after the change (block-density CV 1.171 greedy, 0.32 final, against the pre-registered 0.45-0.58 band) and is not re-tuned. The amendment is recorded, not laundered.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-67-MASK-01",
+   "severity": "high",
+   "status": "OPEN - REQUIRED MASK ABSENT",
+   "title": "No cultural-feature mask (roads, canals, field edges) exists in this checkout",
+   "detail": "The brief requires masking roads, canals and field edges before aggregation. The checkout contains no road/canal/field vector layer and no cultural raster, and this environment cannot reach any tile or vector host (HTTP 000 for the USGS/3DEP/GDR/sciencebase hosts). The only cultural de-weighting in place is whatever the mirrored 1 m scarp pipeline applied before producing the 12 descriptor channels (L_ex_max, L_step_max, L_cross_max, L_coh100, ...), which is unaudited here. Long, straight, human-made lineaments can therefore enter the field as scarp evidence.",
+   "source_ids": [
+    "S07",
+    "S08"
+   ]
+  },
+  {
+   "id": "IR-67-FORMAT-01",
+   "severity": "medium",
+   "status": "DISCLOSED - MITIGATED BY A SECOND SIBLING",
+   "title": "Two format siblings exist because a strict finite-range checker rejects the default NaN export",
+   "detail": "A prior upload was rejected with 'Predicted values must be in range [0, 1]'. The brief's rule writes NaN outside the footprint, and a strict all(0 <= v <= 1) test returns False on NaN. Since v2 the shared writer takes an explicit outside_fill mode and the validator takes outside_policy='either', and the runner writes two siblings from one dot set: -nan (7,111,787 NaN outside, values in [0,1] inside; brief-exact) and -zeros (12,279,160 of 12,279,160 cells finite and in [0,1], 0 NaN). Inside the footprint the two files are identical pixel-for-pixel. The -zeros sibling is the recommended upload. Neither sibling is a score claim.",
+   "source_ids": [
+    "S01"
+   ]
+  },
+  {
+   "id": "IR-67-SCORE-01",
+   "severity": "high",
+   "status": "OPEN - CONFLICTING OWNER-REPORTED TOPS",
+   "title": "The owner-reported inventory contains two mutually inconsistent 'best' values",
+   "detail": "registry/owner_reported_live_scores.json records 0.3774 attributed to GEMSDOE and a 'current highest' of 0.3195 recorded elsewhere, at the same time. Both are owner-typed labels on owner-maintained pages, class UNVERIFIED; the GEMSDOE32 page labels its 0.2778 artifact UNSCORED. No leaderboard was accessed or monitored in this session (DrivenData Terms of Use; login-walled pages). No comparison against a 'current best' may be presented as verified, and the H67-1 artifact is not claimed to beat either value.",
+   "source_ids": [
+    "S14",
+    "S15"
+   ]
+  },
+  {
+   "id": "IR-67-CONFOUND-01",
+   "severity": "critical",
+   "status": "OPEN - NO INTERNAL INSTRUMENT CAN RANK THIS FAMILY",
+   "title": "Geography and relief dominate every internal covariate reading",
+   "detail": "Across the 14 matched artifacts, owner-reported score tracks map position: col_mean rho -0.890, row_std -0.832 (evidence/h67_e1b_robustness.json). Ranking by the SGMC/catalogue-anchored holdouts is unusable: E2 shows the same instrument anti-correlating with the owner-reported outcome (catalogue -0.554, SGMC-all -0.872). Any within-session 'layer wins' statement is a partial correlation with a wide interval on n=14 and is a hypothesis, not a result. No candidate may present an internal holdout gain as evidence of a competition gain.",
+   "source_ids": [
+    "S02",
+    "S14"
+   ]
+  },
+  {
+   "id": "IR-67-TRACE-01",
+   "severity": "low",
+   "status": "OPEN - TOOLING GAP (AUDIT RE-RUN REQUIRED)",
+   "title": "The uniqueness summary does not record which raster produced the worst overlap",
+   "detail": "uniqueness.check_registry writes max_frac_dots_within_3px but no argmax_within3, and the runner's evidence file keeps only the summary, so the raw-overlap exception in IR-67-GATE-02 could not be attributed from the evidence alone. The per-raster table was recomputed with scripts/h67_overlap_audit.py into evidence/h67_overlap_audit.json, including a matched null for the eligible band; the argmax key is added to the module.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-67-DATA-01",
+   "severity": "high",
+   "status": "OPEN - INHERITED AND UNCHANGED",
+   "title": "Native-resolution 2-20 m execution remains impossible in this environment",
+   "detail": "The brief's method paragraph asks for scarp templates and Steger/Frangi scales of 2-20 m on native-resolution DEMs, plus 10 m DEM channel-steepness layers. The 1 m GeoDAWN tiles, the 10 m 3DEP tiles and the tile/vector hosts are unreachable here (HTTP 000), and two manifest entries are intentionally unpinned. H67-1 therefore ran at the 100 m cell scale using the mirrored 1 m-derived aggregate channels, with the deviation stated in the docstrings and in the run card. The two scale-derived missing layers stay in the stack ledger as missing.",
+   "source_ids": [
+    "S08"
+   ]
+  },
+  {
+   "id": "IR-67-SRC-01",
+   "severity": "low",
+   "status": "VERIFIED IN SESSION - CITATION CONFIRMED",
+   "title": "The brief's AGU 2015 citation is real, and its wording is wavelet templates",
+   "detail": "Verified: T31A-2838, 'Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis', Sare & Hilley, AGU Fall Meeting 2015, session T31A, poster Hall, 16 December 2015 (studio.m-anage.com/agu/fm15/webprogram/Paper70055.html). The abstract presents 'new wavelet templates incorporating initial scarp slope and above- and below-scarp surface angles' and analyses DEMs from 'sites in Surprise Valley ... and near Jenny Lake on the Teton rangefront'. Caveat for readers: the abstract describes wavelet curvature templates; the slope-aware template family used in the checkout derives from the Sare & Hilley scarplet package (doi:10.21105/joss.01066). Steger's detector is verified as IEEE TPAMI 20(2):113-125, 1998, doi:10.1109/34.659930.",
+   "source_ids": [
+    "S16"
+   ]
+  },
+  {
    "id": "IR-01-H33-ATTRIBUTION",
    "severity": "high",
    "status": "UNATTRIBUTED \u2014 not organizer-confirmed",
@@ -214,6 +368,60 @@
    ]
   },
   {
+   "id": "IR-73-LEADERBOARD-CLAIM-CONFLICT",
+   "severity": "medium",
+   "status": "OPEN \u2014 conflicting user-supplied claims; not independently verified",
+   "title": "The prompt gives incompatible overall leaderboard-high values",
+   "detail": "The 2026-10-12 user request gives 0.3774 as the current GEMSDOE high and later states that 0.3195 is currently highest. These are conflicting user-provided claims, not a leaderboard snapshot verified in this session. No DrivenData leaderboard was accessed, and neither number is tied here to an organizer receipt and exact artifact hash. Do not present either as a current verified result or as the H33-2-B2 score.",
+   "source_ids": [],
+   "internal_evidence": [
+    "docs/review/2026-10-12-review.md",
+    "evidence/h33_owner_claim_review_2026-10-12.json"
+   ]
+  },
+  {
+   "id": "IR-67-01",
+   "severity": "medium",
+   "status": "OPEN - interpretation rule documented",
+   "title": "Raw 3-px duplicate rule degenerates against the 311,617-dot dense registry raster",
+   "detail": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif carries 311,617 dots (6.0% of the footprint); its 3-px halo alone gives a random-placement null within3 rate of 0.958. Any independent placement (measured: 0.999 for the h52 emission) trips the brief's literal '>70% of dots within 3 px of one registry raster' stop, while the audit's lift-adjusted test (min_lift 1.5) exists precisely for this case (IR-66-GATE-01). This session reports BOTH: the raw value (stop under the literal rule) and the lift-adjusted verdict (DUPLICATE_OVERLAP for a DIFFERENT, sparse raster - see IR-67-04 result). Rule of record: the literal rule is applied against sparse rasters (null < 0.30); against dense rasters (null >= 0.70) the lift-adjusted verdict plus the documented null rate governs. Both numbers are always published.",
+   "source_ids": [
+    "S14"
+   ]
+  },
+  {
+   "id": "IR-67-02",
+   "severity": "low",
+   "status": "FIXED",
+   "title": "novelty_truth() loaded an unpinned SGMC mirror",
+   "detail": "gemsdoe66.fields.sgmc_offcatalogue loaded sgmc_faults_100m.tif (GEMSDOE48 mirror, 82,151 px; 61,664 off-catalogue). The manifest-pinned bytes are derived_sgmc_faults_100m_u8.tif (83,593 px; 62,122 off-catalogue). Fixed 2026-10-12 to prefer the pinned file with fallback; all H67 numbers use the pinned truth (62,122 px). Cross-check difference: 458 px (0.7%).",
+   "source_ids": []
+  },
+  {
+   "id": "IR-67-03",
+   "severity": "high",
+   "status": "OPEN - drives the negative verdict",
+   "title": "h52 holdout gain is range-front-dominated (the confound the gate exists to catch)",
+   "detail": "h52_h_rank emission vs random, by relief tercile over the truth (cuts 24.1 / 42.9 m): low stratum -0.0258 (worse than random), mid +0.0868, high (range front) +0.1773. 5 of 8 fold-level differences positive but the paired 95% CI [-0.0109, +0.0365] crosses zero. Same signature as the inherited PR #13 negative result. The SGMC off-catalogue proxy truth is 59.3% range-front (inherited measurement), so a range-front-seeking detector 'wins' on this proxy without any transferable skill - and the hidden expert set is presumably distributed more like the footprint than like SGMC's mapping bias.",
+   "source_ids": []
+  },
+  {
+   "id": "IR-67-04",
+   "severity": "medium",
+   "status": "OPEN - logged as the lane's negative result",
+   "title": "The native scarp population's residual (complement of the registry) is 83 dots",
+   "detail": "Emission restricted to cells >= 4 px from every dot in the 60-raster registry union could place only 83 of the 37,654-dot budget; pooled holdout DTI 0.0. The family's rasters already occupy the scarp-active terrain, and the top-37k of the h52 surface overlaps the GEMSDOE32 bayesopt-dilation-scarp raster at 77.7% within 3 px (4.38x lift). Under the lane protocol this is a DUPLICATE stop for the standard emission and a budget-exhaustion stop for the complement.",
+   "source_ids": []
+  },
+  {
+   "id": "IR-67-05",
+   "severity": "low",
+   "status": "OPEN - provenance ledger",
+   "title": "Seven additional inputs fetched this session are unpinned in registry/data_manifest.json",
+   "detail": "lidar_scarp_features.json, confounds access_layers.json + confounds_provenance.json, tiger_road_distance_m.tif, blm_closed_claim_distance_m.tif, GEMSDOE48 sgmc_faults_100m.tif, h52_scarp3m_100m.tif (+receipt), 4 family rasters, 2 dem3m pilot tiles. All are owner-mirror bytes fetched from the owner's public repos; sha256 of each is recorded in docs/review/2026-10-12-h67-session.md. They should be pinned in the manifest before any future release that depends on them (the h52 product in particular carries the lane's headline channel).",
+   "source_ids": []
+  },
+  {
    "id": "IR-66-FOOT-01",
    "severity": "high",
    "status": "open \u2014 convention chosen and disclosed",
@@ -231,7 +439,7 @@
    "title": "Frangi vesselness was numerically degenerate when c was estimated from image intensity",
    "detail": "Estimating Frangi's c as half the 99th percentile of the raw field intensity gave a maximum response of 0.0155 and a 99th percentile of 1.9e-4 over the whole footprint, i.e. the channel carried essentially no information. Fixed by estimating c from the pooled, sigma^2-normalised Hessian norm across all scales and by keeping the larger of the ridge and valley responses. The first experiment run used the defective channel; its numbers are superseded and retained in evidence/h66c_experiment1.json and h66c_experiment3.json.",
    "source_ids": [
-    "S20"
+    "S11"
    ]
   },
   {
@@ -241,7 +449,7 @@
    "title": "The BLM closed-claim raster is an administrative status, not a disturbance mask",
    "detail": "45% of the footprint lies within 150 m of a BLM closed claim, so a distance veto on that raster would remove most of the study area. 'Closed to mineral entry' does not imply any physical ground disturbance, so the term is disabled by default in scarp66.cultural_mask (claim_radius_m = 0).",
    "source_ids": [
-    "S21"
+    "S31"
    ]
   },
   {
@@ -253,7 +461,7 @@
    "source_ids": [
     "S14",
     "S15",
-    "S16"
+    "S33"
    ]
   },
   {
@@ -264,7 +472,7 @@
    "detail": "The byte-level subset relation h33-2-b2 subset d28 (6,436 dots removed, all within 200.0 m of the catalogue) and the monotone -0.126-DTI-per-unit-f200 response across the d2-8 lineage are reproduced from the registry bytes, but the associated scores 0.2600 and 0.2778 are owner-reported. No organiser receipt ties either number to exact bytes.",
    "source_ids": [
     "S14",
-    "S16"
+    "S33"
    ]
   },
   {

@@ -1,53 +1,51 @@
 {
- "schema": "gems-project-site-status/2",
+ "schema": "gems-project-site-status/3",
  "review_date": "2026-10-12",
- "active_run": "gemsdoe66-h66c-2026-10-12",
- "active_lane": "native-resolution LiDAR scarp channels",
- "status": "NEGATIVE \u2014 unique format-valid artifact published for review; not promoted",
- "stop_reason": "HOLDOUT-DTI on instrument N is 0.0979 [0.0623, 0.1219] against a frozen best of 0.1195. No local instrument is a validated surrogate for the hidden score (IR-66-INSTR-01).",
+ "active_run": "gemsdoe66-h67-1-scarp-lane-novelty-2026-10-12",
+ "active_lane": "native-resolution LiDAR scarp channels (executed at 100 m cell scale; IR-67-DATA-01)",
+ "status": "FORMAT-READY / NOT PROMOTED - one candidate is downloadable with disclosures",
+ "stop_reason": "The pre-registered science gate is unevaluable with the only available truth layer (IR-67-INSTR-01) and two of four pre-registered predictions failed (P3 block-density CV 0.32 vs 0.45-0.58; P4 raw 70%-within-3px rule, IR-67-GATE-02). Format validation passes on both siblings; the negative control is degenerate by construction (IR-67-INSTR-02). No slot is used and no score is claimed.",
  "new_tiff_created_in_this_review": true,
  "historical_download_files_removed": true,
- "current_candidate": "docs/downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
- "submission_slots_used_in_this_review": 0,
- "recommended_competition_submission": null,
- "download_status": "DOWNLOAD AVAILABLE FOR REVIEW \u2014 scientific gate NOT MET; do not submit",
- "historical_artifacts": [
-  {
-   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
-   "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-   "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
-   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
-  },
-  {
-   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
-   "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
-   "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
-   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
-  },
-  {
-   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
-   "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
-   "status": "WITHDRAWN; audit-only archive outside docs/downloads; no public link",
-   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
-  }
- ],
- "gates": {
-  "authorized_inputs": "RESTORED \u2014 23/23 hash-pinned mirrors + 5 sibling inputs; raw 1 m 3DEP tiles still unreachable",
-  "hypotheses": "FIVE RANKED SAME-LANE PROPOSALS \u2014 one implemented and measured",
-  "new_holdout": "RUN \u2014 instrument N 0.0979 [0.0623, 0.1219]; below the frozen best (0.1195)",
-  "feature_leakage_canaries": "PASS \u2014 63 features, max AUC 0.646",
-  "range_front_analysis": "PASS \u2014 peaks in the piedmont (10-30 m relief), not the range front",
-  "registry_uniqueness": "UNIQUE on 60 accessible rasters (surface 0.080, dots 0.290); complete registry uncertified",
-  "validator": "PASS \u2014 0 failures, 0 skipped, features footprint",
-  "independent_reviews": "OUTSTANDING \u2014 0 of 2"
+ "current_candidate": {
+  "name": "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros",
+  "file": "docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+  "sha256": "eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42",
+  "sibling": "docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+  "sibling_sha256": "1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f",
+  "dots": 40000,
+  "validator": "PASS on both",
+  "lane_verdict": "UNIQUE (lift rule) / IR-67-GATE-02 disclosure",
+  "science_gate": "UNEVALUABLE",
+  "promote": false
  },
- "feed_policy": "Repository-state only; no leaderboard values copied, stored, refreshed, or monitored. No DrivenData subpage is deep-linked from the site absent written authorization.",
+ "submission_slots_used_in_this_review": 0,
+ "recommended_competition_submission": "owner's decision; the artifact is format-valid, no edge over the incumbent is demonstrated",
+ "download_status": "DOWNLOAD ENABLED with disclosures; no score claim, no promotion | H66-C: published for review only, NOT promoted (gate not met)",
+ "gates": {
+  "mechanical": "PASS",
+  "uniqueness_lift_rule": "PASS",
+  "uniqueness_raw_rule": "FAIL (IR-67-GATE-02)",
+  "science": "UNEVALUABLE (IR-67-INSTR-01)",
+  "leakage_canary": "PASS (worst AUC 0.713)",
+  "promotion": "NO"
+ },
  "canonical_run_card": "docs/data/run-card.json",
  "technical_audit": "docs/review/2026-10-11-audit.md",
- "input_preflight_snapshot": {
-  "evidence": "evidence/h66_inputs_s0_review.json",
-  "status": "BLOCKED; one-off pre-merge s0 exited 2; 9 required roles absent, 2 pin records absent; no load/experiment followed",
-  "not_current_runner_output": true
- },
- "release_disposition": "H66-2 is retained as a historical NEGATIVE-NOT-PROMOTED experiment from the newer main branch; no new experiment or candidate emission occurred in this PR reconciliation."
+ "feed_policy": "static project feed only; no leaderboard monitoring or copying",
+ "release_disposition": "artifacts/lidar_lane (inherited, unpublished) stays withdrawn; docs/downloads carries only the two H67-1 siblings",
+ "h66c_2026_10_12": {
+  "run": "gemsdoe66-h66c-2026-10-12",
+  "verdict": "NEGATIVE \u2014 unique format-valid artifact published for review; not promoted",
+  "file": "docs/downloads/gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
+  "sha256": "9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a",
+  "holdout_dti_instrument_N": 0.09794704598530801,
+  "ci95": [
+   0.06229577770273584,
+   0.12194197554626449
+  ],
+  "frozen_best": 0.11949990245011766,
+  "submission_slots_used": 0,
+  "gate": "NOT MET"
+ }
 }

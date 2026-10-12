@@ -114,9 +114,13 @@ def feed_page(feed: dict) -> str:
 
 
 def submission_page(rc: dict) -> str:
-    hist = rc["raster"]["historical_artifacts"][0]
+    preflight_path = ROOT / "evidence" / "input_preflight_2026-10-12.json"
+    preflight = json.loads(preflight_path.read_text(encoding="utf-8")) if preflight_path.exists() else {}
+    required = preflight.get("required_files", [])
+    missing = sum(not item.get("present", False) for item in required)
+    review_date = preflight.get("review_date", "2026-10-12")
     return f'''<div class="eyebrow">Submission workflow</div><h1>How to submit — currently blocked</h1>
-<div class="banner"><h2>No file is available to upload</h2><p>{e(rc['submission']['clearance'])} There is no active TIFF/ZIP link. Historical file SHA-256 <code>{e(hist['sha256'])}</code> is shown for audit only; the file is not submission-cleared.</p></div>
+<div class="banner"><h2>Current disposition ({e(review_date)}): BLOCKED / NEGATIVE — no file is available to upload</h2><p>{e(rc['submission']['clearance'])} The check-only preflight found {missing} of {len(required)} required competition/cache inputs absent. No qualified holdout or feature-leakage canary was run; no download is cleared. The four native-LiDAR hypotheses remain untested. There is no active TIFF/ZIP link; do not use or recreate any historical artifact.</p><p>Read the <a href="review/2026-10-12-review.md">latest three-pass review</a> and the <a href="data/run-card.json">canonical run card</a>.</p></div>
 <section class="card"><h2>Release gates before any future download</h2><ol>
 <li><b>Inputs and provenance:</b> authorized competition training features, labels, sample grid, exact DEM tile inventory, and verified shareable data lineage.</li>
 <li><b>Pre-implementation review:</b> two independent scientific leads review the ranked hypotheses, geological mechanism, named mimics, and planned holdout.</li>
@@ -134,7 +138,8 @@ def submission_page(rc: dict) -> str:
 </ol>
 <pre>Generative-AI disclosure (edit to match actual use): [Name the tool(s)]. I used generative AI to assist with [specific code, review, or documentation tasks] in developing [identify submission elements]. I independently checked [specific analyses, sources, and outputs]. The tools did not access private test labels or submit to the competition. [Correct every sentence to match what actually occurred.]</pre>
 <p class="small">The official rules are the source of truth. The narrative template is not legal advice or a substitute for reading the current rules.</p></section>
-<section class="card"><h2>Why the old format check is not enough</h2><p>The historical all-finite file's basic raster metadata/range checks do not prove it matches the official transform or footprint. The official reference and feature rasters were absent, so those checks were skipped. The old file is withdrawn from the download path and must not be submitted.</p></section>'''
+<section class="card"><h2>Why the old format check is not enough</h2><p>The historical all-finite file's basic raster metadata/range checks do not prove it matches the official transform or footprint. The official reference and feature rasters were absent, so those checks were skipped. The old file is withdrawn from the download path and must not be submitted.</p></section>
+<section class="card"><h2>Prior [0,1] rejection: code guard, not portal acceptance</h2><p>The shared <code>gems.submission_writer</code> rejects values outside [0,1] beyond its 1e-6 floating-point tolerance; the shared validator re-reads the written raster and checks the range together with the reference/features grid and NaN-only-outside footprint. Synthetic tests cover out-of-range rejection. The authorized official reference/features rasters and a current candidate are absent, so this review could not validate a real competition-grid file or verify a portal upload. No historical error is claimed fixed by an untested artifact, and local tests are not organizer acceptance.</p></section>'''
 
 
 def analysis_page(claims: dict) -> str:
@@ -176,7 +181,7 @@ def run_card_page(rc: dict) -> str:
 <div class="card"><h2>Leakage and registry</h2><p><b>Leakage canary:</b> {e(rc['leakage_canary']['status'])}</p><p><b>Threshold AUC:</b> {e(rc['leakage_canary']['threshold_auc'])}; no current feature results.</p><p><b>Pre-placement:</b> {e(reg['pre_placement_surface']['status'])}</p><p><b>Final dots:</b> {e(reg['post_placement_final_dots']['status'])}</p><p>{e(reg['reason'])}</p></div></section>
 <section class="card"><h2>Raster, validator, and submission</h2><p><b>Current raster:</b> {e(current['status'])}</p><p><b>Current file:</b> {display(current['file'])}</p><p><b>Validator:</b> {e(rc['validator']['status'])}</p><p>{e(rc['validator']['result'])}</p><p><b>Submission name/note:</b> not assigned; there is no cleared candidate. Note limit configured in the project: {e(rc['submission']['note_limit_chars'])} characters.</p><p><b>Download:</b> {e(rc['submission']['download_status'])}</p><h3>Historical artifacts withdrawn from the public download path</h3><ul>{old}</ul></section>
 <section class="card"><h2>Inputs, budget, and reviews</h2><p><b>Competition inputs:</b> {e(rc['data_access']['competition_data'])}</p><p><b>DEM source:</b> {e(rc['data_access']['official_1m_dem_source'])}</p><p><b>Experiments used in this review:</b> {e(rc['budget']['new_experiments_used'])} / {e(rc['budget']['max_experiments'])}</p><p><b>Submission slots used:</b> {e(rc['budget']['submission_slots_used'])}</p><p><b>Independent scientific reviews:</b> {e(rc['independent_reviews']['completed'])} / {e(rc['independent_reviews']['scientific_lead_reviews_required'])} — {e(rc['independent_reviews']['status'])}</p></section>
-<p class="small">Machine-readable card: <a href="data/run-card.json">docs/data/run-card.json</a>. Full source review: <a href="review/2026-10-11-audit.md">technical audit</a>.</p>'''
+<p class="small">Machine-readable card: <a href="data/run-card.json">docs/data/run-card.json</a>. Full source review: <a href="review/2026-10-12-review.md">latest three-pass review</a>.</p>'''
 
 
 def irregularities_page(d: dict) -> str:

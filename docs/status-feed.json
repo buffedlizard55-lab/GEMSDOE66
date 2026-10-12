@@ -1,10 +1,85 @@
 {
   "schema": "gems-project-status-feed/1",
-  "generated_utc": "2026-10-11",
-  "status": "BLOCKED — no candidate cleared for download or submission",
-  "scope": "Project-state feed only. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages.",
+  "generated_utc": "2026-10-12T03:00:00Z",
+  "status": "FORMAT-READY, NOT PROMOTED - one downloadable candidate (H67-1) with disclosures; no score claim",
+  "scope": "Static project feed. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages. Every number is labelled HOLDOUT-DTI or UNVERIFIED owner-reported; not one number is ORGANIZER-CONFIRMED.",
   "external_monitoring": "Disabled. DrivenData Terms of Use restrict automated access and manual monitoring/copying without prior written consent. No leaderboard values are stored.",
   "entries": [
+    {
+      "date": "2026-10-12",
+      "id": "h66c",
+      "status": "negative",
+      "title": "H66-C native-resolution LiDAR scarp channels — unique GeoTIFF published for review, gate not met",
+      "summary": "Implemented the assigned lane end to end (scarplet diffusion inversion, Steger sub-pixel lines, Frangi multiscale vesselness, official TIGER 2024 road mask) after the data blocker was lifted. The artifact passes the shared validator and is unique on every density-adjusted diagnostic over 60 rasters, but HOLDOUT-DTI on instrument N is 0.0979 [0.0623, 0.1219] against a frozen best of 0.1195. Published for review; not promoted; no submission slot spent.",
+      "links": [
+        "review/2026-10-12-h66c-verdict.md",
+        "data/run-card-h66c.json"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "kind": "session-66-release-v2",
+      "status": "CLEARED FOR DOWNLOAD — v2 k66 CANDIDATE; FIRST FILE WITHDRAWN AFTER IT LOST THE FROZEN HOLDOUT",
+      "summary": "E11 scored the first k66 candidate on the repository's frozen holdout: 0.03765 vs the incumbent's 0.04888 — a loss, so that file is withdrawn. E12 screened five variants; the apparent winner used the withheld truth's stratum masses and its truth-free twin collapsed, so it is logged as leakage and excluded. Published now: GEMSDOE66-K66C-kbalance-reliefarea-31999, HOLDOUT-DTI 0.04880 [0.02950, 0.07327], margin -0.00008 — ties the family's best-known, does not beat it. No ORGANIZER-CONFIRMED score.",
+      "links": [
+        "downloads/README.md",
+        "data/run-card-session66.json",
+        "irregularities.html"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "kind": "h67-lane-run",
+      "status": "NEGATIVE — NO H67-MEASUREMENT CANDIDATE CLEARED (independent of the H67-1 and K66 candidates above)",
+      "summary": "H67 native-resolution scarp lane (branch arena/9ae5a972): 23/23 hash-pinned mirrors re-verified; five new same-lane hypotheses (H67-A..E) implemented on the pinned 1 m-derived scarp stack + GEMSDOE48 h52 native 1 m-tile scarp-height product + TIGER/BLM cultural layers. E1 canary: no leakage (max AUC 0.5755), no cross-fold transfer (0.29-0.80, four folds sub-chance). E2 h52_h_rank emission: pooled HOLDOUT-DTI of 0.12118 vs incumbent 0.09539 (+0.0258, paired 95% CI [-0.0109, +0.0365]), gain range-front-dominated; 77.7% of final dots within 3 px of the GEMSDOE32 bayesopt-scarp registry raster (4.38x lift) -> lane-drift DUPLICATE stop. E3 lane-separation complement: 83 eligible dots, pooled HOLDOUT-DTI of 0.0. Verdict NEGATIVE; no H67 TIFF offered; 0 slots used. See review/2026-10-12-h67-session.md and data/run-card-h67.json.",
+      "links": [
+        "review/2026-10-12-h67-session.md",
+        "data/run-card-h67.json",
+        "data/hypotheses.json"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "kind": "candidate-emitted",
+      "status": "H67-1 EMITTED - 40,000 dots, two format siblings, validator PASS",
+      "summary": "gems66-h67-scarp-lane-novelty-40000dots-v2-{nan,zeros}.tif written from one dot set. -zeros holds all 12,279,160 cells in [0, 1] with zero NaN, which removes the 'Predicted values must be in range [0, 1]' rejection mode (IR-67-FORMAT-01). sha256 nan 1a72bfeb..., zeros eeadc5ce.... Dot profile: nn median 5.66 px, 85.0% on LiDAR-valid cells, mean distance to mapped faults 2,340 m, block-density CV 0.32.",
+      "links": [
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+        "data/h67_run.json",
+        "executive-summary.html"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "kind": "lane-discipline",
+      "status": "UNIQUE under the lift rule - RAW 70% RULE FALSIFIED (IR-67-GATE-02)",
+      "summary": "0.9992 of the dots lie within 3 px of gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif, but that raster's own 3 px dilation covers 95.8% of the footprint and 96.0% of the eligible band, so the matched lift is 1.04 and the statistic carries no lane-copying information. Max |rho| 0.286; max lift 1.378 < 1.5. The raw rule in the pre-registered P4 is therefore falsified and disclosed rather than waived.",
+      "links": [
+        "data/h67_overlap_audit.json",
+        "irregularities.html"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "kind": "science-gate",
+      "status": "GATE UNEVALUABLE - negative control degenerate by construction (IR-67-INSTR-01/-02)",
+      "summary": "Pooled holdout DTI is exactly 0.0 [0.0, 0.0] because the 400 m exclusion removes every dot inside the credit radius of a truth layer that is the exclusion's own complement. The only truth layer is range-front-confined and anti-correlated with the owner-reported outcome (catalogue -0.554, SGMC-all -0.872). No gain is claimed; the pre-registered P3 failed.",
+      "links": [
+        "data/h67_run.json",
+        "data/h67_e2_proxy_concordance.json"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "kind": "sources-verified",
+      "status": "CITATION VERIFIED IN SESSION",
+      "summary": "T31A-2838 is real: 'Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis', Sare & Hilley, AGU FM15, session T31A, 16 Dec 2015 - it presents wavelet templates with initial scarp slope and above/below-scarp angles and analyses Surprise Valley and Jenny Lake sites. Steger verified as TPAMI 20(2):113-125, 1998, doi:10.1109/34.659930. Nuance: the checkout's template family is the scarplet package (JOSS doi:10.21105/joss.01066), not the wavelet code itself (IR-67-SRC-01).",
+      "links": [
+        "https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html",
+        "https://doi.org/10.1109/34.659930",
+        "https://doi.org/10.21105/joss.01066"
+      ]
+    },
     {
       "date": "2026-10-11",
       "kind": "release-safety",
@@ -125,10 +200,10 @@
     }
   ],
   "next_actions": [
-    "Keep LIDAR-01 blocked; do not run the historical H66-2 union proposal or another experiment without authorized inputs, preserved provenance, scientific review, and an explicit approved research budget.",
-    "Fix and review the buffered whole-segment holdout, LiDAR-covered evaluator, and NaN-outside shared writer in the upstream shared template before re-enabling any research runner; do not use a private fork.",
-    "Obtain two independent scientific-lead reviews of the ranked same-lane hypothesis, named terrace/channel-bank/landslide mimics, and preregistered holdout protocol.",
-    "Keep all artifacts unpublished unless both continuous pre-placement and final emitted-dot checks pass against a complete registry, exact official-grid/footprint validation passes, and a valid HOLDOUT-DTI with evaluator/version/count/95% CI beats the frozen best.",
-    "Complete the missing official-rules PDF section and full applicable Terms of Use review; retain the conservative stop while IR-66-RELEASE-01 remains unresolved."
+    "Owner decision: whether to spend a weekly slot on the disclosed H67-1 sibling (no demonstrated edge; science gate unevaluable).",
+    "If a slot is spent, paste the portal receipt next to the sha256 in docs/downloads/README.md; there is no route to ORGANIZER-CONFIRMED without a portal receipt.",
+    "Obtain an authorised environment with native 1 m GeoDAWN/3DEP tiles and a cultural mask to run the actual 2-20 m method (G-05) and re-test the gate.",
+    "Re-score the negative control against a truth layer that is not the exclusion complement (e.g. GDR qfaults) before quoting any control number.",
+    "Certify registry completeness before claiming a uniqueness pass; 60 rasters compared is not the organizer registry."
   ]
 }

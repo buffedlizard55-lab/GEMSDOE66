@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+H66C_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
+
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -51,36 +53,48 @@ def test_readme_contains_the_brief():
     assert "Predicted values must be in range [0, 1]" in t
 
 
-CANDIDATE_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
+def test_site_links_only_the_disclosed_allowlisted_raster():
+    """A downloadable raster may only be the disclosed H67-1 sibling, and any page that links a
+    raster file must state the two disclosures in the same page: the raw uniqueness rule is
+    falsified and the artifact is not promoted.
 
-
-def test_site_links_only_the_review_candidate_and_never_a_cleared_file():
-    """The site may offer a download, but only the current review candidate, and only
-    together with the statement that it is not promoted.
-
-    The inherited ``lidar_lane``/H66-1/H66-2 artifacts stay withdrawn (their advantage did
-    not survive relief matching). The H66-C GeoTIFF is a different situation: it is unique
-    and format-valid, so downloading it is defensible, but the scientific gate is not met,
-    so it must never be presented as cleared. Guarding the second half is what keeps a
-    future, more optimistic rebuild from quietly promoting a file the evidence does not
-    support.
+    Guarding this with a test is what keeps a future, more optimistic rebuild from quietly
+    publishing a file the evidence does not support - or from dropping the disclosures.
     """
     import re
-    found = False
+    allowed = {
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+        # the H66-C review candidate: downloadable, never promoted
+        "downloads/%s.tif" % H66C_STEM,
+        "downloads/%s.zip" % H66C_STEM,
+    }
+    linked_any = False
     for f in sorted((ROOT / "docs").glob("*.html")):
         html = f.read_text()
-        for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
-            href = m.group(1)
-            assert CANDIDATE_STEM in href, f"{f.name} links a raster that is not the review candidate: {href}"
-            found = True
-        if CANDIDATE_STEM in html:
-            low = html.lower()
-            assert "scientific gate not met" in low or "gate is not met" in low, f.name
-            assert any(phrase in low for phrase in
-                       ("not promoted", "do not submit it", "do not submit this file")), f.name
-    assert found, "no download link is published; the site contract changed again"
-    card = json.loads((ROOT / "docs" / "data" / "run-card-h66c.json").read_text())
-    assert card["promote"] is False
+        hits = [m.group(1) for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html)]
+        for href in hits:
+            rel = href.split("?")[0]
+            # session-66 pass 3: the k66 family allowlist is read from its own run card, so a
+            # withdrawn file (the k66 consensus candidate) stops being linkable automatically.
+            import json as _json
+            _card = _json.loads((ROOT / "registry66" / "run-card-session66.json").read_text())
+            _r = _card["raster"]
+            k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
+            k66 = rel.split("/")[-1] in k66_names
+            assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
+            linked_any = True
+        if hits:
+            links_h67 = any("gems66-h67" in h for h in hits)
+            links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
+            if links_h67:
+                assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
+                assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
+                assert "0.9992" in html, f"{f.name} does not state the measured raw overlap"
+            if links_k66:
+                assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
+                assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
+    assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 
 def test_negative_verdict_is_recorded():

@@ -543,7 +543,10 @@
   "file": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif",
   "name": "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59",
   "note": "h66c lidar scarp diffusion inversion + Steger/Frangi lines, TIGER-road masked, 200 m catalogue-gap gate, d4 spacing",
-  "note_chars": 115
+  "note_chars": 115,
+  "promoted": false,
+  "slots_used": 0,
+  "download_status": "PUBLISHED FOR REVIEW \u2014 download yes, submit no; scientific gate NOT MET"
  },
  "independent_reviews": {
   "status": "NOT COMPLETED",

@@ -1,65 +1,55 @@
-# Downloads
+# Download folder — what is here and what it is worth
 
-## Current file — available, but NOT cleared for submission
+**One file is offered for upload, with one safer-format sibling. Nothing else here is a candidate.**
 
-| | |
-|---|---|
-| **file** | [`gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif`](gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.tif) |
-| **zip** | [`…4023a1c1ef59.zip`](gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59.zip) — 268,440 bytes |
-| **sha256 (tif)** | `9bfe2d404a81f02598576000ce41ce8082475768fde5a29f346d2dadcec3d34a` |
-| **sha256 (zip)** | `1564930414a31044a4fce73ce57d74dbe5289260cf7ffc9285307ba3381edd5a` |
-| **size** | 378,581 bytes · 3730 × 3292 · float32 · 1 band · EPSG:32611 · 100 m |
-| **emitted cells** | 42,000 (0.813 % of the 5,165,852-cell features footprint) |
-| **validator** | PASS — 0 failures, 0 skipped (`gems.validate_submission`, reference `labels.tif`, features `training_features.tif`) |
-| **uniqueness** | UNIQUE on 60 accessible registry rasters: surface max \|ρ\| 0.080, final dots max \|ρ\| 0.290 |
-| **HOLDOUT-DTI** | 0.0979, 95 % CI [0.0623, 0.1219], instrument N, 2,355 withheld positives — **below the frozen best 0.1195** |
+| file | sha256 | status |
+|---|---|---|
+<<<<<<< HEAD
+| [`gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif`](gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif) | `dbee66e6cd030ad3c619d5aa9b04a4b3a2717cffe1b591c3ef281726af66b638` | primary submission (NaN outside the footprint) |
+| [`gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip`](gems66-k66c-kbalance-31999-20261012T020000Z-nan.zip) | `ecc6bac9a3106bd17ae72cb30484befd7719f7eb687a813d243f6083f506a13e` | the same GeoTIFF zipped |
+| [`gems66-k66c-kbalance-31999-20261012T020000Z-allfinite.tif`](gems66-k66c-kbalance-31999-20261012T020000Z-allfinite.tif) | `1072d688791fb6f2e801aee90570d0dc2263f8859ab01fc104a5b39a7178c34c` | identical inside the footprint, writes `0` outside instead of NaN |
 
-### Is it OK to download and submit?
+Submission name `GEMSDOE66-K66C-kbalance-reliefarea-31999`; note (129/140 characters)
+`GEMSDOE66 K66C | K prior, lidar-covered, relief-area-balanced dots; ties the family's best-known on our frozen holdout, no margin`.
 
-- **Download: yes.** It is a real, format-clean, unique GeoTIFF. Verify the SHA-256 above.
-- **Submit: no.** The scientific gate is not met. On the only holdout instrument in this
-  repository that is positively rank-correlated with the owner-reported live scores, the
-  candidate (0.0979) is below every frozen baseline (anderson 0.1195, h33-2-b2 0.1104,
-  d28 0.1065). Two independent scientific-lead reviews are also still outstanding.
+Cleared by [`registry66/run-card-session66.json`](../../registry66/run-card-session66.json) and
+[`evidence66/e13_release.json`](../../evidence66/e13_release.json).
 
-Producing this file spent **no** competition submission slot. Spending one is a separate, human
-selector decision. See the [executive summary](../executive-summary.html) for the exact steps if
-a selector chooses to proceed, and the
-[H66-C verdict note](../review/2026-10-12-h66c-verdict.md) for the reasoning.
+## The holdout result, stated on the download page
 
-### Method in one paragraph
+* HOLDOUT-DTI **0.04880** [95% CI 0.02950, 0.07327] over
+  8 folds, 39,863 withheld positives.
+* Same folds: owner-reported-0.2778 incumbent **0.04888**,
+  chance 0.03416.
+* **Margin -0.00008**: this file ties the family's best-known design on our
+  own frozen instrument; it does not beat it.
 
-The diffused-scarp template `z = (a/2)[1 + erf(x / (2√(κt)))]` is inverted on the 2 m-computed
-LiDAR descriptors: `max|z'| = a/(2√(πκt))` and `max|z''| = 0.12096·a/(κt)` give a scarp-height
-proxy `a_hat = 1.5203·S²/C` and a morphologic-age proxy `κt_hat = 1.5203²·a_hat²/(4πS²)`, with
-`S` the 2 m slope excess over the 30 m regional slope and `C` the 6 m-LoG curvature dipole.
-Steger sub-pixel lines (TPAMI 20(2):113–125, 1998) and Frangi multiscale vesselness (MICCAI 1998,
-LNCS 1496:130–137) at σ = 1.0–3.0 cells are added on that field and on the slope-detrended
-elevation. Roads are removed with the official US Census TIGER 2024 road-distance raster; canals
-and field edges by a four-way geometric conjunction. The field is gradient-boosted under 20 km
-block holdout and emitted as a greedy packing (400 m minimum separation) with a 200 m hard /
-600 m ramp **catalogue-gap gate**.
+## Withdrawn earlier today — do NOT upload
 
----
+* `gems66-k66-kanchor-consensus-32000-20261012T003000Z-*` (sha256 `122fcd16…`): scored 0.03765
+  [0.03087, 0.04440] on the same frozen holdout — a loss to the incumbent — and withdrawn. The bytes
+  remain under `artifacts66/` for audit and are not linked from the site.
 
-## Do not upload these — historical, audit-only
+## Historical artifacts — do NOT upload
 
-**H66-1:** Historical TIFF/ZIP bytes were withdrawn from the public download path and retained
-only as byte-verified audit copies under `evidence/archives/h66-1/`, outside the Pages document
-root and without site links. They did not pass the required holdout, leakage, complete-registry,
-provenance, and exact-footprint release gates.
+- **H66-1** bytes stay under `evidence/archives/h66-1/`, outside the Pages document root.
+- **H66-2** is a historical negative result under `artifacts/h66-2/`.
+- **lidar_lane** is audit-only under `artifacts/lidar_lane/`.
+=======
+| `gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif` | `eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42` | **RECOMMENDED UPLOAD.** float32, EPSG:32611, 100 m, 3730x3292, 40,000 unit-mass dots, zero NaN, every one of the 12,279,160 cells in [0, 1]. Validator PASS. |
+| `gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif` | `1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f` | Same values inside the footprint; NaN outside (7,111,787 cells), which is the brief-exact convention but can trip a strict finite-range checker (IR-67-FORMAT-01). |
+| `*.tif.receipt.json` | — | Writer receipts: grid, range, NaN counts, dot count, the baked-in submission name and the note. Local evidence, **not** organizer acceptance. |
 
-**H66-2:** A historical negative result; its figures are off-catalogue proxies, not
-`HOLDOUT-DTI` or `ORGANIZER-CONFIRMED`. Audit artifacts are under `artifacts/h66-2/`.
+Why two files exist: a previous upload was rejected with *"Predicted values must be in range [0, 1]"*.
+A strict `all(0 <= v <= 1)` test returns `False` on NaN, so the writer now offers an explicit
+`outside_fill` export and the validator an `outside_policy` switch; the runner writes both siblings from
+one dot set. Inside the footprint the files are identical pixel-for-pixel.
 
-**lidar_lane:** The scarp-field artifact and analysis are retained under `artifacts/lidar_lane/`
-for audit only. The reported pooled gain was reversed by relief-matched evaluation; no organizer
-score is established. Its density-adjusted uniqueness output does not override the raw rule: the
-recorded final-dot overlap is 0.990 against an accessible registry raster, above the 0.70 stop
-threshold. Only 60 rasters were compared, full organizer-registry completeness is uncertified,
-and the pre-placement surface comparison is not reported.
+**What is NOT claimed.** No organizer score, no leaderboard comparison, no promotion. The
+pre-registered science gate is unevaluable (IR-67-INSTR-01), the pre-registered P3 and P4 were
+falsified, and the registry comparison carries an open raw-threshold exception (IR-67-GATE-02).
+Upload is the owner's decision; the honest default under the project rule is to keep the slot.
 
-The shared-template provenance discrepancy and the PR #12 reconciliation are recorded in
-[`review/2026-10-11-pr12-reconciliation.md`](../review/2026-10-11-pr12-reconciliation.md). The
-canonical run card is [`data/run-card-h66c.json`](../data/run-card-h66c.json). No
-`ORGANIZER-CONFIRMED` result or cleared submission is claimed.
+**After uploading, write the receipt here** (submission id, timestamp, score or error text). An
+organizer receipt tied to the sha256 above is the only route to `ORGANIZER-CONFIRMED`.
+>>>>>>> origin/main

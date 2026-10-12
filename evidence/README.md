@@ -8,4 +8,11 @@ The exploratory negative cultural-veto/proxy comparison is retained in `h66_e1_o
 
 `data_verification.json` is an older owner-mirror integrity record imported from the updated base branch. Its file-level disposition states that it is not organizer authentication, current input provenance, LiDAR coverage certification, a holdout result, or release clearance. Its listed raster bytes are not present in the current checkout.
 
+## 2026-10-12 current preflight evidence
+
+- [`input_preflight_2026-10-12.json`](input_preflight_2026-10-12.json) records the presence-only `bash scripts/fetch_inputs.sh` result: exit 2, all eight competition/cache inputs absent, and no network request, copy, authentication, or processing. It also records no native DEM, cultural mask, official grid, or complete-registry certificate.
+- [`h33_owner_claim_review_2026-10-12.json`](h33_owner_claim_review_2026-10-12.json) records an owner-page statement, not an organizer score receipt. The user-supplied H33 value remains unverified and is not tied to an exact raster hash.
+- [`release_preflight_2026-10-12.json`](release_preflight_2026-10-12.json) records `cleared_for_review: false` and `download_allowed: false`; it is a mechanical blocker report, not a scientific result.
+- The full three-pass disposition is [`../docs/review/2026-10-12-review.md`](../docs/review/2026-10-12-review.md).
+
 No `HOLDOUT-DTI` measurement from this review exists. A future result must include the exact evaluator version, withheld-positive count, and a 95% spatial-block confidence interval. An organizer value may be called `ORGANIZER-CONFIRMED` only when copied from a submission receipt tied to the exact artifact SHA-256. No credentials or hidden labels were used in this review.

@@ -1,0 +1,62 @@
+{
+  "schema": "gems-input-presence-preflight/1",
+  "command": "bash scripts/fetch_inputs.sh",
+  "exit_code": 2,
+  "result": "BLOCKED",
+  "behavior": "Presence-only check; no network request, copy, authentication, or data processing was performed.",
+  "data_directory_exists": false,
+  "cache_directory_exists": false,
+  "cached_feature_stack": {
+    "path": "data/processed/stack.f32",
+    "present": false
+  },
+  "required_files": [
+    {
+      "path": "bridge/training_features.tif",
+      "present": false
+    },
+    {
+      "path": "bridge/labels.tif",
+      "present": false
+    },
+    {
+      "path": "bridge/existing_faults.tif",
+      "present": false
+    },
+    {
+      "path": "bridge/sample_submission.tif",
+      "present": false
+    },
+    {
+      "path": "bridge/1m_DEM_links.csv",
+      "present": false
+    },
+    {
+      "path": "external/lidar_scarp_features_u8.tif",
+      "present": false
+    },
+    {
+      "path": "external/lidar_scarp_features.json",
+      "present": false
+    },
+    {
+      "path": "external/topo_10m_derived_100m_u8.tif",
+      "present": false
+    }
+  ],
+  "missing_count": 8,
+  "registry": {
+    "accessible_tif_count": 60,
+    "organizer_complete": false,
+    "completeness_certificate": null
+  },
+  "native_lidar_dem_tiles_present": false,
+  "cultural_feature_mask_present": false,
+  "official_reference_grid_present": false,
+  "experiment_started": false,
+  "holdout_started": false,
+  "candidate_emitted": false,
+  "submission_slots_used": 0,
+  "note": "Owner-mirrored artifacts or a cached 100 m derivative are not substitutes for verified native 1 m DEM tiles, official grid/footprint provenance, and the existing cultural-feature mask.",
+  "review_date": "2026-10-12"
+}

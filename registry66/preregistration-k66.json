@@ -1,0 +1,25 @@
+{
+ "schema": "gems66-preregistration/2",
+ "id": "K66C",
+ "fixed_before_emission": true,
+ "why": "written from the E11 negative and the E12 screen: the E7 K^0.5 consensus design lost to the incumbent on the frozen holdout, so a new pre-registered variant was required before any further release",
+ "support": "footprint and lidar-covered and distance-to-catalogue >= 3 cells and K > 0",
+ "prior": "GeoDAWN radiometric K (uint8 mirror band 1), no exponent",
+ "budget": "32000 dots, split across the three L_relief strata in proportion to lidar-covered footprint AREA",
+ "acceptance_rule": "greedy per stratum with min separation 2 cells; the truth-free budget split is the point",
+ "constants": {
+  "N_cap": 32000,
+  "min_sep_cells": 2,
+  "cat_min_cells": 3,
+  "g_truth": 60988
+ },
+ "predicted_direction": "pooled HOLDOUT-DTI at least the incumbent order (0.049) and clearly above chance (0.034)",
+ "measured_after_emission": {
+  "holdout_dti": 0.04880102023310905,
+  "ci95": [
+   0.029498375501489225,
+   0.07327236004281738
+  ]
+ },
+ "stopping": "single emission; the E12 screen is the only iteration and all five variants are recorded"
+}
