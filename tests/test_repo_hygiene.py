@@ -103,6 +103,33 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
     assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 
+def test_h67_geophys_pages_disclose_and_match_their_own_verdict():
+    """The H67 geophysics lane keeps its own pages under docs/h67/ and must obey the same rule:
+    link a raster only when its recomputed verdict is cleared, and always show the label, the CI
+    and the null it is compared against.  A projection is never written as a score.
+    """
+    import re
+    import sys
+
+    pages = sorted((ROOT / "docs" / "h67").glob("*.html"))
+    assert pages, "scripts/build_site_h67.py must publish the lane's pages"
+    sys.path.insert(0, str(ROOT / "scripts"))
+    sys.path.insert(0, str(ROOT / "src"))
+    import build_site_h67
+
+    card = build_site_h67.newest(str(ROOT / "artifacts" / "h67" / "run-card-*.json"))
+    a = build_site_h67.assess(card)
+    index = (ROOT / "docs" / "h67" / "index.html").read_text()
+    assert ("OK TO SUBMIT" in index) == a["cleared"], "banner disagrees with the recomputed verdict"
+    for f in pages:
+        html = f.read_text()
+        assert "HOLDOUT-DTI" in html or f.name in ("sources.html", "method.html"), f.name
+        for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
+            assert a["cleared"], f"{f.name} links {m.group(1)} while the verdict is negative"
+            assert (ROOT / "docs" / "h67" / m.group(1)).resolve().is_file(), m.group(1)
+        assert not re.search(r"ORGANIZER-CONFIRMED\W+0\.\d", html), f.name
+
+
 def test_negative_verdict_is_recorded():
     rc = json.loads((ROOT / "docs" / "data" / "run_card.json").read_text())
     assert rc["verdict"] == "negative", rc["verdict"]

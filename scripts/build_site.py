@@ -19,7 +19,8 @@ DL = DOCS / "downloads"
 NAV = [("index.html", "Overview"), ("executive-summary.html", "How to submit"),
        ("hypotheses.html", "Hypotheses"), ("research.html", "Research"),
        ("results.html", "Results"), ("feed.html", "Project feed"),
-       ("sources.html", "Sources"), ("irregularities.html", "Irregularities")]
+       ("sources.html", "Sources"), ("irregularities.html", "Irregularities"),
+       ("h67/index.html", "H67 geophysics lane")]
 
 
 def esc(s) -> str:

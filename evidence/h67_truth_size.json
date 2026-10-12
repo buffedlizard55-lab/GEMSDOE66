@@ -1,0 +1,251 @@
+{
+ "generated_utc": "2026-10-12T00:49:58Z",
+ "metric_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+ "method": "official DTI inverted on owner-reported scores of hash-pinned mirror artifacts; all artifacts asserted strictly binary p in {0,1} before use",
+ "artifacts": [
+  {
+   "name": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "score_owner_reported": 0.0904,
+   "score_source": "13GEMSDOE  20261001_r13-lattice-s5_v2_nan-outside",
+   "N": 206895,
+   "S": 206895.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.13204306935345403,
+   "implied_T_at_G_upper_bound": 8614.670701757024
+  },
+  {
+   "name": "8GEMSDOE_Hedge-v2_submission.tif",
+   "score_owner_reported": 0.1563,
+   "score_source": "8GEMSDOE  Hedge-v2_submission",
+   "N": 227507,
+   "S": 227507.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.24160102424117394,
+   "implied_T_at_G_upper_bound": 15762.381738292168
+  },
+  {
+   "name": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+   "score_owner_reported": 0.128,
+   "score_source": "GEMSDOE10  H25-ctx-ridge",
+   "N": 174232,
+   "S": 174232.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.17525321371272556,
+   "implied_T_at_G_upper_bound": 11433.75970395289
+  },
+  {
+   "name": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+   "score_owner_reported": 0.1839,
+   "score_source": "GEMSDOE10  h28-dotted-ridge",
+   "N": 69281,
+   "S": 69281.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.19328642740273874,
+   "implied_T_at_G_upper_bound": 12610.271264874254
+  },
+  {
+   "name": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+   "score_owner_reported": 0.1855,
+   "score_source": "16GEMSDOE  h16-1-topo-geophys-baseline-ridges",
+   "N": 123939,
+   "S": 123939.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.2273121330853262,
+   "implied_T_at_G_upper_bound": 14830.154908034403
+  },
+  {
+   "name": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+   "score_owner_reported": 0.1894,
+   "score_source": "19GEMSDOE  h19-4-multiline-corroborated",
+   "N": 123779,
+   "S": 123779.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.23218280513698064,
+   "implied_T_at_G_upper_bound": 15147.92422396069
+  },
+  {
+   "name": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+   "score_owner_reported": 0.1922,
+   "score_source": "19GEMSDOE  h19-5-powerlaw-budget-multiline",
+   "N": 121131,
+   "S": 121131.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.23412994091511544,
+   "implied_T_at_G_upper_bound": 15274.958029084835
+  },
+  {
+   "name": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "score_owner_reported": 0.2477,
+   "score_source": "GEMSDOE24  h25-1-dotted-h19-5-d1-5",
+   "N": 60069,
+   "S": 60069.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.2564783821126358,
+   "implied_T_at_G_upper_bound": 16733.00094308941
+  },
+  {
+   "name": "gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "score_owner_reported": 0.26,
+   "score_source": "GEMSDOE25 dotted-h19-5-d2-8 = GEMSDOE30 d28-poisson300m-offcat-44090",
+   "N": 44090,
+   "S": 44090.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.25647838211263574,
+   "implied_T_at_G_upper_bound": 16733.000943089406
+  },
+  {
+   "name": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+   "score_owner_reported": 0.2449,
+   "score_source": "GEMSDOE27  topo-gap-closure-t-v2-on-d1-5",
+   "N": 61328,
+   "S": 61328.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.2544237084484253,
+   "implied_T_at_G_upper_bound": 16598.951218984883
+  },
+  {
+   "name": "gemsdoe-ens12-adopted-7f00890a.tif",
+   "score_owner_reported": 0.1563,
+   "score_source": "GEMSDOE / 5GEMSDOE  gems-submission-...-7f00890a",
+   "N": 172974,
+   "S": 172974.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 7111787,
+   "implied_recall_rho_at_G_upper_bound": 0.21462871929340555,
+   "implied_T_at_G_upper_bound": 14002.671619994177
+  },
+  {
+   "name": "gemsdoe9-PLACEHOLDER-2314b599.tif",
+   "score_owner_reported": 0.0107,
+   "score_source": "GEMSDOE9  2314b599",
+   "N": 343816,
+   "S": 343816.0,
+   "strictly_binary": true,
+   "max": 1.0,
+   "nan_cells": 0,
+   "implied_recall_rho_at_G_upper_bound": 0.019880146107093957,
+   "implied_T_at_G_upper_bound": 1297.0079615235131
+  }
+ ],
+ "controlled_pair": {
+  "dense": {
+   "name": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "N": 60069,
+   "score": 0.2477
+  },
+  "sparse": {
+   "name": "gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "N": 44090,
+   "score": 0.26
+  },
+  "assumption": "same covered truth mass T and same wasted-mass fraction u",
+  "sweep": [
+   {
+    "u_wasted": 0.05,
+    "T": 836.6500471544705,
+    "G": 3262.068484146336,
+    "recall_T_over_G": 0.2564783821126358
+   },
+   {
+    "u_wasted": 0.13,
+    "T": 2175.2901226016234,
+    "G": 8481.378058780474,
+    "recall_T_over_G": 0.25647838211263574
+   },
+   {
+    "u_wasted": 0.21,
+    "T": 3513.930198048776,
+    "G": 13700.68763341461,
+    "recall_T_over_G": 0.2564783821126358
+   },
+   {
+    "u_wasted": 0.29,
+    "T": 4852.570273495928,
+    "G": 18919.997208048742,
+    "recall_T_over_G": 0.2564783821126358
+   },
+   {
+    "u_wasted": 0.37,
+    "T": 6191.21034894308,
+    "G": 24139.306782682877,
+    "recall_T_over_G": 0.2564783821126358
+   },
+   {
+    "u_wasted": 0.45,
+    "T": 7529.850424390234,
+    "G": 29358.616357317023,
+    "recall_T_over_G": 0.2564783821126358
+   },
+   {
+    "u_wasted": 0.53,
+    "T": 8868.490499837386,
+    "G": 34577.925931951155,
+    "recall_T_over_G": 0.2564783821126358
+   },
+   {
+    "u_wasted": 0.61,
+    "T": 10207.13057528454,
+    "G": 39797.2355065853,
+    "recall_T_over_G": 0.2564783821126358
+   },
+   {
+    "u_wasted": 0.69,
+    "T": 11545.770650731693,
+    "G": 45016.545081219425,
+    "recall_T_over_G": 0.25647838211263585
+   },
+   {
+    "u_wasted": 0.77,
+    "T": 12884.410726178847,
+    "G": 50235.85465585358,
+    "recall_T_over_G": 0.25647838211263574
+   },
+   {
+    "u_wasted": 0.85,
+    "T": 14223.050801626001,
+    "G": 55455.164230487724,
+    "recall_T_over_G": 0.25647838211263574
+   },
+   {
+    "u_wasted": 0.93,
+    "T": 15561.690877073152,
+    "G": 60674.47380512185,
+    "recall_T_over_G": 0.25647838211263574
+   }
+  ]
+ },
+ "identified_quantities": {
+  "identified_invariant_recall_T_over_G": 0.2564783821126358,
+  "x_wasted_over_G_sparse_level": 0.6757981969765128,
+  "x_wasted_over_G_dense_level": 0.9207194804758937,
+  "G_upper_bound_at_u1": 65241.369682926714,
+  "T_upper_bound_at_u1": 16733.00094308941,
+  "note": "|G| and T are only identified up to the common factor u' in (0,1]; T/|G| and (N-M)/|G| are invariant to it and are the decision-relevant quantities. No point estimate of |G| is claimed."
+ },
+ "recall_invariant_T_over_G": 0.2564783821126358,
+ "G_admissible_range_open_to": 65241.369682926714,
+ "catalogue_positive_pixels_for_scale": 60988,
+ "decision_rule": "DTI = rho / (0.2 rho + 0.2 (N-M)/|G| + 0.8). Raising rho and cutting the wasted dot mass (N-M)/|G| are the only two levers; neither requires guessing |G| exactly.",
+ "caveat": "OWNER-REPORTED scores, not ORGANIZER-CONFIRMED. |G| and rho are inference from unrecepted public scores, not measurements."
+}

@@ -63,6 +63,88 @@ negative results and disclosed stops are valid outcomes.
 > [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
 > session-66 design.
 
+## H67 geophysics lane (branch `arena/855725e1`, 2026-10-12) — ONE candidate CLEARED
+
+Pages: [`docs/h67/`](https://buffedlizard55-lab.github.io/GEMSDOE66/h67/) · run card
+[`docs/data/run-card-h67.json`](docs/data/run-card-h67.json) · full review
+[`docs/review/2026-10-12-h67-offcatalogue-geophysics.md`](docs/review/2026-10-12-h67-offcatalogue-geophysics.md)
+
+**Cleared for download:** `gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif`
+(sha256 `512fda025b830209abb01319…`), 45,000 binary dots, float32, EPSG:32611, 100 m, NaN only
+outside the footprint. `scripts/build_site_h67.py` recomputes **all 15 release gates from the bytes
+on disk** at build time and publishes or withdraws `docs/downloads/` accordingly, so the lane shows
+exactly one banner: **✅ DOWNLOAD READY — OK TO SUBMIT** or **❌ NOT CLEARED**, never both.
+Validator: 13 PASS · 0 FAIL · 0 SKIPPED. **No organizer score is claimed, and nothing has been
+uploaded — 0 submission slots used.**
+
+The decisive measurement is a **negative** one that inverted the preregistered hypothesis ranking.
+Every layer that reads a fault *inventory* — the given catalogue, the USGS QFDB traces, the SGMC
+state geologic map, the GDR thermal springs — is an **anti-signal** under this repository's own
+spatially blocked holdout, because that protocol withholds whole fault segments and buffers the
+remaining inventory by 300 m. The withheld truth therefore sits inside a manufactured gap, and
+"distance to the remaining inventory" learns *"gap means no fault"*. Same 2 folds, same 45,000-dot
+budget, same eligible mask, withheld positives pooled **62,383**:
+
+| belief | HOLDOUT-DTI | 95% CI | null-adjusted |
+|---|---|---|---|
+| R1 catalogue distance only | 0.0178 | 0.0147 – 0.0208 | 0.25× random |
+| R4 catalogue + SGMC gap | 0.0178 | 0.0147 – 0.0208 | 0.25× random |
+| R5 full 62-layer stack | 0.0178 | 0.0147 – 0.0208 | 0.25× random |
+| uniform random placement (null) | 0.0707 | — | 1.00× |
+| fixed 100 m lattice (null) | 0.0729 | — | 1.03× |
+| **R3 geophysics/topography, no inventory** | **0.17898** | **0.17816 – 0.17980** | **2.53× random** |
+
+Leakage canary clear (strongest single layer AUC 0.714 vs a 0.90 threshold). Paired gain R3 − R1 =
+**+0.16121, 95% CI [0.15735, 0.16506]**, so the promotion is uncertainty-bounded. Every number
+above is **HOLDOUT-DTI** from [`src/gems/metric.py`](src/gems/metric.py); none is an organizer score
+and none predicts one. **Hypothesis A (the SGMC cartographic gap) is NOT supported**: the gap is
+real as a fact — 79,615 of 83,593 SGMC fault pixels (95.2%) lie outside the given catalogue, 62,122
+of them more than 300 m from it — and it carries no measurable incremental predictive signal, since
+adding the SGMC layers moved HOLDOUT-DTI by exactly 0.0000.
+
+Three protocol defects were found in review and fixed, each now regression-tested:
+
+* **`IR-67-FOOTPRINT-01`** — `sample_submission.tif` is finite on 5,167,373 cells while
+  `training_features.tif` band 1 is finite on 5,165,852 (disagreement 3,061 / 1,540). The validator
+  used the features mask and so **failed an artifact whose NaN convention is byte-identical to all
+  12 owner artifacts the organizer actually scored**. The reference (sample-submission) mask is now
+  authoritative — but only when its band is floating point, since an integer label raster encodes no
+  footprint — the features mask is an INFO cross-check, and no dot may lie outside the features
+  bounds under either reading. This is the defect class behind the earlier *"Predicted values must
+  be in range [0, 1]"* rejection.
+* **`IR-66-GATE-01`, extended** — raw within-3px overlap is dominated by comparator density (a 5-px
+  lattice has a 0.9985 random null, so every candidate looks like a copy of it). The audit now also
+  draws a null from the **1 km neighbourhood the candidate's own dots occupy**, which separates
+  "shares a geological target" from "copies the same dots": the worst comparator's 3.07
+  unconditional lift falls to **1.37**. Over 72 comparators: 0 sha256 twins, max coincident dots
+  6,799 of 45,000, max |Spearman ρ| 0.2241 (stop > 0.90), 0 duplicate-flagged rasters.
+* **A private fork of the layer-exclusion list** — `INVENTORY_LAYERS` was duplicated in two scripts;
+  it now lives once in [`src/gems67/design.py`](src/gems67/design.py) with the measurement that
+  justifies it. `scripts/fetch_mirrors.py` also no longer aborts on manifest entries with
+  `repo: null`, so `data/restore_receipt.json` is finally written: 23 verified, 2 no-mirror,
+  0 failed.
+
+**Reproduce:**
+
+```bash
+python3 scripts/fetch_mirrors.py                       # 23 verified, 2 no-mirror, 0 failed
+python3 scripts/h67_build_stack.py                     # 5,167,373 x 62 float32 memmap, 1.28 GB
+python3 scripts/h67_holdout.py  --instruments C --recipes R1,R4,R5 --standoff-px 2
+python3 scripts/h67_holdout.py  --instruments C --recipes R3       --standoff-px 2
+python3 scripts/h67_null_control.py --instruments C                # the placement nulls
+python3 scripts/h67_submit.py   --recipe R3_geophysical_only --standoff-px 2 --budget 45000
+python3 scripts/h67_run_card.py --holdout evidence/h67_holdout_C.json evidence/h67_holdout_C_R3.json
+python3 scripts/build_site_h67.py                      # recomputes all 15 gates, then publishes
+python3 -m pytest -q
+```
+
+**Blocked here:** no DrivenData credentials, so nothing can be uploaded and the data tab cannot be
+auto-downloaded; egress is limited to `github.com`, `api.github.com` and `pypi.org`, so USGS 3DEP,
+ScienceBase, the GDR endpoints and the DrivenData 1 m DEM links all return HTTP 000
+(`IR-66-DATA-01`) and the brief's native-resolution lidar lane cannot be run. `IR-67-METRIC-01`:
+the official worked example's `FPw = 1.89` does not reproduce — any 5-px line prediction against
+that truth gives `FPw = 2.00`, while `TPw` and `FNw` reproduce exactly.
+
 ## Session 66 status — a unique candidate IS cleared for download
 
 **Download: [`gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif`](docs/downloads/gems66-k66c-kbalance-31999-20261012T020000Z-nan.tif)**

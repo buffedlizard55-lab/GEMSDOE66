@@ -89,6 +89,26 @@ def main() -> int:
         if fid in skip:
             continue
         target = dest / f["dest"]
+        # Manifest entries with "repo": null have no reachable mirror (the owner recorded the
+        # id and sha256 but never mirrored the bytes).  Report them honestly instead of calling
+        # `gh api repos/None/...`, which 404s and aborted the whole restore before the receipt
+        # for the 22 reachable files could be written.
+        if not f.get("repo"):
+            if target.exists():
+                got = sha256_of(target)
+                ok = got == f["sha256"]
+                print(("PASS " if ok else "FAIL ")
+                      + f"{fid:34s} {target.stat().st_size:>13,} bytes  {got[:16]}...  (local)")
+                results.append({"id": fid, "status": "pass" if ok else "FAIL",
+                                "sha256": got, "bytes": target.stat().st_size,
+                                "note": "no mirror in manifest; verified against local copy"})
+                if not ok:
+                    failed.append(fid)
+            else:
+                print(f"SKIP {fid:34s} {'':>13s} {'':16s}  no mirror repo recorded in manifest")
+                results.append({"id": fid, "status": "no_mirror", "sha256": None,
+                                "bytes": 0, "note": "manifest has repo: null; not obtainable here"})
+            continue
         if target.exists() and target.stat().st_size == f["bytes"]:
             got = sha256_of(target)
             if got == f["sha256"]:
@@ -125,11 +145,15 @@ def main() -> int:
     receipt.parent.mkdir(parents=True, exist_ok=True)
     receipt.write_text(json.dumps(
         {"generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-         "verified": sum(1 for r in results if r["status"] != "FAIL"),
+         "verified": sum(1 for r in results if r["status"] in ("pass", "cached")),
+         "cached": sum(1 for r in results if r["status"] == "cached"),
+         "no_mirror": [r["id"] for r in results if r["status"] == "no_mirror"],
          "failed": failed,
          "files": results},
         indent=1))
-    print(json.dumps({"verified": len(results) - len(failed), "failed": failed}, indent=1))
+    print(json.dumps({"verified": sum(1 for r in results if r["status"] in ("pass", "cached")),
+                      "no_mirror": [r["id"] for r in results if r["status"] == "no_mirror"],
+                      "failed": failed}, indent=1))
     return 1 if failed else 0
 
 

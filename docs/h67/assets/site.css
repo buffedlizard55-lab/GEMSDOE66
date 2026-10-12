@@ -1,0 +1,37 @@
+
+:root{--ink:#12181f;--mut:#5b6875;--line:#dfe5ec;--bg:#f6f8fa;--ok:#0b7a3b;--bad:#b3261e;--acc:#0b5cab}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#fff}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid var(--line);background:var(--bg)}
+h1.logo{font-size:19px;margin:14px 0 6px}
+nav.main{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 10px}
+nav.main a{color:var(--mut);text-decoration:none;padding:6px 10px;border-radius:6px;font-size:14px}
+nav.main a:hover{background:#eaeff5}
+nav.main a.on{background:var(--acc);color:#fff}
+main{padding:26px 0 60px}
+h2{font-size:22px;margin:30px 0 10px;border-bottom:1px solid var(--line);padding-bottom:6px}
+h3{font-size:17px;margin:22px 0 6px}
+p{margin:10px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--bg);font-weight:600;white-space:nowrap}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;word-break:break-all}
+.small{font-size:13px;color:var(--mut)}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.02em}
+.pill.ok{background:#e2f5e9;color:var(--ok)}
+.pill.bad{background:#fde8e7;color:var(--bad)}
+.pill.warn{background:#fff4d6;color:#8a6100}
+.banner{border:2px solid;border-radius:10px;padding:18px 20px;margin:18px 0}
+.banner.go{border-color:var(--ok);background:#f2fbf5}
+.banner.stop{border-color:var(--bad);background:#fdf3f2}
+.banner h2{border:0;margin:0 0 8px;font-size:24px}
+.dl{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.dl a{display:inline-block;background:var(--ok);color:#fff;text-decoration:none;font-weight:700;
+      padding:14px 22px;border-radius:8px;font-size:17px}
+.dl a.alt{background:var(--acc)}
+.note{background:#f2f7fd;border-left:4px solid var(--acc);padding:10px 14px;margin:14px 0;border-radius:0 6px 6px 0}
+.stop-box{background:#fdf3f2;border-left:4px solid var(--bad);padding:10px 14px;margin:14px 0;border-radius:0 6px 6px 0}
+ol li,ul li{margin:6px 0}
+footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--mut)}
+.kv{font-size:14px}

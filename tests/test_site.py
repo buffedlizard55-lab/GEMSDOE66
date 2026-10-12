@@ -102,7 +102,15 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
             if path_part.endswith((".tif", ".tiff", ".zip")):
                 rel = urlsplit(href).path
                 assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES), f"{name}: {href}"
-    assert {p.name for p in (DOCS / "downloads").iterdir()} <= set([
+    # the H67 geophysics lane may publish exactly what its own run card clears (fail closed)
+    import glob as _glob
+    _h67 = []
+    _hits = _glob.glob(str(ROOT / "docs" / "data" / "run-card-h67.json"))
+    if _hits:
+        _c = json.loads(Path(_hits[-1]).read_text())
+        if _c.get("cleared_for_download"):
+            _h67 = [Path(_c["raster"]["file"]).name, Path(_c["submission"]["zip"]).name]
+    assert {p.name for p in (DOCS / "downloads").iterdir()} <= set(_h67) | set([
         "README.md",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",

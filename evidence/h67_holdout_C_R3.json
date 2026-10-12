@@ -1,0 +1,296 @@
+{
+ "generated_utc": "2026-10-12T02:21:44Z",
+ "label": "HOLDOUT-DTI",
+ "evaluator_version": "src/gems/metric.py @ arena/855725e1; vectorised == literal brute force to 3.6e-15; TPw+FNw=|G| asserted; official worked example TPw=3.00/FNw=2.00 reproduced exactly",
+ "alpha": 0.2,
+ "beta": 0.8,
+ "kernel_range_m": 300.0,
+ "folds": 2,
+ "dot_budget_cap": 45000,
+ "kappas": [
+  1.0
+ ],
+ "instruments": {
+  "C_catalogue_recover": {
+   "withheld_positive_pixels_pooled": 62383,
+   "n_segments_total": 3199,
+   "segment_id_source": "8-connected components (proxy)",
+   "segment_buffer_px": 3,
+   "standoff_px_tested": [
+    2
+   ],
+   "recipes": {
+    "R3|k1.0|s2": {
+     "mean_holdout_dti": 0.17898276332546392,
+     "folds": 2,
+     "per_fold": [
+      0.17980465869877985,
+      0.178160867952148
+     ],
+     "ci95": [
+      0.178160867952148,
+      0.17980465869877985
+     ],
+     "mean_emitted": 45000.0,
+     "recipe": "R3",
+     "recipe_layers": 54,
+     "kappa": 1.0,
+     "standoff_px": 2,
+     "description": "geophysics/topography only, no fault inventory"
+    }
+   },
+   "leakage_canary": {
+    "mag_anom": {
+     "max_auc": 0.5011874649285082,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rtp": {
+     "max_auc": 0.5015051322754069,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "tmi_hg": {
+     "max_auc": 0.5271803764848765,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "geod_2ndinv": {
+     "max_auc": 0.5651366700343468,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "iso_grav_anom_slope": {
+     "max_auc": 0.5307787901337734,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "tc": {
+     "max_auc": 0.5564976418527878,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "geod_shearrate": {
+     "max_auc": 0.5648160088238527,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "geod_dilaterate": {
+     "max_auc": 0.5152050091626413,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "tmi_vg": {
+     "max_auc": 0.5100961997020849,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "deq_n100a15": {
+     "max_auc": 0.5411777546772945,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "iso_grav_anom_vg": {
+     "max_auc": 0.5258097370765957,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "det_elev": {
+     "max_auc": 0.5191708955697254,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "iso_grav_anom": {
+     "max_auc": 0.528154909472768,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "tmi": {
+     "max_auc": 0.5000518401886103,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "depth_to_base_surf": {
+     "max_auc": 0.5040042995572909,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "ieq_n100a15": {
+     "max_auc": 0.5549915946026762,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "cond_surf": {
+     "max_auc": 0.5204600682588484,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "iso_grav_anom_hg": {
+     "max_auc": 0.5011255765823528,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "det_elev_slope": {
+     "max_auc": 0.5661941636668251,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_ex_max": {
+     "max_auc": 0.573371823652852,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_ex_mean": {
+     "max_auc": 0.5608771325819515,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_step_max": {
+     "max_auc": 0.5747445858259945,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_lapneg_max": {
+     "max_auc": 0.5795063574472481,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_lappos_max": {
+     "max_auc": 0.5873025419031421,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_downface_max": {
+     "max_auc": 0.5581197854931379,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_upface_max": {
+     "max_auc": 0.5692745719336243,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_cross_max": {
+     "max_auc": 0.5477187026842543,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_relief": {
+     "max_auc": 0.5790568337241715,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_coh100": {
+     "max_auc": 0.5354321588955094,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_strike_cos": {
+     "max_auc": 0.5205035846450988,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "lidar_strike_sin": {
+     "max_auc": 0.5154221575892066,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rad_K": {
+     "max_auc": 0.5617603251566567,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rad_Th": {
+     "max_auc": 0.5526888075573045,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rad_U": {
+     "max_auc": 0.5280061272840689,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rad_TC": {
+     "max_auc": 0.5560940483763872,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rad_ThK": {
+     "max_auc": 0.516824187977525,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rad_UK": {
+     "max_auc": 0.5332084798836946,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rad_UTh": {
+     "max_auc": 0.5440412180393532,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "rad_TMI_up150": {
+     "max_auc": 0.5011257750852431,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "sgmc_fault": {
+     "max_auc": 0.5501809428531502,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "qfaults_centroid": {
+     "max_auc": 0.5596576312470923,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "hot_spring_40c": {
+     "max_auc": 0.559728934223303,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "d_visible_catalogue_m": {
+     "max_auc": 0.7138711434972745,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "d_sgmc_m": {
+     "max_auc": 0.6771853184849117,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "d_sgmc_off_visible_m": {
+     "max_auc": 0.5940100584948024,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "d_qfaults_m": {
+     "max_auc": 0.6912222645641996,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "d_hot_spring_m": {
+     "max_auc": 0.5094900967161768,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "det_elev_grad": {
+     "max_auc": 0.5757231711768211,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "steger_ridge_s2": {
+     "max_auc": 0.5601639457655792,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "steger_ridge_s4": {
+     "max_auc": 0.5578422503502265,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "frangi_2to16": {
+     "max_auc": 0.5588229688403922,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "st_coherence": {
+     "max_auc": 0.5468122049162853,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "st_strike_rad": {
+     "max_auc": 0.5130772152666353,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "strike_concordance": {
+     "max_auc": 0.5184067585206482,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "iso_grav_anom_hg_grad": {
+     "max_auc": 0.542813759479776,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "tmi_hg_grad": {
+     "max_auc": 0.5289528916733729,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "iso_grav_anom_vg_grad": {
+     "max_auc": 0.5325557097570505,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "tmi_vg_grad": {
+     "max_auc": 0.5250330677033155,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "tc_grad": {
+     "max_auc": 0.5020530867260401,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "depth_to_base_surf_grad": {
+     "max_auc": 0.5339787641079969,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "cond_surf_grad": {
+     "max_auc": 0.5256545541357678,
+     "leakage_flag_auc_gt_0.90": false
+    },
+    "basement_step": {
+     "max_auc": 0.5592226414100736,
+     "leakage_flag_auc_gt_0.90": false
+    }
+   }
+  }
+ },
+ "wall_seconds": 437.9,
+ "caveat": "Withheld truth is a proxy. Instrument N uses SGMC geologic-map faults >300 m off the given catalogue, NOT the organiser's hidden expert set. No number here is ORGANIZER-CONFIRMED."
+}
