@@ -1,21 +1,15 @@
 {
   "schema": "gems-project-status-feed/1",
   "generated_utc": "2026-10-12",
-<<<<<<< HEAD
-  "status": "READY TO SUBMIT — one cleared candidate; frozen holdout measured (ties the family's best-known); 0 slots used",
-  "scope": "Project-state feed only. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages. Current release state: one unique session-66 candidate is cleared for download; every historical artifact stays withdrawn.",
-=======
   "status": "FORMAT-READY, NOT PROMOTED - one downloadable candidate (H67-1) with disclosures; no score claim",
   "scope": "Static project feed. It is not a live leaderboard feed and does not mirror or monitor DrivenData pages. Every number is labelled HOLDOUT-DTI or UNVERIFIED owner-reported; not one number is ORGANIZER-CONFIRMED.",
->>>>>>> origin/main
   "external_monitoring": "Disabled. DrivenData Terms of Use restrict automated access and manual monitoring/copying without prior written consent. No leaderboard values are stored.",
   "entries": [
     {
       "date": "2026-10-12",
-<<<<<<< HEAD
       "kind": "session-66-release-v2",
-      "status": "CLEARED FOR DOWNLOAD — v2 CANDIDATE, E7 FILE WITHDRAWN",
-      "summary": "E11 scored the first session-66 candidate on the repository's frozen buffered, lidar-covered novelty holdout: 0.03765 [0.03087, 0.04440] vs the incumbent's 0.04888 [0.04425, 0.05415] — a loss, so that file is withdrawn. E12 screened five pre-registered variants: the highest (0.06058) used the withheld truth's stratum masses and its truth-free twin fell to 0.04408, so it is logged as leakage and excluded. The clean winner is now published: K prior, budget split across L_relief strata by lidar-covered footprint AREA, 31,999 dots, HOLDOUT-DTI 0.04880 [0.02950, 0.07327] — it ties the owner-reported-0.2778 incumbent (-0.00008) and does not beat it. Format/range/NaN checks PASS from disk, byte-unique vs all 60 registry rasters, rank correlation 0.021 (limit 0.90). No ORGANIZER-CONFIRMED score is claimed; 0 slots used.",
+      "status": "CLEARED FOR DOWNLOAD — v2 k66 CANDIDATE; FIRST FILE WITHDRAWN AFTER IT LOST THE FROZEN HOLDOUT",
+      "summary": "E11 scored the first k66 candidate on the repository's frozen holdout: 0.03765 vs the incumbent's 0.04888 — a loss, so that file is withdrawn. E12 screened five variants; the apparent winner used the withheld truth's stratum masses and its truth-free twin collapsed, so it is logged as leakage and excluded. Published now: GEMSDOE66-K66C-kbalance-reliefarea-31999, HOLDOUT-DTI 0.04880 [0.02950, 0.07327], margin -0.00008 — ties the family's best-known, does not beat it. No ORGANIZER-CONFIRMED score.",
       "links": [
         "downloads/README.md",
         "data/run-card-session66.json",
@@ -24,14 +18,20 @@
     },
     {
       "date": "2026-10-12",
-      "kind": "session-66-release",
-      "status": "CLEARED FOR DOWNLOAD — ONE CANDIDATE, LOCAL CHECKS ONLY",
-      "summary": "Session 66 emitted and released one unique candidate, GEMSDOE66-K66-kanchor-consensus-32000 (32,000 dots on the K-anchored consensus support, NaN outside the footprint, sha256 122fcd16…). Publisher checks are local: format/range/NaN re-read from disk (10 PASS, 1 SKIPPED because the footprint check needs the login-walled feature stack, and the same footprint is verified against sample_submission.tif), byte-uniqueness against all 60 indexed rasters, and rank correlation 0.289 against the 0.90 limit (PASS). The >70% / 3 px dot rule is proven degenerate in this registry and logged as IR-66-DOTOVERLAP-DEGENERATE: the 0.2778 incumbent itself measures 1.000 and 0 of 776,915 support cells sit more than 3 px from every registry dot. No HOLDOUT-DTI and no ORGANIZER-CONFIRMED score is claimed; 1 file is cleared, 0 competition slots used.",
-=======
+      "kind": "h67-lane-run",
+      "status": "NEGATIVE — NO H67-MEASUREMENT CANDIDATE CLEARED (independent of the H67-1 and K66 candidates above)",
+      "summary": "H67 native-resolution scarp lane (branch arena/9ae5a972): 23/23 hash-pinned mirrors re-verified; five new same-lane hypotheses (H67-A..E) implemented on the pinned 1 m-derived scarp stack + GEMSDOE48 h52 native 1 m-tile scarp-height product + TIGER/BLM cultural layers. E1 canary: no leakage (max AUC 0.5755), no cross-fold transfer (0.29-0.80, four folds sub-chance). E2 h52_h_rank emission: pooled HOLDOUT-DTI of 0.12118 vs incumbent 0.09539 (+0.0258, paired 95% CI [-0.0109, +0.0365]), gain range-front-dominated; 77.7% of final dots within 3 px of the GEMSDOE32 bayesopt-scarp registry raster (4.38x lift) -> lane-drift DUPLICATE stop. E3 lane-separation complement: 83 eligible dots, pooled HOLDOUT-DTI of 0.0. Verdict NEGATIVE; no H67 TIFF offered; 0 slots used. See review/2026-10-12-h67-session.md and data/run-card-h67.json.",
+      "links": [
+        "review/2026-10-12-h67-session.md",
+        "data/run-card-h67.json",
+        "data/hypotheses.json"
+      ]
+    },
+    {
+      "date": "2026-10-12",
       "kind": "candidate-emitted",
       "status": "H67-1 EMITTED - 40,000 dots, two format siblings, validator PASS",
       "summary": "gems66-h67-scarp-lane-novelty-40000dots-v2-{nan,zeros}.tif written from one dot set. -zeros holds all 12,279,160 cells in [0, 1] with zero NaN, which removes the 'Predicted values must be in range [0, 1]' rejection mode (IR-67-FORMAT-01). sha256 nan 1a72bfeb..., zeros eeadc5ce.... Dot profile: nn median 5.66 px, 85.0% on LiDAR-valid cells, mean distance to mapped faults 2,340 m, block-density CV 0.32.",
->>>>>>> origin/main
       "links": [
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "data/h67_run.json",
@@ -189,24 +189,10 @@
     }
   ],
   "next_actions": [
-<<<<<<< HEAD
-    "Submit the cleared v2 file if the owner accepts a tie with the family's best-known design on our own instrument. Record the outcome (slot count, exact error text if any) in this feed and the run card; until an organiser receipt exists, any score is owner-reported.",
-    "Do not spend further slots on designs that do not beat the frozen holdout best (the incumbent's 0.04888 on instrument N). The untried leads are in registry66/hypotheses66.json — H66-2 (thermal-discharge corridors: 27,092 in-footprint wells/springs, 1,873 Hot, max 296.5 °C), H66-3 (ternary radiometry), H66-4 (along-strike matched filter on the 12 lidar bands).",
-    "One file is cleared for submission. Download gems66-k66-kanchor-consensus-32000-20261012T003000Z-nan.tif from the overview page, upload it with the name GEMSDOE66-K66-kanchor-consensus-32000 and its 122-character note, then record the outcome (slot count, any error text) in the feed and the run card. Until a receipt from the organiser exists, any result is owner-reported and must be labelled that way; never write a projection as a score.",
-    "Do not spend a second slot before the buffered whole-segment, LiDAR-covered holdout runs: fetch training_features.tif (5 parts, sha256 4371c82e…) to unblock gemsdoe66.features.load_stack and evaluate_holdout.py, and record HOLDOUT-DTI with evaluator version, withheld-positive count and 95% CI.",
-    "Before testing a candidate, verify the official USGS 3DEP tile inventory and exact footprint; source availability in principle is not proof that these tiles are obtainable here.",
-    "Keep LIDAR-01 blocked; do not run the historical H66-2 union proposal or another experiment without authorized inputs, preserved provenance, scientific review, and an explicit approved research budget.",
-    "Fix and review the buffered whole-segment holdout, LiDAR-covered evaluator, and NaN-outside shared writer in the upstream shared template before re-enabling any research runner; do not use a private fork.",
-    "Obtain two independent scientific-lead reviews of the ranked same-lane hypothesis, named terrace/channel-bank/landslide mimics, and preregistered holdout protocol.",
-    "Keep all artifacts unpublished unless both continuous pre-placement and final emitted-dot checks pass against a complete registry, exact official-grid/footprint validation passes, and a valid HOLDOUT-DTI with evaluator/version/count/95% CI beats the frozen best.",
-    "Complete the missing official-rules PDF section and full applicable Terms of Use review; retain the conservative stop while IR-66-RELEASE-01 remains unresolved.",
-    "Resolve the incompatible user-supplied leaderboard claims only from authorized primary evidence; do not poll, scrape, or mirror DrivenData."
-=======
     "Owner decision: whether to spend a weekly slot on the disclosed H67-1 sibling (no demonstrated edge; science gate unevaluable).",
     "If a slot is spent, paste the portal receipt next to the sha256 in docs/downloads/README.md; there is no route to ORGANIZER-CONFIRMED without a portal receipt.",
     "Obtain an authorised environment with native 1 m GeoDAWN/3DEP tiles and a cultural mask to run the actual 2-20 m method (G-05) and re-test the gate.",
     "Re-score the negative control against a truth layer that is not the exclusion complement (e.g. GDR qfaults) before quoting any control number.",
     "Certify registry completeness before claiming a uniqueness pass; 60 rasters compared is not the organizer registry."
->>>>>>> origin/main
   ]
 }

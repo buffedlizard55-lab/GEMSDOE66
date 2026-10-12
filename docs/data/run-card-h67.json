@@ -1,0 +1,81 @@
+{
+ "schema": "gems-run-card-feed/1",
+ "run_id": "gemsdoe66-h67-native-lidar-2026-10-12",
+ "date": "2026-10-12",
+ "branch": "arena/9ae5a972-gemsdoe66",
+ "lane": "native-resolution LiDAR scarp channels",
+ "hypothesis_id": "H67 (top measured: channel h52_h rank emission, incumbent geometry)",
+ "file": null,
+ "file_zip": null,
+ "sha256": null,
+ "name": null,
+ "note": null,
+ "note_chars": 0,
+ "dots": 37654,
+ "verdict": "NEGATIVE-NOT-PROMOTED",
+ "clearance": "NOT CLEARED - do not submit. No TIFF was generated for the lane: gates G2 (paired 95% CI crosses zero) and G4 (final-dot duplicate stop, 77.7% of dots within 3 px of the GEMSDOE32 bayesopt-scarp registry raster at 4.38x the random rate) fail, and the lane-separation complement emission has only 83 eligible dots (HOLDOUT-DTI of 0.0). 0 competition slots used. The canonical docs/data/run-card.json remains fail-closed (NO QUALIFIED RESULT); this card records the session measurement for the record.",
+ "measurement_class": "HOLDOUT-DTI on the SGMC off-catalogue PROXY truth (62,122 px, 8 spatial folds, 3 px buffer, evaluator gemsdoe66.metric.dti v1) \u2014 PROXY ONLY, NOT ORGANIZER-CONFIRMED, not the organizer's hidden set",
+ "holdout_dti": 0.12118,
+ "holdout_details": {
+  "pooled_candidate": 0.12118,
+  "pooled_incumbent_h33_2_b2": 0.09539,
+  "pooled_diff": 0.02579,
+  "ci95_paired_fold_bootstrap": [
+   -0.01093,
+   0.0365
+  ],
+  "folds_positive": "5 of 8 (fold0 -0.01516, fold4 -0.04842, fold6 -0.01283 negative)",
+  "relief_tercile_cuts_m": [
+   24.11,
+   42.85
+  ],
+  "candidate_minus_random_by_stratum": {
+   "low_basin_pediment": -0.02578,
+   "mid": 0.08678,
+   "high_range_front": 0.17733
+  },
+  "range_front_note": "gain is range-front-dominated - the confound the lane gate exists to catch (IR-67-03)",
+  "complement_emission": {
+   "eligible_rule": ">= 4 px from every dot of every registry raster",
+   "dots": 83,
+   "pooled_dti": 0.0,
+   "note": "no unclaimed scarp population survives lane separation (IR-67-04)"
+  }
+ },
+ "leakage_canary": {
+  "status": "VALIDATED - no leakage",
+  "threshold_auc": 0.9,
+  "max_feature_auc": 0.5755,
+  "transfer_note": "no physical channel transfers across spatial folds (per-fold AUC 0.29-0.80, four folds sub-chance)"
+ },
+ "registry_checks": {
+  "corpus": "60 rasters in registry/rasters (family corpus; complete organizer registry NOT certified)",
+  "pre_placement_surface": "max |Spearman rho| = 0.198 (<= 0.90 threshold); no exact pixel identity",
+  "post_placement_final_dots": "DUPLICATE stop - 77.7% of the 37,654 dots within 3 px of gems32-bayesopt-dilation-scarp-d28-20261004 (45,000 dots) at 4.38x the random-placement rate (null 0.177); raw max within-3-px 0.999 occurs against the 311,617-dot dense raster whose 3-px halo null is 0.958 (IR-67-01: reported, not the deciding measurement under the documented interpretation rule)"
+ },
+ "budget": {
+  "new_experiments_used": 3,
+  "max_experiments": 3,
+  "time_spent_hours": 1.6,
+  "submission_slots_used": 0,
+  "experiments": [
+   "E1 leakage canary",
+   "E2 h52_h_rank emission",
+   "E3 complement emission"
+  ]
+ },
+ "independent_reviews": {
+  "required": 2,
+  "completed": 0
+ },
+ "evidence": [
+  "evidence/h67_e1_canary.json",
+  "evidence/h67_e2_emit_h52_h_rank.json",
+  "evidence/h67_e2_h52_post_unique_full.json",
+  "evidence/h67_e2_emit_h52_h_rank_complement.json",
+  "evidence/h67_validator_selftest_incumbent.json"
+ ],
+ "audit_document": "docs/review/2026-10-12-h67-session.md",
+ "promote": false,
+ "promotion_decision": "negative"
+}

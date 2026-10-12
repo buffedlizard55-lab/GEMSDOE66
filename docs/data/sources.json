@@ -1,133 +1,157 @@
 {
-  "schema": 3,
-  "verified_on": "2026-10-12",
-  "sources": [
-    {
-      "id": "S01",
-      "title": "DrivenData — GEMS Prize competition overview",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
-      "supports": "Official competition purpose, structure, source links, and current navigation entry point.",
-      "status": "REVIEWED 2026-10-11",
-      "how": "Official overview page. The site Terms of Use restrict deep linking; project pages therefore do not embed links to DrivenData subpages."
-    },
-    {
-      "id": "S02",
-      "title": "DrivenData — GEMS Prize problem description, page 967",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-      "supports": "Incomplete public catalogue/new expert-labelled faults, competition data provenance, 100 m EPSG:32611 feature grid, distance-weighted Tversky formula and parameters, 300 m triangular support, and single-band float32 [0,1] GeoTIFF contract with null/NaN outside the study bounds.",
-      "status": "REVIEWED 2026-10-11 — both content chunks",
-      "how": "Official source read in full for this audit; no leaderboard rows or private test content copied."
-    },
-    {
-      "id": "S03",
-      "title": "DrivenData — public GEMS leaderboard (reference only)",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
-      "supports": "Official public-board location only. A displayed row is not by itself a submission receipt or a hash-to-artifact attribution.",
-      "status": "REFERENCE ONLY — NO VALUES MIRRORED; NO ONGOING MONITORING",
-      "how": "The path is retained in this private evidence register only; site output shows it as non-clickable text. No repeated access, snapshot, or leaderboard feed is permitted absent written authorization."
-    },
-    {
-      "id": "S04",
-      "title": "Geologic Enhanced Mapping System (GEMS) Prize Official Rules — September 2026",
-      "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
-      "supports": "Official data-access/registration requirements; single 100 m GeoTIFF submission; three feedback submissions per week and selection of one final entry; required generative-AI disclosure in the narrative when applicable; public/private/final evaluation structure.",
-      "status": "REVIEWED 2026-10-11 — all seven parsed chunks",
-      "how": "NLR-hosted official rules PDF. The disclosure requirement is in §3.2; feedback/final-selection terms are in §§3.4–3.6."
-    },
-    {
-      "id": "S05",
-      "title": "DrivenData — GEMS competition data tab",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
-      "supports": "Current access state for the competition's training features, labels, sample submission, and 1m_DEM_links.csv.",
-      "status": "BLOCKED WITHOUT ACCOUNT — unauthenticated request redirected to login 2026-10-11",
-      "how": "No competition credentials or authenticated session were used. Required files are absent from this checkout."
-    },
-    {
-      "id": "S06",
-      "title": "DrivenData — Terms of Use",
-      "url": "https://www.drivendata.org/termsofuse/",
-      "supports": "Site terms say not to use robots/spiders/automatic means or manual processes to monitor/copy site material without prior written consent; terms also restrict links to subpages.",
-      "status": "REVIEWED 2026-10-11 — four parsed chunks",
-      "how": "Current page text was read. This project does not implement external page polling, copy leaderboard values, or embed DrivenData subpage links."
-    },
-    {
-      "id": "S07",
-      "title": "USGS National Map 3DEP — 1 meter Digital Elevation Models collection",
-      "url": "https://data.usgs.gov/datacatalog/data/USGS:77ae0551-c61e-4979-aedd-d797abdcde0e",
-      "supports": "USGS describes tiled 1 m bare-earth DEMs, The National Map access, and public-domain status. The product page does not establish exact competition tile coverage or alignment.",
-      "status": "REVIEWED 2026-10-11 — public source verified; exact study tiles not checked",
-      "how": "Official USGS Science Data Catalog page. Suitable official source in principle; tile inventory and footprint remain a gate."
-    },
-    {
-      "id": "S08",
-      "title": "USGS — GeoDAWN airborne magnetic and radiometric surveys data release",
-      "url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
-      "supports": "Official description of the GeoDAWN magnetic/radiometric survey and DOI 10.5066/P93LGLVQ. This does not establish matching LiDAR/DEM coverage.",
-      "status": "GEODAWN PROVENANCE ONLY — NOT LiDAR OR SGMC EVIDENCE",
-      "how": "This source describes the GeoDAWN geophysical survey only. It is not cited as evidence for the SGMC-derived exploratory proxy or native-resolution LiDAR coverage."
-    },
-    {
-      "id": "S09",
-      "title": "Sare and Hilley (2018) — Scarplet: A Python package for topographic template matching and diffusion dating",
-      "url": "https://doi.org/10.21105/joss.01066",
-      "supports": "Method precedent and publication metadata for template-matched scarp amplitude, morphologic age, orientation, and signal-to-noise outputs.",
-      "status": "BIBLIOGRAPHY VERIFIED 2026-10-11",
-      "how": "Journal of Open Source Software, volume 3, issue 31, article 1066; Robert Sare and George E. Hilley; DOI verified against the JOSS journal record."
-    },
-    {
-      "id": "S10",
-      "title": "Steger (1998) — An Unbiased Detector of Curvilinear Structures",
-      "url": "https://doi.org/10.1109/34.659930",
-      "supports": "Sub-pixel curvilinear-line detection and width estimation as a methodological precedent; not a geologic validation result.",
-      "status": "BIBLIOGRAPHY VERIFIED 2026-10-11",
-      "how": "Carsten Steger, IEEE Transactions on Pattern Analysis and Machine Intelligence, volume 20, issue 2, pages 113–125; DOI verified against the ACM/IEEE record."
-    },
-    {
-      "id": "S11",
-      "title": "Frangi, Niessen, Vincken, and Viergever (1998) — Multiscale vessel enhancement filtering",
-      "url": "https://doi.org/10.1007/BFb0056195",
-      "supports": "Hessian-eigenvalue multiscale line/vesselness method precedent; transfer to geomorphic scarps requires validation.",
-      "status": "BIBLIOGRAPHY VERIFIED 2026-10-11",
-      "how": "MICCAI 1998, Lecture Notes in Computer Science volume 1496, pages 130–137; authors and DOI checked on the Springer record."
-    },
-    {
-      "id": "S12",
-      "title": "AGU 2015 Fall Meeting Author Index — Sare, abstract T31A-2838",
-      "url": "https://studio.m-anage.com/agu/fm15/webprogram/authors.html",
-      "supports": "The author index associates Sare with abstract T31A-2838, ‘Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis.’ It is prior-method context, not this project's result.",
-      "status": "PARTIAL — ID/title visible in the author index; individual abstract endpoint was not available",
-      "how": "Do not attribute algorithm details or quantitative performance to the abstract without its full record."
-    },
-    {
-      "id": "S13",
-      "title": "DrivenData organization — GEMS Prize reference-solution repository",
-      "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
-      "supports": "Organizer-linked reference implementation for participants; not assumed to be the organizer's hidden-test evaluator.",
-      "status": "REFERENCE LINK; not used as score or hidden-label evidence",
-      "how": "Linked from the official problem description."
-    },
-    {
-      "id": "S14",
-      "title": "GEMSDOE32 owner repository and project material",
-      "url": "https://github.com/buffedlizard55-lab/GEMSDOE32",
-      "supports": "Owner-maintained artifact history and method notes. The project page describes the H33 artifact as unscored and says no organizer score exists for its artifacts.",
-      "status": "OWNER-REPORTED CONTEXT ONLY — not a submission receipt",
-      "how": "No exact receipt or SHA-256-to-score mapping is present in this checkout."
-    },
-    {
-      "id": "S15",
-      "title": "GEMSDOE32 owner-maintained project site",
-      "url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html",
-      "supports": "Owner-reported status for H33 artifacts; not organizer-confirmed scoring.",
-      "status": "OWNER-MAINTAINED; no receipt/hash attribution",
-      "how": "Use only to identify the owner claim and its caveat, never as an organizer score."
-    },
-    {
-      "id": "S16",
-      "title": "AGU FM15 T31A-2838 - Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis (Sare & Hilley)",
-      "url": "https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html",
-      "accessed": "2026-10-12",
-      "status": "VERIFIED in session: slope-aware wavelet templates with initial scarp slope and above/below-scarp surface angles; sites in Surprise Valley and near Jenny Lake. The checkout's template family is the scarplet package (S10), not this wavelet code."
-    }
-  ]
+ "schema": 3,
+ "verified_on": "2026-10-12 H67-lane-measurement session (branch arena/9ae5a972): 23/23 sha256 re-check plus owner-mirror inputs S30-S32 (unpinned, ledgered in the H67 review). No leaderboard values mirrored; no monitoring.",
+ "sources": [
+  {
+   "id": "S01",
+   "title": "DrivenData \u2014 GEMS Prize competition overview",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
+   "supports": "Official competition purpose, structure, source links, and current navigation entry point.",
+   "status": "REVIEWED 2026-10-11",
+   "how": "Official overview page. The site Terms of Use restrict deep linking; project pages therefore do not embed links to DrivenData subpages."
+  },
+  {
+   "id": "S02",
+   "title": "DrivenData \u2014 GEMS Prize problem description, page 967",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+   "supports": "Incomplete public catalogue/new expert-labelled faults, competition data provenance, 100 m EPSG:32611 feature grid, distance-weighted Tversky formula and parameters, 300 m triangular support, and single-band float32 [0,1] GeoTIFF contract with null/NaN outside the study bounds.",
+   "status": "REVIEWED 2026-10-11 \u2014 both content chunks",
+   "how": "Official source read in full for this audit; no leaderboard rows or private test content copied."
+  },
+  {
+   "id": "S03",
+   "title": "DrivenData \u2014 public GEMS leaderboard (reference only)",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+   "supports": "Official public-board location only. A displayed row is not by itself a submission receipt or a hash-to-artifact attribution.",
+   "status": "REFERENCE ONLY \u2014 NO VALUES MIRRORED; NO ONGOING MONITORING",
+   "how": "The path is retained in this private evidence register only; site output shows it as non-clickable text. No repeated access, snapshot, or leaderboard feed is permitted absent written authorization."
+  },
+  {
+   "id": "S04",
+   "title": "Geologic Enhanced Mapping System (GEMS) Prize Official Rules \u2014 September 2026",
+   "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+   "supports": "Official data-access/registration requirements; single 100 m GeoTIFF submission; three feedback submissions per week and selection of one final entry; required generative-AI disclosure in the narrative when applicable; public/private/final evaluation structure.",
+   "status": "REVIEWED 2026-10-11 \u2014 all seven parsed chunks",
+   "how": "NLR-hosted official rules PDF. The disclosure requirement is in \u00a73.2; feedback/final-selection terms are in \u00a7\u00a73.4\u20133.6."
+  },
+  {
+   "id": "S05",
+   "title": "DrivenData \u2014 GEMS competition data tab",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+   "supports": "Current access state for the competition's training features, labels, sample submission, and 1m_DEM_links.csv.",
+   "status": "BLOCKED WITHOUT ACCOUNT \u2014 unauthenticated request redirected to login 2026-10-11",
+   "how": "No competition credentials or authenticated session were used. Required files are absent from this checkout."
+  },
+  {
+   "id": "S06",
+   "title": "DrivenData \u2014 Terms of Use",
+   "url": "https://www.drivendata.org/termsofuse/",
+   "supports": "Site terms say not to use robots/spiders/automatic means or manual processes to monitor/copy site material without prior written consent; terms also restrict links to subpages.",
+   "status": "REVIEWED 2026-10-11 \u2014 four parsed chunks",
+   "how": "Current page text was read. This project does not implement external page polling, copy leaderboard values, or embed DrivenData subpage links."
+  },
+  {
+   "id": "S07",
+   "title": "USGS National Map 3DEP \u2014 1 meter Digital Elevation Models collection",
+   "url": "https://data.usgs.gov/datacatalog/data/USGS:77ae0551-c61e-4979-aedd-d797abdcde0e",
+   "supports": "USGS describes tiled 1 m bare-earth DEMs, The National Map access, and public-domain status. The product page does not establish exact competition tile coverage or alignment.",
+   "status": "REVIEWED 2026-10-11 \u2014 public source verified; exact study tiles not checked",
+   "how": "Official USGS Science Data Catalog page. Suitable official source in principle; tile inventory and footprint remain a gate."
+  },
+  {
+   "id": "S08",
+   "title": "USGS \u2014 GeoDAWN airborne magnetic and radiometric surveys data release",
+   "url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+   "supports": "Official description of the GeoDAWN magnetic/radiometric survey and DOI 10.5066/P93LGLVQ. This does not establish matching LiDAR/DEM coverage.",
+   "status": "GEODAWN PROVENANCE ONLY \u2014 NOT LiDAR OR SGMC EVIDENCE",
+   "how": "This source describes the GeoDAWN geophysical survey only. It is not cited as evidence for the SGMC-derived exploratory proxy or native-resolution LiDAR coverage."
+  },
+  {
+   "id": "S09",
+   "title": "Sare and Hilley (2018) \u2014 Scarplet: A Python package for topographic template matching and diffusion dating",
+   "url": "https://doi.org/10.21105/joss.01066",
+   "supports": "Method precedent and publication metadata for template-matched scarp amplitude, morphologic age, orientation, and signal-to-noise outputs.",
+   "status": "BIBLIOGRAPHY VERIFIED 2026-10-11",
+   "how": "Journal of Open Source Software, volume 3, issue 31, article 1066; Robert Sare and George E. Hilley; DOI verified against the JOSS journal record."
+  },
+  {
+   "id": "S10",
+   "title": "Steger (1998) \u2014 An Unbiased Detector of Curvilinear Structures",
+   "url": "https://doi.org/10.1109/34.659930",
+   "supports": "Sub-pixel curvilinear-line detection and width estimation as a methodological precedent; not a geologic validation result.",
+   "status": "BIBLIOGRAPHY VERIFIED 2026-10-11",
+   "how": "Carsten Steger, IEEE Transactions on Pattern Analysis and Machine Intelligence, volume 20, issue 2, pages 113\u2013125; DOI verified against the ACM/IEEE record."
+  },
+  {
+   "id": "S11",
+   "title": "Frangi, Niessen, Vincken, and Viergever (1998) \u2014 Multiscale vessel enhancement filtering",
+   "url": "https://doi.org/10.1007/BFb0056195",
+   "supports": "Hessian-eigenvalue multiscale line/vesselness method precedent; transfer to geomorphic scarps requires validation.",
+   "status": "BIBLIOGRAPHY VERIFIED 2026-10-11",
+   "how": "MICCAI 1998, Lecture Notes in Computer Science volume 1496, pages 130\u2013137; authors and DOI checked on the Springer record."
+  },
+  {
+   "id": "S12",
+   "title": "AGU 2015 Fall Meeting Author Index \u2014 Sare, abstract T31A-2838",
+   "url": "https://studio.m-anage.com/agu/fm15/webprogram/authors.html",
+   "supports": "The author index associates Sare with abstract T31A-2838, \u2018Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis.\u2019 It is prior-method context, not this project's result.",
+   "status": "PARTIAL \u2014 ID/title visible in the author index; individual abstract endpoint was not available",
+   "how": "Do not attribute algorithm details or quantitative performance to the abstract without its full record."
+  },
+  {
+   "id": "S13",
+   "title": "DrivenData organization \u2014 GEMS Prize reference-solution repository",
+   "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+   "supports": "Organizer-linked reference implementation for participants; not assumed to be the organizer's hidden-test evaluator.",
+   "status": "REFERENCE LINK; not used as score or hidden-label evidence",
+   "how": "Linked from the official problem description."
+  },
+  {
+   "id": "S14",
+   "title": "GEMSDOE32 owner repository and project material",
+   "url": "https://github.com/buffedlizard55-lab/GEMSDOE32",
+   "supports": "Owner-maintained artifact history and method notes. The project page describes the H33 artifact as unscored and says no organizer score exists for its artifacts.",
+   "status": "OWNER-REPORTED CONTEXT ONLY \u2014 not a submission receipt",
+   "how": "No exact receipt or SHA-256-to-score mapping is present in this checkout."
+  },
+  {
+   "id": "S15",
+   "title": "GEMSDOE32 owner-maintained project site",
+   "url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html",
+   "supports": "Owner-reported status for H33 artifacts; not organizer-confirmed scoring.",
+   "status": "OWNER-MAINTAINED; no receipt/hash attribution",
+   "how": "Use only to identify the owner claim and its caveat, never as an organizer score."
+  },
+  {
+   "id": "S16",
+   "title": "AGU FM15 T31A-2838 - Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis (Sare & Hilley)",
+   "url": "https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html",
+   "accessed": "2026-10-12",
+   "status": "VERIFIED in session: slope-aware wavelet templates with initial scarp slope and above/below-scarp surface angles; sites in Surprise Valley and near Jenny Lake. The checkout's template family is the scarplet package (S10), not this wavelet code."
+  },
+  {
+   "id": "S30",
+   "title": "GEMSDOE48 owner mirror - h52_scarp3m_100m.tif (7-band native 1 m-tile scarp-height product)",
+   "url": "https://github.com/buffedlizard55-lab/GEMSDOE48/blob/main/data/external/h52_scarp3m_100m.json",
+   "supports": "h_all/h_gate07/h_gate12 scarp-height estimates, sigma_mean, facing_at, strike_at, cover from 697/700 USGS 1 m EarthMRI D20 tiles (owner CI workflow run 37565284104). Owner mirror; integrity recorded in docs/review/2026-10-12-h67-session.md; NOT organizer-authenticated; unpinned in the manifest (IR-67-05).",
+   "status": "Fetched + hashed 2026-10-12",
+   "how": "gh api raw blob from the owner's public repo."
+  },
+  {
+   "id": "S31",
+   "title": "GEMSDOE24 owner mirror - cultural-feature distance layers (TIGER roads, BLM closed claims)",
+   "url": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/audit_sources/tiger_road_receipt.json",
+   "supports": "tiger_road_distance_m.tif (78,440 road features, 0-13,083 m) and blm_closed_claim_distance_m.tif (35,818 claims, 0-15,440 m) - the existing cultural-feature mask for roads / field edges required by the lane brief.",
+   "status": "Fetched + hashed 2026-10-12",
+   "how": "gh api raw blob from the owner's public repo."
+  },
+  {
+   "id": "S32",
+   "title": "GEMSDOE48 owner mirror - 3 m pilot tiles of USGS 1 m EarthMRI D20 DEMs",
+   "url": "https://github.com/buffedlizard55-lab/GEMSDOE48/blob/main/data/pilot/dem3m/dem_pilot_receipt.json",
+   "supports": "Two int16 (decimetre) 3 m tiles (x40y427, x42y425) with source URLs (prd-tnm.s3.amazonaws.com .../NV_WestCentral_EarthMRI_2020_D20), sha256 and grid receipts. Demonstrates the native-resolution path and the datum/CRS (EPSG:26911 -> 32611) handling; the raw S3 hosts are unreachable from this sandbox.",
+   "status": "Fetched + hashed 2026-10-12",
+   "how": "gh api raw blob from the owner's public repo."
+  }
+ ]
 }

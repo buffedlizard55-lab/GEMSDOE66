@@ -105,6 +105,72 @@ k66 artifact carries its own. The site does not rank them against each other.</p
        esc(hd.get("status", "")), links, hash_rows)
 
 
+def h67m_block() -> str:
+    """H67 lane MEASUREMENT (branch arena/9ae5a972), rendered from that session's evidence files.
+
+    Independent of the H67-1 emitted candidate and the session-66 K66 candidate: five new
+    same-lane hypotheses implemented and measured, gate NEGATIVE, nothing emitted from this
+    branch. Every number is a local HOLDOUT-DTI proxy measurement, never ORGANIZER-CONFIRMED.
+    """
+    e1 = load(ROOT / "evidence" / "h67_e1_canary.json", {}) or {}
+    e2 = load(ROOT / "evidence" / "h67_e2_emit_h52_h_rank.json", {}) or {}
+    e3 = load(ROOT / "evidence" / "h67_e2_emit_h52_h_rank_complement.json", {}) or {}
+    if not e2:
+        return ""
+    h = e2.get("holdout", {})
+    st = e2.get("strata", {})
+    can = e1.get("canaries", {})
+    best_ch = max(can.get("channels", {}), key=lambda k: can["channels"][k].get("mean_auc", 0)) if can.get("channels") else "-"
+    best_auc = can.get("channels", {}).get(best_ch, {}).get("mean_auc", float("nan"))
+    h52_auc = can.get("channels", {}).get("h52_h", {}).get("mean_auc", float("nan"))
+    strata_rows = "".join(
+        f"<tr><td>{esc(k)}</td><td>{v.get('n_truth', 0):,}</td>"
+        f"<td>{v.get('candidate_dti', float('nan')):.5f}</td>"
+        f"<td>{v.get('random_dti', float('nan')):.5f}</td>"
+        f"<td>{v.get('candidate_minus_random', float('nan')):+.5f}</td></tr>"
+        for k, v in st.items() if isinstance(v, dict) and "candidate_dti" in v
+    )
+    e3h = e3.get("holdout", {})
+    e3dots = int((e3h.get("per_fold") or {}).get("fold0", {}).get("candidate_mass", float("nan")) or 0)
+    lo, hi = h.get("paired_ci95", [float("nan"), float("nan")])
+    return f"""
+<h2>H67 lane measurement (branch <code>arena/9ae5a972</code>) — separate negative result</h2>
+<div class="note"><b>All values below are HOLDOUT-DTI</b> on the SGMC off-catalogue proxy truth
+(62,122 withheld positives — the hash-pinned truth), 8 spatial folds by connected component,
+3 px training buffer, evaluator <code>gemsdoe66.metric.dti</code> v1, α = 0.2, β = 0.8,
+300 m triangular kernel. This is a <b>measurement, not an emitted candidate</b>: it is
+independent of the H67-1 artifact above and of the session-66 K66 release, and it clears no
+gate. No <code>ORGANIZER-CONFIRMED</code> score exists. Budget: 3/3 experiments, 0 slots used.
+Full record: <a href="review/2026-10-12-h67-session.md">session review</a>.</div>
+<p><b>E1 — leakage canary (protocol 4):</b> no feature above the 0.90 AUC leakage threshold
+(max {best_auc:.4f} for channel {esc(best_ch)}; best in-lane surface h52_h {h52_auc:.4f}), but
+no physical channel transfers across spatial folds (per-fold AUCs 0.29–0.80, four of eight
+folds sub-chance) — the signal is region-bound, dominated by the truth's own relief/mapping
+bias. Evidence: <code>evidence/h67_e1_canary.json</code>.</p>
+<table>
+<tr><th>E2 — h52_h_rank emission (37,654 dots, incumbent geometry) — HOLDOUT-DTI</th><th>candidate</th><th>incumbent h33-2-b2</th></tr>
+<tr><td>pooled</td><td><b>{h.get('pooled_candidate', float('nan')):.5f}</b></td><td>{h.get('pooled_incumbent', float('nan')):.5f}</td></tr>
+<tr><td>paired difference / 95% CI (fold bootstrap)</td><td colspan="2"><b>{h.get('pooled_diff', float('nan')):+.5f} [{lo:+.5f}, {hi:+.5f}]</b> — CI crosses zero (gate G2 FAIL); 5 of 8 folds positive</td></tr>
+<tr><td>uniqueness of final dots (60-raster corpus)</td><td colspan="2">{pill(False, 'DUPLICATE — 77.7% of dots within 3 px of the GEMSDOE32 bayesopt-scarp raster at 4.38x the random rate (gate G4 FAIL)')} raw max within-3-px = 0.999 occurs against the 311,617-dot dense raster (IR-67-01, the same degeneracy the H67-1 row above records as 0.9992)</td></tr>
+<tr><td>road-veto ablation</td><td colspan="2">0 dots in the veto zone; no effect</td></tr>
+</table>
+<h3>E2 relief strata — candidate minus random (equal mass)</h3>
+<table><tr><th>stratum (truth relief tercile, cuts 24.1 / 42.9 m)</th><th>n truth</th>
+<th>candidate</th><th>random</th><th>candidate − random</th></tr>
+{strata_rows}</table>
+<p class="small">The gain is range-front-dominated (high +0.177 vs mid +0.087 vs low −0.026) —
+the exact confound the lane gate exists to catch (IR-67-03).</p>
+<h3>E3 — lane-separation complement emission</h3>
+<p>Dots eligible only where ≥ 4 px from every dot of every registry raster: the 60-raster
+union's halo leaves no scarp-rich cell — <b>{e3dots} dots</b> placed (of 37,654), pooled
+HOLDOUT-DTI of <b>{e3h.get('pooled_candidate', float('nan')):.5f}</b>. The family's rasters
+already occupy the scarp-active terrain (IR-67-04).</p>
+<div class="stop"><b>H67-measurement verdict: NEGATIVE.</b> Gates G2 (CI crosses zero) and G4
+(duplicate stop) fail. No TIFF is generated from this branch, nothing is offered for download,
+and no slot is used — the protocol's negative branch. This measurement does not change the
+status of the H67-1 or K66 artifacts.</div>
+"""
+
 def _rank(vals):
     """Average-rank transform (ties share the mean rank)."""
     order = sorted(range(len(vals)), key=lambda i: vals[i])
@@ -374,6 +440,8 @@ with a hard 400 m exclusion around every mapped fault inventory.</p>
 unreachable from this sandbox, so the line evidence runs at 100 m-cell scales; the required
 cultural-feature mask (roads, canals, field edges) does not exist in this checkout
 (<a href="irregularities.html">IR-67-MASK-01</a>) and weaker substitutes were used.</p>
+
+{h67m_block()}
 """, "index.html")
 
 
@@ -490,6 +558,8 @@ scarp channels and the owner-reported habitat direction. If the new faults inste
 beside the mapped networks &mdash; the usual outcome in a mature province &mdash; the design
 forfeits that mass. That is the downside; the gate table above is the honest accounting of what
 this session could and could not measure about it.</p>
+
+{h67m_block()}
 """, "executive-summary.html")
 
 
@@ -679,6 +749,7 @@ def results_page() -> str:
 <div class="note"><b>Label policy.</b> Every number below is either
 <code>HOLDOUT-DTI</code>/<code>INTERNAL-INSTRUMENT</code> (with its evaluator, withheld-positive
 count and CI where applicable) or <code>UNVERIFIED owner-reported</code>. No <code>ORGANIZER-CONFIRMED</code> number exists in this repository.</div>
+{h67m_block()}
 
 <h3>1 &middot; The artifact</h3>
 <table>
@@ -807,7 +878,7 @@ def irr_page() -> str:
 <p>Read from <code>registry/irregularities.json</code> (review date {esc(d.get("review_date", ""))}).
 An irregularity is a difference between what the brief asks for, what the code does, and what the
 evidence supports. Nothing here is waived; items marked OPEN stay open for the next session.</p>
-<h3>This session (H67-1)</h3>
+<h3>This session (H67-1 + H67 lane measurement, branch arena/9ae5a972)</h3>
 {block(cur)}
 <h3>Inherited items, unchanged</h3>
 {block(past)}
