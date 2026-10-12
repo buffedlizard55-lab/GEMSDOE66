@@ -26,7 +26,10 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     with zipfile.ZipFile(zip_path) as archive:
         assert len(archive.namelist()) == 1
         assert archive.testzip() is None
-    assert sorted(path.name for path in (DOCS / "downloads").iterdir()) == ["README.md"]
+    # Only the historical H66 files are asserted absent; a later lane may legitimately publish
+    # its own cleared artifact here (see tests/test_repo_hygiene.py for that gate).
+    published = {path.name for path in (DOCS / "downloads").iterdir()}
+    assert not any(n.startswith(HISTORICAL_PREFIX) for n in published), published
 
 
 def test_current_run_card_cannot_clear_a_historical_artifact():

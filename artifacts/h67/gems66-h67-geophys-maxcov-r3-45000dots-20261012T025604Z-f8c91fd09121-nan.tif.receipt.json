@@ -1,0 +1,20 @@
+{
+  "file": "gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif",
+  "sha256": "512fda025b830209abb013190aa320e58eaa03de2ba212510805fff6e97ad578",
+  "shape_hw": [
+    3730,
+    3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5167373,
+  "emitted_cells_gt0": 45000,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 7111787,
+  "name": "gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan",
+  "note": "H67 inventory-free geophysics/topography belief, metric-native max-coverage emission; 45000 dots; NaN outside footprint",
+  "note_chars": 119,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+}

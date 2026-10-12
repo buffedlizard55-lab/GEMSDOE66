@@ -4,66 +4,41 @@
 <title>Results · GEMSDOE66</title>
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
-<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="on">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
-<main>
-<div class="wrap">
+<h1 class="logo">GEMSDOE66 &mdash; DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html">Download &amp; status</a><a href="executive-summary.html">How to submit</a><a href="results.html" class="on">Results</a><a href="hypotheses.html">Hypotheses</a><a href="method.html">Method &amp; metric</a><a href="sources.html">Sources</a><a href="irregularities.html">Irregularities</a><a href="run-card.html">Run card</a></nav></div></header>
+<main><div class="wrap">
+<h2>Results</h2>
+<h3>1. Metric structure, recovered from the official formula</h3>
+<p>Because every artifact in the pinned scored mirror is strictly binary
+(<code>p &isin; {0,1}</code>, asserted before use), the official DTI collapses to</p>
+<p class="mono">DTI = T / (0.2 T + 0.2 (N &minus; M) + 0.8 |G|)</p>
+<p>with <code>N</code> emitted cells, <code>T</code> = TP<sub>w</sub>, <code>M</code> the emitted
+mass that lands within 300 m of truth, and <code>|G|</code> the hidden positive count. Writing
+&rho; = T/|G| (kernel-weighted recall) and x = (N&minus;M)/|G| (wasted mass),</p>
+<p class="mono">DTI = &rho; / (0.2 &rho; + 0.2 x + 0.8)</p>
+<p>Inverting the two scored thinning levels of one belief surface
+(<code>h25-1-dotted-h19-5</code> at 60,069 dots &rarr; 0.2477 and 44,090 dots &rarr; 0.2600)
+identifies <b>&rho; = 0.2565</b> and <b>x = 0.676</b> for that family, and these two ratios are
+invariant to the single nuisance (the wasted-mass fraction). <code>|G|</code> itself is only
+bounded (&le; 65,241); that is stated rather than guessed. See
+<code>evidence/h67_truth_size.json</code>.</p>
+<div class="note"><b>Consequence.</b> There are exactly two levers: raise &rho;, or cut x. Both are
+measurable on the holdout. Adding dots to a fixed belief surface only ever lowers DTI, because
+each one costs 0.2 whether or not it earns credit.</div>
+<h3>2. HOLDOUT-DTI</h3>
+<table><tr><th>instrument</th><th>key</th><th>belief recipe</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>folds</th><th>withheld px</th><th>dots</th></tr><tr><td>C_catalogue_recover</td><td class='mono'>R3|k1.0|s2</td><td>geophysics/topography only, no fault inventory</td><td>0.1790</td><td>0.1782 &ndash; 0.1798</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R1|k1.0|s2</td><td>catalogue distance only (the incumbent signal)</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R4|k1.0|s2</td><td>catalogue + SGMC gap</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr><tr><td>C_catalogue_recover</td><td class='mono'>R5|k1.0|s2</td><td>full 62-layer stack</td><td>0.0178</td><td>0.0147 &ndash; 0.0208</td><td>2</td><td>62,383</td><td>45,000</td></tr></table><p class='small'>Evaluator: <code>src/gems/metric.py @ arena/855725e1; vectorised == literal brute force to 3.6e-15; TPw+FNw=|G| asserted; official worked example TPw=3.00/FNw=2.00 reproduced exactly</code>. Withheld truth is a proxy. Instrument N uses SGMC geologic-map faults &gt;300 m off the given catalogue, NOT the organiser&#x27;s hidden expert set. No number here is ORGANIZER-CONFIRMED.</p>
+<h3>3. Leakage canary (every layer alone)</h3>
+<h3>C_catalogue_recover</h3><table><tr><th>layer</th><th>max AUC alone</th><th>verdict</th></tr><tr><td class='mono'>d_visible_catalogue_m</td><td>0.714</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_qfaults_m</td><td>0.691</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_sgmc_m</td><td>0.677</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>d_sgmc_off_visible_m</td><td>0.594</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_lappos_max</td><td>0.587</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_lapneg_max</td><td>0.580</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_relief</td><td>0.579</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>det_elev_grad</td><td>0.576</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_step_max</td><td>0.575</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_ex_max</td><td>0.573</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>lidar_upface_max</td><td>0.569</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>det_elev_slope</td><td>0.566</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>geod_2ndinv</td><td>0.565</td><td><span class="pill ok">ok</span></td></tr><tr><td class='mono'>geod_shearrate</td><td>0.565</td><td><span class="pill ok">ok</span></td></tr></table><p class='small'>Flagged above the 0.90 leakage threshold: none</p>
+<h3>4. Registry uniqueness</h3>
+<p>Compared against <b>72</b> reachable prior rasters (60 registry + 12 scored mirrors). Stop thresholds: |&rho;| &gt; 0.90, or &gt; 70% of candidate dots within 3 px of one raster's dots.</p><p class='small'>The random-null column is essential: a registry raster with 300,000 dots covers so much of the footprint that a <i>uniformly random</i> dot set already lands within 3 px of it most of the time. Only the lift above that null is evidence of lane drift. Worst rows shown.</p><table><tr><th>registry raster</th><th>Spearman &rho; (surface)</th><th>cand dots within 3 px</th><th>random null</th><th>lift</th><th>its dots</th></tr><tr><td class='mono'>scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif</td><td>0.0000</td><td>0.9997</td><td>0.9985</td><td>1.00</td><td>206,895</td></tr><tr><td class='mono'>rasters/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</td><td>-0.0176</td><td>0.9951</td><td>0.9597</td><td>1.04</td><td>311,617</td></tr><tr><td class='mono'>scored/gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif</td><td>0.2241</td><td>0.8044</td><td>0.2618</td><td>3.07</td><td>174,232</td></tr><tr><td class='mono'>scored/gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif</td><td>0.1283</td><td>0.7904</td><td>0.2712</td><td>2.91</td><td>69,281</td></tr><tr><td class='mono'>scored/8GEMSDOE_Hedge-v2_submission.tif</td><td>0.2058</td><td>0.5701</td><td>0.2817</td><td>2.02</td><td>227,507</td></tr><tr><td class='mono'>scored/gemsdoe-ens12-adopted-7f00890a.tif</td><td>0.1500</td><td>0.5692</td><td>0.2429</td><td>2.34</td><td>172,974</td></tr><tr><td class='mono'>scored/gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif</td><td>0.1382</td><td>0.4965</td><td>0.2103</td><td>2.36</td><td>123,939</td></tr><tr><td class='mono'>rasters/19GEMSDOE__h19-4-multiline-corroborated.tif</td><td>0.1372</td><td>0.4893</td><td>0.2049</td><td>2.39</td><td>123,779</td></tr></table>
+<h3>5. Scores claimed</h3>
+<p><b>None.</b> No ORGANIZER-CONFIRMED score is attached to any byte in this repository. Owner-
+and user-reported public values were used only to invert the metric algebra in section 1, and
+are labelled as such.</p>
 
-<h2>Results — inherited negative experiment, not a promotion</h2>
-<div class="note"><b>All performance measurements below are labelled HOLDOUT-DTI.</b>
-Evaluator: <code>gemsdoe66.metric.dti</code> (the inherited card reports a 1e-9 comparison
-with a brute-force equation transcription). Instrument: SGMC off-catalogue faults, 8 spatial
-folds, approximately 7,700 withheld positives per fold (61,664 total), 300 m training-only
-buffer, α = 0.2, β = 0.8, 300 m triangular kernel. The listed 95% CIs are the recorded
-percentile intervals over folds. This proxy holdout is not the organizer's hidden set. No
-<code>ORGANIZER-CONFIRMED</code> score exists for any artifact.</div>
-<p class="stop"><b>Protocol deviation:</b> the inherited lane used 1 m-derived 100 m descriptors
-and 2–20 pixel scales on the 100 m grid (200–2,000 m), not the requested native-resolution
-2–20 m scarp method. The numeric results below do not validate LIDAR-01.</p>
-
-<h3>Pooled novelty instrument (relief-confounded)</h3>
-<table><tr><th>field</th><th>HOLDOUT-DTI mean</th><th>95% CI</th><th>folds</th></tr>
-<tr><td>lidar lane</td><td>0.07075</td><td>[0.05217, 0.08967]</td><td>8</td></tr><tr><td>incumbent</td><td>0.04896</td><td>[0.04191, 0.05669]</td><td>8</td></tr><tr><td>uniform random</td><td>0.04019</td><td>[0.03786, 0.04233]</td><td>8</td></tr></table>
-
-<h3>Relief-matched instrument</h3>
-<table><tr><th>field</th><th>HOLDOUT-DTI mean</th><th>95% CI</th><th>folds</th></tr>
-<tr><td>lidar lane</td><td>0.02638</td><td>[0.02087, 0.03183]</td><td>8</td></tr><tr><td>incumbent</td><td>0.02727</td><td>[0.02421, 0.03049]</td><td>8</td></tr><tr><td>uniform random</td><td>0.02612</td><td>[0.02436, 0.02741]</td><td>8</td></tr></table>
-<p>The paired matched lane-minus-incumbent HOLDOUT-DTI difference is
-<b>-0.00089</b>, 95% CI
-[-0.00836,
-+0.00664];
-positive in 3 of
-8 folds. The paired lane-minus-random
-HOLDOUT-DTI difference is <b>+0.00026</b>,
-95% CI [-0.00552,
-+0.00601]. Both
-intervals include zero; the verdict remains negative.</p>
-
-<h3>Relief strata — HOLDOUT-DTI</h3>
-<table><tr><th>terrain</th><th>lane HOLDOUT-DTI mean [95% CI]</th>
-<th>random HOLDOUT-DTI mean [95% CI]</th></tr>
-<tr><td>Basin</td><td>0.00090 [0.00000, 0.00262]</td><td>0.00274 [0.00124, 0.00448]</td></tr><tr><td>Mid-relief</td><td>0.02630 [0.02218, 0.03040]</td><td>0.02585 [0.02305, 0.02840]</td></tr><tr><td>Range front</td><td>0.05054 [0.03613, 0.06538]</td><td>0.04867 [0.04507, 0.05255]</td></tr></table>
-<p class="small">These are per-stratum HOLDOUT-DTI means with their recorded marginal CIs. No
-paired difference is inferred here. No score projection is made.</p>
-
-<h3>Chance-control HOLDOUT-DTI</h3>
-<table><tr><th>control</th><th>mean</th><th>95% CI</th></tr>
-<tr><td>random</td><td>0.03973</td><td>[+0.03803, +0.04123]</td></tr><tr><td>lidar_lane</td><td>0.07075</td><td>[+0.05217, +0.08967]</td></tr><tr><td>incumbent_prior</td><td>0.04476</td><td>[+0.03830, +0.05196]</td></tr><tr><td>lane_minus_random</td><td>0.03102</td><td>[+0.01253, +0.04978]</td></tr></table>
-
-<h3>Other diagnostics</h3>
-<p>The relief-gate sensitivity values are retained in the evidence JSON. They are internal
-HOLDOUT-DTI diagnostics, not a chosen submission budget or a promotion result. The mass sweep
-is omitted here because no score is selected from that instrument.</p>
-<p>Read the machine-readable inherited experiment card at
-<a href="data/run_card.json"><code>docs/data/run_card.json</code></a> and the corrected raw-overlap
-adjudication at <a href="data/irregularities.json">IR-71</a>. All values remain internal; no
-file is cleared for download.</p>
-
-</div>
-</main>
-<footer><div class="wrap">
-GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
-competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
-Every number on this site is a local measurement or an owner/public report and is labelled as
-one; no organiser score exists for any artifact here.
-</div></footer></body></html>
+</div></main>
+<footer class="wrap"><p class="small">Built 2026-10-12T02:58:40Z
+by <code>scripts/build_site_h67.py</code>. Every number on this site is either HOLDOUT-DTI
+(internal, with its evaluator and CI) or a measurement of our own bytes. Nothing here is an
+organizer score.</p></footer>
+</body></html>

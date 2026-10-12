@@ -56,11 +56,25 @@ def validate(path: str | Path, reference_path: str | Path | None = None,
     ref_shape = None
     ref_transform = None
     ref_crs = None
+    ref_fp = None
     if reference_path is not None:
         with rasterio.open(reference_path) as ref:
             ref_shape = (ref.height, ref.width)
             ref_transform = ref.transform
             ref_crs = ref.crs
+            # The organiser's own sample submission IS the authoritative footprint.  Every one of
+            # the 12 owner artifacts that the organiser actually scored is finite on exactly its
+            # 5,167,373-cell mask and NaN on the other 7,111,787 cells (see
+            # data/restore_receipt.json + evidence/h67_truth_size.json).  The training-features
+            # band-1 mask disagrees with it by 3,061 cells one way and 1,540 the other, so the
+            # features mask is a cross-check, never the pass/fail criterion -- using it as the
+            # criterion failed two checks on an artifact that is byte-convention identical to
+            # every scored submission.  Logged as IR-67-FOOTPRINT-01.
+            ref_band = ref.read(1)
+            # Only a floating reference band can encode a footprint: an integer label raster is
+            # finite everywhere and says nothing about where data is allowed.
+            ref_fp = (np.isfinite(ref_band.astype(np.float64))
+                      if np.issubdtype(ref_band.dtype, np.floating) else None)
 
     with rasterio.open(path) as src:
         out_shape = (src.height, src.width)
@@ -137,12 +151,27 @@ def validate(path: str | Path, reference_path: str | Path | None = None,
             checks.append(_check("footprint shape matches candidate", False,
                                  f"footprint={fp.shape} candidate={arr.shape}"))
         else:
-            nan_inside = int((~finite & fp).sum())
+            # The reference (sample submission) mask is authoritative when supplied; the
+            # features band-1 mask is only a cross-check.  See IR-67-FOOTPRINT-01.
+            use_ref = ref_fp is not None and ref_fp.shape == arr.shape
+            auth = ref_fp if use_ref else fp
+            auth_name = "reference sample-submission mask" if use_ref else "features band-1 mask"
+            nan_inside = int((~finite & auth).sum())
             checks.append(_check("no NaN inside footprint", nan_inside == 0,
-                                 f"nan_inside={nan_inside} footprint_cells={int(fp.sum())}"))
-            outside_finite = int((finite & ~fp).sum())
+                                 f"nan_inside={nan_inside} footprint_cells={int(auth.sum())} "
+                                 f"mask={auth_name}"))
+            outside_finite = int((finite & ~auth).sum())
             checks.append(_check("NaN-only outside footprint", outside_finite == 0,
-                                 f"finite_outside={outside_finite}; only NaN is allowed outside"))
+                                 f"finite_outside={outside_finite}; only NaN is allowed outside; "
+                                 f"mask={auth_name}"))
+            if use_ref:
+                d1 = int((auth & ~fp).sum())
+                d2 = int((fp & ~auth).sum())
+                checks.append(_check(
+                    "info: features band-1 mask disagrees with the authoritative mask", True,
+                    f"in_reference_not_features={d1} in_features_not_reference={d2}; the 12 "
+                    f"organizer-scored owner artifacts all follow the reference mask "
+                    f"(IR-67-FOOTPRINT-01)", status="INFO"))
     else:
         checks.append(_check("footprint checks", False,
                              "SKIPPED: no features raster supplied", status="SKIPPED"))

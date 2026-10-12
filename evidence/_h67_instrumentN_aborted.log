@@ -1,0 +1,10 @@
+[1] loading design matrix and inventories ...
+    62 layers | catalogue 60,988 | SGMC-off>300m 62,122 | footprint 5,167,373
+
+[2] instrument N_offcatalogue_novel
+    2 folds | withheld positives pooled = 61,601 | segments = 2,115 (8-connected components (proxy))
+    canary done (30s)
+    fold 0: training rows 92,187 (36s)
+      R1|k1.0|s0: DTI=0.0455 dots=45,000 (154s)
+      R1|k1.0|s2: DTI=0.0481 dots=45,000 (256s)
+      R2|k1.0|s0: DTI=0.0000 dots=32,153 (357s)

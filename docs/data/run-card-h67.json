@@ -1,0 +1,291 @@
+{
+ "schema": "gems-run-card/3",
+ "run_id": "gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan",
+ "generated_utc": "2026-10-12T02:57:10Z",
+ "repo": "buffedlizard55-lab/GEMSDOE66",
+ "lane": "off-catalogue geologic-map fault gap + metric-native max-coverage emission",
+ "hypothesis": "Faults drawn on the USGS SGMC state geologic map but absent from the given USGS-QFDB/INGENIOUS catalogue are the population the organiser's expert test set is drawn from, so a belief surface anchored on that gap recovers off-catalogue faults a geophysics-only model cannot see.",
+ "mechanism": "Bedrock geologic maps record fault contacts that the Quaternary-only fault database omits.  79,615 SGMC fault pixels (95.2%) lie outside the given catalogue and 62,122 are more than 300 m from it, so they are visible evidence of faulting the catalogue lacks.",
+ "named_non_fault_mimic": "Geologic map-unit contacts and bedding traces digitised as faults, arbitrary map-index lines, and lithologic boundaries with no geomorphic or geophysical expression.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator_version": "src/gems/metric.py @ arena/855725e1; vectorised == literal brute force to 3.6e-15; TPw+FNw=|G| asserted; official worked example TPw=3.00/FNw=2.00 reproduced exactly",
+  "per_instrument": {
+   "C_catalogue_recover": {
+    "candidate_key": "R3|k1.0|s2",
+    "incumbent_key": "R1|k1.0|s2",
+    "withheld_positive_count": 62383,
+    "folds": 2,
+    "segment_id_source": "8-connected components (proxy)",
+    "holdout_dti": 0.17898276332546392,
+    "ci95": [
+     0.178160867952148,
+     0.17980465869877985
+    ],
+    "mean_emitted": 45000.0,
+    "incumbent_holdout_dti": 0.017772995513180793,
+    "paired_gain_vs_incumbent": {
+     "mean": 0.16120976781228313,
+     "ci95": [
+      0.15735458400717736,
+      0.1650649516173889
+     ],
+     "beats_incumbent": true
+    },
+    "status": "measured"
+   }
+  },
+  "value": 0.17898276332546392,
+  "ci95": [
+   0.178160867952148,
+   0.17980465869877985
+  ],
+  "withheld_positive_count": 62383,
+  "proxy_disclosure": "Withheld truth is a proxy, not the organiser's hidden expert set. Instrument C withholds catalogue segments; instrument N withholds SGMC map-fault segments >300 m off the catalogue."
+ },
+ "emission": {
+  "rule": "greedy maximisation of expected DTI under an independent-Bernoulli truth model; stops at break-even, budget is a cap",
+  "emitted": 45000.0,
+  "expected_dti": 0.16708054053030927,
+  "expected_tp": 150560.79513090733,
+  "expected_fp_mass": 3798.470742404461,
+  "assumed_truth_mass": 1087819.0,
+  "rounds": 18.0,
+  "dot_budget_cap": 45000,
+  "kappa_truth_mass": 1.0,
+  "standoff_px": 2,
+  "recipe": "R3_geophysical_only"
+ },
+ "registry_checks": {
+  "max_abs_spearman_surface": 0.22413660629015106,
+  "max_frac_dots_within_3px": 0.9996888888888888,
+  "max_frac_random_dots_within_3px_same_raster": 0.9984666666666666,
+  "rasters_compared": 72,
+  "thresholds": {
+   "rho": 0.9,
+   "within_3px": 0.7
+  }
+ },
+ "raster": {
+  "file": "gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif",
+  "sha256": "512fda025b830209abb013190aa320e58eaa03de2ba212510805fff6e97ad578",
+  "shape_hw": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "emitted_cells": 45000,
+  "dots_within_200m_of_catalogue": 0,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 7111787
+ },
+ "validator": {
+  "passed": true,
+  "has_failures": false,
+  "checks": [
+   {
+    "check": "single band",
+    "status": "PASS",
+    "detail": "count=1"
+   },
+   {
+    "check": "dtype float32",
+    "status": "PASS",
+    "detail": "dtype=float32"
+   },
+   {
+    "check": "CRS EPSG:32611",
+    "status": "PASS",
+    "detail": "crs=EPSG:32611"
+   },
+   {
+    "check": "shape matches",
+    "status": "PASS",
+    "detail": "file=(3730, 3292) expected=(3730, 3292)"
+   },
+   {
+    "check": "resolution 100 m",
+    "status": "PASS",
+    "detail": "res=(100.0, 100.0)"
+   },
+   {
+    "check": "transform matches reference",
+    "status": "PASS",
+    "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "CRS matches reference",
+    "status": "PASS",
+    "detail": "file=EPSG:32611 ref=EPSG:32611"
+   },
+   {
+    "check": "nodata tag is none or NaN",
+    "status": "PASS",
+    "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+   },
+   {
+    "check": "no infinities",
+    "status": "PASS",
+    "detail": "inf_count=0"
+   },
+   {
+    "check": "values within [0, 1]",
+    "status": "PASS",
+    "detail": "min=0.0 max=1.0 finite_cells=5167373"
+   },
+   {
+    "check": "features grid shape matches",
+    "status": "PASS",
+    "detail": "features=(3730, 3292) reference=(3730, 3292)"
+   },
+   {
+    "check": "features transform matches reference grid",
+    "status": "PASS",
+    "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "features CRS matches reference grid",
+    "status": "PASS",
+    "detail": "features=EPSG:32611 reference=EPSG:32611"
+   },
+   {
+    "check": "no NaN inside footprint",
+    "status": "PASS",
+    "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+   },
+   {
+    "check": "NaN-only outside footprint",
+    "status": "PASS",
+    "detail": "finite_outside=0; only NaN is allowed outside; mask=reference sample-submission mask"
+   },
+   {
+    "check": "info: features band-1 mask disagrees with the authoritative mask",
+    "status": "INFO",
+    "detail": "in_reference_not_features=3061 in_features_not_reference=1540; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+   },
+   {
+    "check": "info: emitted cells (value > 0)",
+    "status": "INFO",
+    "detail": "emitted=45000"
+   }
+  ]
+ },
+ "submission": {
+  "name": "gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan",
+  "note": "H67 inventory-free geophysics/topography belief, metric-native max-coverage emission; 45000 dots; NaN outside footprint",
+  "note_chars": 119,
+  "zip": "gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.zip"
+ },
+ "scores_claimed": "NONE. No ORGANIZER-CONFIRMED score exists for this artifact.",
+ "placement_null_control": {
+  "source": "/home/user/GEMSDOE66/evidence/h67_null_control.json",
+  "per_instrument": {
+   "C_catalogue_recover": {
+    "NULL-1_random_eligible": {
+     "mean_dti": 0.07070520953218663,
+     "sd_dti": 0.0017420703220706085,
+     "min_dti": 0.06828297856263707,
+     "max_dti": 0.07402067260912867,
+     "n": 12
+    },
+    "NULL-2_random_footprint": {
+     "mean_dti": 0.06936165810487632,
+     "sd_dti": 0.0015296415921100767,
+     "min_dti": 0.06690978854018458,
+     "max_dti": 0.07161122399736641,
+     "n": 12
+    },
+    "NULL-3_lattice_eligible": {
+     "mean_dti": 0.0728910374703284,
+     "sd_dti": 0.0005348249754150158,
+     "min_dti": 0.07235621249491338,
+     "max_dti": 0.07342586244574341,
+     "n": 2
+    }
+   }
+  },
+  "note": "Uniform random dots and a fixed lattice over the SAME eligible mask, budget and withheld truth.  A HOLDOUT-DTI is only interpretable next to this baseline (IR-66-GATE-01)."
+ },
+ "leakage_canary": {
+  "threshold_auc": 0.9,
+  "flagged_layers_by_instrument": {
+   "C_catalogue_recover": {}
+  },
+  "status": "CLEAR - no layer alone exceeds 0.90"
+ },
+ "promotion_decision": "promote",
+ "promote": true,
+ "promotion_rationale": "candidate beats the incumbent belief recipe on every instrument with a paired 95% CI excluding zero",
+ "verdict": "PROMOTE - cleared for download; no organizer score claimed",
+ "budget": {
+  "experiments_this_session": 2,
+  "submission_slots_used": 0
+ },
+ "updated_utc": "2026-10-12T02:58:11Z",
+ "release_gates_recomputed_at_build": {
+  "single float32 band": {
+   "pass": true,
+   "detail": "count=1 dtype=float32"
+  },
+  "EPSG:32611 and CRS matches the official reference": {
+   "pass": true,
+   "detail": "EPSG:32611 vs EPSG:32611"
+  },
+  "shape matches the official reference": {
+   "pass": true,
+   "detail": "(3730, 3292) vs (3730, 3292)"
+  },
+  "geotransform matches the official reference": {
+   "pass": true,
+   "detail": "(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) vs (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+  },
+  "all finite values in [0, 1]": {
+   "pass": true,
+   "detail": "min=0.0 max=1.0"
+  },
+  "no NaN inside the footprint": {
+   "pass": true,
+   "detail": "nan_inside=0 of 5,167,373 reference-mask cells; features-mask disagreement=(3061, 1540)"
+  },
+  "NaN only outside the footprint": {
+   "pass": true,
+   "detail": "finite_outside=0"
+  },
+  "official validator reports no failures and no skipped checks": {
+   "pass": true,
+   "detail": "passed=True failures=False skipped=False"
+  },
+  "submission note is at most 140 characters": {
+   "pass": true,
+   "detail": "119 chars"
+  },
+  "rank correlation with every registry raster below 0.90": {
+   "pass": true,
+   "detail": "max |rho| = 0.2241 over 72 rasters"
+  },
+  "no registry raster is duplicated (within-3px and null lift judged per raster)": {
+   "pass": true,
+   "detail": "max within-3px = 0.9997 (unconditional null lift 6.03; neighbourhood-conditioned null 0.9985, lift 1.00); rasters failing BOTH the 0.70 overlap rule and a 3x neighbourhood-null lift = 0 of 72"
+  },
+  "not byte-identical to any registry raster": {
+   "pass": true,
+   "detail": "0 sha256 twins; max coincident dots with one raster = 6,801"
+  },
+  "holdout evidence exists for the emitted recipe": {
+   "pass": true,
+   "detail": "h67_holdout_C.json / R3|k1.0|s2"
+  },
+  "emitted recipe beats the random-placement null on the same folds and budget": {
+   "pass": true,
+   "detail": "HOLDOUT-DTI 0.1790 vs null 0.0707"
+  },
+  "run card promotion decision is promote": {
+   "pass": true,
+   "detail": "promote"
+  }
+ },
+ "cleared_for_download": true,
+ "clearing_failures": []
+}

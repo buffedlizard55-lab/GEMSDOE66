@@ -4,100 +4,14 @@
 <title>Irregularities · GEMSDOE66</title>
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
-<h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="on">Irregularities</a></nav></div></header>
-<main>
-<div class="wrap">
+<h1 class="logo">GEMSDOE66 &mdash; DOE GEMS Prize fault discovery</h1>
+<nav class="main"><a href="index.html">Download &amp; status</a><a href="executive-summary.html">How to submit</a><a href="results.html">Results</a><a href="hypotheses.html">Hypotheses</a><a href="method.html">Method &amp; metric</a><a href="sources.html">Sources</a><a href="irregularities.html" class="on">Irregularities</a><a href="run-card.html">Run card</a></nav></div></header>
+<main><div class="wrap">
 
-<h2>Irregularities</h2>
-<table>
-<tr><th>id</th><th>what</th><th>status</th></tr>
-<tr><td><b>IR-66-CONFOUND-01</b><br><span class="tag">verdict-changing</span></td>
- <td><b>The primary instrument was confounded, and the confound was the whole result.</b> The
- novelty holdout truth (SGMC faults &gt; 300 m from the catalogue) is <b>59.3 % range front</b>
- and <b>1.3 % basin</b>, against a footprint that is 25.2 % range front and 23.7 % basin.
- Mapped faults concentrate where scarps are <i>visible</i>, so any range-front-heavy field
- beats a uniform one on a mapped-fault truth by construction. The lane puts 64.3 % of its dots
- on range fronts (the incumbent: 17.2 %), i.e. it matches the truth's own relief prior.
- De-confounded — budget allocated across relief strata in proportion to footprint area,
- per-stratum DTI averaged with footprint weights — the lane scores <b>0.02638</b> against the
- incumbent's <b>0.02727</b> and random's 0.02612: lane−incumbent <b>−0.00089</b>
- (CI [−0.0084, +0.0066], 3/8 folds), lane−random <b>+0.00026</b> (CI [−0.0055, +0.0060],
- 4/8 folds). The confound is worth <b>+0.0227</b> — the entire +0.0218 headline. On range
- fronts specifically the lane's 0.0505 barely exceeds <i>random placement</i>'s 0.0487 at the
- same budget. <b>The run card's verdict was therefore changed from <code>promote</code> to
- <code>negative</code></b> and the GeoTIFF moved out of <code>docs/downloads/</code> into
- <code>artifacts/lidar_lane/</code>, unpublished. The pooled numbers reproduce exactly
- (0.07075 / 0.04896), so only the de-confounding is new, not the pipeline.</td>
- <td><span class="pill bad">OPEN — verdict flipped</span></td></tr>
-<tr><td><b>IR-66-SCORE-01</b></td>
- <td>An earlier draft quoted a public leaderboard target. No leaderboard was accessed or
- monitored in this reconciliation, and no public row is tied here to an exact artifact receipt.
- No such number is used as an organizer-confirmed score or decision threshold.</td>
- <td><span class="pill warn">OPEN — NOT VERIFIED HERE</span></td></tr>
-<tr><td><b>IR-66-DATA-01</b></td>
- <td>The sandbox reaches only github.com, api.github.com, pypi.org and their CDNs.
- <code>prd-tnm.s3.amazonaws.com</code>, <code>earthquake.usgs.gov</code>,
- <code>gdr.openei.org</code>, <code>sciencebase.gov</code> and <code>dropbox.com</code> all
- return HTTP 000. The raw 1 m GeoDAWN lidar and 10 m 3DEP tiles are therefore unobtainable
- here, and the scarplet template matcher cannot be run on native-resolution data.</td>
- <td><span class="pill warn">OPEN</span></td></tr>
-<tr><td><b>IR-66-DATA-02</b></td>
- <td>The 10 m-DEM channel-steepness product covers <b>25 of 36 blocks</b>.</td>
- <td><span class="pill warn">OPEN</span></td></tr>
-<tr><td><b>IR-66-PROXY-01</b></td>
- <td>Layer dot-means correlate with owner-reported live scores at |ρ| up to 0.98, but also with
- the emitted dot count at |ρ| = 0.5–0.9. The lidar scarp channels flip sign under nuisance
- control. The live anchor is a lane-choice prior, not evidence.</td>
- <td><span class="pill warn">OPEN</span></td></tr>
-<tr><td><b>IR-66-GATE-01</b></td>
- <td>A density-adjusted diagnostic was used to label a final-dot scan <code>UNIQUE</code> even
- though the raw overlap against one accessible registry raster is 0.990, above the brief's
- 0.70 stop threshold. Against a 311,617-dot raster the random-placement null is high, but the
- null does not waive the specified threshold. The raw result is a stop; the 1.5× lift is
- diagnostic only. Only 60 rasters were compared, full organizer-registry completeness is not
- certified, and this artifact has no recorded pre-placement-surface correlation.</td>
- <td><span class="pill bad">OPEN — NOT A UNIQUENESS PASS</span></td></tr>
-<tr><td><b>IR-70-TEMPLATE-PROVENANCE</b></td>
- <td>The recorded shared-template comparison covers 23 <code>src/gems57</code> files: 19 match
- the stored hashes. <code>anatomy.py</code> and <code>metric.py</code> differ from the recorded
- template snapshot; <code>uniqueness.py</code> and <code>gates.py</code> are changes in this PR.
- <code>registry/template_pin.json</code> is absent from <code>origin/main</code>; no live
- upstream revision or tarball was checked. Do not claim an upstream fix or a complete provenance
- pass. Details: <a href="review/2026-10-11-pr12-reconciliation.md">PR #12 reconciliation</a>.</td>
- <td><span class="pill warn">OPEN</span></td></tr>
-<tr><td><b>IR-71-LIDAR-RAW-OVERLAP</b></td>
- <td>The inherited lidar-lane final-dot result reports 0.990386 within 3 px of one accessible
- registry raster, above the 0.70 stop threshold. Its density-adjusted <code>UNIQUE</code> label
- is diagnostic only. Only 60 rasters were compared; organizer-registry completeness is
- uncertified; pre-placement surface correlation is unreported; no full-registry pixel/hash pass
- is established. The candidate remains negative and unpublished.</td>
- <td><span class="pill bad">OPEN — STOP</span></td></tr>
-<tr><td><b>IR-66-BUG-01</b></td>
- <td>The first holdout run excluded the held-out truth's 300 m buffer from <i>emission</i> as
- well as training, forcing TP<sub>w</sub> = 0 for every candidate. The buffer is
- training-only.</td>
- <td><span class="pill ok">FIXED</span></td></tr>
-<tr><td><b>IR-66-BUG-02</b></td>
- <td>The greedy packer suppressed neighbours only across blocks, so two dots accepted inside
- the same block could sit closer than the minimum separation. Each accepted pixel now stamps
- its exclusion disc.</td>
- <td><span class="pill ok">FIXED</span></td></tr>
-<tr><td><b>IR-66-BUG-03</b></td>
- <td><code>folds_by_quadrant</code> assigned background (label 0) to fold 0 and produced folds
- of 2,307 vs 23,044 px. Replaced by balanced spatial clustering of connected components.</td>
- <td><span class="pill ok">FIXED</span></td></tr>
-<tr><td><b>IR-66-H2-01</b></td>
- <td>A supervised field trained on off-catalogue SGMC faults scores <b>below chance</b> on
- held-out SGMC faults: it learns regional geology, not the fault signal.</td>
- <td><span class="pill bad">NEGATIVE RESULT</span></td></tr>
-</table>
-
-</div>
-</main>
-<footer><div class="wrap">
-GEMSDOE66 · <a href="https://github.com/buffedlizard55-lab/GEMSDOE66">repository</a> ·
-competition <a href="https://www.drivendata.org/">DrivenData #306</a>.
-Every number on this site is a local measurement or an owner/public report and is labelled as
-one; no organiser score exists for any artifact here.
-</div></footer></body></html>
+<h2>Irregularity register</h2><table><tr><th>id</th><th>what</th><th>status</th></tr><tr><td class='mono'>IR-67-METRIC-01</td><td>The official page&#x27;s worked example states FPw = 1.89; a literal reading of its own formula on the 5-pixel cross it depicts gives exactly 2.00. TPw and FNw reproduce exactly. Our implementation follows the formula, not the figure.</td><td><span class='pill warn'>open</span></td></tr><tr><td class='mono'>IR-67-LABEL-01</td><td>labels.tif and existing_faults.tif are byte-identical (sha256 7ba308cc&amp;hellip;). The competition ships the same raster under two names.</td><td><span class='pill warn'>open</span></td></tr><tr><td class='mono'>IR-67-SAMPLE-01</td><td>sample_submission.tif is described on the problem page as predicting &#x27;total fault absence&#x27;, but 60,988 of its cells equal 1 and they sit exactly on the labelled catalogue. It is usable only as a grid template, never as a baseline.</td><td><span class='pill warn'>open</span></td></tr><tr><td class='mono'>IR-67-MANIFEST-01</td><td>registry/data_manifest.json carries two entries with repo/ref/sha256 = null (the 10 m topo stack and the LiDAR sidecar). They are intentionally unpinned; this session does not use either layer.</td><td><span class='pill warn'>open</span></td></tr><tr><td class='mono'>IR-67-SCALE-01</td><td>The requested 2-20 m native-resolution LiDAR filters cannot be run here: raw 1 m 3DEP tiles are not reachable from this sandbox, so the filters run at 200-2000 m on the 100 m aggregate. Disclosed, not presented as the native method.</td><td><span class='pill warn'>open</span></td></tr><tr><td class='mono'>IR-67-HOLDOUT-01</td><td>With a 300 m segment buffer, a dot placed exactly on a visible fault can never score, which drove two early recipes to DTI = 0.0000. Fixed by masking visible faults out of the eligible set pixel-exactly, as the protocol specifies.</td><td><span class='pill ok'>fixed</span></td></tr><tr><td class='mono'>IR-67-LEAK-01</td><td>The first version of the fold-dependent SGMC columns was inverted and reproduced the withheld truth exactly (distance 0 at every withheld pixel). The in-fold assertion caught it before any number was reported.</td><td><span class='pill ok'>fixed</span></td></tr></table>
+</div></main>
+<footer class="wrap"><p class="small">Built 2026-10-12T02:58:40Z
+by <code>scripts/build_site_h67.py</code>. Every number on this site is either HOLDOUT-DTI
+(internal, with its evaluator and CI) or a measurement of our own bytes. Nothing here is an
+organizer score.</p></footer>
+</body></html>

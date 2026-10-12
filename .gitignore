@@ -46,3 +46,11 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+
+# The cleared submission artifact IS published, because the brief requires it to be downloadable
+# from the GitHub Pages site.  This is our own 45,000-dot prediction (about 600 KB), not organizer
+# or competition data: the "/data/" and mirrored-raster rules above still hold, and
+# scripts/build_site_h67.py empties and refills this directory from the recomputed verdict, so a
+# file can only appear here if all 15 gates pass on its bytes.
+!/docs/downloads/*.tif
+!/docs/downloads/*.zip
