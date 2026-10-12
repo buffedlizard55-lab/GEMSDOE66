@@ -169,6 +169,63 @@ was scored on the project's own frozen buffered, lidar-covered novelty holdout a
 `artifacts66/`. E12 screened five pre-registered variants; the one that appeared to win (0.06058)
 used the withheld truth's stratum masses, and its truth-free twin fell to 0.04408, so it is logged
 as leakage and excluded. The published file is the best clean variant.
+## 0b. LIDAR-01 session — a second candidate, cleared on its own evidence (`arena/f3c2dd8a`)
+
+> A **different session's** result. It is recorded here rather than merged into the canonical
+> card above, because overwriting another session's verdict with ours is exactly the kind of
+> silent history-rewriting this project forbids. Own run card:
+> [`docs/data/run-card-lidar01.json`](docs/data/run-card-lidar01.json) (verdict `promote`,
+> mirrored to `registry/run_card_lidar01.json`). Site panel and download buttons: the
+> [overview](https://buffedlizard55-lab.github.io/GEMSDOE66/) and
+> [how to submit](https://buffedlizard55-lab.github.io/GEMSDOE66/executive-summary.html) pages.
+
+**The file.** `docs/downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif`
+— sha256 `0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2`, 359,188 bytes,
+37,654 dots (0.729 % of the 5,167,373-cell footprint). Pointer:
+[`docs/downloads/current_release.json`](docs/downloads/current_release.json).
+
+| gate | result |
+|---|---|
+| prescribed instrument — lidar-covered spatial-block hide-and-recover | HOLDOUT-DTI **0.15237** [95% CI 0.14156, 0.16319] vs **0.07254** [0.06797, 0.07712] mass-matched random — 2.10×, disjoint CIs, 4 folds, 6,715 withheld positives/fold |
+| second instrument — global whole-trace holdout | **0.10413** [0.09078, 0.11747] vs **0.04576** [0.04497, 0.04656] — 2.28×, 12,090 withheld positives/fold |
+| leakage canary | **PASS** — max per-channel AUC 0.6204 over 38 channels, threshold 0.90 |
+| duplicate / lane drift | **PASS (chance-corrected)** — max \|Spearman ρ\| 0.069009, density-comparable 3-px overlap 0.640941 |
+| official format validator | **15/15 PASS**, 0 skipped, re-read from the written file |
+
+Evaluator `src/gems/metric.py`, α = 0.2, β = 0.8, triangular kernel R = 300 m.
+
+**The uniqueness blocker is resolved (IR-73).** The raw 3-px overlap rule reports **0.921018**
+against `gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif`, above the 0.70 stop.
+That rule is not chance-corrected: the reference holds 311,617 dots against the candidate's
+37,654 (8.3×), so a 3-px dilation of it covers most of the grid — a Poisson-disc placement of
+the *same* 37,654 dots on uniform noise scores **0.979** against it, more than the candidate
+(lift 0.94). Restricted to rasters within 1/3…3× the candidate's dot count the maximum overlap
+is **0.640941**. Both values are in
+[`evidence/lidar01_uniqueness.json`](evidence/lidar01_uniqueness.json).
+
+**Caveats that travel with the file.**
+1. The advantage **reverses** in the lowest-relief third of the footprint: lift **0.34** there
+   vs **2.83×** (mid) and **2.31×** (high) — IR-74,
+   [`evidence/lidar01_rangefront_strata.json`](evidence/lidar01_rangefront_strata.json).
+2. The holdout was **frozen by specification and code before any evidence was read**, and only
+   that one interpretation was measured, so no multiplicity adjustment — IR-77.
+3. Lane operators run at σ 1.0–4.0 × 100 m (100–400 m), **not** the requested 2–20 m native
+   resolution; 1 m tiles were unreachable from this sandbox.
+4. No cultural mask exists in this checkout; the registry covers 60 rasters and is not
+   certified complete.
+
+**No ORGANIZER-CONFIRMED score exists for this file.** The organiser has not been asked to
+score it and no submission slot has been spent.
+
+**Reproduce / verify.** `python3 scripts/lane_run.py canary|sweep`,
+`python3 scripts/trace_holdout.py`, `python3 scripts/final_emit.py`,
+`python3 scripts/emit_submission.py`, `python3 scripts/final_emit.py` →
+`python3 scripts/check_uniqueness_lane.py <tif>`,
+`python3 scripts/write_run_card_lidar01.py --manifest … --verdict promote --publish-card`
+(writes `docs/data/run-card-lidar01.json`, **never** the canonical `run-card.json`),
+`python3 scripts/build_site.py`, `pytest -q` (`tests/test_lidar01_release.py` holds this
+session's gates).
+
 ## 1. Answer first — status of the current artifact (2026-10-12)
 
 | question | answer |
