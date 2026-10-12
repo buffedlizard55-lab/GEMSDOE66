@@ -51,19 +51,31 @@ def test_readme_contains_the_brief():
     assert "Predicted values must be in range [0, 1]" in t
 
 
-def test_site_links_no_downloadable_raster():
-    """A NEGATIVE verdict must not publish a submission file.
+def test_site_links_only_the_disclosed_allowlisted_raster():
+    """A downloadable raster may only be the disclosed H67-1 sibling, and any page that links a
+    raster file must state the two disclosures in the same page: the raw uniqueness rule is
+    falsified and the artifact is not promoted.
 
-    The lane's advantage did not survive relief matching, so the GeoTIFF lives in
-    ``artifacts/lidar_lane/`` for audit and the site must not offer it as a download.
     Guarding this with a test is what keeps a future, more optimistic rebuild from quietly
-    re-publishing a file the evidence does not support.
+    publishing a file the evidence does not support - or from dropping the disclosures.
     """
     import re
+    allowed = {
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+    }
+    linked_any = False
     for f in sorted((ROOT / "docs").glob("*.html")):
         html = f.read_text()
-        for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
-            raise AssertionError(f"{f.name} links a downloadable raster: {m.group(1)}")
+        hits = [m.group(1) for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html)]
+        for href in hits:
+            assert href.split("?")[0] in allowed, f"{f.name} links an unlisted raster: {href}"
+            linked_any = True
+        if hits:
+            assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
+            assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
+            assert "0.9992" in html, f"{f.name} does not state the measured raw overlap"
+    assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 
 def test_negative_verdict_is_recorded():

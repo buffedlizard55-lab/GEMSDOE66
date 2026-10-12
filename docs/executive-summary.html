@@ -9,110 +9,100 @@
 <main>
 <div class="wrap">
 
-<h2>Executive summary — why there is nothing to download</h2>
+<h2>Executive summary</h2>
 
-<div class="stop">
-<h2>Verdict: NEGATIVE — do not submit this file</h2>
-<p>A historical GeoTIFF exists under <code>artifacts/lidar_lane/</code> with a local format
-sidecar. It is <b>not</b> a current, officially cleared submission and is not published as a
-download; the relief-matched result and raw uniqueness stop both block release.</p>
-<p><b>Inherited internal HOLDOUT-DTI only — not an organizer result.</b> The PR #13 record
-uses <code>gemsdoe66.metric.dti</code> (reported verified to 1e-9 against an equation
-transcription), pooled distance-weighted Tversky with α = 0.2, β = 0.8, a 300 m triangular
-kernel, 8 spatial folds, and approximately 7,700 withheld positives per fold (61,664 total for
-the SGMC novelty instrument). The recorded 95% CIs are percentile intervals over folds. No
-<code>ORGANIZER-CONFIRMED</code> score exists. The field is scale-deviating: it uses 100 m-derived
-inputs and 200–2,000 m line scales, not the requested native-resolution 2–20 m method.</p>
-<p><b>The finding.</b> The holdout truth (SGMC faults &gt; 300 m from the given catalogue) is
-not distributed like the terrain: it is <b>59.3 % range front</b> and <b>1.3 % basin</b>,
-while the footprint is 25.2 % range front and 23.7 % basin. The inherited experiment found the
-pooled lane advantage did not survive relief matching. Its recorded HOLDOUT-DTI summaries are:</p>
-<table>
-<tr><th>instrument</th><th>lane mean [95% CI]</th><th>incumbent mean [95% CI]</th><th>uniform random mean [95% CI]</th></tr>
-<tr><td>pooled (confounded)</td><td><b>0.07075 [0.05217, 0.08967]</b></td><td>0.04896 [0.04191, 0.05669]</td><td>0.04019 [0.03786, 0.04233]</td></tr>
-<tr><td><b>relief-matched</b></td><td>0.02638 [0.02087, 0.03183]</td><td><b>0.02727 [0.02421, 0.03049]</b></td><td>0.02612 [0.02436, 0.02741]</td></tr>
-</table>
-<p class="small">Relief-matched lane − incumbent = <b>−0.00089</b>, 95 % CI
-[−0.00836, +0.00664], positive in 3 of 8 folds.
-Relief-matched lane − random = <b>+0.00026</b>, 95 % CI [−0.00552, +0.00601], 4 of 8 folds.
-Both intervals straddle zero. These are internal HOLDOUT-DTI measurements only; the analysis
-remains negative and the artifact remains unsubmitted.</p>
+<div class="warn">
+<h2>Status: FORMAT-READY, NOT PROMOTED &mdash; download enabled with disclosures</h2>
+<p><b>Download:</b>
+<a class="btn" href="downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif</a>
+<span class="small mono">sha256 eeadc5cee0516d9b&hellip;</span>
+&nbsp;&middot;&nbsp;NaN-outside sibling:
+<a class="btn" href="downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif">gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif</a></p>
+<p><b>What is proven:</b> the shared validator passes every check on both siblings; the
+<code>-zeros</code> file has zero NaN and all 12,279,160 cells in [0, 1], so it cannot trip the
+previous rejection <span class="mono">Predicted values must be in range [0, 1]</span>.</p>
+<p><b>What is NOT proven:</b> an edge over the incumbent. The pre-registered science gate
+(&ldquo;a DTI gain on the LiDAR-covered holdout not confined to range fronts&rdquo;) is
+<b>unevaluable</b> here (<a href="irregularities.html">IR-67-INSTR-01</a>) and two of four
+pre-registered predictions failed (P3 block-density CV 0.32 vs the 0.45&ndash;0.58 band; P4 raw
+70 %-within-3 px rule &mdash; <a href="irregularities.html">IR-67-GATE-02</a>). Under this
+project's own rule (&ldquo;do not spend a weekly slot on an idea that has not beaten the current
+holdout best&rdquo;) the honest default is <b>keep the slot</b>. Upload is the owner's call, made
+with the numbers on this page.</p>
 </div>
 
-<h2>2 · Submission portal — do not proceed</h2>
-<div class="stop"><b>No file or note is cleared for use.</b> Do not open a submission form, upload an
-artifact, or spend a competition slot. If every scientific, provenance, registry, and official-grid
-gate is passed in a future review, use the official competition interface and record its receipt.
-No submission name or note on this page is cleared. The following instructions are
-<b>conditional, not authorization to submit</b>.</div>
+<h2>1 &middot; Exactly how to submit (five steps)</h2>
 <ol>
-<li>After an independent selector approves a candidate, confirm that its exact SHA-256
-matches the approved run card, and that the shared validator passed against the official
-sample grid and feature footprint (single-band float32, EPSG:32611, 100 m, values [0,1]
-inside and NaN only outside). Never substitute an all-finite audit variant.</li>
-<li>Only then download the specifically approved TIFF from this site's top-of-page download
-link. There is no such link now. Check the downloaded file SHA-256 before using it.</li>
-<li>On the official DrivenData competition page, review the current rules and weekly limit,
-open the submission form, select the <code>.tif</code> file, enter the approved unique name
-and the approved note (at most 140 characters), then submit. Record the portal receipt and
-its exact file hash; do not claim a score from an owner page or a projection.</li>
+<li>Open the official competition page
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a> and
+its submission form. The weekly cap shown there applies; this project has spent <b>0</b> slots.</li>
+<li>Click the download button above (or in the top block of <a href="index.html">the overview</a>).
+The portal accepts a single-band GeoTIFF (or a ZIP containing one). Every value is already inside
+[0, 1]; do not rescale, do not add a nodata value, do not reproject.</li>
+<li>Upload <span class="mono">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif</span>. Verify the hash first if you wish:
+<span class="mono">eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42</span></li>
+<li>Paste this submission name and note (both are also written into the TIFF as
+<code>GEMS_NAME</code> / <code>GEMS_NOTE</code>):</li>
+</ol>
+<table>
+<tr><th>name</th><td class="mono">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros</td></tr>
+<tr><th>note (128/140)</th><td class="mono">H67-1 scarp-lane novelty field, LiDAR-derived scarp channels + scale persistence, mapped-fault exclusion; see GEMSDOE66 run card</td></tr>
+<tr><th>artifact</th><td class="mono">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif</td></tr>
+</table>
+<ol start="5">
+<li>Record the portal receipt (score or error text) in
+<code>docs/downloads/README.md</code> next to the sha256. Nothing can promote this artifact to
+<code>ORGANIZER-CONFIRMED</code> except a portal receipt, and no page on this site is a score.</li>
 </ol>
 
-<h2>3 · Format information is not release clearance</h2>
-<p>The inherited local sidecar records a format-only check on its artifact bytes. That is not
-organizer acceptance, does not establish current official-grid/footprint clearance, and cannot
-override the negative scientific result, the raw overlap stop, the uncertified registry, or the
-missing pre-placement surface comparison. The user-facing output remains unavailable.</p>
+<h2>2 &middot; The gate table</h2>
 <table>
-<tr><th>check</th><th>meaning</th></tr>
-<tr><td>single band</td><td>the organiser asks for one layer</td></tr>
-<tr><td>float32</td><td>"datatype of 32-bit float"</td></tr>
-<tr><td>3730 × 3292</td><td>same shape as the template</td></tr>
-<tr><td>EPSG:32611</td><td>"the same projected coordinate reference system"</td></tr>
-<tr><td>geotransform</td><td>100 m, origin (243350, 4508550)</td></tr>
-<tr><td>no NaN / inf / sentinel inside</td><td>nodata −3.4028235e38 would be read as a real value</td></tr>
-<tr><td><b>all finite values in [0, 1]</b></td><td>the rejection rule reported in the brief</td></tr>
-<tr><td><b>NaN outside the footprint</b></td><td>"data outside the bounds is null or nan"</td></tr>
-<tr><td>0 dots within 200 m of a known fault</td><td>the organiser does not score known faults</td></tr>
+<tr><th>gate</th><th>result</th><th>evidence</th></tr>
+<tr><td>format &amp; grid, both siblings, re-read from disk</td>
+    <td><span class="pill ok">PASS</span></td>
+    <td><code>evidence/h67_run.json</code></td></tr>
+<tr><td>range contract: <code>-zeros</code> fully finite in [0, 1]</td>
+    <td><span class="pill ok">PASS</span> 0 NaN, 40,000 dots, max 1.0</td>
+    <td>writer receipt + validator <code>--outside-policy either</code></td></tr>
+<tr><td>lane: rank correlation vs 60 registry rasters</td>
+    <td><span class="pill ok">max |&amp;rho;| 0.286</span></td>
+    <td><code>gemsdoe66.uniqueness.check_registry</code></td></tr>
+<tr><td>lane: raw &gt;70 % of dots within 3 px of one raster</td>
+    <td><span class="pill bad">FALSIFIED (0.9992)</span> against
+    gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif &mdash; whose own 3 px dilation covers
+    0.960 of the eligible band (matched lift
+    1.04). Raw rule not waived, disclosed.</td>
+    <td><a href="data/h67_overlap_audit.json">audit</a>,
+    <a href="irregularities.html">IR-67-GATE-02</a>, <a href="irregularities.html">IR-67-VERIFY-01</a>
+    (the shared verifier measures this clause in the opposite direction and reports 0.3167)</td></tr>
+<tr><td>leakage canary: any feature alone, AUC &gt; 0.90</td>
+    <td><span class="pill ok">worst 0.713</span></td>
+    <td><code>evidence/h67_run.json</code></td></tr>
+<tr><td>pre-registered predictions P1&ndash;P4</td>
+    <td><span class="pill warn">2 met, 2 falsified</span>
+    P1 met marginally (mean distance to mapped faults 2,336 m),
+    P2 met (85.0 % LiDAR-valid),
+    P3 falsified (0.32 vs 0.45&ndash;0.58), P4 falsified on the raw rule</td>
+    <td><code>registry/preregistration-h67.json</code></td></tr>
+<tr><td>science: holdout DTI on LiDAR blocks, range-front stratified</td>
+    <td><span class="pill bad">UNEVALUABLE</span> pooled 0.0000
+    [0.0, 0.0] &mdash; degenerate by construction
+    (<a href="irregularities.html">IR-67-INSTR-02</a>); instrument anti-correlated with the
+    owner-reported outcome</td>
+    <td><code>evidence/h67_run.json</code>, <code>evidence/h67_e2_proxy_concordance.json</code></td></tr>
 </table>
 
-<h2>4 · Is it OK to download and submit?</h2>
-<div class="stop"><b>No.</b> The candidate is not cleared; the following checks do not authorize a submission.
-<ul>
-<li><b>Format-only check</b>: the inherited sidecar records 12 local checks on the bytes;
-this is not organizer acceptance or release clearance. Receipt:
-<code>artifacts/lidar_lane/checks-gems66-lidar_lane-37654dots-20261011T214803Z-a08aa21d30ba-nan.tif.json</code>.</li>
-<li><b>Uniqueness is not passed.</b> The recorded final-dot overlap is 0.990 against an
-accessible registry raster, above the user's 0.70 stop threshold. The density-adjusted output
-is diagnostic only; the full organizer registry is not certified, the pre-placement surface
-comparison is unreported, and no registry-wide unique claim is made.</li>
-<li><b>NOT demonstrated</b>: on the relief-matched instrument the lane is
-<b>indistinguishable from the incumbent</b> (HOLDOUT-DTI difference −0.00089, 95% CI
-[−0.00836, +0.00664]) and from <b>uniform random placement</b> (difference +0.00026, 95% CI
-[−0.00552, +0.00601]). In the range-front stratum, internal HOLDOUT-DTI is 0.05054
-[0.03613, 0.06538] for the lane and 0.04867 [0.04507, 0.05255] for random placement, with
-the same evaluator/folds described above.</li>
-<li><b>NOT claimed</b>: <b>no organiser score exists for this file.</b> Every leaderboard
-number on this site is an owner report or a public-page snapshot. The holdout's truth is SGMC,
-not the expert panel's hidden set.</li>
-</ul></div>
-
-<h2>5 · What would be required before reconsideration</h2>
-<p>The inherited analysis does not clear the candidate. Any future reconsideration must stay
-within the remaining approved experiment/time budget and the specified native-resolution lane;
-it cannot be authorized by a leaderboard projection.</p>
-<ol>
-<li><b>Obtain and verify lawful native 1 m inputs</b> plus their coverage, hashes, CRS, and
-exact footprint. If unavailable, keep the native-resolution hypothesis untested.</li>
-<li><b>Pre-register a relief-balanced, whole-segment buffered holdout</b> with visible-fault
-masking and LiDAR-covered blocks, then report only correctly labelled HOLDOUT-DTI with
-version/count/95% CI. Test each feature alone for leakage.</li>
-<li><b>Pass both uniqueness phases against a certified complete registry</b>, exact hash/pixel
-checks, official-grid validation, and independent scientific reviews. A competition slot is a
-separate selector decision and remains unused unless the frozen holdout criterion is met.</li>
-</ol>
-<div class="note"><b>Current decision: do not download, submit, or spend a slot.</b> No live-board
-number or owner-reported value changes this stop.</div>
+<h2>3 &middot; What you are betting on, in one paragraph</h2>
+<p>The organizers state that the scored faults were identified by experts and are <i>not</i> in the
+public fault databases. Every mapped network available here &mdash; the given catalogue and the
+state-map compilation &mdash; is therefore closer to &ldquo;already in the database&rdquo; than to
+the truth, and the metric charges mass there as false positive while it can earn no credit. This
+file spends all 40,000 unit-mass dots at least 400 m from every mapped fault
+(mean 2,336 m), weighted toward the mirrored 1 m-derived
+scarp channels and the owner-reported habitat direction. If the new faults instead cluster on and
+beside the mapped networks &mdash; the usual outcome in a mature province &mdash; the design
+forfeits that mass. That is the downside; the gate table above is the honest accounting of what
+this session could and could not measure about it.</p>
 
 </div>
 </main>

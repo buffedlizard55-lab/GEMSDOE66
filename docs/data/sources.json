@@ -1,6 +1,6 @@
 {
   "schema": 3,
-  "verified_on": "2026-10-11 — official problem/rules/data-access status and bibliographic records rechecked for this audit. No leaderboard snapshot or values are stored. No repeated monitoring is scheduled.",
+  "verified_on": "2026-10-12",
   "sources": [
     {
       "id": "S01",
@@ -121,6 +121,13 @@
       "supports": "Owner-reported status for H33 artifacts; not organizer-confirmed scoring.",
       "status": "OWNER-MAINTAINED; no receipt/hash attribution",
       "how": "Use only to identify the owner claim and its caveat, never as an organizer score."
+    },
+    {
+      "id": "S16",
+      "title": "AGU FM15 T31A-2838 - Mapping of normal fault scarps in airborne laser swath mapping data using wavelet analysis (Sare & Hilley)",
+      "url": "https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html",
+      "accessed": "2026-10-12",
+      "status": "VERIFIED in session: slope-aware wavelet templates with initial scarp slope and above/below-scarp surface angles; sites in Surprise Valley and near Jenny Lake. The checkout's template family is the scarplet package (S10), not this wavelet code."
     }
   ]
 }
