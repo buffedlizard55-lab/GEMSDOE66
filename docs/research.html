@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="assets/site.css"></head>
 <body><header class="top"><div class="wrap">
 <h1 class="logo">GEMSDOE66 — DOE GEMS Prize fault discovery</h1>
-<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="on">Research</a><a href="results.html" class="">Results</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="hypotheses.html" class="">Hypotheses</a><a href="research.html" class="on">Research</a><a href="results.html" class="">Results</a><a href="analysis.html" class="">H33 attribution</a><a href="feed.html" class="">Project feed</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav></div></header>
 <main>
 <div class="wrap">
 
@@ -45,6 +45,21 @@ matching expected count; incomplete access is not a pass.</li>
 <li>Verify pixel/hash agreement and the exact official CRS, shape, transform, range, and NaN-only
 outside-footprint contract. A local format receipt is not organizer acceptance.</li>
 </ul>
+
+<h3>3b · The session-66 lane (released) and its limits</h3>
+<p>The released candidate does <b>not</b> use the native-resolution scarp method. It is the
+K-anchored consensus-support design: the region is the union of 300 m disks of the six
+highest owner-scored registry rasters, restricted to cells at least 300 m from the catalogue with
+positive radiometric K; dots are packed greedily under a prior proportional to K<sup>0.5</sup>
+with the published metric's own first-order acceptance test; the design is frozen in
+<a href="../registry66/preregistration-k66.json"><code>registry66/preregistration-k66.json</code></a>.
+Its released status rests on <i>local</i> measurements only: format/range/footprint re-read from
+disk, byte-uniqueness against all 60 indexed rasters, rank correlation 0.289 against a 0.90 limit,
+and a leakage canary. It has <b>no HOLDOUT-DTI</b>: the buffered whole-segment, LiDAR-covered
+holdout still needs the login-walled feature stack, so the release verdict is
+<code>PROMOTE-FOR-DOWNLOAD</code> with <code>holdout_dti = NOT MEASURED</code>. The >70&nbsp;% /
+3&nbsp;px lane-drift rule is degenerate in this registry and is logged as
+<a href="irregularities.html">IR-66-DOTOVERLAP-DEGENERATE</a> rather than claimed as passed.</p>
 
 <h3>4 · Evidence status</h3>
 <p>Official competition inputs and exact DEM-tile coverage remain unverified in this environment.
