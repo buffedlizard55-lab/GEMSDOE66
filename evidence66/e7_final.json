@@ -1,0 +1,23 @@
+{
+ "design": {
+  "support": "union of 300 m disks of the six highest owner-scored registry rasters",
+  "cat_min_cells": 3,
+  "gamma": 0.5,
+  "N_cap": 32000,
+  "min_sep_cells": 2,
+  "kernel_range_cells": 3
+ },
+ "n_dots": 32000,
+ "K_mean": 126.33184375,
+ "footprint_mean_K": 124.73118991023098,
+ "coverage_frac_within_300m": 0.11753399648138425,
+ "frac_dots_within_1cell_catalogue": 0.0,
+ "frac_dots_within_2cells_catalogue": 0.0,
+ "frac_dots_within_3cells_catalogue": 0.00015625,
+ "frac_dots_in_lidar_coverage": 0.84009375,
+ "model_T": 20620.856282354907,
+ "model_F": 12148.87375113368,
+ "model_dti_proxy": 0.3725919225761452,
+ "runtime_s": 12.1,
+ "evidence_class": "LOCAL DESIGN STATISTICS; not a score"
+}

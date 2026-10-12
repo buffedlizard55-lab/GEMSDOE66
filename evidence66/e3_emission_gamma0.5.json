@@ -1,0 +1,17 @@
+{
+ "gamma": 0.5,
+ "min_sep_px": 2,
+ "cat_prune_px": 2,
+ "g_truth_assumed": 60988.0,
+ "e1k_scale": 0.5,
+ "n_dots": 404236,
+ "T_model": 33924.4343388674,
+ "F_model": 337643.1986634135,
+ "model_dti": 0.27557556672397554,
+ "k_mean_at_dots": 136.34698486328125,
+ "footprint_mean_K": 124.73119354248047,
+ "coverage_within_300m_frac_of_footprint": 0.9334000080892167,
+ "frac_dots_within_2px_catalogue": 0.0006901908785956718,
+ "runtime_s": 10.3,
+ "evidence_class": "MODEL PROXY (rho~K^gamma, assumed g); not a score"
+}

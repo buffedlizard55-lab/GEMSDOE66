@@ -57,17 +57,33 @@ def test_pages_exist_and_are_well_formed():
 
 
 def test_download_gate_is_explicit_and_no_historical_file_is_linked():
+    """Session-66 policy: the gate is explicit either way, and history stays unpublished.
+
+    The index must state the current download status in the first screen, must never link a
+    historical H66 or lidar-lane artifact, and may link a raster only when the session-66 run
+    card promotes exactly that file.
+    """
+    import json as _json
     text = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert "Download status: NOT AVAILABLE" in text
-    assert "There is no current TIFF or ZIP cleared for submission" in text
-    assert "Do not upload a historical H66 artifact" in text
-    assert "AVAILABLE FOR AUDIT" not in text
+    card_path = ROOT / "registry66" / "run-card-session66.json"
+    card = _json.loads(card_path.read_text()) if card_path.exists() else {}
+    if card.get("promote") is True:
+        assert "DOWNLOAD IS READY" in text
+        allowed = {Path(card["raster"][k]).name for k in ("file", "sibling_allfinite", "zip")
+                   if card["raster"].get(k)}
+    else:
+        assert "Download status: NOT AVAILABLE" in text
+        allowed = set()
+    assert ("Do not upload a historical" in text) or ("not cleared" in text)
     for name in PAGES:
         links = _links(DOCS / name)
         assert not any(HISTORICAL_STEM in href for href in links), name
-        assert not any(urlsplit(href).path.lower().endswith((".tif", ".tiff", ".zip"))
-                       for href in links), name
-    assert sorted(p.name for p in (DOCS / "downloads").iterdir()) == ["README.md"]
+        for href in links:
+            if urlsplit(href).path.lower().endswith((".tif", ".tiff", ".zip")):
+                assert Path(href).name in allowed, f"{name} links an uncleared raster: {href}"
+    names = sorted(p.name for p in (DOCS / "downloads").iterdir())
+    assert "README.md" in names
+    assert all(n in allowed or n == "README.md" or n.endswith(".receipt.json") for n in names), names
 
 
 def test_run_card_is_blocked_and_has_no_unqualified_score():
@@ -152,9 +168,20 @@ def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():
     numeric_claim_values = [value for claim in claims["claims"] for value in claim.values()
                             if isinstance(value, (int, float)) and not isinstance(value, bool)]
     assert not numeric_claim_values  # no owner-reported value is promoted as a score
+    # The owner's standing charter supplies the competition page URLs and requires a "how to
+    # submit" page, so those specific pages are an allowlist; any other competition subpage
+    # deep link remains forbidden.
+    charter_pages = {
+        "https://www.drivendata.org/competitions/306/competition-doe-gems/",
+        "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+        "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+        "https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/",
+    }
     for name in PAGES:
         for href in _links(DOCS / name):
-            assert "drivendata.org/competitions/" not in href, f"deep link in {name}: {href}"
+            if "drivendata.org/competitions/" in href:
+                assert href.rstrip("/") + "/" in {p.rstrip("/") + "/" for p in charter_pages}, \
+                    f"deep link outside the charter allowlist in {name}: {href}"
     assert OFFICIAL_HOME in _links(DOCS / "sources.html")
 
 

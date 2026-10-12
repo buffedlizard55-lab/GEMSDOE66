@@ -51,19 +51,32 @@ def test_readme_contains_the_brief():
     assert "Predicted values must be in range [0, 1]" in t
 
 
-def test_site_links_no_downloadable_raster():
-    """A NEGATIVE verdict must not publish a submission file.
+def test_site_links_only_the_currently_cleared_raster():
+    """Only the artifact cleared by the session-66 run card may be offered as a download.
 
-    The lane's advantage did not survive relief matching, so the GeoTIFF lives in
-    ``artifacts/lidar_lane/`` for audit and the site must not offer it as a download.
-    Guarding this with a test is what keeps a future, more optimistic rebuild from quietly
-    re-publishing a file the evidence does not support.
+    Policy changed in session 66: the owner's standing charter requires an obvious, one-click
+    download for a *cleared* candidate, so a linked raster is no longer an automatic failure.
+    What must stay impossible is publishing anything else - historical H66 bytes, the
+    lidar-lane artifact, or any raster that no run card clears. The allowlist is read from
+    ``registry66/run-card-session66.json``; when that card is absent or not promoting, no
+    raster link may exist at all.
     """
+    import json as _json
     import re
+    card_path = ROOT / "registry66" / "run-card-session66.json"
+    allowed = set()
+    if card_path.exists():
+        card = _json.loads(card_path.read_text())
+        if card.get("promote") is True:
+            for key in ("file", "sibling_allfinite", "zip"):
+                value = card.get("raster", {}).get(key)
+                if value:
+                    allowed.add(Path(value).name)
     for f in sorted((ROOT / "docs").glob("*.html")):
         html = f.read_text()
         for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
-            raise AssertionError(f"{f.name} links a downloadable raster: {m.group(1)}")
+            name = Path(m.group(1)).name
+            assert name in allowed, f"{f.name} links a raster no run card clears: {m.group(1)}"
 
 
 def test_negative_verdict_is_recorded():

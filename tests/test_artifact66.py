@@ -26,7 +26,11 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     with zipfile.ZipFile(zip_path) as archive:
         assert len(archive.namelist()) == 1
         assert archive.testzip() is None
-    assert sorted(path.name for path in (DOCS / "downloads").iterdir()) == ["README.md"]
+    names = sorted(path.name for path in (DOCS / "downloads").iterdir())
+    assert "README.md" in names
+    # Session-66 policy: a cleared current candidate may be published. Historical H66 bytes
+    # must still be absent from the public download path.
+    assert all(not n.startswith(HISTORICAL_PREFIX) for n in names), names
 
 
 def test_current_run_card_cannot_clear_a_historical_artifact():

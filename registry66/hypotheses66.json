@@ -1,0 +1,100 @@
+{
+ "schema": "gems66-hypotheses/1",
+ "generated_from": "local sha256-pinned mirrors (this session)",
+ "ranking_basis": "expected structural evidence gain against the validated drivers (mean K under dots, dot count, coverage, off-catalogue purity) and implementation cost. No DTI projection is made: the scored truth is login-walled and no holdout instrument for it exists in this checkout.",
+ "local_layer_availability": {
+  "gdr_wellspring_rows": 27092,
+  "gdr_hot_rows": 1873,
+  "gdr_temp_c_max": 296.54,
+  "gdr_temp_c_median": 32.0,
+  "gdr_qfault_traces": 1126,
+  "gdr_volcanic_vents": 21,
+  "lidar_scarp_bands": 12,
+  "sgmc_fault_cells": 83593,
+  "radiometric_bands": 4,
+  "radiometric_extension_bands": 4
+ },
+ "items": [
+  {
+   "id": "H66-1",
+   "rank": 1,
+   "implemented_this_session": true,
+   "title": "K-anchored consensus-support metric-marginal emission",
+   "layers": [
+    "GeoDAWN radiometric K (uint8 mirror band 1)",
+    "the 60 registry rasters (as the region definition only)",
+    "labels.tif (catalogue exclusion only)"
+   ],
+   "signature": "mass-weighted mean K under emitted dots; dot count; coverage fraction",
+   "why_a_missed_fault": "K highs with low U/K mark K-metasomatism / argillic-sericitic alteration along permeable structures, and in the northern Great Basin they also track young volcanic terrain hosting the geothermal systems the expert-added faults bound; the family's own score record says its higher-scoring rasters sat on higher K (+0.977; partial +0.913)",
+   "difference_from_repo": "the repo used radiometrics as one input among many inside a prior field and never optimised the validated statistic directly; this session also restricted support to the six-best consensus region and used the published metric's first-order condition as the acceptance rule",
+   "expected_gain": "MODERATE (direction validated in-family; magnitude unverifiable here)",
+   "cost": "LOW (done: scripts66/e5_design.py, e7_final.py)",
+   "data_status": "in hand, hash-verified"
+  },
+  {
+   "id": "H66-2",
+   "rank": 2,
+   "implemented_this_session": false,
+   "title": "Thermal-discharge corridor coverage (wells and springs as permeability evidence)",
+   "layers": [
+    "GDR 1391 well/spring temperatures and thermal class (27,092 in-footprint samples; max temp 296.54 C, 1873 'Hot' rows)",
+    "GDR QFaults traces with slip rate and recency (126k CSV, CC-BY)",
+    "SGMC fault raster (83,593 cells)"
+   ],
+   "signature": "corridor density between thermal-discharge points and mapped trace endpoints; gap segments of each trace that terminate near a thermal anomaly",
+   "why_a_missed_fault": "geothermal systems require both heat and permeability, so the faults experts add in a geothermal prize are the ones that explain thermal anomalies; a trace that dies out before a boiling spring is a candidate for an unmapped continuation, which is exactly the class the catalogue is missing",
+   "difference_from_repo": "the repo has never used the GDR well/spring table for placement (the manifest records that its label-derived dist_known_fault_px column must never be used); corridors add a *point-support* constraint that no prior family raster encoded",
+   "expected_gain": "HIGH if the hidden faults are geothermal faults (mechanism is strong); testable in-family before any slot by checking whether thermal-corridor proximity of the dots raises the owner-score model's LOO fit",
+   "cost": "LOW (CSV in hand; placement machinery already written)",
+   "risk": "thermal springs also occur on mapped faults, so the signal must be gated to the off-catalogue domain; a well/spring 'Hot' class may simply re-find the map",
+   "data_status": "in hand, hash-verified (CC BY 4.0, DOI 10.15121/1881483)"
+  },
+  {
+   "id": "H66-3",
+   "rank": 3,
+   "implemented_this_session": false,
+   "title": "Ternary radiometric alteration discrimination (K high, Th flat, U/K low)",
+   "layers": [
+    "GeoDAWN K, Th, U, TC and the Th/K, U/K, U/Th extension bands"
+   ],
+   "signature": "K enrichment with Th conservation and U depletion, i.e. the radiometric ternary position of K-metasomatism versus potash/playa and versus mafic rock",
+   "why_a_missed_fault": "it separates the *mechanism* of a K high (fluid alteration along a structure) from K highs with no structural meaning, which is what a K-only test cannot do",
+   "difference_from_repo": "the repo measured single-layer dot means only, never the ternary/ratio structure",
+   "expected_gain": "MODERATE \u2014 it mainly raises precision inside H66-1's support",
+   "cost": "LOW (bands in hand)",
+   "named_non_fault_mimic": "playa evaporites and agricultural potash raise K without alteration",
+   "data_status": "in hand, hash-verified"
+  },
+  {
+   "id": "H66-4",
+   "rank": 4,
+   "implemented_this_session": false,
+   "title": "Along-strike matched filter on the LiDAR scarp descriptor stack",
+   "layers": [
+    "12 lidar scarp bands: ex_max, ex_mean, step_max, lapneg_max, lappos_max, downface_max, upface_max, cross_max, relief, coh100, strike, valid"
+   ],
+   "signature": "coherent along-strike scarp amplitude with internally consistent downface direction and high orientation coherence at the 2-20 cell scale on a detrended surface",
+   "why_a_missed_fault": "subtle scarps under young deposits and fan surfaces are exactly what expert compilers see in lidar and what bedrock mapping misses; orientation coherence is what separates a fault scarp from an isolated terrace riser",
+   "difference_from_repo": "the repo used these bands as *point* statistics under dots; it never built an along-strike detector with a coherence gate, and the native-resolution scarplet/Steger method remains unimplemented (see the README deviation note)",
+   "expected_gain": "MODERATE-HIGH (closest to the stated lane), but note the scale deviation: the mirror bands are 100 m aggregates of the 1 m descriptors, so this is a proxy",
+   "cost": "MEDIUM (matched filter + coherence gate + spatial CV)",
+   "data_status": "in hand, hash-verified; raw 1 m DEM not reachable from this sandbox"
+  },
+  {
+   "id": "H66-5",
+   "rank": 5,
+   "implemented_this_session": false,
+   "title": "Competition-band structural corroboration (geodetic shear strain, seismicity, magnetics, gravity) folded into the K-anchored support",
+   "layers": [
+    "the 19 organiser bands in training_features.tif (419 MB, 5 parts) \u2014 magnetics, gravity, geodetic strain, seismicity, MT, topography"
+   ],
+   "signature": "co-located shear-strain/inferred-dip lineaments with magnetic-gravity gradients; the family's own anchor already shows geod_shearrate partial rho +0.678 against score",
+   "why_a_missed_fault": "active-strain and potential-field lineaments mark structures that, where geology is unmapped or covered, are the ones experts add",
+   "difference_from_repo": "the repo's inherited runs used these bands through 100 m derived features, not as a corroboration term inside a K-anchored support",
+   "expected_gain": "UNKNOWN \u2014 no local measurement of these bands exists yet in this session",
+   "cost": "MEDIUM (419 MB fetch, hash-pinned and verified obtainable: python3 scripts/fetch_mirrors.py --only training_features)",
+   "data_status": "obtainable (mirror confirmed reachable in this session via GitHub contents API)"
+  }
+ ]
+}
