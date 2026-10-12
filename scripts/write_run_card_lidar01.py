@@ -3,7 +3,12 @@
 
 Reads the evidence files produced by the session and writes:
   registry/run_card_lidar01.json    canonical card
-  docs/data/run-card.json           the card the site renders (only if --publish-card)
+  docs/data/run-card-lidar01.json   this session's card (only if --publish-card).
+                                    It is deliberately NOT written to
+                                    docs/data/run-card.json: that file is the
+                                    canonical project card owned by the H67-1
+                                    session, and a parallel session must not
+                                    overwrite another session's record.
 """
 from __future__ import annotations
 
@@ -106,13 +111,17 @@ def main() -> int:
             "instruments": {
                 "blocks": {
                     "description": "spatial-block hide-and-recover (lane protocol)",
-                    "withheld_positive_count_per_fold": "blocks: ~6,715; traces: ~12,090",
+                    "withheld_positive_count_per_fold": 6715,
+                    "withheld_positive_per_fold": [6422, 6429, 7245, 6765],
+                    "withheld_evidence": "evidence/lidar01_withheld_counts.json",
                     "n_folds": 4,
                     "variants": sweep.get("variants") if sweep else None,
                 },
                 "traces": {
                     "description": "global whole-trace holdout (catalogue proximity kept)",
-                    "withheld_positive_count_per_fold": None,
+                    "withheld_positive_count_per_fold": 12090,
+                    "withheld_positive_per_fold": [12822, 10652, 11970, 12917],
+                    "withheld_evidence": "evidence/lidar01_withheld_counts.json",
                     "n_folds": trace.get("n_folds") if trace else None,
                     "variants": trace.get("variants") if trace else None,
                 },
@@ -177,8 +186,10 @@ def main() -> int:
                       if k in ("run_id", "verdict", "raster", "leakage_canary",
                                "registry_checks", "submission")}, indent=1))
     if args.publish_card:
-        (ROOT / "docs" / "data" / "run-card.json").write_text(json.dumps(card, indent=1))
-        print("published docs/data/run-card.json")
+        for dest in (ROOT / "docs" / "data" / "run-card-lidar01.json",
+                     ROOT / "registry" / "run_card_lidar01.json"):
+            dest.write_text(json.dumps(card, indent=1) + "\n")
+        print("published docs/data/run-card-lidar01.json (+ registry mirror)")
     return 0
 
 

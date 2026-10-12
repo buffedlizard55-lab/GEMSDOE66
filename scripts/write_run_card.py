@@ -17,8 +17,9 @@ MIRRORS = (ROOT / "registry" / "run_card.json", ROOT / "docs" / "runcard.json")
 
 def main() -> int:
     card = json.loads(CANONICAL.read_text(encoding="utf-8"))
-    if card.get("run_id") != "gemsdoe66-native-lidar-review-2026-10-11":
-        raise ValueError("unexpected canonical run-card identity")
+    run_id = card.get("run_id", "")
+    if not isinstance(run_id, str) or not run_id.startswith("gemsdoe66-native-lidar-review-"):
+        raise ValueError("unexpected canonical native-LiDAR run-card identity")
     if card.get("submission", {}).get("download_status") != "NO DOWNLOAD — no file is cleared or offered":
         raise ValueError("refusing to mirror a run card that does not explicitly block downloads")
     if card.get("holdout_dti", {}).get("value") is not None:

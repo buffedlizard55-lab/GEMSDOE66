@@ -67,6 +67,24 @@ def test_writer_output_passes_validator(tmp_path, reference, footprint, features
     assert json.loads((tmp_path / "sub.tif.receipt.json").read_text())["sha256"] == receipt["sha256"]
 
 
+def test_writer_refuses_empty_or_full_footprint(tmp_path, reference):
+    pred = np.zeros((H, W))
+    for fp in (np.zeros((H, W), bool), np.ones((H, W), bool)):
+        with pytest.raises(ValueError, match="footprint"):
+            write_submission(tmp_path / "invalid.tif", pred, fp, reference)
+
+
+def test_writer_refuses_incorrect_reference_grid(tmp_path, footprint):
+    pred = np.zeros((H, W))
+    bad = tmp_path / "wrong-reference.tif"
+    with rasterio.open(bad, "w", driver="GTiff", height=H, width=W, count=1,
+                       dtype="int32", crs="EPSG:4326", transform=TF) as dst:
+        dst.write(np.zeros((H, W), np.int32), 1)
+    with pytest.raises(ValueError, match="EPSG:32611"):
+        write_submission(tmp_path / "invalid.tif", pred, footprint, bad)
+    assert not (tmp_path / "invalid.tif").exists()
+
+
 def test_writer_refuses_values_outside_unit_interval(tmp_path, reference, footprint):
     pred = np.full((H, W), 0.5)
     pred[0, 0] = 1.4

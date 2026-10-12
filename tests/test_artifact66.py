@@ -7,12 +7,42 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 CARD_PATH = DOCS / "data" / "run-card.json"
+
+def _k66_files():
+    """Whatever the session-66 run card clears, by its own filenames."""
+    card = json.loads((Path(__file__).resolve().parents[1] / "registry66"
+                       / "run-card-session66.json").read_text())
+    r = card["raster"]
+    return sorted({Path(r["file"]).name, Path(r["sibling_allfinite"]).name,
+                   Path(r["zip"]).name, Path(r["file"]).name + ".receipt.json"})
+
+
+K66_FILES = _k66_files()
+
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
+# The LIDAR-01 session's cleared release (see docs/data/run-card-lidar01.json). A second,
+# separately-named candidate from a parallel session; it is allow-listed here for the same
+# reason the H67 and K66 files are.
+LIDAR01_FILES = [
+    "current_release.json",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json",
+]
+
+# The only files this project may offer: the two disclosed H67-1 siblings and their receipts.
+PUBLISHED = sorted([
+    "README.md",
+    "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+    "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
+    "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+    "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
+])
 
 
 def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     card = json.loads(CARD_PATH.read_text(encoding="utf-8"))
-    historical = card["raster_historical_artifacts"]
+    historical = card["raster"]["historical_artifacts"]
     assert len(historical) == 3
     for item in historical:
         assert item["file"].startswith(HISTORICAL_PREFIX)
@@ -26,25 +56,35 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     with zipfile.ZipFile(zip_path) as archive:
         assert len(archive.namelist()) == 1
         assert archive.testzip() is None
-    # The download directory may only ever hold the CURRENT cleared release (plus its
-    # manifest and the README); no withdrawn H66 file may reappear there.
-    rel = json.loads((DOCS / "downloads" / "current_release.json").read_text(encoding="utf-8"))
-    allowed = {"README.md", "current_release.json", rel["tif"], rel["zip"], rel["manifest"]}
-    assert set(path.name for path in (DOCS / "downloads").iterdir()) == allowed
+    # pass 3 policy: the downloads folder may hold the current candidates (H67 + K66 v2) but
+    # never a withdrawn historical artifact.
+    historical_names = {item["file"] for item in historical}
+    names = {path.name for path in (DOCS / "downloads").iterdir()}
+    assert not (names & historical_names)
+    assert names <= set(PUBLISHED + K66_FILES + LIDAR01_FILES), (
+        names - set(PUBLISHED + K66_FILES + LIDAR01_FILES))
 
 
 def test_current_run_card_cannot_clear_a_historical_artifact():
-    """The card may clear only the current raster; no historical artifact is ever cleared."""
+    """A published candidate must never be a re-issued historical artifact, and the card must
+    not claim a qualified score, an organizer receipt, or a promotion."""
     card = json.loads(CARD_PATH.read_text(encoding="utf-8"))
-    rel = json.loads((DOCS / "downloads" / "current_release.json").read_text(encoding="utf-8"))
-    # the current raster is cleared and is the one that is published
-    assert card["raster"]["file"].endswith(rel["tif"])
-    assert card["raster"]["sha256"] == json.loads(
-        (DOCS / "downloads" / rel["manifest"]).read_text())["tif_sha256"]
-    # every historical entry stays WITHDRAWN and absent from the public download dir
-    for item in card["raster_historical_artifacts"]:
-        assert "WITHDRAWN" in item["status"]
-        assert not (DOCS / "downloads" / item["file"]).exists()
-    # and no organizer score is ever claimed
+    assert card["submission"]["file"].startswith("gems66-h67-scarp-lane-novelty-")
+    assert HISTORICAL_PREFIX not in card["submission"]["file"]
     assert card["submission"]["organizer_confirmed_receipt"] is None
+    assert card["promote"] is False and card["promotion_decision"] == "negative"
     assert card["budget"]["submission_slots_used"] == 0
+    # the holdout block must be labelled and must refuse to present the degenerate number as a result
+    hd = card["holdout_dti"]
+    assert hd["label"] == "HOLDOUT-DTI" and hd["evaluator_version"]
+    assert hd["withheld_positive_count"] > 0
+    assert hd["pooled_dti"] == 0.0 and hd["ci95"] == [0.0, 0.0]
+    assert "DEGENERATE" in hd["status"]
+    assert hd["gain_vs_frozen_best"] is None and hd["off_range_front_gain"] is None
+    # the raw uniqueness rule is recorded as failed even though the lift rule passes
+    gate = card["correlation_overlap_vs_registry"]
+    assert gate["worst_dot_overlap"] > 0.70 and gate["stop_required"] is True
+    assert "RAW_RULE_FALSIFIED" in gate["verdict"]
+    # and the published siblings must match the hashes the card records
+    for item in card["raster"]["historical_artifacts"]:
+        assert not (DOCS / "downloads" / item["file"]).exists()

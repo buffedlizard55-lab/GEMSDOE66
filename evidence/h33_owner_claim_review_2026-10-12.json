@@ -1,0 +1,41 @@
+{
+  "schema": "gems-owner-claim-audit/1",
+  "artifact_id": "H33-2-B2",
+  "source_class": "OWNER-MAINTAINED; NOT OFFICIAL ORGANIZER EVIDENCE",
+  "source_repository": "https://github.com/buffedlizard55-lab/GEMSDOE32",
+  "source_file": "https://github.com/buffedlizard55-lab/GEMSDOE32/blob/main/docs/index.html",
+  "retrieval": "GitHub contents API via gh api repos/buffedlizard55-lab/GEMSDOE32/contents/docs/index.html",
+  "source_blob_sha": "8857c8f8c3a54859beaf9f87a82bb8638038b6d8",
+  "owner_page_observations": [
+    "The page describes H33-2-B2 as a sparse candidate formed by pruning cells within two grid pixels of the catalogue from an owner-described base.",
+    "The page labels its projected live estimate as a model, not a score.",
+    "The page states that no organizer score exists for any artifact in that repository.",
+    "No submission-page receipt or receipt-to-raster SHA-256 mapping was found in this checkout."
+  ],
+  "user_supplied_score_claim": {
+    "value": 0.2778,
+    "classification": "UNVERIFIED USER/OWNER CLAIM; NEITHER HOLDOUT-DTI NOR ORGANIZER-CONFIRMED",
+    "receipt": null,
+    "use_as_score": false
+  },
+  "local_raster_reproduction": {
+    "path": "registry/rasters/GEMSDOE32__h33-2-b2-zeros.tif",
+    "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+    "shape": [
+      3730,
+      3292
+    ],
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "nodata": null,
+    "unique_values": [
+      0.0,
+      1.0
+    ],
+    "positive_cells": 37654,
+    "classification": "LOCAL FILE PROPERTIES; NOT A SCORE OR ORGANIZER VALIDATION"
+  },
+  "conclusion": "No defensible causal explanation of the alleged score is possible without an organizer receipt tied to exact artifact bytes and a controlled comparison. Any metric-based explanation is a mechanism hypothesis only.",
+  "live_leaderboard_accessed": false,
+  "review_date": "2026-10-12"
+}

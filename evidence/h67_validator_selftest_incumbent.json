@@ -1,0 +1,33 @@
+{
+ "ok": true,
+ "checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "dimensions_3730x3292": true,
+  "crs_epsg_32611": true,
+  "transform_matches_template": true,
+  "in_footprint_zero_nan": true,
+  "in_footprint_zero_inf": true,
+  "in_footprint_no_sentinel": true,
+  "in_footprint_range_0_1": true,
+  "in_footprint_has_positive": true,
+  "outside_footprint_zero": true,
+  "zero_positive_within_2.0px_of_catalogue": true,
+  "emitted_count_matches_budget": true
+ },
+ "stats": {
+  "in_footprint_pixels": 5167373,
+  "in_footprint_finite": 5167373,
+  "in_footprint_min": 0.0,
+  "in_footprint_max": 1.0,
+  "in_footprint_mean": 0.0072868745774030685,
+  "positive_pixels": 37654,
+  "outside_footprint_pixels": 7111787,
+  "positive_within_catalogue_buffer": 0,
+  "emitted_count": 37654,
+  "expected_count": 37654
+ },
+ "filename": "GEMSDOE32__h33-2-b2-zeros.tif",
+ "size_bytes": 219065,
+ "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9"
+}

@@ -9,106 +9,156 @@
 <main>
 <div class="wrap">
 
-<h1>Executive summary — how to submit</h1>
-<p class="sub">One page: the decision, the file, the exact form fields, and the evidence
-behind them.</p>
+<h2>Executive summary</h2>
 
-<div class="go">
-  <h2>Is it OK to download and submit? Yes.</h2>
-  <p>The file below passed every gate this project set: the prescribed
-  spatial-block hide-and-recover holdout, the leakage canary, the registry
-  duplicate check and the official format validator. Download it and upload it
-  to the competition.</p>
-  <p><a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif">Download the submission GeoTIFF (.tif)</a>
-     <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip">Download the .zip</a></p>
-  <p class="small"><b>What the number is.</b> The result is an internal
-  <b>HOLDOUT-DTI</b> on our own hide-and-recover instruments, with a 95 % CI,
-  measured against mass-matched random placement. It is <b>not</b> an
-  ORGANIZER-CONFIRMED score: no leaderboard receipt exists for this file and none
-  is claimed. A projection is never written as a score.</p>
+<div class="warn">
+<h2>Status: FORMAT-READY, NOT PROMOTED &mdash; download enabled with disclosures</h2>
+<p><b>Download:</b>
+<a class="btn" href="downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif</a>
+<span class="small mono">sha256 eeadc5cee0516d9b&hellip;</span>
+&nbsp;&middot;&nbsp;NaN-outside sibling:
+<a class="btn" href="downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif">gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif</a></p>
+<p><b>What is proven:</b> the shared validator passes every check on both siblings; the
+<code>-zeros</code> file has zero NaN and all 12,279,160 cells in [0, 1], so it cannot trip the
+previous rejection <span class="mono">Predicted values must be in range [0, 1]</span>.</p>
+<p><b>What is NOT proven:</b> an edge over the incumbent. The pre-registered science gate
+(&ldquo;a DTI gain on the LiDAR-covered holdout not confined to range fronts&rdquo;) is
+<b>unevaluable</b> here (<a href="irregularities.html">IR-67-INSTR-01</a>) and two of four
+pre-registered predictions failed (P3 block-density CV 0.32 vs the 0.45&ndash;0.58 band; P4 raw
+70 %-within-3 px rule &mdash; <a href="irregularities.html">IR-67-GATE-02</a>). Under this
+project's own rule (&ldquo;do not spend a weekly slot on an idea that has not beaten the current
+holdout best&rdquo;) the honest default is <b>keep the slot</b>. Upload is the owner's call, made
+with the numbers on this page.</p>
 </div>
 
-<h2>1 · The decision, in one sentence</h2>
-<p><b>Download the .tif below and upload it to the DrivenData submission form — it passed every gate we set.</b>
-Verdict in the canonical run card: <span class="tag">promote</span></p>
-
-<h2>2 · Exactly how to submit (step by step)</h2>
+<h2>1 &middot; How to submit, step by step (five steps)</h2>
 <ol>
-  <li><b>Download</b> <code>gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif</code> (359,188 bytes) — or the
-      <code>.zip</code> if the form prefers an archive. Both contain the same single-band
-      GeoTIFF.</li>
-  <li>Open the competition submissions page on the DrivenData host (no leaderboard values are
-      mirrored here) and choose <b>New submission</b>.</li>
-  <li>Under <b>File to submit</b> pick the downloaded <code>.tif</code> (or the
-      <code>.zip</code>).</li>
-  <li>Paste the <b>name</b> and the <b>note</b> from the table below. The note is
-      140/140 characters — the form rejects anything longer.</li>
-  <li>Press <b>Create submission</b>. Until the organiser actually returns a receipt,
-      <b>no ORGANIZER-CONFIRMED score exists for this file and none is claimed here</b>;
-      every number on this site is <code>HOLDOUT-DTI</code>. When a receipt arrives it
-      replaces the projection.</li>
+<li>Open the official competition page
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a> and
+its submission form. The weekly cap shown there applies; this project has spent <b>0</b> slots.</li>
+<li>Click the download button above (or in the top block of <a href="index.html">the overview</a>).
+The portal accepts a single-band GeoTIFF (or a ZIP containing one). Every value is already inside
+[0, 1]; do not rescale, do not add a nodata value, do not reproject.</li>
+<li>Upload <span class="mono">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif</span>. Verify the hash first if you wish:
+<span class="mono">eeadc5cee0516d9b8cdd10dd3a8e57b6952693ed25cf7ddc8a02003768060d42</span></li>
+<li>Paste this submission name and note (both are also written into the TIFF as
+<code>GEMS_NAME</code> / <code>GEMS_NOTE</code>):</li>
+</ol>
+<table>
+<tr><th>name</th><td class="mono">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros</td></tr>
+<tr><th>note (128/140)</th><td class="mono">H67-1 scarp-lane novelty field, LiDAR-derived scarp channels + scale persistence, mapped-fault exclusion; see GEMSDOE66 run card</td></tr>
+<tr><th>artifact</th><td class="mono">gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif</td></tr>
+</table>
+<ol start="5">
+<li>Record the portal receipt (score or error text) in
+<code>docs/downloads/README.md</code> next to the sha256. Nothing can promote this artifact to
+<code>ORGANIZER-CONFIRMED</code> except a portal receipt, and no page on this site is a score.</li>
 </ol>
 
-<h3>Form fields — copy these exactly</h3>
+<h2>2 &middot; The gate table</h2>
 <table>
-  <tr><th>File to submit</th><td class="mono">gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif</td></tr>
-  <tr><th>Name</th><td class="mono">gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z</td></tr>
-  <tr><th>Note (140/140)</th><td class="mono">LIDAR-01: slope-aware antislope scarplet template + Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, spacing-cons...</td></tr>
-  <tr><th>sha256</th><td class="mono">0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2</td></tr>
+<tr><th>gate</th><th>result</th><th>evidence</th></tr>
+<tr><td>format &amp; grid, both siblings, re-read from disk</td>
+    <td><span class="pill ok">PASS</span></td>
+    <td><code>evidence/h67_run.json</code></td></tr>
+<tr><td>range contract: <code>-zeros</code> fully finite in [0, 1]</td>
+    <td><span class="pill ok">PASS</span> 0 NaN, 40,000 dots, max 1.0</td>
+    <td>writer receipt + validator <code>--outside-policy either</code></td></tr>
+<tr><td>lane: rank correlation vs 60 registry rasters</td>
+    <td><span class="pill ok">max |&amp;rho;| 0.286</span></td>
+    <td><code>gemsdoe66.uniqueness.check_registry</code></td></tr>
+<tr><td>lane: raw &gt;70 % of dots within 3 px of one raster</td>
+    <td><span class="pill bad">FALSIFIED (0.9992)</span> against
+    gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif &mdash; whose own 3 px dilation covers
+    0.960 of the eligible band (matched lift
+    1.04). Raw rule not waived, disclosed.</td>
+    <td><a href="data/h67_overlap_audit.json">audit</a>,
+    <a href="irregularities.html">IR-67-GATE-02</a>, <a href="irregularities.html">IR-67-VERIFY-01</a>
+    (the shared verifier measures this clause in the opposite direction and reports 0.3167)</td></tr>
+<tr><td>leakage canary: any feature alone, AUC &gt; 0.90</td>
+    <td><span class="pill ok">worst 0.713</span></td>
+    <td><code>evidence/h67_run.json</code></td></tr>
+<tr><td>pre-registered predictions P1&ndash;P4</td>
+    <td><span class="pill warn">2 met, 2 falsified</span>
+    P1 met marginally (mean distance to mapped faults 2,336 m),
+    P2 met (85.0 % LiDAR-valid),
+    P3 falsified (0.32 vs 0.45&ndash;0.58), P4 falsified on the raw rule</td>
+    <td><code>registry/preregistration-h67.json</code></td></tr>
+<tr><td>science: <code>HOLDOUT-DTI</code> on LiDAR blocks, range-front stratified</td>
+    <td><span class="pill bad">UNEVALUABLE</span> pooled 0.0000
+    [0.0, 0.0] &mdash; degenerate by construction
+    (<a href="irregularities.html">IR-67-INSTR-02</a>); instrument anti-correlated with the
+    owner-reported outcome</td>
+    <td><code>evidence/h67_run.json</code>, <code>evidence/h67_e2_proxy_concordance.json</code></td></tr>
 </table>
 
-<div class="note"><b>Why an earlier upload was rejected with &ldquo;Predicted values must be
-in range [0, 1]&rdquo;.</b> The organiser rejects a raster that contains any value outside
-[0, 1], any NaN <i>inside</i> the footprint, or a finite value anywhere <i>outside</i> it.
-This file has min 0.0, max 1.0, 0 NaN inside the 5,167,373-cell footprint and NaN in every
-one of the 7,111,787 cells outside it — verified by re-reading the written file,
-15/15 checks PASS, 0 skipped. If you re-export it yourself, do not write 0 outside
-the footprint and do not keep a finite nodata tag.</div>
+<h2>3 &middot; What you are betting on, in one paragraph</h2>
+<p>The organizers state that the scored faults were identified by experts and are <i>not</i> in the
+public fault databases. Every mapped network available here &mdash; the given catalogue and the
+state-map compilation &mdash; is therefore closer to &ldquo;already in the database&rdquo; than to
+the truth, and the metric charges mass there as false positive while it can earn no credit. This
+file spends all 40,000 unit-mass dots at least 400 m from every mapped fault
+(mean 2,336 m), weighted toward the mirrored 1 m-derived
+scarp channels and the owner-reported habitat direction. If the new faults instead cluster on and
+beside the mapped networks &mdash; the usual outcome in a mature province &mdash; the design
+forfeits that mass. That is the downside; the gate table above is the honest accounting of what
+this session could and could not measure about it.</p>
 
-<h2>3 · The evidence behind the decision</h2>
+
+<h2>H67 lane measurement (branch <code>arena/9ae5a972</code>) — separate negative result</h2>
+<div class="note"><b>All values below are HOLDOUT-DTI</b> on the SGMC off-catalogue proxy truth
+(62,122 withheld positives — the hash-pinned truth), 8 spatial folds by connected component,
+3 px training buffer, evaluator <code>gemsdoe66.metric.dti</code> v1, α = 0.2, β = 0.8,
+300 m triangular kernel. This is a <b>measurement, not an emitted candidate</b>: it is
+independent of the H67-1 artifact above and of the session-66 K66 release, and it clears no
+gate. No <code>ORGANIZER-CONFIRMED</code> score exists. Budget: 3/3 experiments, 0 slots used.
+Full record: <a href="review/2026-10-12-h67-session.md">session review</a>.</div>
+<p><b>E1 — leakage canary (protocol 4):</b> no feature above the 0.90 AUC leakage threshold
+(max nan for channel -; best in-lane surface h52_h nan), but
+no physical channel transfers across spatial folds (per-fold AUCs 0.29–0.80, four of eight
+folds sub-chance) — the signal is region-bound, dominated by the truth's own relief/mapping
+bias. Evidence: <code>evidence/h67_e1_canary.json</code>.</p>
 <table>
-  <tr><th>instrument / variant</th><th>HOLDOUT-DTI mean</th><th>95 % CI</th><th>label</th></tr>
-  <tr><td>Prescribed instrument — lidar-covered spatial-block hide-and-recover — distance|topk</td><td class='mono'>0.588731</td><td class='mono'>[0.55846, 0.619002]</td><td>HOLDOUT-DTI</td></tr><tr><td>Prescribed instrument — lidar-covered spatial-block hide-and-recover — distance|weighted</td><td class='mono'>0.073296</td><td class='mono'>[0.068806, 0.077786]</td><td>HOLDOUT-DTI</td></tr><tr><td>Prescribed instrument — lidar-covered spatial-block hide-and-recover — lane_nocat|topk</td><td class='mono'>0.152374</td><td class='mono'>[0.141558, 0.16319]</td><td>HOLDOUT-DTI</td></tr><tr><td>Prescribed instrument — lidar-covered spatial-block hide-and-recover — lane_nocat|weighted</td><td class='mono'>0.087968</td><td class='mono'>[0.081657, 0.09428]</td><td>HOLDOUT-DTI</td></tr><tr><td>Prescribed instrument — lidar-covered spatial-block hide-and-recover — random|topk</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td>HOLDOUT-DTI</td></tr><tr><td>Prescribed instrument — lidar-covered spatial-block hide-and-recover — random|weighted</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td>HOLDOUT-DTI</td></tr><tr><td>Second instrument — global whole-trace holdout — distance|topk</td><td class='mono'>0.01232</td><td class='mono'>[0.009617, 0.015022]</td><td>HOLDOUT-DTI</td></tr><tr><td>Second instrument — global whole-trace holdout — distance|weighted</td><td class='mono'>0.047768</td><td class='mono'>[0.047152, 0.048384]</td><td>HOLDOUT-DTI</td></tr><tr><td>Second instrument — global whole-trace holdout — lane_nocat|topk</td><td class='mono'>0.104125</td><td class='mono'>[0.090784, 0.117466]</td><td>HOLDOUT-DTI</td></tr><tr><td>Second instrument — global whole-trace holdout — lane_nocat|weighted</td><td class='mono'>0.05747</td><td class='mono'>[0.054107, 0.060832]</td><td>HOLDOUT-DTI</td></tr><tr><td>Second instrument — global whole-trace holdout — random|topk</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td>HOLDOUT-DTI</td></tr><tr><td>Second instrument — global whole-trace holdout — random|weighted</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td>HOLDOUT-DTI</td></tr>
+<tr><th>E2 — h52_h_rank emission (37,654 dots, incumbent geometry) — HOLDOUT-DTI</th><th>candidate</th><th>incumbent h33-2-b2</th></tr>
+<tr><td>pooled</td><td><b>0.12118</b></td><td>0.09539</td></tr>
+<tr><td>paired difference / 95% CI (fold bootstrap)</td><td colspan="2"><b>+0.02579 [-0.01093, +0.03650]</b> — CI crosses zero (gate G2 FAIL); 5 of 8 folds positive</td></tr>
+<tr><td>uniqueness of final dots (60-raster corpus)</td><td colspan="2"><span class="pill bad">DUPLICATE — 77.7% of dots within 3 px of the GEMSDOE32 bayesopt-scarp raster at 4.38x the random rate (gate G4 FAIL)</span> raw max within-3-px = 0.999 occurs against the 311,617-dot dense raster (IR-67-01, the same degeneracy the H67-1 row above records as 0.9992)</td></tr>
+<tr><td>road-veto ablation</td><td colspan="2">0 dots in the veto zone; no effect</td></tr>
 </table>
-<p class="small">Evaluator: <code>src/gems/metric.py</code>, &alpha; = 0.2, &beta; = 0.8,
-triangular kernel R = 300 m. Four folds on each instrument; withheld positives per fold
-&asymp; 6,715 (blocks) and &asymp; 12,090 (traces). The comparison that matters is the lane
-versus <b>mass-matched random placement</b> at the same dot budget and spacing.</p>
+<h3>E2 relief strata — candidate minus random (equal mass)</h3>
+<table><tr><th>stratum (truth relief tercile, cuts 24.1 / 42.9 m)</th><th>n truth</th>
+<th>candidate</th><th>random</th><th>candidate − random</th></tr>
+<tr><td>low (basin/pediment)</td><td>13,445</td><td>0.02311</td><td>0.04889</td><td>-0.02578</td></tr><tr><td>mid</td><td>13,178</td><td>0.13477</td><td>0.04798</td><td>+0.08678</td></tr><tr><td>high (range front)</td><td>13,218</td><td>0.22542</td><td>0.04809</td><td>+0.17733</td></tr></table>
+<p class="small">The gain is range-front-dominated (high +0.177 vs mid +0.087 vs low −0.026) —
+the exact confound the lane gate exists to catch (IR-67-03).</p>
+<h3>E3 — lane-separation complement emission</h3>
+<p>Dots eligible only where ≥ 4 px from every dot of every registry raster: the 60-raster
+union's halo leaves no scarp-rich cell — <b>83 dots</b> placed (of 37,654), pooled
+HOLDOUT-DTI of <b>0.00000</b>. The family's rasters
+already occupy the scarp-active terrain (IR-67-04).</p>
+<div class="stop"><b>H67-measurement verdict: NEGATIVE.</b> Gates G2 (CI crosses zero) and G4
+(duplicate stop) fail. No TIFF is generated from this branch, nothing is offered for download,
+and no slot is used — the protocol's negative branch. This measurement does not change the
+status of the H67-1 or K66 artifacts.</div>
 
-<h3>Leakage canary</h3>
-<p>PASS - no channel exceeded the threshold — maximum per-channel AUC
-0.6204434774766624 across
-38 channels, against the 0.90
-threshold.</p>
 
-<h3>Uniqueness against 60 registry rasters</h3>
-<p>max |Spearman &rho;| = 0.069009 (limit 0.90); density-comparable
-max 3-px dot overlap = 0.640941
-(limit 0.70); no identical SHA-256 and no identical decoded pixels.
-The literal 3-px overlap test trips only against registry rasters carrying &gt;3x the candidate&#x27;s dot count: after a 3-px dilation those rasters cover most of the grid, so a RANDOM placement scores at least as high as the candidate (0.979 random vs 0.921 candidate against gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros, lift 0.94, Spearman rho -0.010). The chance-corrected rule - overlap &gt; 0.70 AND &gt; 2x the random baseline AND comparable density - is the informative one and it does not trip (density-comparable max overlap 0.641).</p>
-
-<h2>4 · Caveats you should read before spending a slot</h2>
-<ul><li>HOLDOUT-DTI is an internal hide-and-recover measurement on the public catalogue, not an ORGANIZER-CONFIRMED leaderboard score.</li><li>The measured gain reverses in the low-relief basin floor (18.3% of withheld positives): mean kernel credit 0.0224 vs 0.0660 for random (lift 0.34). The gain is real in the mid- (2.83x) and high-relief (2.31x) strata, so it is not confined to range fronts, but it is not present everywhere.</li><li>The Steger/Frangi operators run at sigma = 1.0-4.0 x 100 m (100-400 m), not the requested 2-20 m native scales: the 1 m/2 m bare-earth DEM is not reachable from this environment and the cached 100 m aggregate keeps only per-cell extrema of 2 m descriptors.</li><li>No cultural-feature mask (roads, canals, field edges) exists in the restored inputs, so the veto is the channel-internal cross-slope/downslope step term only.</li><li>registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified.</li></ul>
-
-<h2>5 · Format rules this file satisfies</h2>
+<h2>Second candidate — LIDAR-01 (gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z)</h2>
+<p>A parallel session's file, cleared on its own evidence. If you prefer it to the H67-1
+candidate above, use these fields instead — the name and note are exact and the note is
+140/140 characters.</p>
 <table>
-  <tr><th>check</th><th>meaning</th><th>this file</th></tr>
-  <tr><td>single band</td><td>the organiser asks for one layer</td><td>count = 1</td></tr>
-  <tr><td>float32</td><td>“datatype of 32-bit float”</td><td>float32</td></tr>
-  <tr><td>3730 × 3292</td><td>same shape as the template</td><td>3730 × 3292</td></tr>
-  <tr><td>EPSG:32611</td><td>“the same projected coordinate reference system”</td><td>EPSG:32611</td></tr>
-  <tr><td>geotransform</td><td>100 m, origin (243350, 4508550)</td><td>exact match</td></tr>
-  <tr><td>values</td><td>all finite values in [0, 1]</td><td>min 0.0, max 1.0</td></tr>
-  <tr><td>NaN policy</td><td>“data outside the bounds is null or nan”</td><td>0 finite outside; 0 NaN inside</td></tr>
-  <tr><td>emitted cells</td><td>dots at 1.0, everything else 0.0</td><td>37,654</td></tr>
+<tr><th>File to submit</th><td class="mono">gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif</td></tr>
+<tr><th>Name</th><td class="mono">gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z</td></tr>
+<tr><th>Note (140/140)</th><td class="mono">LIDAR-01: slope-aware antislope scarplet template + Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, spacing-cons...</td></tr>
+<tr><th>sha256</th><td class="mono">0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2</td></tr>
 </table>
+<p><a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif">Download the GeoTIFF</a>
+   <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip">Download the .zip</a></p>
+<p class="small"><b>No ORGANIZER-CONFIRMED score exists for this file and none is claimed.</b>
+It is a <b>HOLDOUT-DTI</b> result only:
+0.15237 [95 % CI 0.14156, 0.16319] on the prescribed spatial-block instrument against
+0.07254 [0.06797, 0.07712] for mass-matched random placement.</p>
 
-<h2>6 · Never upload a historical artifact</h2>
-<p>The H66-1 TIFF/ZIP bytes remain withdrawn: byte-verified audit copies live under
-<code>evidence/archives/h66-1/</code>, outside the Pages document root and with no site
-link. H66-2 and the inherited <code>lidar_lane</code> field are audit-only under
-<code>artifacts/h66-2/</code> and <code>artifacts/lidar_lane/</code>. None of them passed
-the holdout, leakage, uniqueness or format gates.</p>
 
 </div>
 </main>

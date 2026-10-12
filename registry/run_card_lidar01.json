@@ -1,7 +1,7 @@
 {
  "schema": "gems-run-card/3",
  "run_id": "gemsdoe66-LIDAR-01-2026-10-12",
- "generated_utc": "2026-10-12T02:29:07Z",
+ "generated_utc": "2026-10-12T02:56:53Z",
  "repo": "buffedlizard55-lab/GEMSDOE66",
  "lane": "native-resolution LiDAR scarp channels",
  "hypothesis": "A slope-aware antislope scarplet-template response combined with Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, used as an emission intensity rather than a ranking, will place dots on catalogue faults that were withheld from training better than mass-matched random placement and better than catalogue-distance alone.",
@@ -13,7 +13,14 @@
   "instruments": {
    "blocks": {
     "description": "spatial-block hide-and-recover (lane protocol)",
-    "withheld_positive_count_per_fold": "blocks: ~6,715; traces: ~12,090",
+    "withheld_positive_count_per_fold": 6715,
+    "withheld_positive_per_fold": [
+     6422,
+     6429,
+     7245,
+     6765
+    ],
+    "withheld_evidence": "evidence/lidar01_withheld_counts.json",
     "n_folds": 4,
     "variants": {
      "random|topk": {
@@ -194,7 +201,14 @@
    },
    "traces": {
     "description": "global whole-trace holdout (catalogue proximity kept)",
-    "withheld_positive_count_per_fold": null,
+    "withheld_positive_count_per_fold": 12090,
+    "withheld_positive_per_fold": [
+     12822,
+     10652,
+     11970,
+     12917
+    ],
+    "withheld_evidence": "evidence/lidar01_withheld_counts.json",
     "n_folds": 4,
     "variants": {
      "random|topk": {
@@ -407,27 +421,7 @@
   "zip": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
   "zip_sha256": "134e3694d76eaee5a26824fbf543d305055fc40f82d75c7de553650c39c2825b"
  },
- "raster_historical_artifacts": [
-  {
-   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif",
-   "sha256": "44d6dccbc27ce2e6dbe42794ed24c0f34c86aadb942c9b913afec08fb39953e1",
-   "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
-   "properties_recorded_before_withdrawal": "3730\u00d73292, one band, float32, EPSG:32611, 100 m, all finite in [0,1], 37,654 positive cells. Exact reference transform/footprint was not validated in this review.",
-   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.tif"
-  },
-  {
-   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif",
-   "sha256": "d6f6d0b869180e0ded54b1742c213a7fe3ee9a5253462e5ae342550bb95e11a0",
-   "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; footprint alignment unverified",
-   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-nan.tif"
-  },
-  {
-   "file": "gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip",
-   "sha256": "40a3747aa5a8ac9f9b20ec75512579d633a72c5362cd68627c9f0babbc07fb4a",
-   "status": "WITHDRAWN FROM PUBLIC DOWNLOAD; archived audit-only; not submission-cleared",
-   "archive_file": "evidence/archives/h66-1/gems66-h66-1-scarplet-veto-37654-20261011T203224Z-allfinite.zip"
-  }
- ],
+ "raster_historical_artifacts": [],
  "validator": {
   "file": "/home/user/GEMSDOE66/artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
   "passed": true,

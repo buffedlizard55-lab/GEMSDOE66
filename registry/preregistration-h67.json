@@ -1,0 +1,51 @@
+{
+  "schema": "gems-preregistration/1",
+  "id": "H67-1",
+  "created_utc": "2026-10-12",
+  "lane": "native-resolution LiDAR scarp channels",
+  "written_before": "any candidate dot set, any candidate DTI, and any uniqueness comparison",
+  "hypothesis": "On high-prior (LiDAR-covered) tiles, a scarplet-lane field built from the 1 m-LiDAR-derived scarp channels - scarp-pixel fraction, SNR-weighted amplitude (amplitude x strike coherence), amplitude-weighted circular orientation coherence and dominant strike - combined with scale-persistent Steger/Frangi line evidence on the slope-detrended surface, and restricted to terrain away from every mapped fault inventory, places unit-mass dots where expert-identified faults that are absent from the public fault databases are more likely than a footprint-uniform lattice.",
+  "mechanism": "A tectonic scarp keeps a cross-profile step, an amplitude, an orientation and a strike-coherent extent that the 100 m aggregate dilutes but the 1 m-derived per-cell descriptors still carry. Newly identified faults are, by the organiser's own definition, absent from the public catalogue, so mass spent on or beside the mapped networks is charged as false positive under the official metric while earning no true-positive credit.",
+  "named_non_fault_mimics": [
+    "fluvial terrace risers",
+    "natural channel banks",
+    "landslide headscarps",
+    "shorelines and playa margins",
+    "cultural edges: roads, canals, field boundaries, pipelines",
+    "DEM tiling seams and LiDAR swath edges"
+  ],
+  "cultural_mask_status": "UNAVAILABLE IN THIS CHECKOUT. The brief requires masking roads/canals/field edges with the existing cultural-feature mask; no cultural mask file is present or hash-pinned here (IR-67-MASK-01). Substitutes applied and disclosed: strike-concordance with the regional structure tensor, scale persistence across three scales, and a relief/slope sanity gate; these are weaker than a real cultural mask and are reported as such.",
+  "falsifiable_predictions": [
+    "P1: candidate dot-mean distance to the mapped networks (catalogue and SGMC) is higher than the frozen incumbent's 20.0 px (catalogue) and its SGMC value.",
+    "P2: candidate dot density inside LiDAR-valid cells exceeds 0.95 (lane evidence is LiDAR-borne).",
+    "P3: candidate block-density CV lands in the 0.45-0.58 band of the owner-reported top scorers rather than the >1.0 band of a clustered field.",
+    "P4: candidate stays below the duplicate thresholds (|rho| <= 0.90, <= 70% of dots within 3 px of any single registry raster)."
+  ],
+  "gate_definition": {
+    "mechanical": "gems.validate_submission passes every check including reference-grid and footprint checks",
+    "uniqueness": "check_registry reports UNIQUE for the continuous surface (pre-placement) and for the final dots",
+    "format": "float32, EPSG:32611, 100 m, exact reference transform/shape, values in [0,1] inside the footprint; two siblings written: NaN outside and 0 outside",
+    "science_negative_control": "pooled DTI on the LiDAR-covered blocked holdout against SGMC off-catalogue truth, with the range-front stratification; REPORTED, NOT OPTIMISED, because this project's own E2 measurement shows that instrument is anti-correlated with the owner-reported outcome (Spearman -0.87 on SGMC-all, -0.17 on the LiDAR-restricted off-catalogue variant)",
+    "promotion_rule": "mechanical PASS and uniqueness PASS and directional improvement on the E1/E1b owner-reported-anchored covariate model; a negative science-control result is logged, not hidden"
+  },
+  "budget": {
+    "experiments_allowed": 3,
+    "experiments_used": 3,
+    "experiments": [
+      "E1 score-anchored credit regression (scripts/h67_e1_credit_regression.py)",
+      "E1b robustness / confound pass (scripts/h67_e1b_robustness.py)",
+      "E2 proxy-versus-live concordance on the matched rasters (evidence/h67_e2_proxy_concordance.json)"
+    ],
+    "note": "the emission run below is the finish step of the pre-registered method, not a new hypothesis test",
+    "submission_slots_used": 0
+  },
+  "emission_spec": {
+    "dots": 40000,
+    "min_sep_px": 3.0,
+    "mass_per_dot": 1.0,
+    "exclusion_radius_px_around_mapped_networks": 4.0,
+    "mapped_networks_excluded": ["competition catalogue (labels.tif == 1)", "SGMC 100 m derived faults"],
+    "variants": ["-nan (NaN outside the footprint)", "-zeros (0 outside the footprint, fully finite; recommended for upload)"],
+    "reason_for_two_variants": "the owner reported that an upload of a previously offered file returned 'Predicted values must be in range [0, 1]'; a NaN-outside file can fail a strict finite-range checker, so a fully finite sibling is offered (IR-67-FORMAT-01)"
+  }
+}

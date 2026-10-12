@@ -1,0 +1,379 @@
+{
+ "evidence_class": "LOCAL structural screen vs owner-reported scores (n=18); not scores",
+ "union_coverage_all18": 0.2990175085096431,
+ "union_coverage_best6": 0.16934755822736233,
+ "K_percentiles_union_best6": [
+  71.0,
+  99.0,
+  132.0,
+  161.0
+ ],
+ "K_percentiles_footprint": [
+  87.0,
+  126.0,
+  161.0,
+  190.0
+ ],
+ "per_raster": {
+  "19GEMSDOE__h19-4-multiline-corroborated.tif": {
+   "n_dots": 123779.0,
+   "frac_within_2px_cat": 0.14152643016989958,
+   "mean_dist_to_cat": 24.885831720986005,
+   "coverage_frac": 0.20359048979046027,
+   "K_mean": 97.35310513091882,
+   "step_mean": 68.27271992825924,
+   "valid_mean": 193.7012740448703,
+   "coh_mean": 116.74470629105099,
+   "sgmc_mean": 0.03452928202683816,
+   "relief_mean": 50.030780665541,
+   "in_lidar_frac": 0.7600885449066481,
+   "mean_Kminus_fp": -27.37808477931216
+  },
+  "19GEMSDOE__h19-5-powerlaw-budget-multiline.tif": {
+   "n_dots": 121131.0,
+   "frac_within_2px_cat": 0.14303522632521815,
+   "mean_dist_to_cat": 24.82449211519533,
+   "coverage_frac": 0.19609480484571173,
+   "K_mean": 97.48980029885,
+   "step_mean": 68.88116171747943,
+   "valid_mean": 194.71638143827758,
+   "coh_mean": 117.43684110591013,
+   "sgmc_mean": 0.03458239426736343,
+   "relief_mean": 50.4973045710842,
+   "in_lidar_frac": 0.7640075620609093,
+   "mean_Kminus_fp": -27.24138961138098
+  },
+  "GEMSDOE24__h25-1-dotted-h19-5-d1-5.tif": {
+   "n_dots": 60069.0,
+   "frac_within_2px_cat": 0.14598212056135446,
+   "mean_dist_to_cat": 24.855290882876588,
+   "coverage_frac": 0.18079283225731915,
+   "K_mean": 98.79968036757728,
+   "step_mean": 70.4919509231051,
+   "valid_mean": 196.02693569062245,
+   "coh_mean": 118.04702924969618,
+   "sgmc_mean": 0.033361634120761124,
+   "relief_mean": 50.878506384324695,
+   "in_lidar_frac": 0.7691155171552715,
+   "mean_Kminus_fp": -25.9315095426537
+  },
+  "GEMSDOE25__dotted-h19-5-d2-8.tif": {
+   "n_dots": 44090.0,
+   "frac_within_2px_cat": 0.1459741437967793,
+   "mean_dist_to_cat": 24.95158127507228,
+   "coverage_frac": 0.17191094972242182,
+   "K_mean": 99.49428441823542,
+   "step_mean": 71.2496257654797,
+   "valid_mean": 196.74726695395782,
+   "coh_mean": 118.15633930596508,
+   "sgmc_mean": 0.03393059650714448,
+   "relief_mean": 51.16064867316852,
+   "in_lidar_frac": 0.7719664322975731,
+   "mean_Kminus_fp": -25.236905491995557
+  },
+  "GEMSDOE27__topo-gap-closure-t-v2-on-d1-5.tif": {
+   "n_dots": 61328.0,
+   "frac_within_2px_cat": 0.14471367075397862,
+   "mean_dist_to_cat": 24.46788696684028,
+   "coverage_frac": 0.1852153889413441,
+   "K_mean": 99.40466018784242,
+   "step_mean": 69.88228867727628,
+   "valid_mean": 195.87495108270284,
+   "coh_mean": 118.06347834594312,
+   "sgmc_mean": 0.03308439864336029,
+   "relief_mean": 50.470861596660576,
+   "in_lidar_frac": 0.7685233498565093,
+   "mean_Kminus_fp": -25.326529722388557
+  },
+  "GEMSDOE28__h27-4-r1-solo-d2-8.tif": {
+   "n_dots": 40199.0,
+   "frac_within_2px_cat": 0.06331003258787532,
+   "mean_dist_to_cat": 27.26993752128005,
+   "coverage_frac": 0.1600641176861047,
+   "K_mean": 100.34719769148487,
+   "step_mean": 71.2868728077813,
+   "valid_mean": 195.40003482673697,
+   "coh_mean": 117.39411428144979,
+   "sgmc_mean": 0.02691609244011045,
+   "relief_mean": 50.87815617303913,
+   "in_lidar_frac": 0.7666857384512052,
+   "mean_Kminus_fp": -24.383992218746116
+  },
+  "GEMSDOE28__h32-1-prethin-tip-euler-d2-8.tif": {
+   "n_dots": 42294.0,
+   "frac_within_2px_cat": 0.10963730079916773,
+   "mean_dist_to_cat": 25.97621420542639,
+   "coverage_frac": 0.16674913926283239,
+   "K_mean": 99.84607745779543,
+   "step_mean": 71.2975835815955,
+   "valid_mean": 196.07029365867498,
+   "coh_mean": 117.82810800586371,
+   "sgmc_mean": 0.030051543954225185,
+   "relief_mean": 50.99231569489762,
+   "in_lidar_frac": 0.7693289828344446,
+   "mean_Kminus_fp": -24.88511245243555
+  },
+  "GEMSDOE28__h36-1-rung30-blind-r1.tif": {
+   "n_dots": 37660.0,
+   "frac_within_2px_cat": 0.06248008497079129,
+   "mean_dist_to_cat": 27.321135920123073,
+   "coverage_frac": 0.157525109954323,
+   "K_mean": 100.32177376526819,
+   "step_mean": 71.1621083377589,
+   "valid_mean": 195.23085501858736,
+   "coh_mean": 117.35031864046734,
+   "sgmc_mean": 0.026420605416887944,
+   "relief_mean": 50.71404673393521,
+   "in_lidar_frac": 0.7659585767392458,
+   "mean_Kminus_fp": -24.40941614496279
+  },
+  "GEMSDOE28__h38-1-hf-euler-r30-r1.tif": {
+   "n_dots": 37860.0,
+   "frac_within_2px_cat": 0.0621500264131009,
+   "mean_dist_to_cat": 27.225250833819874,
+   "coverage_frac": 0.15835357733997527,
+   "K_mean": 100.47606973058637,
+   "step_mean": 71.20884838880085,
+   "valid_mean": 195.3849445324881,
+   "coh_mean": 117.4379556259905,
+   "sgmc_mean": 0.026333861595351293,
+   "relief_mean": 50.7338087691495,
+   "in_lidar_frac": 0.7665610142630744,
+   "mean_Kminus_fp": -24.255120179644607
+  },
+  "GEMSDOE29__wormrank-d28.tif": {
+   "n_dots": 41338.0,
+   "frac_within_2px_cat": 0.14451594174851226,
+   "mean_dist_to_cat": 25.109012780841034,
+   "coverage_frac": 0.16962061767168735,
+   "K_mean": 99.34735594368378,
+   "step_mean": 77.58844162755818,
+   "valid_mean": 193.21210508490978,
+   "coh_mean": 117.56512167981035,
+   "sgmc_mean": 0.03270598480816682,
+   "relief_mean": 52.351057138710146,
+   "in_lidar_frac": 0.7580434467076298,
+   "mean_Kminus_fp": -25.3838339665472
+  },
+  "GEMSDOE30__d28-poisson300m-offcat-44090.tif": {
+   "n_dots": 44090.0,
+   "frac_within_2px_cat": 0.1459741437967793,
+   "mean_dist_to_cat": 24.95158127507228,
+   "coverage_frac": 0.17191094972242182,
+   "K_mean": 99.49428441823542,
+   "step_mean": 71.2496257654797,
+   "valid_mean": 196.74726695395782,
+   "coh_mean": 118.15633930596508,
+   "sgmc_mean": 0.03393059650714448,
+   "relief_mean": 51.16064867316852,
+   "in_lidar_frac": 0.7719664322975731,
+   "mean_Kminus_fp": -25.236905491995557
+  },
+  "GEMSDOE32__h33-2-b2-zeros.tif": {
+   "n_dots": 37654.0,
+   "frac_within_2px_cat": 0.0,
+   "mean_dist_to_cat": 28.996593932371773,
+   "coverage_frac": 0.15085344139081888,
+   "K_mean": 100.97644340574706,
+   "step_mean": 71.38827216232008,
+   "valid_mean": 194.76430126945345,
+   "coh_mean": 116.84952461889839,
+   "sgmc_mean": 0.02289265416688798,
+   "relief_mean": 50.73195410846125,
+   "in_lidar_frac": 0.764195039039677,
+   "mean_Kminus_fp": -23.75474650448392
+  },
+  "GEMSDOE33__h33d-analog-tip-stepover-r30.tif": {
+   "n_dots": 41865.0,
+   "frac_within_2px_cat": 0.09301325689716948,
+   "mean_dist_to_cat": 26.43560538752187,
+   "coverage_frac": 0.16618560340041255,
+   "K_mean": 100.14231458258689,
+   "step_mean": 71.1747760659262,
+   "valid_mean": 195.78485608503524,
+   "coh_mean": 117.7427206497074,
+   "sgmc_mean": 0.02883076555595366,
+   "relief_mean": 50.79178311238505,
+   "in_lidar_frac": 0.7682073330944703,
+   "mean_Kminus_fp": -24.58887532764409
+  },
+  "GEMSDOE36__anderson-geothermal-pinn-38854.tif": {
+   "n_dots": 38854.0,
+   "frac_within_2px_cat": 0.0,
+   "mean_dist_to_cat": 28.672542555793374,
+   "coverage_frac": 0.15459015635217352,
+   "K_mean": 100.9131620939929,
+   "step_mean": 71.6591341946775,
+   "valid_mean": 196.34902455345653,
+   "coh_mean": 117.95040407680033,
+   "sgmc_mean": 0.022751840222370926,
+   "relief_mean": 51.3482266948062,
+   "in_lidar_frac": 0.7703968703351006,
+   "mean_Kminus_fp": -23.818027816238086
+  },
+  "GEMSDOE49__gate_ortho_w0.25-40k.tif": {
+   "n_dots": 40000.0,
+   "frac_within_2px_cat": 0.0,
+   "mean_dist_to_cat": 27.22400462176164,
+   "coverage_frac": 0.1532471141525878,
+   "K_mean": 97.143575,
+   "step_mean": 66.292875,
+   "valid_mean": 176.793,
+   "coh_mean": 111.405375,
+   "sgmc_mean": 0.02755,
+   "relief_mean": 55.21735,
+   "in_lidar_frac": 0.693725,
+   "mean_Kminus_fp": -27.587614910230982
+  },
+  "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif": {
+   "n_dots": 44090.0,
+   "frac_within_2px_cat": 0.1459741437967793,
+   "mean_dist_to_cat": 24.95158127507228,
+   "coverage_frac": 0.17191094972242182,
+   "K_mean": 99.49428441823542,
+   "step_mean": 71.2496257654797,
+   "valid_mean": 196.74726695395782,
+   "coh_mean": 118.15633930596508,
+   "sgmc_mean": 0.03393059650714448,
+   "relief_mean": 51.16064867316852,
+   "in_lidar_frac": 0.7719664322975731,
+   "mean_Kminus_fp": -25.236905491995557
+  },
+  "gemsdoe32-d28-ref02600-repro-44090-20261004T183200Z-426073b6-zeros.tif": {
+   "n_dots": 44090.0,
+   "frac_within_2px_cat": 0.1459741437967793,
+   "mean_dist_to_cat": 24.95158127507228,
+   "coverage_frac": 0.17191094972242182,
+   "K_mean": 99.49428441823542,
+   "step_mean": 71.2496257654797,
+   "valid_mean": 196.74726695395782,
+   "coh_mean": 118.15633930596508,
+   "sgmc_mean": 0.03393059650714448,
+   "relief_mean": 51.16064867316852,
+   "in_lidar_frac": 0.7719664322975731,
+   "mean_Kminus_fp": -25.236905491995557
+  },
+  "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif": {
+   "n_dots": 37654.0,
+   "frac_within_2px_cat": 0.0,
+   "mean_dist_to_cat": 28.996593932371773,
+   "coverage_frac": 0.15085344139081888,
+   "K_mean": 100.97644340574706,
+   "step_mean": 71.38827216232008,
+   "valid_mean": 194.76430126945345,
+   "coh_mean": 116.84952461889839,
+   "sgmc_mean": 0.02289265416688798,
+   "relief_mean": 50.73195410846125,
+   "in_lidar_frac": 0.764195039039677,
+   "mean_Kminus_fp": -23.75474650448392
+  }
+ },
+ "single_variable_loo": [
+  {
+   "statistic": "n_dots",
+   "rho": -0.826722338204593,
+   "loo_rmse": 0.008754340897312467
+  },
+  {
+   "statistic": "K_mean",
+   "rho": 0.9770354906054279,
+   "loo_rmse": 0.014923150296306212
+  },
+  {
+   "statistic": "mean_Kminus_fp",
+   "rho": 0.9770354906054279,
+   "loo_rmse": 0.0149231502963063
+  },
+  {
+   "statistic": "coverage_frac",
+   "rho": -0.7849686847599164,
+   "loo_rmse": 0.01573764645909353
+  },
+  {
+   "statistic": "sgmc_mean",
+   "rho": -0.7995824634655531,
+   "loo_rmse": 0.0222859256241573
+  },
+  {
+   "statistic": "mean_dist_to_cat",
+   "rho": 0.8622129436325677,
+   "loo_rmse": 0.022823458102254238
+  },
+  {
+   "statistic": "frac_within_2px_cat",
+   "rho": -0.5610969671677714,
+   "loo_rmse": 0.024951213766981263
+  },
+  {
+   "statistic": "coh_mean",
+   "rho": -0.10438413361169101,
+   "loo_rmse": 0.027561897298699484
+  },
+  {
+   "statistic": "step_mean",
+   "rho": 0.6847599164926931,
+   "loo_rmse": 0.03147115748186344
+  },
+  {
+   "statistic": "relief_mean",
+   "rho": 0.0020876826722338207,
+   "loo_rmse": 0.03858838825973648
+  },
+  {
+   "statistic": "in_lidar_frac",
+   "rho": 0.17536534446764093,
+   "loo_rmse": 0.04422124588776717
+  },
+  {
+   "statistic": "valid_mean",
+   "rho": 0.17536534446764093,
+   "loo_rmse": 0.04454786310732047
+  }
+ ],
+ "two_variable_loo": [
+  {
+   "model": "n_dots+K_mean",
+   "loo_rmse": 0.0023097895342811072
+  },
+  {
+   "model": "n_dots+mean_Kminus_fp",
+   "loo_rmse": 0.0023097895342811267
+  },
+  {
+   "model": "n_dots+relief_mean",
+   "loo_rmse": 0.003990510324339038
+  },
+  {
+   "model": "n_dots+sgmc_mean",
+   "loo_rmse": 0.008136769180932315
+  },
+  {
+   "model": "n_dots+mean_dist_to_cat",
+   "loo_rmse": 0.00825949432190967
+  },
+  {
+   "model": "n_dots+coverage_frac",
+   "loo_rmse": 0.009658834664392445
+  },
+  {
+   "model": "n_dots+frac_within_2px_cat",
+   "loo_rmse": 0.010003438197339268
+  },
+  {
+   "model": "n_dots+in_lidar_frac",
+   "loo_rmse": 0.010542189315580087
+  },
+  {
+   "model": "n_dots+valid_mean",
+   "loo_rmse": 0.010590905027396808
+  },
+  {
+   "model": "n_dots+step_mean",
+   "loo_rmse": 0.0155517463004135
+  },
+  {
+   "model": "n_dots+coh_mean",
+   "loo_rmse": 0.017457758450640747
+  }
+ ]
+}

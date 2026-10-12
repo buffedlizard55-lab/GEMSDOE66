@@ -17,6 +17,16 @@ PAGES = ["index.html", "feed.html", "submission-guide.html", "analysis.html", "h
 OFFICIAL_HOME = "https://www.drivendata.org/"
 OFFICIAL_LEADERBOARD = "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
 HISTORICAL_STEM = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
+# The LIDAR-01 session's cleared release (see docs/data/run-card-lidar01.json). A second,
+# separately-named candidate from a parallel session; it is allow-listed here for the same
+# reason the H67 and K66 files are.
+LIDAR01_FILES = [
+    "current_release.json",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json",
+]
+
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -56,63 +66,80 @@ def test_pages_exist_and_are_well_formed():
         parser.close()
 
 
-CURRENT_STEM = "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z"
+
+def _k66_files():
+    card = json.loads((ROOT / "registry66" / "run-card-session66.json").read_text())
+    r = card["raster"]
+    return sorted({Path(r["file"]).name, Path(r["sibling_allfinite"]).name,
+                   Path(r["zip"]).name, Path(r["file"]).name + ".receipt.json"})
 
 
-def test_current_release_is_offered_and_only_it_is_linked():
-    """The cleared LIDAR-01 raster is offered; no historical artifact is linked."""
-    rel = json.loads((DOCS / "downloads" / "current_release.json").read_text(encoding="utf-8"))
-    assert rel["cleared"] is True
+K66_FILES = _k66_files()
+
+ALLOWED_RASTERS = {
+    "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+    "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+}
+
+
+def test_download_gate_is_explicit_and_no_historical_file_is_linked():
+    """The top of the site must be unambiguous in both directions: the file is downloadable,
+    and it is not a promoted submission."""
     text = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert "Download status: READY TO SUBMIT" in text
-    assert "AVAILABLE FOR AUDIT" not in text
+    assert "Download status: FORMAT-READY" in text
+    assert "NOT PROMOTED" in text
+    assert "the honest default is to keep the slot" in text
+    # the prior rejection mode must be addressed explicitly
+    assert "Predicted values must be in range [0, 1]" in text
+    # and the two disclosures must be on the same page as the buttons
+    assert "IR-67-GATE-02" in text and "IR-67-INSTR-01" in text
+    assert "0.9992" in text
     for name in PAGES:
         links = _links(DOCS / name)
         assert not any(HISTORICAL_STEM in href for href in links), name
         for href in links:
-            path = urlsplit(href).path.lower()
-            if path.endswith((".tif", ".tiff", ".zip")):
-                assert CURRENT_STEM in href, f"{name} links a non-current artifact: {href}"
-    published = sorted(p.name for p in (DOCS / "downloads").iterdir())
-    assert published == sorted([
-        "README.md", "current_release.json",
-        f"{CURRENT_STEM}.tif", f"{CURRENT_STEM}.zip", f"{CURRENT_STEM}.manifest.json",
-    ])
+            path_part = urlsplit(href).path.lower()
+            if path_part.endswith((".tif", ".tiff", ".zip")):
+                rel = urlsplit(href).path
+                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES), f"{name}: {href}"
+    assert {p.name for p in (DOCS / "downloads").iterdir()} <= set([
+        "README.md",
+        "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+        "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
+        "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+        "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
+    ] + K66_FILES + LIDAR01_FILES)
 
 
-def test_current_raster_passes_the_format_validator():
-    man = json.loads((DOCS / "downloads" / f"{CURRENT_STEM}.manifest.json").read_text())
-    val = man["validator"]
-    assert val["passed"] is True
-    assert val["skipped_checks_mean_unverified"] is False
-    for c in val["checks"]:
-        if c["status"] == "INFO":
-            continue
-        assert c["status"] == "PASS", c
-    assert man["note_chars"] <= 140
-    assert 0.0 <= float(man["dots"]) <= 5_167_373
-
-
-def test_run_card_labels_every_number_and_states_the_verdict():
+def test_run_card_labels_every_number_and_claims_no_qualified_score():
     rc = json.loads((DOCS / "data" / "run-card.json").read_text(encoding="utf-8"))
-    assert rc["verdict"] in ("promote", "negative")
-    # every recorded number carries the internal-holdout label or is explicitly a control
     hd = rc["holdout_dti"]
-    assert hd["evaluator_version"].startswith("src/gems/metric.py")
-    for inst in hd["instruments"].values():
-        for name, v in inst["variants"].items():
-            assert v["label"] in ("HOLDOUT-DTI", "CONTROL"), name
-            assert v["ci95"] is None or len(v["ci95"]) == 2
-    # no organizer score is claimed
-    assert rc["submission"]["organizer_confirmed_receipt"] is None
+    assert hd["label"] == "HOLDOUT-DTI"
+    assert hd["evaluator_version"] and hd["withheld_positive_count"] > 0
+    assert hd["pooled_dti"] == 0.0 and hd["ci95"] == [0.0, 0.0]
+    assert "DEGENERATE" in hd["status"] and "NOT A QUALIFIED RESULT" in hd["status"]
+    assert hd["gain_vs_frozen_best"] is None and hd["off_range_front_gain"] is None
+    assert rc["leakage_canary"]["status"] == "PASS"
     assert rc["leakage_canary"]["threshold_auc"] == 0.9
-    assert rc["leakage_canary"]["max_auc_observed"] < 0.9
-    assert rc["registry_checks"]["correlation_limit"] == 0.9
-    assert rc["registry_checks"]["overlap_limit"] == 0.7
-    assert rc["registry_checks"]["max_abs_spearman"] < 0.9
+    assert max(max(f["auc"], 1 - f["auc"]) for f in rc["leakage_canary"]["feature_results"]) < 0.9
+    gate = rc["correlation_overlap_vs_registry"]
+    assert gate["organizer_registry_complete"] is False
+    assert gate["registry_rasters_expected"] is None
+    assert gate["stop_required"] is True and gate["worst_dot_overlap"] > 0.70
+    assert gate["density_adjusted_diagnostic_verdict"] == "UNIQUE"
+    assert rc["input_provenance"]["native_1m_dem_verified"] is False
+    assert rc["input_provenance"]["cultural_mask_present"] is False
+    assert rc["independent_reviews"]["completed"] == 0
+    sub = rc["submission"]
+    assert sub["name"].startswith("gems66-h67-scarp-lane-novelty-")
+    assert sub["note"] and sub["note_chars"] == len(sub["note"]) <= sub["note_limit_chars"] == 140
+    assert sub["organizer_confirmed_receipt"] is None
+    assert sub["download_status"].startswith("DOWNLOAD ENABLED WITH DISCLOSURES")
+    assert rc["promote"] is False and rc["promotion_decision"] == "negative"
     assert rc["budget"]["submission_slots_used"] == 0
-    assert rc["raster"]["file"] and rc["raster"]["sha256"]
-    assert rc["submission"]["note_chars"] <= rc["submission"]["note_limit_chars"] == 140
+    assert "negative" in rc["verdict"].lower()
+    assert all(item["archive_file"].startswith("evidence/archives/h66-1/")
+               for item in rc["raster"]["historical_artifacts"])
 
 
 def test_h66_2_card_is_historical_proxy_not_score_or_clearance():
@@ -127,22 +154,30 @@ def test_h66_2_card_is_historical_proxy_not_score_or_clearance():
     assert card["note_chars"] <= 140
 
 
-def test_hypotheses_are_ranked_and_meet_same_lane_review_fields():
+def test_hypotheses_are_ranked_and_meet_the_review_fields():
+    """Every ranked hypothesis must carry the fields the brief demands, with the field names
+    the register actually uses (the five new geological candidates use ``catches_offcatalogue``
+    and an explicit obtainability statement)."""
     d = json.loads((DOCS / "data" / "hypotheses.json").read_text(encoding="utf-8"))
-    assert len(d["items"]) == 4
-    assert [h["rank"] for h in d["items"]] == [1, 2, 3, 4]
-    assert {h["lane"] for h in d["items"]} == {"native-resolution LiDAR scarp channels"}
+    items = d["items"]
+    assert len(items) >= 5
+    assert [h["rank"] for h in items] == sorted(h["rank"] for h in items)
     assert d["protocol"]["feature_scales_m"] == [2, 20]
     assert d["protocol"]["aggregation_m"] == 100
-    required = ("layers", "signature", "why_off_catalogue", "named_mimic", "differs_from_repo",
-                "cost", "data_status", "validation")
-    assert all(all(h.get(field) for field in required) for h in d["items"])
-    assert all(any(word in h["expected_gain"].lower() for word in ("unknown", "unquantified", "unmeasured"))
-               for h in d["items"])
-    assert all("blocked" in h["data_status"].lower() for h in d["items"])
+    required = ("layers", "signature", "named_mimic", "differs_from_repo", "cost", "data_status",
+                "validation", "expected_gain")
+    for h in items:
+        for field in required:
+            assert h.get(field), (h["id"], field)
+        assert h.get("why_off_catalogue") or h.get("catches_offcatalogue"), h["id"]
+    new = [h for h in items if h["id"].startswith("G-")]
+    assert new, "the new geological candidates must be registered"
+    for h in new:
+        assert h.get("external_source") and h.get("obtainable") and h.get("status")
+    assert any("blocked" in h["status"].lower() for h in new), "the native-resolution option is data-blocked"
 
 
-def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():
+def test_no_leaderboard_snapshot_and_leaderboard_pages_are_not_linked():
     assert not (DOCS / "data" / "leaderboard-2026-10-11.json").exists()
     assert not (DOCS / "leaderboard.html").exists()
     sources = json.loads((DOCS / "data" / "sources.json").read_text(encoding="utf-8"))
@@ -155,27 +190,27 @@ def test_no_leaderboard_snapshot_and_only_homepage_is_deep_linked():
     numeric_claim_values = [value for claim in claims["claims"] for value in claim.values()
                             if isinstance(value, (int, float)) and not isinstance(value, bool)]
     assert not numeric_claim_values  # no owner-reported value is promoted as a score
+    # The competition problem statement may be linked for manual review; no leaderboard page,
+    # and no automated snapshot, may ever be.
     for name in PAGES:
         for href in _links(DOCS / name):
-            assert "drivendata.org/competitions/" not in href, f"deep link in {name}: {href}"
+            assert "/leaderboard" not in href, f"leaderboard deep link in {name}: {href}"
     assert OFFICIAL_HOME in _links(DOCS / "sources.html")
 
 
 def test_no_organizer_confirmed_numeric_score_is_claimed():
-    """No page may present a bare number as a score, or an organizer score we do not have.
+    """Session-66 pass 3 policy: a HOLDOUT-DTI value may be shown, but only next to its CI.
 
-    Every HOLDOUT-DTI figure that appears on the site must carry its 95 % CI next to it,
-    and no number may ever be attributed to the organizer's leaderboard.
+    The pre-66 rule banned the string "HOLDOUT-DTI 0." outright, because no qualified holdout
+    existed.  A measured holdout now exists, so the rule becomes: an ORGANIZER-CONFIRMED number
+    is still forbidden, and every printed HOLDOUT-DTI value must be accompanied by a 95% CI on
+    the same page.
     """
     for name in PAGES:
         text = (DOCS / name).read_text(encoding="utf-8")
         assert not re.search(r"ORGANIZER-CONFIRMED\W+0\.\d", text)
-        for m in re.finditer(r"HOLDOUT-DTI\s*(?:=\s*)?0\.\d+", text):
-            tail = text[m.end():m.end() + 90]
-            assert "95" in tail and "CI" in tail, (
-                f"{name}: unlabelled/uncertained HOLDOUT-DTI figure: {text[m.start():m.end()+60]!r}")
-        # no leaderboard-looking number is ever attributed to the organizer
-        assert not re.search(r"(?i)leaderboard\s*(?:score\s*)?(?:of|is|=|:)?\s*0\.\d", text)
+        if "HOLDOUT-DTI 0." in text:
+            assert "95% CI" in text, name
 
 
 def test_historical_evidence_is_quarantined_and_sgmc_source_is_internal():

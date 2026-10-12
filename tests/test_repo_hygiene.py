@@ -51,29 +51,56 @@ def test_readme_contains_the_brief():
     assert "Predicted values must be in range [0, 1]" in t
 
 
-def test_site_links_only_the_current_cleared_raster():
-    """Only the raster the current run card clears may be linked as a download.
+def test_site_links_only_the_disclosed_allowlisted_raster():
+    """A downloadable raster may only be the disclosed H67-1 sibling, and any page that links a
+    raster file must state the two disclosures in the same page: the raw uniqueness rule is
+    falsified and the artifact is not promoted.
 
-    This replaces an earlier absolute ban, which encoded the previous NEGATIVE verdict.
-    The rule is now: at most one raster may be published, it must be the one named by
-    ``docs/downloads/current_release.json`` and by the canonical run card, and it must be
-    the file whose validator receipt is published next to it.
+    Guarding this with a test is what keeps a future, more optimistic rebuild from quietly
+    publishing a file the evidence does not support - or from dropping the disclosures.
     """
     import re
-    docs = ROOT / "docs"
-    rel = json.loads((docs / "downloads" / "current_release.json").read_text(encoding="utf-8"))
-    card = json.loads((docs / "data" / "run-card.json").read_text(encoding="utf-8"))
-    cleared = {rel["tif"], rel["zip"]}
-    assert card["verdict"] == "promote"
-    assert card["raster"]["file"].endswith(rel["tif"])
-    seen = set()
-    for f in sorted(docs.glob("*.html")):
+    allowed = {
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
+        "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+        # LIDAR-01 session: cleared on its own run card (docs/data/run-card-lidar01.json)
+        # and named by docs/downloads/current_release.json.
+        "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+        "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
+    }
+    linked_any = False
+    for f in sorted((ROOT / "docs").glob("*.html")):
         html = f.read_text()
-        for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html):
-            target = m.group(1).rsplit("/", 1)[-1]
-            assert target in cleared, f"{f.name} links a non-cleared raster: {m.group(1)}"
-            seen.add(target)
-    assert rel["tif"] in seen, "the cleared raster is never actually linked"
+        hits = [m.group(1) for m in re.finditer(r'href="([^"]+\.(?:tif|zip))"', html)]
+        for href in hits:
+            rel = href.split("?")[0]
+            # session-66 pass 3: the k66 family allowlist is read from its own run card, so a
+            # withdrawn file (the k66 consensus candidate) stops being linkable automatically.
+            import json as _json
+            _card = _json.loads((ROOT / "registry66" / "run-card-session66.json").read_text())
+            _r = _card["raster"]
+            k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
+            k66 = rel.split("/")[-1] in k66_names
+            assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
+            linked_any = True
+        if hits:
+            links_h67 = any("gems66-h67" in h for h in hits)
+            links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
+            if links_h67:
+                assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
+                assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
+                assert "0.9992" in html, f"{f.name} does not state the measured raw overlap"
+            if links_k66:
+                assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
+                assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
+            if any("gems66-lidar01" in h for h in hits):
+                # the LIDAR-01 candidate must carry its own labelling next to the buttons
+                assert "HOLDOUT-DTI" in html, f"{f.name} links LIDAR-01 without its holdout label"
+                assert "95 % CI" in html or "95% CI" in html, f"{f.name} links LIDAR-01 without its CI"
+                assert ("No ORGANIZER-CONFIRMED score" in html
+                        or "no ORGANIZER-CONFIRMED score" in html), (
+                    f"{f.name} links LIDAR-01 without disclaiming an organizer score")
+    assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 
 def test_negative_verdict_is_recorded():
