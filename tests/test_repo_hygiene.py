@@ -65,7 +65,11 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
     allowed = {
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
-        # the H66-C review candidate: downloadable, never promoted
+        # LIDAR-01 session: cleared on its own run card (docs/data/run-card-lidar01.json)
+        # and named by docs/downloads/current_release.json.
+        "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+        "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
+        # H66-C session: published for review only, never promoted (gate NOT MET).
         "downloads/%s.tif" % H66C_STEM,
         "downloads/%s.zip" % H66C_STEM,
     }
@@ -94,6 +98,13 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             if links_k66:
                 assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
                 assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
+            if any("gems66-lidar01" in h for h in hits):
+                # the LIDAR-01 candidate must carry its own labelling next to the buttons
+                assert "HOLDOUT-DTI" in html, f"{f.name} links LIDAR-01 without its holdout label"
+                assert "95 % CI" in html or "95% CI" in html, f"{f.name} links LIDAR-01 without its CI"
+                assert ("No ORGANIZER-CONFIRMED score" in html
+                        or "no ORGANIZER-CONFIRMED score" in html), (
+                    f"{f.name} links LIDAR-01 without disclaiming an organizer score")
     assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 

@@ -101,3 +101,19 @@ pre code { background:none; padding:0; }
 .note { color: var(--muted); font-size: 14px; }
 footer { color: var(--muted); font-size: 13px; padding: 24px; text-align:center; border-top:1px solid var(--line); margin-top: 32px; }
 a { color: var(--blue); }
+
+/* Cleared-release panel: reads as a call to action (green), unlike .stop (red). */
+.go {
+  border: 2px solid #067647;
+  border-left-width: 8px;
+  background: #ecfdf3;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+.go h2 { margin-top: 0; color: #054f31; }
+.go table { background: #fff; }
+.go .btn { display: inline-block; background: #067647; color: #fff; font-weight: 700;
+  padding: 11px 18px; border-radius: 7px; text-decoration: none; margin: 4px 6px 4px 0; }
+.go .btn:hover { filter: brightness(1.12); text-decoration: none; }
+.go .btn.ghost { background: #fff; color: #054f31; border: 1px solid #067647; font-weight: 600; }

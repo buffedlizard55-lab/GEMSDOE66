@@ -17,6 +17,16 @@ PAGES = ["index.html", "feed.html", "submission-guide.html", "analysis.html", "h
 OFFICIAL_HOME = "https://www.drivendata.org/"
 OFFICIAL_LEADERBOARD = "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
 HISTORICAL_STEM = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
+# The LIDAR-01 session's cleared release (see docs/data/run-card-lidar01.json). A second,
+# separately-named candidate from a parallel session; it is allow-listed here for the same
+# reason the H67 and K66 files are.
+LIDAR01_FILES = [
+    "current_release.json",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
+    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json",
+]
+
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -73,6 +83,7 @@ H66C_FILES = sorted({H66C_STEM + ext for ext in
 ALLOWED_RASTERS = {
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
+
     "downloads/" + H66C_STEM + ".tif",
     "downloads/" + H66C_STEM + ".zip",
 }
@@ -97,45 +108,18 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
             path_part = urlsplit(href).path.lower()
             if path_part.endswith((".tif", ".tiff", ".zip")):
                 rel = urlsplit(href).path
-                assert (rel in ALLOWED_RASTERS or rel.split("/")[-1] in K66_FILES
-                        or rel.split("/")[-1] in H66C_FILES), f"{name}: {href}"
+                assert (rel in ALLOWED_RASTERS
+                        or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + H66C_FILES)), \
+                    f"{name}: {href}"
     assert {p.name for p in (DOCS / "downloads").iterdir()} <= set([
         "README.md",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
-        H66C_STEM + ".tif", H66C_STEM + ".zip", H66C_STEM + ".manifest.json",
-        "README.md",
-    ] + K66_FILES)
-
-
-def test_h66c_candidate_is_published_only_as_a_review_candidate():
-    """The second (H66-C) candidate may be downloaded but must never read as promoted.
-
-    Its gate is not met, so the same page that offers the bytes has to say so, name the
-    measurement that failed, and point at the run card. This is the half of the contract a
-    later, more optimistic rebuild is most likely to drop.
-    """
-    text = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert H66C_STEM in text
-    low = text.lower()
-    assert "not promoted" in low
-    assert "for review" in low
-    assert "scientific gate not met" in low
-    assert "download yes, submit no" in low
-    assert "do not submit this file as-is" in low
-    card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
-    assert card["promote"] is False
-    assert card["promotion_decision"] == "negative"
-    assert card["submission"]["slots_used"] == 0
-
-def test_h66c_downloads_are_present_and_hash_pinned():
-    tif = DOCS / "downloads" / (H66C_STEM + ".tif")
-    assert tif.is_file()
-    card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
-    digest = hashlib.sha256(tif.read_bytes()).hexdigest()
-    assert digest == card["raster"]["sha256"], digest
+    ] + K66_FILES + LIDAR01_FILES + H66C_FILES + [
+        H66C_STEM + ".manifest.json",
+    ])
 
 
 def test_run_card_labels_every_number_and_claims_no_qualified_score():
@@ -301,3 +285,32 @@ def test_all_local_links_resolve():
                 continue
             target = (path.parent / parsed.path).resolve()
             assert target.exists(), f"{name}: broken local link {href}"
+
+
+def test_h66c_candidate_is_published_only_as_a_review_candidate():
+    """The H66-C candidate may be downloaded but must never read as promoted.
+
+    Its gate is not met, so the same page that offers the bytes has to say so, name the
+    measurement that failed, and point at the run card. This is the half of the contract a
+    later, more optimistic rebuild is most likely to drop.
+    """
+    text = (DOCS / "index.html").read_text(encoding="utf-8")
+    assert H66C_STEM in text
+    low = text.lower()
+    assert "not promoted" in low
+    assert "for review" in low
+    assert "scientific gate not met" in low
+    assert "download yes, submit no" in low
+    assert "do not submit this file as-is" in low
+    card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
+    assert card["promote"] is False
+    assert card["promotion_decision"] == "negative"
+    assert card["submission"]["slots_used"] == 0
+
+
+def test_h66c_downloads_are_present_and_hash_pinned():
+    tif = DOCS / "downloads" / (H66C_STEM + ".tif")
+    assert tif.is_file()
+    card = json.loads((DOCS / "data" / "run-card-h66c.json").read_text(encoding="utf-8"))
+    digest = hashlib.sha256(tif.read_bytes()).hexdigest()
+    assert digest == card["raster"]["sha256"], digest

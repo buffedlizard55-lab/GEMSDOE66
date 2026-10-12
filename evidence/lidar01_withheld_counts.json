@@ -1,0 +1,31 @@
+{
+ "instrument": "withheld positives per fold; blocks = spatial_block_holdout (lane_run.make_folds), traces = whole-trace holdout (trace_holdout.make_folds)",
+ "blocks": {
+  "n_folds_used": 4,
+  "per_fold": [
+   6422,
+   6429,
+   7245,
+   6765
+  ],
+  "mean": 6715,
+  "all_six_folds": [
+   6422,
+   6429,
+   7245,
+   6765,
+   7548,
+   5917
+  ]
+ },
+ "traces": {
+  "n_folds_used": 4,
+  "per_fold": [
+   12822,
+   10652,
+   11970,
+   12917
+  ],
+  "mean": 12090
+ }
+}
