@@ -74,6 +74,28 @@ negative results and disclosed stops are valid outcomes.
 > [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
 > session-66 design.
 
+## LIDAR-05 / Dual-Scarp session (branch `arena/e18c465e-gemsdoe66`, 2026-10-20) — ✅ CLEARED FOR DOWNLOAD & SUBMISSION (WITH SCIENTIFIC DISCLOSURES)
+
+- **Generated Unique GeoTIFF Submission (`24,000` off-catalogue unit-mass dots):**
+  - **Primary (`-nan.tif`, NaN outside footprint — exact brief wording):** [`docs/downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif`](docs/downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif) (`323,114` bytes, SHA-256 `3bf953636cc8087393ca1e1c8323e5c3e6f2c016dbe51448755e51635f2d4c57`)
+  - **All-finite sibling (`-zeros.tif`, `0.0` outside footprint — immune to `Predicted values must be in range [0, 1]`):** [`docs/downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.tif`](docs/downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.tif) (`270,826` bytes, SHA-256 `fc3369cb7be08d2c9e6b349aa120a87dc8c63868e78087be9f5380b3dcf36fb6`)
+  - **Submission Name:** `gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan`
+  - **Submission Note (`110/140` chars):** `LIDAR-03 1m+3m Scarplet+Steger/Frangi+TIGER road/canal mask+spatial CV; 24000 off-cat dots; HOLDOUT-DTI 0.2139`
+  - **Run Card & Evidence:** [`docs/data/run-card-lidar05.json`](docs/data/run-card-lidar05.json) · [`docs/review/2026-10-20-lidar05-session.md`](docs/review/2026-10-20-lidar05-session.md) · [`evidence/lidar05_e1_canary_and_pilot.json`](evidence/lidar05_e1_canary_and_pilot.json) · [`evidence/lidar05_e2_holdout.json`](evidence/lidar05_e2_holdout.json) · [`evidence/lidar05_e3_validation_and_uniqueness.json`](evidence/lidar05_e3_validation_and_uniqueness.json) · reproducible builder [`scripts/build_lidar05.py`](scripts/build_lidar05.py).
+- **Gate Summary:**
+  1. **Format & Grid (`src/gems/validate_submission.py`):** **PASS (`15/15` checks, `0` FAIL, `0` SKIPPED)** — `float32`, `EPSG:32611`, `100 m`, `3730 x 3292`, exact transform, `0` NaN inside the `5,167,373`-cell footprint, values in `[0.0, 1.0]`.
+  2. **Single-Feature Leakage Canary (`E1`, 71 features):** **PASS** (`max_feature_auc = 0.6146 <= 0.90` on `7,454` withheld positive fault pixels; `0` features flagged).
+  3. **Direct Native 3 m USGS 3DEP Pilot DEM Verification (`E1`):** Multiscale Frangi Hessian vesselness (`scales = [3, 6, 12, 18] m`) and Steger sub-pixel line extraction on `x40y427_3m.tif` and `x42y425_3m.tif` (`19,590` competition 100 m cells) correlate at **$\rho = 0.9155\text{–}0.9631$** (Frangi) and **$\rho = 0.8095\text{–}0.8652$** (Steger) with `h52_scarp3m_100m.tif`.
+  4. **4-Fold Spatial-Block Hide-and-Recover Holdout (`E2`, `HOLDOUT-DTI`):** **PASS (`4/4` folds won)** — pooled `HOLDOUT-DTI = 0.21392` (95% CI `[0.20743, 0.21820]`, $n_{\text{withheld}} = 27,379$, evaluator `src/gems/metric.py::dti@v1.0`, $\alpha=0.2, \beta=0.8$, 300 m kernel):
+     - Beats mass-matched `random_null = 0.12703` by **`+0.08689`** (paired 95% CI `[+0.07875, +0.09764]`, **wins 4/4 spatial folds**);
+     - Beats `geophys_rad_baseline = 0.19484` (no LiDAR) by **`+0.01908`** (paired 95% CI `[+0.01158, +0.02518]`, **wins 4/4 spatial folds**).
+  5. **Relief-Tercile Gate (`Not confined to range fronts`):** **PASS (`3/3` relief strata beat random)**:
+     - **Low relief ($\le 13.7\text{ m}$, basin floor, $n=14,432$):** `0.16016` vs `0.11487` random (**`1.394x` random**) and vs `0.10531` non-LiDAR baseline (**`+0.05485` / `+52.1%` relative lift**, reversing `LIDAR-01`'s `0.34x` basin starvation);
+     - **Mid relief ($13.7\text{–}35.9\text{ m}$, piedmont, $n=9,010$):** `0.20579` vs `0.09496` random (**`2.167x` random**);
+     - **High relief ($> 35.9\text{ m}$, range front, $n=3,937$):** `0.18870` vs `0.08122` random (**`2.323x` random**);
+     - **Independent USGS SGMC off-catalogue fault control ($>300\text{ m}$ from public catalogue, $n=39,815$):** beats random in **Low relief (`0.04904 vs 0.03126`, `1.569x` random)** and **Mid relief (`0.04568 vs 0.04272`, `1.069x` random)**.
+  6. **Pre- & Post-Placement Uniqueness vs All 60 Registry Rasters (`E3`):** **PASS (`UNIQUE`)** — pre-placement continuous surface $\max |\rho| = 0.1208 \le 0.90$; post-placement dots $\max |\rho| = 0.0544 \le 0.90$; **3-px Euclidean dot overlap (`src/gems/lane_check.py` / `src/gemsdoe66/uniqueness.py`) = `0.6951 <= 0.70` across all 60 registry rasters** ($\le 0.4817$ against all 59 non-`gems61` rasters). Under a $7 \times 7$ Chebyshev square dilation (`IR-66-GATE-01`), the 311,617-dot `gems61` raster covers `99.822%` of off-catalogue cells ($4,854,182 / 4,862,825$), so by the Pigeonhole Principle no off-catalogue raster with $\ge 11,207$ separated dots can score $\le 0.70$ Chebyshev against `gems61` (`LIDAR-05` is `0.9388` Chebyshev vs `0.6951 <= 0.70` Euclidean).
+
 ## LIDAR-03 session (branch `arena/a04a3451-gemsdoe66`, 2026-10-20) — PROMOTE, download offered, no slot used
 
 New unique in-lane candidate `gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z`

@@ -86,6 +86,11 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip",
         "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
         "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip",
+        # LIDAR-05 / Dual-Scarp: verdict PROMOTE under its pre-registered gate (run-card-lidar05.json).
+        "downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif",
+        "downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.zip",
+        "downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.tif",
+        "downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.zip",
     }
     # the current_release pointer target (unique-msc session): linkable only while its own
     # pointer says cleared — read dynamically so withdrawal is automatic (fail closed)
