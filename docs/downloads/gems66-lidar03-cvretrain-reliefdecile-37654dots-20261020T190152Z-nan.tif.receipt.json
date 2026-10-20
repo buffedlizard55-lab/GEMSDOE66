@@ -1,0 +1,23 @@
+{
+  "file": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+  "sha256": "cbcd9139e0b81b3d86a0b5d1243956ad361b9a14adaecb1e101bc6cdb875cb84",
+  "shape_hw": [
+    3730,
+    3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5167373,
+  "emitted_cells_gt0": 37654,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 7111787,
+  "outside_fill": null,
+  "finite_outside_count": 0,
+  "all_values_in_0_1": false,
+  "name": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z",
+  "note": "LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03",
+  "note_chars": 110,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+}

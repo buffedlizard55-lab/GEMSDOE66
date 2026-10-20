@@ -427,7 +427,7 @@ this candidate. No ORGANIZER-CONFIRMED result exists.</p>
     caveats = "".join(f"<li>{esc(c)}</li>" for c in rel.get("caveats", []))
     return f"""
 <div class="go">
-<h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
+<h2>Second candidate (unique-msc session) — format-valid on its own local gates; no organizer score</h2>
 <p><code>{esc(rel["tif"])}</code> — {man.get("dots", 0):,} dots,
 {man.get("bytes", 0):,} bytes, sha256 <span class="mono">{esc(man.get("tif_sha256", ""))}</span>.
 Own run card: <a href="data/run-card-lidar01.json">run-card-lidar01.json</a> (verdict
@@ -470,7 +470,7 @@ The older HOLDOUT-DTI measurements are not organizer scores and do not override 
 """
     man = load(DOCS / "downloads" / rel["manifest"], {})
     return f"""
-<h2>Second candidate — LIDAR-01 ({esc(man.get("name", ""))})</h2>
+<h2>Second candidate — unique-msc session ({esc(man.get("name", ""))})</h2>
 <p>A parallel session's file, cleared on its own evidence. If you prefer it to the H67-1
 candidate above, use these fields instead — the name and note are exact and the note is
 {man.get("note_chars", 0)}/140 characters.</p>
@@ -490,6 +490,63 @@ It is a <b>HOLDOUT-DTI</b> result only:
 
 
 LIDAR02_STEM = "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z"
+
+
+LIDAR03_STEM = "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z"
+
+
+def lidar03_block() -> str:
+    """LIDAR-03 (2026-10-20) banner: spatial-CV-retrained classifier, verdict PROMOTE.
+
+    Reads its own run card (docs/data/run-card-lidar03.json); returns "" if absent or
+    if the card's verdict is not promote, so a rebuild can never invent a clearance.
+    The verbatim banner text is kept in sync with the hand-patched HTML of the
+    LIDAR-03 session (docs/review/2026-10-20-lidar03-session.md).
+    """
+    card = load(DOCS / "data" / "run-card-lidar03.json", None)
+    if not card or card.get("verdict") != "promote":
+        return ""
+    stem = LIDAR03_STEM
+    sha_z = card["raster"]["zeros"]["sha256"]
+    sha_n = card["raster"]["nan"]["sha256"]
+    return f"""
+<div class="go" style="border:3px solid #2ea043">
+<h2>&#9989; LIDAR-03 (2026-10-20): NEW UNIQUE SUBMISSION &mdash; <b>OK TO DOWNLOAD AND SUBMIT</b></h2>
+<p><b>Is it OK to download and submit? YES</b> &mdash; under this lane's pre-registered gate (all 9
+conditions pass; <a href="data/run-card-lidar03.json">run-card-lidar03.json</a>, verdict <b>promote</b>).
+Spending a weekly slot remains the separate selector decision; <b>no ORGANIZER-CONFIRMED score
+exists</b> and beating 0.2778 (owner-reported) is <b>not</b> claimed.</p>
+<p><a class="btn" href="downloads/{stem}-zeros.tif">&#11015; {stem}-zeros.tif</a>
+<a class="btn" href="downloads/{stem}-zeros.zip">.zip</a>
+<a class="btn" href="downloads/{stem}-nan.tif">NaN-outside sibling (.tif)</a>
+<a class="btn" href="downloads/{stem}-nan.zip">NaN sibling (.zip)</a><br>
+<span class="small mono">sha256 (zeros) {sha_z}<br>sha256 (nan) {sha_n}</span></p>
+<table>
+<tr><th>File to submit</th><td class="mono">{stem}-zeros.tif</td></tr>
+<tr><th>Unique submission name</th><td class="mono">{stem}</td></tr>
+<tr><th>Note to paste (110/140 chars)</th><td class="mono">LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03</td></tr>
+<tr><th>How to submit (exactly)</th><td>On the competition page choose <b>Submit</b> &rarr;
+<i>File to submit</i>: pick <code>{stem}-zeros.tif</code> (or its .zip) &rarr; paste the Note above
+&rarr; submit. The <code>-zeros</code> file is finite in all 12,279,160 cells, values in [0, 1], no
+nodata tag, so the earlier <span class="mono">Predicted values must be in range [0, 1]</span>
+rejection cannot occur; the <code>-nan</code> sibling has NaN only outside the footprint.</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; shared validator vs the official sample grid + pinned
+training features: <b>15 PASS &middot; 0 FAIL &middot; 0 SKIPPED &middot; 2 INFO</b> on both siblings
+(float32, EPSG:32611, 100 m, 3730&times;3292, exact transform; 37,654 dots; 0 within 200 m of the catalogue).</td></tr>
+<tr><th>Science gate (HOLDOUT-DTI)</th><td><b>PASS</b> &mdash; candidate 0.1522 [95% CI 0.1258, 0.1816] vs
+mass-matched random 0.0919; paired diff +0.0603 [0.0336, 0.0919]; 4/4 folds; 48,465 withheld
+positives (evaluator <code>src/gems/metric.py</code>). Disclosed conflict: SGMC proxy 0.0670 vs
+h33-2-b2 0.0954 &mdash; see the run card.</td></tr>
+</table>
+</div>
+
+<div class="stop">
+<h2>LIDAR-01 &mdash; NOT CLEARED &middot; DO NOT DOWNLOAD OR SUBMIT (withdrawn, audit only)</h2>
+<p>The earlier LIDAR-01 candidate remains <b>WITHDRAWN</b>: <b>0.921018</b> of its dots lie within
+3 px of one registry raster, exceeding the literal 0.70 duplicate stop. See
+<a href="data/run-card-lidar01.json">run-card-lidar01.json</a>.</p>
+</div>
+"""
 
 
 def lidar02_block() -> str:
@@ -551,17 +608,15 @@ plus the evidence for why it looks the way it does. The scored truth is <b>fault
 in the given public catalogue</b>, so every design choice here is aimed at that and not at
 recovering the 60,988 labelled pixels we were given.</p>
 
+{lidar03_block()}
+
 {lidar02_block()}
 
 {submission_block()}
 
-<<<<<<< HEAD
 {lidar01_block()}
 
 {submission_block_h66c()}
-=======
-{lidar01_block()}
->>>>>>> origin/main
 
 <h2>The two facts this session measured</h2>
 <p><b>1. The official metric is a budget.</b> With <code>T = TP_w</code>, <code>S = &Sigma;p</code>,
@@ -635,6 +690,8 @@ def exec_page() -> str:
             "mapped-fault exclusion; see GEMSDOE66 run card")
     return page("How to submit", f"""
 <h2>Executive summary</h2>
+
+{lidar03_block()}
 
 {lidar02_block()}
 
@@ -732,13 +789,9 @@ forfeits that mass. That is the downside; the gate table above is the honest acc
 this session could and could not measure about it.</p>
 
 {h67m_block()}
-<<<<<<< HEAD
 {lidar01_exec_block()}
 
 {h66c_exec_block()}
-=======
-{lidar01_exec_block()}
->>>>>>> origin/main
 """, "executive-summary.html")
 
 

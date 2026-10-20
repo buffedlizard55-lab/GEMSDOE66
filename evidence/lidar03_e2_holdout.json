@@ -1,0 +1,93 @@
+{
+ "experiment": "LIDAR-03 E2 quadrant hide-and-recover, classifier RETRAINED per fold on visible catalogue only; eligibility buffer from visible catalogue only",
+ "label": "HOLDOUT-DTI",
+ "evaluator": "src/gems/metric.py dti (alpha=0.2, beta=0.8, triangular R=300m, eps=1e-9)",
+ "folds": [
+  {
+   "fold": 0,
+   "withheld_positives": 22989,
+   "k_fold": 19663,
+   "candidate_dti": 0.1350466682256454,
+   "random_dti": 0.09295253171097745,
+   "train": {
+    "n_pos": 25476,
+    "n_neg": 127380
+   }
+  },
+  {
+   "fold": 1,
+   "withheld_positives": 7135,
+   "k_fold": 7404,
+   "candidate_dti": 0.19710358772866,
+   "random_dti": 0.08865082355274424,
+   "train": {
+    "n_pos": 41330,
+    "n_neg": 206650
+   }
+  },
+  {
+   "fold": 2,
+   "withheld_positives": 9350,
+   "k_fold": 5530,
+   "candidate_dti": 0.1599602788286643,
+   "random_dti": 0.09438130082719229,
+   "train": {
+    "n_pos": 39115,
+    "n_neg": 195575
+   }
+  },
+  {
+   "fold": 3,
+   "withheld_positives": 8991,
+   "k_fold": 7538,
+   "candidate_dti": 0.11662218507253946,
+   "random_dti": 0.09147308338266896,
+   "train": {
+    "n_pos": 39474,
+    "n_neg": 197370
+   }
+  }
+ ],
+ "candidate_mean": 0.15218317996387726,
+ "candidate_ci95": [
+  0.12583442664909242,
+  0.18158935785290634
+ ],
+ "random_mean": 0.09186443486839573,
+ "random_ci95": [
+  0.08972625059230255,
+  0.09366691626908488
+ ],
+ "paired_diff_mean": 0.060318745095481546,
+ "paired_diff_ci95": [
+  0.033621619102269226,
+  0.0918631072606038
+ ],
+ "folds_won": 4,
+ "total_withheld_positives": 48465,
+ "oof_proba_auc_vs_catalogue": 0.6436480248779052,
+ "feature_names": [
+  "step_max",
+  "ex_max",
+  "ex_mean",
+  "lappos_max",
+  "lapneg_max",
+  "coh100",
+  "relief",
+  "tmpl_amp_unsigned",
+  "tmpl_upface",
+  "tmpl_downface",
+  "tmpl_cross",
+  "snr_amp",
+  "sharp_ratio",
+  "curv_asym",
+  "damage_frac_L02D",
+  "persist_geomean",
+  "strike_disc_L02C",
+  "frangi_max",
+  "steger_frac300",
+  "steger_offset_density_L02B",
+  "tensor_coherence"
+ ],
+ "note": "Catalogue-truth holdout measures recovery of withheld MAPPED segments; it cannot certify discovery of unmapped faults. Reported for falsification per protocol."
+}

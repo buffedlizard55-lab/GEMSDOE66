@@ -1,0 +1,16 @@
+{
+ "schema": "gems-current-release/1",
+ "candidate": "LIDAR-03",
+ "cleared": true,
+ "tif": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+ "zip": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip",
+ "nan_tif": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+ "nan_zip": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip",
+ "sha256_zeros": "7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e",
+ "sha256_nan": "cbcd9139e0b81b3d86a0b5d1243956ad361b9a14adaecb1e101bc6cdb875cb84",
+ "run_card": "../data/run-card-lidar03.json",
+ "submission_name": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z",
+ "note": "LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03",
+ "note_chars": 110,
+ "ok_to_submit": "YES per the pre-registered LIDAR-03 gate (run-card-lidar03.json). No organizer-confirmed score exists; SGMC instrument conflict disclosed in the run card."
+}
