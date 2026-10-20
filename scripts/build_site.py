@@ -54,6 +54,7 @@ one; no organiser score exists for any artifact here.
 
 
 from h66c_blocks import submission_block_h66c, h66c_exec_block, pillw  # noqa: E402  (site blocks)
+from lidar02_blocks import lidar02_block, lidar02_exec_block  # noqa: E402  (LIDAR-02 blocks)
 
 
 def load(p: Path, default=None):
@@ -489,13 +490,11 @@ recovering the 60,988 labelled pixels we were given.</p>
 
 {submission_block()}
 
-<<<<<<< HEAD
 {lidar01_block()}
 
 {submission_block_h66c()}
-=======
-{lidar01_block()}
->>>>>>> origin/main
+
+{lidar02_block()}
 
 <h2>The two facts this session measured</h2>
 <p><b>1. The official metric is a budget.</b> With <code>T = TP_w</code>, <code>S = &Sigma;p</code>,
@@ -664,13 +663,11 @@ forfeits that mass. That is the downside; the gate table above is the honest acc
 this session could and could not measure about it.</p>
 
 {h67m_block()}
-<<<<<<< HEAD
 {lidar01_exec_block()}
 
 {h66c_exec_block()}
-=======
-{lidar01_exec_block()}
->>>>>>> origin/main
+
+{lidar02_exec_block()}
 """, "executive-summary.html")
 
 

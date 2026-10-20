@@ -1,0 +1,164 @@
+{
+ "generated_utc": "2026-10-20T18:33:04Z",
+ "stage": "E1 leakage canary (LIDAR-02)",
+ "instrument": "per-channel AUC, withheld whole segments (8-connected proxy) vs in-domain non-fault background subsampled to 150k, 6 spatial-block folds",
+ "withheld_positives_per_fold": [
+  6422,
+  6429,
+  7245,
+  6765,
+  7548,
+  5917
+ ],
+ "per_channel": {
+  "ex_max": {
+   "n_folds": 6,
+   "auc_mean": 0.538307,
+   "auc_max": 0.559765,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "step_max": {
+   "n_folds": 6,
+   "auc_mean": 0.540348,
+   "auc_max": 0.564802,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "upface_max": {
+   "n_folds": 6,
+   "auc_mean": 0.55534,
+   "auc_max": 0.578716,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "downface_max": {
+   "n_folds": 6,
+   "auc_mean": 0.546726,
+   "auc_max": 0.568081,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "cross_max": {
+   "n_folds": 6,
+   "auc_mean": 0.539243,
+   "auc_max": 0.557791,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "relief": {
+   "n_folds": 6,
+   "auc_mean": 0.53348,
+   "auc_max": 0.554275,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "coh100": {
+   "n_folds": 6,
+   "auc_mean": 0.468435,
+   "auc_max": 0.479314,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "template_net": {
+   "n_folds": 6,
+   "auc_mean": 0.477067,
+   "auc_max": 0.507772,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "template_net_coh": {
+   "n_folds": 6,
+   "auc_mean": 0.508478,
+   "auc_max": 0.513059,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "snr_amp": {
+   "n_folds": 6,
+   "auc_mean": 0.534155,
+   "auc_max": 0.557168,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "template_veto": {
+   "n_folds": 6,
+   "auc_mean": 0.541745,
+   "auc_max": 0.560561,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "lap_mag": {
+   "n_folds": 6,
+   "auc_mean": 0.543133,
+   "auc_max": 0.566457,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "rough1km": {
+   "n_folds": 6,
+   "auc_mean": 0.530628,
+   "auc_max": 0.558399,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "prominence": {
+   "n_folds": 6,
+   "auc_mean": 0.508471,
+   "auc_max": 0.513175,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "frangi_max": {
+   "n_folds": 6,
+   "auc_mean": 0.550805,
+   "auc_max": 0.582196,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "frangi_scale": {
+   "n_folds": 6,
+   "auc_mean": 0.467924,
+   "auc_max": 0.48653,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "persist_count": {
+   "n_folds": 6,
+   "auc_mean": 0.507884,
+   "auc_max": 0.511514,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "persist_gate": {
+   "n_folds": 6,
+   "auc_mean": 0.504698,
+   "auc_max": 0.508202,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "field_raw": {
+   "n_folds": 6,
+   "auc_mean": 0.551886,
+   "auc_max": 0.583868,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "field_new": {
+   "n_folds": 6,
+   "auc_mean": 0.504722,
+   "auc_max": 0.50822,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "field_new_cov": {
+   "n_folds": 6,
+   "auc_mean": 0.510698,
+   "auc_max": 0.516109,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  }
+ },
+ "flagged": [],
+ "max_auc_observed": 0.583868
+}

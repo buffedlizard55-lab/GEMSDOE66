@@ -40,6 +40,21 @@ def _h67_geophys_files():
 
 H67_GEOPHYS_FILES = _h67_geophys_files()
 
+def _lidar02_files():
+    """Whatever the LIDAR-02 run card clears, by its own filenames -- fail closed."""
+    p = ROOT / "docs" / "data" / "run-card-lidar02.json"
+    if not p.exists():
+        return []
+    card = json.loads(p.read_text())
+    rel = card.get("release") or {}
+    if not card.get("promote") or not rel.get("offered_for_download"):
+        return []
+    return sorted({rel["tif"], rel["zeros_tif"], rel["zip"], rel["manifest"],
+                   rel["tif"] + ".receipt.json", rel["zeros_tif"] + ".receipt.json"})
+
+
+LIDAR02_FILES = _lidar02_files()
+
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 # The LIDAR-01 session's cleared release (see docs/data/run-card-lidar01.json). A second,
 # separately-named candidate from a parallel session; it is allow-listed here for the same
@@ -86,7 +101,7 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     historical_names = {item["file"] for item in historical}
     names = {path.name for path in (DOCS / "downloads").iterdir()}
     assert not (names & historical_names)
-    allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES)
+    allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES + LIDAR02_FILES)
     assert names <= allowed, names - allowed
     # and if the H67 geophysics lane is NOT cleared, none of its files may be present
     if not H67_GEOPHYS_FILES:

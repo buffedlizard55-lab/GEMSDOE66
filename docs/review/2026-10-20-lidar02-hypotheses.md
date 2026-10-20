@@ -1,0 +1,22 @@
+# LIDAR-02 candidate hypotheses — ranked before implementation (2026-10-20)
+
+Lane: native-resolution lidar scarp channels. Ranking basis: expected HOLDOUT-DTI
+improvement per implementation cost, judged before any new number was computed in
+this session. "Untried" was checked against `registry/hypotheses.json` (19 items),
+`src/gems66/`, `src/gemsdoe66/`, `scripts/lane_run.py`, the LIDAR-01 run card
+(promoted) and the H66-C verdict (negative) on 2026-10-20.
+
+| rank | id | layers | physical signature targeted | why it can catch a catalogue-missing fault | differs from this repo | cost | expected gain |
+|---|---|---|---|---|---|---|---|
+| 1 | **LIDAR-02-A (implemented this session)** | lidar u8 stack: upface/downface/cross/step/coh100/lapneg/lappos/relief/valid | local-SNR prominence (antislope template amplitude ÷ 1 km-window robust roughness) × signed Steger persistence at ≥2 scales × Frangi max; kernel max-cover emission | detectability ranking promotes low-amplitude basin/piedmont scarps that coarse mapping misses; no inventory input, so no catalogue rediscovery | LIDAR-01 = HGB + catalogue-distance dynamics + top-K (basin reversal IR-74); H66-C = diffusion inversion + TIGER + 200 m gap gate; 40 km-block MAD exists (channels66) but not a 1 km denominator; persistence here is across *scales* with sign consistency, not H67-C along-strike corridor length; max-cover never applied to the scarp field | low–medium (channels + holdout + emission, all CPU) | highest: attacks the one measured defect (IR-74) with a metric-matched emission |
+| 2 | G-03 polarity pairing vs local dip azimuth | same stack + detrended-elevation aspect from `training_features.tif` (det_elev) | ordered crest→toe polarity (lapneg adjacent to lappos across a step) whose down-thrown side matches the local structural dip direction | fan-head trenches and terrace risers have polarity set by drainage, not by block tilt; a young fault crossing a fan keeps tectonic polarity where drainages reverse | listed as G-03 in hypotheses.json, status blank/never run; LIDAR-04 was folded into it | medium (cross-profile pairing at 100 m aggregate is approximate) | medium; strong mimic rejection but the 100 m extrema stack may not preserve profile order |
+| 3 | H67-D strike bimodality / X-junction | coh100 + strike bands | two coherent scarp strikes ≥20° apart within 5 km (conjugate/transfer junctions, geothermal upflow loci) | intersecting structures are mapping targets in their own right and single-strike detectors split their vote | surface exists in `src/gems66/h67_hypotheses.py` (bimodal_x) but was never the primary arm of a gated holdout in this repo | low (surface exists) | low–medium as a *standalone* field; better as a multiplier, which is a different experiment |
+| 4 | G-04 scarp × potassium corridor | lidar stack + GeoDAWN radiometrics (`external/geodawn_rad_u8.tif`, in manifest, fetchable via the same verified mirror — checked 2026-10-20) | scarp lineament coincident with K/Th alteration corridor edges | hydrothermal alteration follows permeable (often unmapped) faults; a scarp with an alteration halo is likelier active/permeable | radiometric fusion was tried in sibling repos (owner-reported r11f 0.1589, GEMSDOE46) but not as an AND-gate on this lane's gated holdout; **lane-drift risk** — the lane text is lidar-only | medium | unknown; deprioritised on lane-discipline grounds, not physics |
+| 5 | G-05 true native 1 m Scarplet + 2–20 m Steger/Frangi | USGS 3DEP 1 m DEM tiles | the brief's literal operators at native scale | sub-100 m scarp geometry (profile shape, κt) is destroyed by aggregation; native profiles separate diffused tectonic steps from sharp cultural edges | never run anywhere in the family (every session discloses the same substitution) | **not viable this session**: source named — USGS National Map / 3DEP (`https://prd-tnm.s3.amazonaws.com/`, TNMAccess API) and the competition's `1m_DEM_links.csv`; checked 2026-10-20: sandbox outbound access is limited to github/pypi hosts and both USGS and census endpoints returned no response; DrivenData data tab is login-walled. Free and official, but not obtainable from here. | highest in principle, blocked in fact |
+
+## Decision
+
+Validate rank 1 (LIDAR-02-A) on the spatially blocked holdout under
+`registry/preregistration-lidar02.json`. No submission slot is touched unless
+every preregistered gate condition is met; a failed gate is published as a
+negative result with no download offered.

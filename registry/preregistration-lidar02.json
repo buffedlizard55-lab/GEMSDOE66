@@ -1,0 +1,88 @@
+{
+ "schema": "gems-preregistration/1",
+ "session": "LIDAR-02 (branch arena/c73a2700-gemsdoe66)",
+ "generated_utc": "2026-10-20T18:18:27Z",
+ "lane": "Native-resolution lidar scarp channels: slope-aware scarplet template (Sare & Hilley, JOSS 2018, doi:10.21105/joss.01066; AGU 2015 T31A-2838) + Steger (IEEE TPAMI 20(2):113-125, 1998) / Frangi (MICCAI 1998, LNCS 1496:130-137) multiscale lines, aggregated to 100 m cells.",
+ "scale_disclosure": "The 1 m/2 m bare-earth DEM is NOT reachable from this sandbox (outbound access is limited to github.com/pypi hosts; curl to census.gov and USGS S3 returned no response on 2026-10-20; DrivenData data tab is login-walled). Inputs are the hash-pinned owner-mirrored stacks in registry/data_manifest.json, chiefly external/lidar_scarp_features_u8.tif (per-100 m-cell extrema of descriptors computed upstream from USGS 3DEP 1 m tiles). Steger/Frangi are therefore evaluated at sigma = 1.0-4.0 x 100 m cells. The native 2-20 m operator is NOT measured in this session; every result is labelled with this disclosure. This is the same disclosed deviation as LIDAR-01 and H66-C.",
+ "hypothesis_primary": {
+  "id": "LIDAR-02-A",
+  "statement": "A scarp field built as (a) local-SNR prominence: the slope-aware antislope template amplitude divided by a 1 km-window robust background roughness (median absolute lapneg/lappos response), multiplied by (b) a cross-scale persistence gate requiring a Steger line of consistent sign at >= 2 of the evaluated scales, emitted by (c) batched greedy kernel max-cover under the 300 m triangular DTI kernel, recovers withheld catalogue segments in lidar-covered spatial blocks better than the global raw scarp field emitted by spacing-constrained top-K at the same dot budget, and the gain is not confined to the high-relief (range-front) stratum.",
+  "mechanism": "Raw amplitude ranks range-front scarps first everywhere because both signal and topographic noise scale with relief; dividing by local roughness ranks by detectability, so a low but isolated basin/piedmont step can outrank a large step embedded in rugged terrain. Single-scale sharp cultural edges (field boundaries, road cuts) do not persist across smoothing scales with consistent Hessian sign, while a degraded tectonic scarp (a diffused step) does. Max-cover emission spends each dot where the not-yet-covered field mass inside the 300 m scoring kernel is largest, matching the marginal-credit structure of the metric (alpha=0.2) instead of clustering dots on one strong lineament.",
+  "named_non_fault_mimic": "Fluvial terrace riser / alluvial-fan head incision (antislope-facing, cross-scale persistent, locally prominent). Secondary mimics: landslide headscarps, paleo-shorelines, canal banks.",
+  "why_off_catalogue": "Catalogue mapping is biased toward high-relief range fronts where scarps are obvious in coarse DEMs/air photos (inherited measurement: SGMC novelty truth is 59.3% range-front vs 25.2% of footprint). A detectability-ranked field promotes exactly the low-amplitude, low-relief scarps that coarse mapping misses, and none of its inputs reads any fault inventory, so it cannot rediscover-the-catalogue by construction.",
+  "differs_from_repo": "LIDAR-01 (promoted): regularised HGB over 58 channels incl. catalogue-distance dynamics, spacing-constrained top-K emission; measured basin-floor reversal (IR-74). H66-C (negative): diffusion-inversion a_hat/kt_hat ranks + TIGER veto + 200 m catalogue-gap gate + d4 top-K. channels66/scarp66 compute a 40 km-blockwise MAD robust-z of amplitude; LIDAR-02-A uses a 1 km local window denominator, a >=2-scale signed-persistence hard gate (multiscale_line_fields in gems66.lidar_channels only ORs scales), and kernel max-cover emission (used in this repo only on the H67 geophysics field, never on the lidar scarp field). No trained classifier and no catalogue-derived feature is used in the primary arm."
+ },
+ "experiments": [
+  {
+   "id": "E1",
+   "what": "Rebuild lidar channels from the fetched hash-verified u8 stack (dequantise per gems66.lidar_channels), compute template, Frangi/Steger multiscale fields with per-scale signed line masks, local-SNR prominence and persistence fields. Leakage canary: per-channel AUC of every candidate channel against withheld whole segments in the blocked holdout; AUC > 0.90 = leakage stop.",
+   "outputs": [
+    "data/derived/lidar02_channels.f32 (git-ignored)",
+    "evidence/lidar02_canary.json"
+   ]
+  },
+  {
+   "id": "E2",
+   "what": "Spatial-block hide-and-recover holdout (src/gems/holdout.py spatial_block_holdout; block 60 px, buffer 3 px, min lidar fraction 0.9, 6 folds seeds 0-5, 8-connected-component segment proxy DISCLOSED - authoritative trace IDs not in the reachable manifest). Four arms at identical eligibility and budget: (a) mass-matched random, (b) raw global scarp field + spacing top-K (deterministic LIDAR-01-like baseline WITHOUT its HGB/catalogue features - disclosed simplification), (c) LIDAR-02-A field + spacing top-K, (d) LIDAR-02-A field + batched kernel max-cover (primary). Eligibility: footprint & lidar-covered & held-block+300 m halo domain & NOT visible-fault pixels (pixel-exact mask per protocol). Per-fold dots = round(38000 * eligible_fold_domain / eligible_full_grid). Pooled DTI (src/gems/metric.py, alpha 0.2, beta 0.8, R 300 m) + per-fold mean with 95% CI (mean +/- 1.96 se over folds, as lane_run.mean_ci) + paired differences. Relief strata from the lidar relief band terciles over footprint&lidar cells (computed once, full grid, no truth used); per-stratum DTI per fold pooled by summed TP/FP/FN terms where defined.",
+   "outputs": [
+    "evidence/lidar02_holdout.json"
+   ]
+  },
+  {
+   "id": "E3",
+   "what": "Only if the gate in E2 is met: emit the full-grid candidate (arm d recipe, 38000 dots, binary 1.0 dots on 0.0, float32 EPSG:32611, NaN only outside footprint) with src/gems/submission_writer.py; validate with src/gems/validate_submission.py against sample_submission + training_features; uniqueness vs every registry/rasters/*.tif plus every docs/downloads/*.tif and artifacts/**/*.tif on BOTH the pre-placement surface and the final dots (Spearman |rho| limit 0.90, within-3px dot fraction limit 0.70 with random-placement chance correction reported alongside the raw value, sha256/pixel identity). If the gate is not met: write the negative run card, keep any diagnostic raster out of docs/downloads/, spend no submission slot.",
+   "outputs": [
+    "evidence/lidar02_uniqueness.json",
+    "docs/data/run-card-lidar02.json"
+   ]
+  }
+ ],
+ "gate_promote_requires_all": [
+  "canary: no candidate channel AUC > 0.90 on any fold",
+  "arm (d) pooled HOLDOUT-DTI > arm (b) pooled HOLDOUT-DTI",
+  "paired per-fold difference (d)-(b): 95% CI lower bound > 0",
+  "paired per-fold difference (d)-(a) random: 95% CI lower bound > 0",
+  "not confined to range fronts: arm (d) per-stratum pooled DTI exceeds arm (a) in the low-relief OR mid-relief stratum (in addition to pooled), each stratum requiring >= 100 pooled withheld positives to be judged; strata below that are reported as UNJUDGED, not passed",
+  "uniqueness: no sha256/pixel twin; max |Spearman| <= 0.90 on surface and dots; dots are not a duplicate under the chance-corrected rule AND the raw within-3px fraction and its random-placement baseline are both reported (a raw > 0.70 against a much denser raster is reported as WARN, following IR-73/IR-66-UNIQ-01 precedent, never silently passed)",
+  "validator: passed == true with 0 FAIL and 0 SKIPPED"
+ ],
+ "budget": {
+  "experiments_max": 3,
+  "wall_hours_max": 2,
+  "submission_slots_used": 0
+ },
+ "emission_constants": {
+  "full_grid_dots": 38000,
+  "min_sep_px_topk_arms": 2.8,
+  "kernel_m": 300,
+  "alpha": 0.2,
+  "beta": 0.8
+ },
+ "number_labelling": "Every measured number is HOLDOUT-DTI with evaluator src/gems/metric.py unless copied from an organiser receipt (none exists in this session). Owner-reported leaderboard numbers from the brief are labelled OWNER-REPORTED (UNVERIFIED) wherever used.",
+ "known_limitations_declared_up_front": [
+  "No raw 1 m DEM reachable; native 2-20 m Steger/Frangi not measured (see scale_disclosure).",
+  "No cultural-feature (TIGER) raster in the reachable manifest (registry/data_manifest.json has no tiger entry) and census.gov unreachable from sandbox: the brief's cultural mask cannot be applied; the cross-scale persistence gate is a partial, disclosed proxy only. Logged as an irregularity.",
+  "Segment IDs are the 8-connected-component proxy (authoritative INGENIOUS trace CSV not in reachable manifest).",
+  "Catalogue-rediscovery holdout is a known imperfect surrogate for the hidden expert truth (H66-C measured an anti-correlated instrument); the gate is therefore necessary-not-sufficient and no leaderboard projection will be made."
+ ],
+ "amendments": [
+  {
+   "utc": "2026-10-20 (before E2; no holdout number computed yet)",
+   "change": "Cross-scale persistence counted after 3x3 (1 px) dilation of each scale's Steger line mask; gate remains count>=2.",
+   "reason": "First E1 build found only 6,586 of 3,894,460 lidar cells persistent at exact-pixel coincidence (Steger line position migrates with sigma), which cannot support a mass-matched 38,000-dot emission. 1 px tolerance is the standard line-correspondence allowance and is below the 300 m scoring kernel.",
+   "evidence": "data/derived/lidar02_channels.json first build (persist_gate_cells=6586); rebuilt after amendment."
+  },
+  {
+   "utc": "2026-10-20 (before E2; no holdout number computed yet)",
+   "change": "Arm (d) max-cover objective field is field_new + 0.01*rank01(prominence) (stored as field_new_cov). Arm (c) top-K keeps the pure hard-gated field_new.",
+   "reason": "Hard-gated mass sits on 98,954 cells; once the 300 m kernel covers them the marginal gain is exactly 0 and a pure greedy would place remaining dots by array-order accident. The 1% ungated-prominence tail makes the tail placement prominence-ordered (same physical quantity, no new information source) while gated mass dominates by two orders of magnitude.",
+   "evidence": "E1 rebuild counts in scripts/run_lidar02.py channels log (persist_gate_cells=98954 at response_pct=95)."
+  },
+  {
+   "utc": "2026-10-20 (after E2 negative result, before E2b is run)",
+   "change": "Add experiment E2b, the FINAL experiment of this session (E1+E2+E2b = 3 experiments; E3 gated emission is production, not an experiment). E2b keeps identical folds, eligibility, dot budgets, evaluator and gate conditions. Arms: random, raw_topk (reference), raw_maxcov (field_raw + max-cover; isolates the emission effect measured in E2 as +0.0185 on field_new), promup_topk and promup_maxcov where promup = rank01(upface_max/(rough1km+floor)) * persist_gate (prominence WITHOUT the veto subtraction; max-cover objective adds the same 0.01 rank tail). Promotable candidate selection rule, fixed in advance: the higher-pooled-DTI arm among {promup_maxcov, raw_maxcov}; it must satisfy ALL original gate conditions (pooled > raw_topk, paired CI vs raw_topk and vs random lower bounds > 0, beats random in low or mid relief stratum under the ORIGINAL per-stratum pooled DTI definition, canary clear incl. new channels, uniqueness, validator). Multiplicity (2 candidate arms, unadjusted CIs) is disclosed in the run card. Per-stratum kernel-credit lift is added as a REPORTED DIAGNOSTIC ONLY (not a gate change).",
+   "reason": "E2 falsified the veto-subtracted prominence field (new_maxcov BELOW random, paired CI excludes 0; basin stratum 0.0092 vs random 0.0858) while isolating two mechanism-level signals: max-cover emission beats top-K on an identical field, and the E1 canary ranks raw upface_max first (AUC 0.555) while veto-subtracted template_net is an anti-signal (0.477). E2b tests exactly those two diagnosed mechanisms and nothing else. Adaptivity is disclosed: E2b was motivated by E2 diagnostics, so its holdout is exploratory-confirmatory, not untouched.",
+   "evidence": "evidence/lidar02_holdout.json, evidence/lidar02_canary.json"
+  }
+ ]
+}

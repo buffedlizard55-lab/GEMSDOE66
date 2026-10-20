@@ -76,6 +76,24 @@ def _k66_files():
 
 K66_FILES = _k66_files()
 
+
+def _lidar02_files():
+    """LIDAR-02 release files, read from its own run card (fail closed: a card that
+    does not promote contributes no allow-listed names)."""
+    p = ROOT / "docs" / "data" / "run-card-lidar02.json"
+    if not p.exists():
+        return []
+    card = json.loads(p.read_text())
+    rel = card.get("release") or {}
+    if not card.get("promote") or not rel.get("offered_for_download"):
+        return []
+    names = {rel["tif"], rel["zeros_tif"], rel["zip"], rel["manifest"],
+             rel["tif"] + ".receipt.json", rel["zeros_tif"] + ".receipt.json"}
+    return sorted(names)
+
+
+LIDAR02_FILES = _lidar02_files()
+
 ALLOWED_RASTERS = {
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
@@ -101,7 +119,7 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
             path_part = urlsplit(href).path.lower()
             if path_part.endswith((".tif", ".tiff", ".zip")):
                 rel = urlsplit(href).path
-                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES), f"{name}: {href}"
+                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + LIDAR02_FILES), f"{name}: {href}"
     # the H67 geophysics lane may publish exactly what its own run card clears (fail closed)
     import glob as _glob
     _h67 = []
@@ -116,7 +134,7 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
-    ] + K66_FILES + LIDAR01_FILES)
+    ] + K66_FILES + LIDAR01_FILES + LIDAR02_FILES)
 
 
 def test_run_card_labels_every_number_and_claims_no_qualified_score():

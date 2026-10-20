@@ -6,20 +6,15 @@
 [`docs/review/`](docs/review/). Keep **Maximize P(Win)** and **Own the Outcome** central;
 negative results and disclosed stops are valid outcomes.
 
-**Three candidates now live on the site; none of them is `ORGANIZER-CONFIRMED`, and the site does
+**Four candidates now live on the site; none of them is `ORGANIZER-CONFIRMED`, and the site does
 not rank them against each other.**
 
 | candidate | lane | status | download |
 |---|---|---|---|
+| `gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z` | **LIDAR-02 lidar scarp field + kernel max-cover emission** | **promoted on its own preregistered gate (2026-10-20); slim off-range-front margin and a falsified sister field disclosed in the run card** | yes |
 | `gems66-h67-scarp-lane-novelty-40000dots-v2` | H67-1 scarp-lane novelty | disclosed, not promoted | yes |
 | k66 `K^0.5` consensus (parallel session 66) | K-anchored consensus | listed with its own register | yes |
 | `gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59` | **H66-C native-resolution LiDAR scarp channels** | **NOT offered — scientific gate NOT MET (0.0979 vs frozen best 0.1195); bytes kept under `artifacts/h66c/` with published hashes** | no |
-
-The H66-C file is unique and format-valid, but its gate is not met, so per the brief it is
-**not offered for download**; the bytes stay under `artifacts/h66c/` with their sha256 published
-and it spent no submission slot. See
-[`docs/review/2026-10-12-h66c-verdict.md`](docs/review/2026-10-12-h66c-verdict.md) and
-[`docs/data/run-card-h66c.json`](docs/data/run-card-h66c.json).
 
 ## 0. SESSION-66 STANDING CHARTER — parallel session, merged from `main`
 >
@@ -77,6 +72,43 @@ and it spent no submission slot. See
 > [Appendix A](#appendix-a--original-project-brief-preserved-verbatim-as-historical-source-text) and
 > [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
 > session-66 design.
+
+## LIDAR-02 (2026-10-20, branch `arena/c73a2700-gemsdoe66`) — promoted on its own gate, with a falsified field on the record
+
+Run card [`docs/data/run-card-lidar02.json`](docs/data/run-card-lidar02.json) · preregistration
+[`registry/preregistration-lidar02.json`](registry/preregistration-lidar02.json) · hypotheses
+[`docs/review/2026-10-20-lidar02-hypotheses.md`](docs/review/2026-10-20-lidar02-hypotheses.md) ·
+session review [`docs/review/2026-10-20-lidar02-session.md`](docs/review/2026-10-20-lidar02-session.md)
+
+**Cleared for download:** `gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif`
+(sha256 `4dd82c24411ebbc810eaa806a326c57763a06ac156a0d69bc3d8c3200594f0a7`), 38,000 binary dots,
+float32 EPSG:32611 100 m, NaN only outside the footprint, plus an all-finite `-zeros` sibling for
+the portal's `[0, 1]` checker. Validator 15 PASS / 0 FAIL / 0 SKIPPED. **No organizer score is
+claimed; 0 submission slots used.**
+
+What the session actually measured, in order. (E2) The preregistered LIDAR-02-A field —
+local-SNR antislope prominence × cross-scale Steger persistence — was **falsified**: HOLDOUT-DTI
+0.0827 pooled, *below* mass-matched random (0.0956), paired CI excludes 0, basin stratum 0.0092 vs
+random 0.0858. The veto-subtracted template is an anti-signal on this instrument (canary AUC 0.477).
+(E2b, pre-written amendment 3) Two diagnosed mechanisms survived: max-cover emission beats
+spacing top-K on *identical* fields, replicated three times (+0.0185, +0.0170, +0.0100; every CI
+excludes 0), and the promoted candidate is therefore the conventional scarp field
+(0.5·rank(template_net_coh) + 0.5·rank(Frangi)) emitted by batched greedy kernel max-cover:
+HOLDOUT-DTI pooled **0.1185** vs raw top-K 0.1086 and random 0.0956 (6 folds, 40,326 withheld
+positives pooled, `src/gems/metric.py`). The off-range-front condition passes only via mid relief
+(+0.0012 over random; basin still below random, kernel-credit lift 0.38) — disclosed on the
+download panel, not hidden (IR-LIDAR02-GATE-01). Uniqueness over 73 comparators: max |ρ| 0.034
+(dots) / 0.149 (surface); one literal within-3px trip against the 311k-dot raster at lift 1.016
+over its own random control (IR-73 density artifact, reported verbatim).
+
+Also fixed this session: the published site contained literal git merge-conflict markers
+(IR-LIDAR02-SITE-01).
+
+The H66-C file is unique and format-valid, but its gate is not met, so per the brief it is
+**not offered for download**; the bytes stay under `artifacts/h66c/` with their sha256 published
+and it spent no submission slot. See
+[`docs/review/2026-10-12-h66c-verdict.md`](docs/review/2026-10-12-h66c-verdict.md) and
+[`docs/data/run-card-h66c.json`](docs/data/run-card-h66c.json).
 
 ## H67 geophysics lane (branch `arena/855725e1`, 2026-10-12) — ONE candidate CLEARED
 

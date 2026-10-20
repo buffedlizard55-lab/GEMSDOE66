@@ -84,11 +84,23 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             _r = _card["raster"]
             k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
             k66 = rel.split("/")[-1] in k66_names
-            assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
+            # LIDAR-02 (2026-10-20): names read from its own run card, fail closed.
+            _c2p = ROOT / "docs" / "data" / "run-card-lidar02.json"
+            _l02 = set()
+            if _c2p.exists():
+                _c2 = _json.loads(_c2p.read_text())
+                _rel2 = _c2.get("release") or {}
+                if _c2.get("promote") and _rel2.get("offered_for_download"):
+                    _l02 = {_rel2["tif"], _rel2["zeros_tif"], _rel2["zip"]}
+            l02 = rel.split("/")[-1] in _l02
+            assert rel in allowed or k66 or l02, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
             links_h67 = any("gems66-h67" in h for h in hits)
             links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
+            if any("gems66-lidar02" in h for h in hits):
+                assert "HOLDOUT-DTI" in html, f"{f.name} links the lidar02 raster without labelled holdout numbers"
+                assert "IR-73" in html, f"{f.name} links the lidar02 raster without the raw-overlap disclosure"
             if links_h67:
                 assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
                 assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
