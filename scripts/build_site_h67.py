@@ -295,8 +295,10 @@ def download_block(a: dict) -> str:
 so nothing is published in <code>docs/downloads/</code>. This is a deliberate, logged outcome,
 not an error.</p></div>"""
     c = a["card"]
-    r = a["raster"]
     if a["cleared"]:
+        # A failed or incomplete assessment may have no raster payload at all. Keep the
+        # site builder fail-closed: do not index release-only fields until every gate clears.
+        r = a["raster"]
         rows = "".join(
             f'<tr><th>{html.escape(k)}</th><td><span class="pill ok">PASS</span> '
             f'<span class="small">{html.escape(str(v["detail"]))}</span></td></tr>'

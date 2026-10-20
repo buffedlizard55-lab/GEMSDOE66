@@ -65,10 +65,6 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
     allowed = {
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
-        # LIDAR-01 session: cleared on its own run card (docs/data/run-card-lidar01.json)
-        # and named by docs/downloads/current_release.json.
-        "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
-        "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
         # H66-C is deliberately absent: its gate is not met, so it is never offered here.
     }
     linked_any = False

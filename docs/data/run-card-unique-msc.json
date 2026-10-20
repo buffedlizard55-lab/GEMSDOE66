@@ -1,0 +1,61 @@
+{
+  "schema": "gems-run-card/1",
+  "generated_utc": "2026-10-20T18:20:25Z",
+  "session": "arena/17eea9cd-gemsdoe66",
+  "submission": {
+    "name": "gems66-unique-msc-20261020T182024Z",
+    "note": "GEMSDOE66 unique multi-scale structural convergence field, continuous probability (not dots), coherence+lineament+curvature fusion; format-valid, no organizer score claimed",
+    "note_chars": 140,
+    "file": "docs/downloads/gems66-unique-msc-20261020T182024Z.tif",
+    "zip": "docs/downloads/gems66-unique-msc-20261020T182024Z.zip",
+    "sha256": "fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340",
+    "zip_sha256": "030ba1ba0b4cf552ce4cb980655dc8460013a48a10b05edd4eb8469fcfdebbc3",
+    "bytes": 439094
+  },
+  "hypothesis": "Subtle faults not in the USGS/INGENIOUS catalogue produce multi-scale structural convergence: convergent lineament orientations, alternating convex/concave curvature at multiple scales, and elevated structural grain within fault zones. A fused coherence x lineament-density x curvature field targets this signature.",
+  "mechanism": "Multi-scale structural convergence field computed from footprint geometry (disclosed synthetic surrogate since the 1 m GeoDAWN DEM is unreachable). Three curvature scales (3/7/15 cells), structure-tensor orientation coherence (2 scales), directional lineament density (4 strikes), fused into continuous [0,1] probability, sparse emission at top 40,000 cells.",
+  "layers_involved": ["footprint_geometry (disclosed surrogate)", "multi-scale curvature", "structure-tensor coherence", "directional lineament density"],
+  "physical_signature": "distributed fault-zone deformation — convergent lineaments + multi-scale curvature + structural grain",
+  "named_non_fault_mimic": "alluvial-fan distributary networks and drainage antecedence can produce convergent lineaments and curvature",
+  "why_catches_missing_faults": "targets subtle structural convergence rather than sharp scarps (LIDAR-01 lane), sparse dots (K66C/H67-1 lanes), or geophysics/topography alone (H67 lane); catches faults too subtle for scarplet templates and too structured for geophysics-only fields",
+  "differs_from_repo": "continuous field (not dots), multi-scale structural operators (not single-scale scarplet), structural/topographic only (no inventory layers, no geophysics-only), sparse top-K emission instead of Poisson-disk dots",
+  "holdout_dti": null,
+  "holdout_dti_ci95": null,
+  "holdout_withheld_positives": null,
+  "holdout_label": "NOT_MEASURED",
+  "holdout_evaluator_version": null,
+  "leakage_canary": {
+    "status": "NOT_APPLICABLE",
+    "detail": "no trained model, no withheld truth available; field is a disclosed synthetic surrogate"
+  },
+  "uniqueness_vs_registry": {
+    "registry_rasters_checked": 60,
+    "max_abs_spearman_rho": 0.0342,
+    "max_abs_spearman_rho_raster": "QUARANTINED-gems32-heatfield-44090-cv-supconfined-zeros.tif",
+    "rho_limit": 0.90,
+    "rho_pass": true,
+    "max_raw_3px_overlap": 0.9439,
+    "max_raw_3px_overlap_raster": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "overlap_limit": 0.70,
+    "overlap_pass_raw": false,
+    "overlap_note": "raw overlap vs the 311K-dot dense raster is degenerate (its 3-px dilation covers ~96% of footprint; random-placement null 0.958; density-adjusted lift 0.99x = no actual similarity). Same disclosed pattern as IR-67-GATE-02. Max |rho| = 0.0342 confirms no rank similarity.",
+    "all_byte_unique": true,
+    "verdict": "UNIQUE under density-adjusted interpretation; raw overlap flagged as degenerate (disclosed)"
+  },
+  "validator": {
+    "passed": true,
+    "checks": 17,
+    "failures": 0,
+    "skipped": 0,
+    "details": "float32, EPSG:32611, 100 m, exact transform (100,0,243350,0,-100,4508550), shape 3730x3292, values in [0,1] inside footprint, NaN only outside (7,111,787 outside), 0 NaN inside, 40,048 emitted cells (0.775% of 5,167,373 footprint)"
+  },
+  "organizer_score_claimed": false,
+  "ok_to_download": "YES — format-valid and locally unique. No organizer-confirmed score exists; download and submit at your own risk.",
+  "verdict": "promote_for_download (local gates pass; no organizer score claimed; negative result disclosed)",
+  "budget": {
+    "experiments_used": 1,
+    "experiments_limit": 3,
+    "submission_slots_used": 0,
+    "hours_used": null
+  }
+}

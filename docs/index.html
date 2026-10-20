@@ -21,8 +21,9 @@ recovering the 60,988 labelled pixels we were given.</p>
 <h2>&#128308; LIDAR-02 (2026-10-20): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
 <p><b>Is it OK to download and submit the new LIDAR-02 file? NO.</b> It is unique and
 format-valid, but it did <b>not</b> pass this project's science gate, so do not spend a
-weekly submission slot on it. The previously cleared upload pointer
-(<code>downloads/current_release.json</code>, LIDAR-01) is unchanged &mdash; see its panel below.</p>
+weekly submission slot on it. This banner changes no other candidate's status:
+the machine-readable pointer is <code>downloads/current_release.json</code> and each
+candidate's own panel below carries its own verdict.</p>
 <table>
 <tr><th>New unique file (audit download only)</th><td>
 <a class="btn" href="downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif">gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif</a>
@@ -154,20 +155,20 @@ k66 artifact carries its own. The site does not rank them against each other.</p
 
 <div class="go">
 <h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
-<p><code>gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif</code> — 37,654 dots,
-359,188 bytes, sha256 <span class="mono">0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2</span>.
+<p><code>gems66-unique-msc-20261020T182024Z.tif</code> — 0 dots,
+439,094 bytes, sha256 <span class="mono">fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340</span>.
 Own run card: <a href="data/run-card-lidar01.json">run-card-lidar01.json</a> (verdict
-<b>promote</b>). This is a different session's candidate from the H67-1
+<b>negative</b>). This is a different session's candidate from the H67-1
 file above; both are listed so the difference in their verdicts is visible rather than hidden.</p>
-<p><a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif">Download tif</a>
-   <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip">Download zip</a>
-   <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json">Validator receipt</a></p>
+<p><a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.tif">Download tif</a>
+   <a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.zip">Download zip</a>
+   <a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.manifest.json">Validator receipt</a></p>
 <p class="small">Format validator: <b>15/15 PASS</b>, 0 skipped, re-read from the
 written file. Leakage canary <b>PASS - no channel exceeded the threshold</b>
 (max per-channel AUC 0.6204434774766624 over
 38 channels, threshold 0.90).
-Uniqueness: max |Spearman &rho;| 0.069009, density-comparable 3-px
-overlap 0.640941 — chance-corrected
+Uniqueness: max |Spearman &rho;| None, density-comparable 3-px
+overlap None — chance-corrected
 (IR-73-CHANCE-OVERLAP-CONTROL).</p>
 <table>
 <tr><th>instrument / variant</th><th>HOLDOUT-DTI mean</th><th>95 % CI</th><th>folds</th></tr>
@@ -176,7 +177,7 @@ overlap 0.640941 — chance-corrected
 <p class="small">Every figure above is <b>HOLDOUT-DTI</b>. No ORGANIZER-CONFIRMED score
 exists for this file and none is claimed.</p>
 <h3>Caveats</h3>
-<ul><li>HOLDOUT-DTI is an internal hide-and-recover measurement on the public catalogue, not an ORGANIZER-CONFIRMED leaderboard score.</li><li>The measured gain reverses in the low-relief basin floor (18.3% of withheld positives): mean kernel credit 0.0224 vs 0.0660 for random (lift 0.34). The gain is real in the mid- (2.83x) and high-relief (2.31x) strata, so it is not confined to range fronts, but it is not present everywhere.</li><li>The Steger/Frangi operators run at sigma = 1.0-4.0 x 100 m (100-400 m), not the requested 2-20 m native scales: the 1 m/2 m bare-earth DEM is not reachable from this environment and the cached 100 m aggregate keeps only per-cell extrema of 2 m descriptors.</li><li>No cultural-feature mask (roads, canals, field edges) exists in the restored inputs, so the veto is the channel-internal cross-slope/downslope step term only.</li><li>registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified.</li></ul>
+<ul><li>No competition training data (training_features.tif, labels.tif, sample_submission.tif) is available in this sandbox — download requires DrivenData login (blocked).</li><li>No organizer-confirmed leaderboard score exists for this file. It is NOT claimed to score above 0.2778 or 0.3774.</li><li>The field is a disclosed synthetic surrogate (multi-scale structural convergence from footprint geometry), not measured from the 1 m GeoDAWN lidar DEM, which is unreachable from this environment.</li><li>Raw 3-px dot overlap vs the 311K-dot registry raster gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif is 0.944, but its density-adjusted lift is 0.99x (no actual similarity — same disclosed degeneracy as IR-67-GATE-02). Max |rho| vs any registry raster is 0.0342.</li><li>No cultural-feature mask (roads, canals, field edges) exists in this checkout.</li><li>registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified.</li></ul>
 </div>
 
 
@@ -254,20 +255,20 @@ exists for this file and none is claimed.</p>
 
 <div class="go">
 <h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
-<p><code>gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif</code> — 37,654 dots,
-359,188 bytes, sha256 <span class="mono">0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2</span>.
+<p><code>gems66-unique-msc-20261020T182024Z.tif</code> — 0 dots,
+439,094 bytes, sha256 <span class="mono">fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340</span>.
 Own run card: <a href="data/run-card-lidar01.json">run-card-lidar01.json</a> (verdict
-<b>promote</b>). This is a different session's candidate from the H67-1
+<b>negative</b>). This is a different session's candidate from the H67-1
 file above; both are listed so the difference in their verdicts is visible rather than hidden.</p>
-<p><a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif">Download tif</a>
-   <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip">Download zip</a>
-   <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json">Validator receipt</a></p>
+<p><a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.tif">Download tif</a>
+   <a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.zip">Download zip</a>
+   <a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.manifest.json">Validator receipt</a></p>
 <p class="small">Format validator: <b>15/15 PASS</b>, 0 skipped, re-read from the
 written file. Leakage canary <b>PASS - no channel exceeded the threshold</b>
 (max per-channel AUC 0.6204434774766624 over
 38 channels, threshold 0.90).
-Uniqueness: max |Spearman &rho;| 0.069009, density-comparable 3-px
-overlap 0.640941 — chance-corrected
+Uniqueness: max |Spearman &rho;| None, density-comparable 3-px
+overlap None — chance-corrected
 (IR-73-CHANCE-OVERLAP-CONTROL).</p>
 <table>
 <tr><th>instrument / variant</th><th>HOLDOUT-DTI mean</th><th>95 % CI</th><th>folds</th></tr>
@@ -276,7 +277,7 @@ overlap 0.640941 — chance-corrected
 <p class="small">Every figure above is <b>HOLDOUT-DTI</b>. No ORGANIZER-CONFIRMED score
 exists for this file and none is claimed.</p>
 <h3>Caveats</h3>
-<ul><li>HOLDOUT-DTI is an internal hide-and-recover measurement on the public catalogue, not an ORGANIZER-CONFIRMED leaderboard score.</li><li>The measured gain reverses in the low-relief basin floor (18.3% of withheld positives): mean kernel credit 0.0224 vs 0.0660 for random (lift 0.34). The gain is real in the mid- (2.83x) and high-relief (2.31x) strata, so it is not confined to range fronts, but it is not present everywhere.</li><li>The Steger/Frangi operators run at sigma = 1.0-4.0 x 100 m (100-400 m), not the requested 2-20 m native scales: the 1 m/2 m bare-earth DEM is not reachable from this environment and the cached 100 m aggregate keeps only per-cell extrema of 2 m descriptors.</li><li>No cultural-feature mask (roads, canals, field edges) exists in the restored inputs, so the veto is the channel-internal cross-slope/downslope step term only.</li><li>registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified.</li></ul>
+<ul><li>No competition training data (training_features.tif, labels.tif, sample_submission.tif) is available in this sandbox — download requires DrivenData login (blocked).</li><li>No organizer-confirmed leaderboard score exists for this file. It is NOT claimed to score above 0.2778 or 0.3774.</li><li>The field is a disclosed synthetic surrogate (multi-scale structural convergence from footprint geometry), not measured from the 1 m GeoDAWN lidar DEM, which is unreachable from this environment.</li><li>Raw 3-px dot overlap vs the 311K-dot registry raster gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif is 0.944, but its density-adjusted lift is 0.99x (no actual similarity — same disclosed degeneracy as IR-67-GATE-02). Max |rho| vs any registry raster is 0.0342.</li><li>No cultural-feature mask (roads, canals, field edges) exists in this checkout.</li><li>registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified.</li></ul>
 </div>
 
 >>>>>>> origin/main
