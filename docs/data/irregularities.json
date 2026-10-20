@@ -564,6 +564,26 @@
    "title": "Hand-edited Pages HTML was silently revertible by scripts/build_site.py",
    "detail": "docs/index.html, docs/executive-summary.html and docs/results.html were patched or rewritten by hand while the site generator still emitted the older negative-only content; any later builder run would have discarded the H66-C pages. Fixed by adding docs/data/release-h66c.json, docs/data/executive-summary-sections.json and docs/data/results-h66c-section.json, consumed by the generator, so a rebuild now reproduces the same pages.",
    "source_ids": []
+  },
+  {
+   "id": "IR-2026-OVERLAP-KERNEL-01",
+   "severity": "medium",
+   "status": "OPEN - KERNEL CONVENTION DISCLOSED; NEGATIVE GATE ROBUST",
+   "title": "The 3-pixel registry-overlap test does not specify a neighborhood kernel",
+   "detail": "The historical LIDAR-01 checker uses a 7x7 square binary dilation and produces candidate-side overlap 0.9210177 against gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif. An independent Euclidean radius-3-pixel distance check gives 0.8481967. Both exceed the literal 0.70 stop threshold, so the release verdict is negative under either convention. Future runs should preregister the kernel and use one shared implementation for surface and final-dot checks.",
+   "source_ids": [
+    "S02"
+   ]
+  },
+  {
+   "id": "IR-2026-H67-ORPHAN-01",
+   "severity": "high",
+   "status": "RESOLVED - FAIL-CLOSED WITHDRAWAL; SOURCE ARTIFACT MISSING",
+   "title": "H67 geophysics download copies had no matching source raster under artifacts/h67",
+   "detail": "A fresh scripts/build_site_h67.py assessment found the run-card-named source TIFF missing under artifacts/h67 while a staged TIFF/ZIP existed under docs/downloads. The fail-closed builder now handles assessments with no raster payload and withdraws only the H67 geophysics filename prefix. The site is NOT CLEARED and no H67 geophysics download remains public. The existing evidence/score record was not reinterpreted; restore authorized source bytes and rerun all release gates before considering publication.",
+   "source_ids": [
+    "S02"
+   ]
   }
  ]
 }

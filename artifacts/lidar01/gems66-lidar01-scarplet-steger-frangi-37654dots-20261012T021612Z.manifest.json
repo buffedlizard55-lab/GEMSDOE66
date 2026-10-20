@@ -105,5 +105,8 @@
   "skipped_checks_mean_unverified": false
  },
  "validator_passed": true,
- "receipt_kind": "local writer/validator receipt; NOT an organizer receipt"
+ "receipt_kind": "local writer/validator receipt; NOT an organizer receipt",
+ "release_status": "AUDIT ONLY \u2014 NOT CLEARED; literal registry dot-overlap stop rule exceeded",
+ "public_download": false,
+ "verdict": "negative"
 }

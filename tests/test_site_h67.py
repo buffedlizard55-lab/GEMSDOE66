@@ -40,6 +40,20 @@ def build():
     return build_site_h67
 
 
+def test_download_block_fails_closed_without_raster_payload():
+    import build_site_h67
+    assessment = {
+        "card": {"submission": {"name": "missing-output"}},
+        "cleared": False,
+        "reasons": ["raster missing"],
+        "gates": {"raster exists": {"pass": False, "detail": "not on disk"}},
+    }
+    html = build_site_h67.download_block(assessment)
+    assert "Download status: NOT CLEARED" in html
+    assert "Do not upload it" in html
+    assert "not on disk" in html
+
+
 def _links(path: Path):
     class _L(HTMLParser):
         def __init__(self):
@@ -92,11 +106,18 @@ def test_published_verdict_matches_a_fresh_recomputation(build):
         assert (DL / assessment["raster"]["zip"].name).exists()
     else:
         assert GO not in text
-        assert sorted(p.name for p in DL.iterdir()) == ["README.md"]
+        # docs/downloads is shared across lanes; a failed H67 assessment must withdraw only
+        # this lane's files, never assert that unrelated releases do not exist.
+        names = {p.name for p in DL.iterdir()}
+        assert "README.md" in names
+        assert not any(n.startswith("gems66-h67-geophys-maxcov-") and n.endswith((".tif", ".zip"))
+                       for n in names)
         for href, _ in build.NAV:
             for link in _links(DOCS / href):
-                assert not urlsplit(link).path.lower().endswith((".tif", ".tiff", ".zip")), \
-                    f"{href} links a submission file while nothing is cleared"
+                path = urlsplit(link).path.lower()
+                if path.endswith((".tif", ".tiff", ".zip")):
+                    assert "gems66-h67-geophys-maxcov" not in path, \
+                        f"{href} links this lane's file while its assessment is negative"
 
 
 @pytest.mark.skipif(not REFERENCE.exists(), reason="competition mirror not fetched")
