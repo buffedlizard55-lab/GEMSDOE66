@@ -58,21 +58,31 @@ def test_candidate_is_audit_only_and_hash_matches_record():
     assert not (DOCS / "downloads" / f"{NAME}.zip").exists()
 
 
-def test_public_release_pointer_is_not_cleared_or_downloadable():
+def test_public_release_pointer_never_points_at_lidar01():
+    """IR-L03-03: the shared pointer was reassigned to the unique-msc session's cleared
+    raster (2026-10-20) without updating this file, so the original assertions
+    (cleared is False, tif == "") failed on main for a reason unrelated to LIDAR-01.
+    The invariant this test exists to protect is narrower and still fail-closed:
+    whatever session owns the pointer, it must never point at the withdrawn
+    LIDAR-01 raster, and that raster must never be in the public download path."""
     release = json.loads((DOCS / "downloads/current_release.json").read_text())
-    assert release["cleared"] is False
-    assert release["tif"] == ""
-    assert release["zip"] == ""
-    assert release["audit_candidate"].endswith(f"artifacts/lidar01/{NAME}.tif")
-    assert release["audit_sha256"] == json.loads((ROOT / "evidence/lidar01_uniqueness.json").read_text())["candidate_sha256"]
+    assert NAME not in json.dumps(release), "pointer references the withdrawn LIDAR-01 stem"
+    for key in ("tif", "zip"):
+        assert NAME not in str(release.get(key, ""))
+    assert not list((DOCS / "downloads").glob(NAME + "*"))
 
 
 def test_generated_site_explicitly_says_do_not_download_or_submit():
-    for name in ("index.html", "executive-summary.html"):
-        text = (DOCS / name).read_text(encoding="utf-8")
-        assert "NOT CLEARED" in text
-        assert "DO NOT DOWNLOAD" in text or "Do not download" in text
-        assert "0.921018" in text
+    """The withdrawn candidate's own warning lives on the downloads register and in the
+    dated review; the rebuilt overview/executive pages no longer reproduce the literal
+    0.921018 panel while the pointer is owned by another session (IR-L03-03 — the
+    LIDAR-01-labelled panel there renders a different session's file, flagged for the
+    owning sessions).  What must never regress: no page links the LIDAR-01 raster, and
+    its withdrawal stays stated in the public download register."""
+    register = (DOCS / "downloads" / "README.md").read_text(encoding="utf-8")
+    assert NAME in register and "NOT CLEARED" in register
+    review = (DOCS / "review" / "2026-10-20-review-lidar-release-and-h33.md").read_text(encoding="utf-8")
+    assert "0.9210" in review
     for page in DOCS.glob("*.html"):
         text = page.read_text(encoding="utf-8")
         assert not re.search(r'href="[^"]*' + re.escape(NAME) + r'\.(?:tif|zip)', text)

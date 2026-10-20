@@ -228,6 +228,16 @@ def multiscale_line_fields(field: np.ndarray, scales=(1.0, 1.5, 2.0, 3.0, 4.0),
 
     Memory-frugal: only the running maxima, the accumulated line count and the
     arg-scale map are kept (one float32 array each), never the whole scale stack.
+
+    Fixed 2026-10-20 (IR-L03-TOOL-01): the Steger response threshold was taken
+    as a percentile of the running *Frangi vesselness* maximum and then applied
+    to the Steger Hessian response ``|l2|`` -- a unit mismatch (dimensionless
+    vesselness in ~[0, 1] vs curvature units of the input surface) that made
+    ``steger_frac300``'s operating point arbitrary.  The threshold is now the
+    ``response_pct`` percentile of the Steger response itself at the same
+    scale.  Frangi outputs are unchanged; Steger outputs of pre-fix runs
+    (LIDAR-01/02) are not reproducible from this version and their
+    ``steger_frac300`` values should be read with that caveat.
     """
     n = field.shape[0] * field.shape[1]
     best_fr = np.zeros(field.shape, dtype=np.float32)
@@ -243,8 +253,10 @@ def multiscale_line_fields(field: np.ndarray, scales=(1.0, 1.5, 2.0, 3.0, 4.0),
         best_fr = np.where(take, fr, best_fr)
         best_scale = np.where(take, np.float32(s), best_scale)
         del fr, take
-        thr = float(np.percentile(best_fr[~nan], response_pct)) if (~nan).any() else np.inf
-        _, line, _ = steger_lines(f, s, response_min=thr)
+        resp, line, _ = steger_lines(f, s, response_min=0.0)
+        thr = float(np.percentile(resp[~nan], response_pct)) if (~nan).any() else np.inf
+        line &= (resp > thr)
+        del resp
         line &= ~nan
         line_sum += line.astype(np.float32)
         del line

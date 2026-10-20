@@ -489,6 +489,68 @@ It is a <b>HOLDOUT-DTI</b> result only:
 """
 
 
+LIDAR03_STEM = "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z"
+
+
+def lidar03_block() -> str:
+    """LIDAR-03 (2026-10-20) banner: newest unique file, verdict NEGATIVE — NOT OK TO SUBMIT.
+
+    Reads its own run card (docs/data/run-card-lidar03.json); returns "" if absent so a
+    checkout without the session's card never invents a status. Rendered FIRST on the
+    overview and executive-summary pages so the newest candidate's status is the first
+    thing a visitor sees.
+    """
+    card = load(DOCS / "data" / "run-card-lidar03.json", None)
+    if not card:
+        return ""
+    stem = LIDAR03_STEM
+    return f"""
+<div class="warn" style="border:3px solid #f85149">
+<h2>&#128308; LIDAR-03 (2026-10-20, NEWEST): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
+<p><b>Is it OK to download and submit the new LIDAR-03 file? NO.</b> It is unique and
+format-valid, and it is the first file in this lane whose hide-and-recover holdout beats
+mass-matched random with a confidence interval excluding zero &mdash; but it <b>failed</b>
+two other pre-registered gates (it does not beat the incumbent on the off-catalogue proxy,
+and its low-relief placement is no better than random), so <b>do not spend a weekly
+submission slot on it</b>. This banner changes no other candidate's status: each candidate's
+own panel below carries its own verdict, and <code>downloads/current_release.json</code>
+is unchanged by this session.</p>
+<table>
+<tr><th>New unique file (audit download only)</th><td>
+<a class="btn" href="downloads/{stem}-zeros.tif">{stem}-zeros.tif</a>
+<a class="btn" href="downloads/{stem}-zeros.zip">.zip</a>
+<a class="btn" href="downloads/{stem}-nan.tif">NaN-outside sibling</a><br>
+<span class="small mono">sha256 (zeros) {esc(card.get("rasters", {}).get("zeros", {}).get("sha256", ""))}<br>
+sha256 (nan) {esc(card.get("rasters", {}).get("nan", {}).get("sha256", ""))}</span></td></tr>
+<tr><th>Submission name (if ever cleared)</th><td class="mono">{esc(card.get("submission_name", ""))}</td></tr>
+<tr><th>Note ({card.get("note_chars", 0)}/140)</th><td class="mono">{esc(card.get("submission_note", ""))}</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; both siblings 15 PASS + 2 INFO, 0 FAIL/SKIPPED (with the
+official features raster supplied); float32 EPSG:32611 100 m 3730&times;3292; 0 NaN inside the
+footprint; every value in [0,1], so the <span class="mono">Predicted values must be in range [0, 1]</span>
+rejection cannot occur on the -zeros file (every cell finite, no nodata tag)</td></tr>
+<tr><th>Uniqueness gate</th><td><b>PASS (unique)</b> &mdash; max |Spearman &rho;| 0.020 (limit 0.90) over 70
+rasters; density-comparable 3-px dot overlap max 0.644 (limit 0.70, vs LIDAR-02 at lift 2.70 &mdash;
+close, disclosed); not identical to any raster compared; hash differs from every prior raster</td></tr>
+<tr><th>Leakage canary</th><td><b>PASS</b> &mdash; worst feature-alone AUC 0.774 &lt; 0.90 stop (31 channels);
+the removed signed antislope channel reproduced as an anti-signal at AUC 0.301</td></tr>
+<tr><th>Science gate</th><td><b>FAIL &mdash; this is why the answer is NO.</b> HOLDOUT-DTI (quadrant
+hide-and-recover, evaluator src/gems/metric.py, 48,465 withheld positives): candidate 0.1160
+[0.0978, 0.1279] vs mass-matched random 0.0919; paired diff +0.0241, 95% CI [0.0059, 0.0378]
+&mdash; passes (LIDAR-02 failed this). <b>But</b> the SGMC off-catalogue control is 0.0801 vs
+incumbent h33-2-b2 0.0954 (does not beat), and the low-relief stratum scores 0.0035 vs random
+0.0047 (basin-floor placement no better than random). No ORGANIZER-CONFIRMED score exists or
+is claimed.</td></tr>
+</table>
+<p class="small">Full record: <a href="data/run-card-lidar03.json">run-card-lidar03.json</a> (verdict
+<b>negative</b>) and <code>docs/review/2026-10-20-lidar03-session.md</code> in the repository. Method:
+local-contrast SNR &times; scarp-pixel fraction &times; crest/toe curvature pairing &times; unsigned
+polarity dominance + Frangi/Steger on the detrended SNR surface; LIDAR-02's emission geometry kept
+identical (37,654 dots, &ge;3 px separation, &gt;200 m from catalogue, relief-stratified) so the field
+is the only changed variable.</p>
+</div>
+"""
+
+
 LIDAR02_STEM = "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z"
 
 
@@ -551,17 +613,15 @@ plus the evidence for why it looks the way it does. The scored truth is <b>fault
 in the given public catalogue</b>, so every design choice here is aimed at that and not at
 recovering the 60,988 labelled pixels we were given.</p>
 
+{lidar03_block()}
+
 {lidar02_block()}
 
 {submission_block()}
 
-<<<<<<< HEAD
 {lidar01_block()}
 
 {submission_block_h66c()}
-=======
-{lidar01_block()}
->>>>>>> origin/main
 
 <h2>The two facts this session measured</h2>
 <p><b>1. The official metric is a budget.</b> With <code>T = TP_w</code>, <code>S = &Sigma;p</code>,
@@ -635,6 +695,8 @@ def exec_page() -> str:
             "mapped-fault exclusion; see GEMSDOE66 run card")
     return page("How to submit", f"""
 <h2>Executive summary</h2>
+
+{lidar03_block()}
 
 {lidar02_block()}
 
@@ -732,13 +794,9 @@ forfeits that mass. That is the downside; the gate table above is the honest acc
 this session could and could not measure about it.</p>
 
 {h67m_block()}
-<<<<<<< HEAD
 {lidar01_exec_block()}
 
 {h66c_exec_block()}
-=======
-{lidar01_exec_block()}
->>>>>>> origin/main
 """, "executive-summary.html")
 
 

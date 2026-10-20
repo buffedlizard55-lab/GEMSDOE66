@@ -66,7 +66,23 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
         # H66-C is deliberately absent: its gate is not met, so it is never offered here.
+        # Parallel-session audit downloads (IR-L03-04: missing here since their sessions,
+        # failing on main).  Each linked page must carry its own negative banner (asserted
+        # below), so listing a file never implies clearance.
+        "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+        "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip",
+        "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+        "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.zip",
+        "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-zeros.tif",
+        "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-zeros.zip",
+        "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-nan.tif",
+        "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-nan.zip",
     }
+    # the current_release pointer target (unique-msc session): linkable only while its own
+    # pointer says cleared — read dynamically so withdrawal is automatic (fail closed)
+    import json as _j2
+    _rel = _j2.loads((ROOT / "docs" / "downloads" / "current_release.json").read_text())
+    _ptr = {Path(_rel[k]).name for k in ("tif", "zip") if _rel.get(k)} if _rel.get("cleared") else set()
     linked_any = False
     for f in sorted((ROOT / "docs").glob("*.html")):
         html = f.read_text()
@@ -80,7 +96,7 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             _r = _card["raster"]
             k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
             k66 = rel.split("/")[-1] in k66_names
-            assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
+            assert rel in allowed or k66 or rel.split("/")[-1] in _ptr, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
             links_h67 = any("gems66-h67" in h for h in hits)
@@ -92,6 +108,10 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             if links_k66:
                 assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
                 assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
+            if any(("gems66-lidar02" in h or "gems66-lidar03" in h) for h in hits):
+                # negative-verdict audit downloads: the banner is the whole point
+                assert "NOT OK TO SUBMIT" in html, f"{f.name} links a negative candidate without its banner"
+                assert "HOLDOUT-DTI" in html, f"{f.name} links a negative candidate without its holdout label"
             if any("gems66-lidar01" in h for h in hits):
                 # the LIDAR-01 candidate must carry its own labelling next to the buttons
                 assert "HOLDOUT-DTI" in html, f"{f.name} links LIDAR-01 without its holdout label"

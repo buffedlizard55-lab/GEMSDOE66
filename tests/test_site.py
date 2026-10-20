@@ -41,6 +41,19 @@ LIDAR02_FILES = [
     "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif.receipt.json",
 ]
 
+# LIDAR-03 (2026-10-20): unique + format-valid but verdict NEGATIVE (gates G3/G4 fail).
+# Same rule as LIDAR02: audit download explicit, banner must keep saying NOT OK TO SUBMIT
+# (run-card-lidar03.json).
+LIDAR03_STEM = "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z"
+LIDAR03_FILES = [
+    f"{LIDAR03_STEM}-zeros.tif",
+    f"{LIDAR03_STEM}-zeros.zip",
+    f"{LIDAR03_STEM}-zeros.tif.receipt.json",
+    f"{LIDAR03_STEM}-nan.tif",
+    f"{LIDAR03_STEM}-nan.zip",
+    f"{LIDAR03_STEM}-nan.tif.receipt.json",
+]
+
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -115,7 +128,7 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
             path_part = urlsplit(href).path.lower()
             if path_part.endswith((".tif", ".tiff", ".zip")):
                 rel = urlsplit(href).path
-                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + LIDAR02_FILES + UNIQUE_MSC_FILES), f"{name}: {href}"
+                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + LIDAR02_FILES + LIDAR03_FILES + UNIQUE_MSC_FILES), f"{name}: {href}"
     # the H67 geophysics lane may publish exactly what its own run card clears (fail closed)
     import glob as _glob
     _h67 = []
@@ -130,7 +143,7 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
-    ] + K66_FILES + LIDAR01_FILES + LIDAR02_FILES + UNIQUE_MSC_FILES)
+    ] + K66_FILES + LIDAR01_FILES + LIDAR02_FILES + LIDAR03_FILES + UNIQUE_MSC_FILES)
 
 
 def test_run_card_labels_every_number_and_claims_no_qualified_score():
