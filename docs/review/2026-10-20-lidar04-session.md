@@ -1,15 +1,27 @@
-# LIDAR-03 session review — 2026-10-20 (`arena/6c75ae04-gemsdoe66`)
+# LIDAR-04 session review — 2026-10-20 (`arena/6c75ae04-gemsdoe66`)
 
 **Verdict: NEGATIVE (not promoted). A new, lane-unique, format-valid GeoTIFF pair was
 generated and is preserved for audit, but the pre-registered gate is not met (G3, G4 fail),
 so it is NOT cleared for submission and no weekly slot should be spent on it.**
-Machine-readable card: [`docs/data/run-card-lidar03.json`](../data/run-card-lidar03.json).
-Builder: [`scripts/build_lidar03.py`](../../scripts/build_lidar03.py) (reuses the shared
+Machine-readable card: [`docs/data/run-card-lidar04.json`](../data/run-card-lidar04.json).
+Builder: [`scripts/build_lidar04.py`](../../scripts/build_lidar04.py) (reuses the shared
 `gems66.lidar_channels`, `gems.metric`, `gems.submission_writer`, `gems.validate_submission`
 and the LIDAR-02 helpers imported unchanged from `scripts/build_lidar02.py` — no private
-forks). Evidence: `evidence/lidar03_e1_canary.json`, `lidar03_e2_holdout.json`,
-`lidar03_e3_emission.json`, `lidar03_uniqueness.json`, `lidar03_validate_{zeros,nan}.json`,
-`lidar03_revalidate_summary.json`, `lidar03_run.log`.
+forks). Evidence: `evidence/lidar04_e1_canary.json`, `lidar04_e2_holdout.json`,
+`lidar04_e3_emission.json`, `lidar04_uniqueness.json`, `lidar04_validate_{zeros,nan}.json`,
+`lidar04_revalidate_summary.json`, `lidar04_run.log`.
+
+
+> **Rename note (IR-L04-RENAME).** This session originally ran under the label
+> "LIDAR-03". A parallel session independently used the same label for a
+> spatial-CV-retrained classifier, merged first (PR #30), with a **promote**
+> verdict and raster `gems66-lidar03-cvretrain-reliefdecile-…` (HOLDOUT-DTI
+> candidate mean 0.15218 on the same evaluator, per its own run card — stronger
+> than this session's 0.11600). At merge, this session became **LIDAR-04**
+> everywhere except the raster file stem `gems66-lidar03-localsnr-fracpair-…`,
+> which is baked into the GeoTIFF tags/receipts/sha256 and is kept verbatim.
+> The two candidates must not be confused: CV-retrain (LIDAR-03, promote) ≠
+> this hand-weighted field (LIDAR-04, negative).
 
 Core values: *Maximize P(Win)* — one instrument improved decisively and the other got
 worse; spending a slot while the two disagree and the basin-floor control is at random
@@ -21,7 +33,7 @@ tests fixed, and the negative result shipped as the deliverable.
 
 ## 1. Why did `h33-h33-2-b2-…-zeros` get the family's highest reported score (0.2778), and can we beat it?
 
-### 1.1 Provenance first (re-verified this session, IR-L03-05)
+### 1.1 Provenance first (re-verified this session, IR-L04-05)
 
 On 2026-10-20 this session re-fetched
 <https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html>. That site — the raster's
@@ -53,7 +65,7 @@ basin-floor placement the scarp lane is not reproducing (see §3, G4).
 ### 1.3 Can a submission score higher than 0.2778 / 0.3195 / 0.3774?
 
 Only by raising mean kernel credit per dot at fixed mass — roughly +36 % credit density in
-the top of the ranking to go from a 0.2778-class field to 0.3774 (first order). LIDAR-03
+the top of the ranking to go from a 0.2778-class field to 0.3774 (first order). LIDAR-04
 shows the scarp lane can now beat random on the prescribed holdout (paired CI excludes
 zero), but it *lost* ground on the off-catalogue inventory proxy and remains at random on
 the basin floor, exactly where the incumbent is strong. **No honest claim to beat 0.2778
@@ -65,11 +77,11 @@ scarp channels is structurally blind there (next-session candidates, §6).
 
 | rank | id | layers | physical signature | why off-catalogue | differs from repo | expected gain / cost |
 |---|---|---|---|---|---|---|
-| 1 | **L03-A local-SNR × fraction × crest/toe pair × unsigned polarity (IMPLEMENTED)** | `step/ex/ex_mean/lap±/up/down/cross/relief` + Frangi/Steger on detrended SNR surface | step & ex divided by ~1 km Gaussian background; `ex_mean/(ex_max+ε)`; `sqrt(lappos·lapneg)`; `|up−down|/(up+down+cross)` | Young subtle scarps on fans are locally anomalous at low absolute amplitude; damage zones raise within-cell scarp fraction; diffusion profile pairs crest+toe curvature | No prior field used a signal/background SNR, a fraction ratio, a curvature-pairing product, or unsigned polarity; the signed antislope net (measured anti-signal, AUC 0.301) is removed | Highest / low |
-| 2 | L03-B Steger offset-valid density solo field | Detrended SNR surface, σ=1,2 | 5×5 density of pixels whose sub-pixel extremum lands in-pixel with consistent Hessian sign | True line crests localise sub-pixel; diffuse cultural edges do not | Channel included at weight 0.05 and canaried (AUC 0.538/0.528 — weak); solo emission not run | Low after canary / low |
-| 3 | L03-C strike-discontinuity (relay) field | `strike`, `coh100` | Circular gradient of dominant strike × coherence (abrupt ≥20° breaks on coherent traces) | Relay ramps/stepovers between mapped segments are classic unmapped sites | Strike has only been a passive channel; canary remains ~chance (0.498/0.510), lowering the prior | Low / medium |
-| 4 | L03-D cross-slope-veto complement solo | `cross_max` lows × step highs | Steps with no cross-slope competitor (pure dip-slip geometry) | Roads/canals are orientation-mixed; normal-fault scarps are not | Veto used subtractively before; `cross_max` alone is a *positive* predictor (AUC 0.765/0.578), so the complement prior weakened this session | Low / low |
-| 5 | L03-E true native 2–20 m Scarplet/Steger/Frangi on raw 1 m DEM | USGS 3DEP 1 m tiles | Native-resolution template fits (amplitude, age, SNR) + sub-pixel lines at 2–20 m | Exactly the lane's premise; sub-cell geometry is destroyed by the 100 m aggregate | Never measured in any session here | Unknown / **blocked**: named free official source is USGS 3DEP (<https://www.usgs.gov/3d-elevation-program>); checked obtainable — **not from this sandbox** (egress limited to github.com / pypi.org). The hash-pinned 2 m-descriptor aggregate is the disclosed substitute |
+| 1 | **L04-A local-SNR × fraction × crest/toe pair × unsigned polarity (IMPLEMENTED)** | `step/ex/ex_mean/lap±/up/down/cross/relief` + Frangi/Steger on detrended SNR surface | step & ex divided by ~1 km Gaussian background; `ex_mean/(ex_max+ε)`; `sqrt(lappos·lapneg)`; `|up−down|/(up+down+cross)` | Young subtle scarps on fans are locally anomalous at low absolute amplitude; damage zones raise within-cell scarp fraction; diffusion profile pairs crest+toe curvature | No prior field used a signal/background SNR, a fraction ratio, a curvature-pairing product, or unsigned polarity; the signed antislope net (measured anti-signal, AUC 0.301) is removed | Highest / low |
+| 2 | L04-B Steger offset-valid density solo field | Detrended SNR surface, σ=1,2 | 5×5 density of pixels whose sub-pixel extremum lands in-pixel with consistent Hessian sign | True line crests localise sub-pixel; diffuse cultural edges do not | Channel included at weight 0.05 and canaried (AUC 0.538/0.528 — weak); solo emission not run | Low after canary / low |
+| 3 | L04-C strike-discontinuity (relay) field | `strike`, `coh100` | Circular gradient of dominant strike × coherence (abrupt ≥20° breaks on coherent traces) | Relay ramps/stepovers between mapped segments are classic unmapped sites | Strike has only been a passive channel; canary remains ~chance (0.498/0.510), lowering the prior | Low / medium |
+| 4 | L04-D cross-slope-veto complement solo | `cross_max` lows × step highs | Steps with no cross-slope competitor (pure dip-slip geometry) | Roads/canals are orientation-mixed; normal-fault scarps are not | Veto used subtractively before; `cross_max` alone is a *positive* predictor (AUC 0.765/0.578), so the complement prior weakened this session | Low / low |
+| 5 | L04-E true native 2–20 m Scarplet/Steger/Frangi on raw 1 m DEM | USGS 3DEP 1 m tiles | Native-resolution template fits (amplitude, age, SNR) + sub-pixel lines at 2–20 m | Exactly the lane's premise; sub-cell geometry is destroyed by the 100 m aggregate | Never measured in any session here | Unknown / **blocked**: named free official source is USGS 3DEP (<https://www.usgs.gov/3d-elevation-program>); checked obtainable — **not from this sandbox** (egress limited to github.com / pypi.org). The hash-pinned 2 m-descriptor aggregate is the disclosed substitute |
 
 Method sources for manual review (same verified set as prior sessions): Scarplet
 <https://doi.org/10.21105/joss.01066>; Steger, IEEE TPAMI 20(2):113–125, 1998,
@@ -86,7 +98,7 @@ Method sources for manual review (same verified set as prior sessions): Scarplet
 
 Inputs sha256-verified 5/5 against `registry/data_manifest.json` (`labels`, `sample_submission`,
 lidar stack, SGMC via `scripts/fetch_mirrors.py`; `training_features` via git sparse
-partial-clone at the pinned ref after the GitHub API quota ran out — IR-L03-02 — concatenated
+partial-clone at the pinned ref after the GitHub API quota ran out — IR-L04-02 — concatenated
 and verified `4371c82e…` before use; pins prove mirror consistency, not organiser
 authentication). Emission geometry identical to LIDAR-02 so the field is the only variable.
 
@@ -147,31 +159,31 @@ oppositely, and neither instrument can certify the hidden expert-added set.
 
 ## 5. Irregularities found (all carried in the run card)
 
-- **IR-L03-TOOL-01 (fixed once in the template):** `multiscale_line_fields` thresholded the
+- **IR-L04-TOOL-01 (fixed once in the template):** `multiscale_line_fields` thresholded the
   Steger Hessian response `|λ2|` with a percentile of the *Frangi vesselness* running max —
   a unit mismatch making `steger_frac300`'s operating point arbitrary in LIDAR-01/02. Now
   thresholded on the Steger response's own distribution per scale; verified on a synthetic
   ridge (line pixels exactly on the ridge centre). Frangi outputs unchanged.
-- **IR-L03-SITE-01 (fixed):** literal merge-conflict markers in `scripts/build_site.py`
+- **IR-L04-SITE-01 (fixed):** literal merge-conflict markers in `scripts/build_site.py`
   were rendering as text on the live overview and executive-summary pages (both sides of
   both conflicts printed). Resolved keeping both panels; a regression assertion is in
-  `tests/test_lidar03_release.py`.
-- **IR-L03-02:** GitHub REST API quota (shared token, 5000/h) exhausted mid-session;
+  `tests/test_lidar04_release.py`.
+- **IR-L04-02:** GitHub REST API quota (shared token, 5000/h) exhausted mid-session;
   `training_features` fetched by git sparse partial-clone at the pinned commit and
   sha256-verified against the manifest before use. The other four inputs verified normally
   through `fetch_mirrors.py`.
-- **IR-L03-03 (pre-existing, flagged, not fixed here):** `current_release.json` points at
+- **IR-L04-03 (pre-existing, flagged, not fixed here):** `current_release.json` points at
   the unique-msc session's raster (`cleared: true`) while `lidar01_block()` renders that
   pointer under a "LIDAR-01 session" heading with `run-card-lidar01.json`'s holdout rows,
   and `docs/downloads/README.md` still calls the pointer LIDAR-01's. Two candidates'
   evidence are conflated in one site panel. Left to the owning session to avoid silently
   rewriting another session's release semantics.
-- **IR-L03-04 (fixed):** `tests/test_artifact66.py` and `tests/test_repo_hygiene.py` were
+- **IR-L04-04 (fixed):** `tests/test_artifact66.py` and `tests/test_repo_hygiene.py` were
   already failing on `main` — their allowlists never learned about the LIDAR-02 and
   unique-msc downloads. Extended with the same fail-closed conditions as `test_site.py`
   (negative candidates linkable only beside their NOT-OK banner + HOLDOUT-DTI label;
   pointer target read dynamically).
-- **IR-L03-05:** owner-reported score provenance (§1.1). No number in this review is
+- **IR-L04-05:** owner-reported score provenance (§1.1). No number in this review is
   ORGANIZER-CONFIRMED.
 
 ## 6. Next work, in order (for the next session in this lane)
@@ -187,12 +199,12 @@ oppositely, and neither instrument can certify the hidden expert-added set.
    from "invents SGMC-like linework". Until then both instruments stay falsification-only.
 3. **Native 1 m execution (L03-E)** remains the lane's untested premise; it needs an
    environment that can reach USGS 3DEP, with tile inventory + hashes recorded first.
-4. **IR-L03-03** release-pointer conflation needs the owning sessions to reconcile
+4. **IR-L04-03** release-pointer conflation needs the owning sessions to reconcile
    `current_release.json`, `lidar01_block()` and `docs/downloads/README.md`.
 5. Cultural-feature mask (roads/canals/field edges) still does not exist in this checkout;
    every scarp-lane candidate to date is exposed to that mimic class.
 
-## 7. Run card (summary; full JSON in `docs/data/run-card-lidar03.json`)
+## 7. Run card (summary; full JSON in `docs/data/run-card-lidar04.json`)
 
 ```json
 {

@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""LIDAR-03 — locally-normalised SNR x scarp-fraction x crest/toe-pair scarp lane.
+"""LIDAR-04 — locally-normalised SNR
+
+RENAME NOTE (2026-10-20, at merge): this session originally ran as "LIDAR-03" in
+parallel with another session that independently used the same label for a
+spatial-CV-retrained classifier and merged first (PR #30, verdict promote,
+file gems66-lidar03-cvretrain-reliefdecile-...). To avoid overwriting that
+session's record, this session was renamed LIDAR-04 everywhere except the
+raster file stem gems66-lidar03-localsnr-fracpair-..., which is baked into the
+GeoTIFF tags, receipts and sha256 record and is therefore kept verbatim. x scarp-fraction x crest/toe-pair scarp lane.
 
 Lane (assigned, single paragraph): native-resolution lidar scarp channels —
 (i) slope-aware scarplet template channels (Sare & Hilley, JOSS 2018,
@@ -237,7 +245,7 @@ def main():
           "evaluator": EVALUATOR, "channels": canary, "worst_auc": worst,
           "worst_channel": worst_name, "pass": bool(worst <= 0.90),
           "n_sgmc_offcat": int(sgmc_off.sum()), "n_channels": len(canary)}
-    (EVID / "lidar03_e1_canary.json").write_text(json.dumps(e1, indent=1))
+    (EVID / "lidar04_e1_canary.json").write_text(json.dumps(e1, indent=1))
     print("E1 worst AUC", worst, worst_name, "pass", e1["pass"], flush=True)
     if not e1["pass"]:
         print("LEAKAGE STOP"); return
@@ -293,7 +301,7 @@ def main():
           "note": "Catalogue-truth holdout penalises off-catalogue designs by construction "
                   "(h33 as-is ~0.006/fold); reported for falsification, paired with the "
                   "SGMC off-catalogue pooled control in E3."}
-    (EVID / "lidar03_e2_holdout.json").write_text(json.dumps(e2, indent=1))
+    (EVID / "lidar04_e2_holdout.json").write_text(json.dumps(e2, indent=1))
     print("E2 candidate", cand_m, cand_ci, "random", rnd_m, rnd_ci, "diff", diff_m, diff_ci, flush=True)
 
     # ---------- E3 final emission ----------
@@ -384,7 +392,7 @@ def main():
                 "worst_comparable": worst_comp, "duplicate_under_lift_rule": dup_lift,
                 "any_identical": any(u.get("identical_dots") for u in ok_u),
                 "per_raster": uniq}
-    (EVID / "lidar03_uniqueness.json").write_text(json.dumps(uniq_rec, indent=1))
+    (EVID / "lidar04_uniqueness.json").write_text(json.dumps(uniq_rec, indent=1))
     print("uniq rho", max_rho, "ov_comp", max_ov_comp, "ov_raw", max_ov_raw,
           "dup_lift", len(dup_lift), flush=True)
 
@@ -406,7 +414,7 @@ def main():
     base = f"gems66-lidar03-localsnr-fracpair-{int(dots.sum())}dots-{ts}"
     name = base[:120]
     note = ("LIDAR-03 local-SNR x scarp-fraction x crest/toe pair, antislope-net removed,"
-            " relief-stratified; GEMSDOE66 lidar03")[:140]
+            " relief-stratified; GEMSDOE66 lidar03")[:140]  # historical: as executed (see rename note)
     outdir = ROOT / "docs" / "downloads"; outdir.mkdir(parents=True, exist_ok=True)
     receipts = {}
     for suffix, fill, pol in [("zeros", 0.0, "either"), ("nan", None, "nan")]:
@@ -414,7 +422,7 @@ def main():
         rec = write_submission(out, pred, footprint, SAMPLE_TIF, overwrite=True,
                                name=name, note=note, outside_fill=fill)
         v = validate(out, reference_path=SAMPLE_TIF, outside_policy=pol)
-        (EVID / f"lidar03_validate_{suffix}.json").write_text(json.dumps(v, indent=1, default=str))
+        (EVID / f"lidar04_validate_{suffix}.json").write_text(json.dumps(v, indent=1, default=str))
         zpath = outdir / f"{base}-{suffix}.zip"
         with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
             z.write(out, arcname=out.name)
@@ -432,7 +440,7 @@ def main():
                "field_formula": FIELD_FORMULA,
                "inputs_sha256": {str(p.relative_to(ROOT)): sha256_file(p)
                                  for p in [LIDAR_TIF, LABELS_TIF, SAMPLE_TIF, SGMC_TIF]}}
-    (EVID / "lidar03_e3_emission.json").write_text(json.dumps(rec_all, indent=1, default=str))
+    (EVID / "lidar04_e3_emission.json").write_text(json.dumps(rec_all, indent=1, default=str))
     print("DONE", base, "gate_all_pass", gate["all_pass"], flush=True)
     print(json.dumps({"base": base, "gate": gate}, indent=1), flush=True)
 

@@ -108,7 +108,7 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             if links_k66:
                 assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
                 assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
-            if any(("gems66-lidar02" in h or "gems66-lidar03" in h) for h in hits):
+            if any(("gems66-lidar02" in h or "gems66-lidar03" in h or "gems66-lidar04" in h) for h in hits):
                 # negative-verdict audit downloads: the banner is the whole point
                 assert "NOT OK TO SUBMIT" in html, f"{f.name} links a negative candidate without its banner"
                 assert "HOLDOUT-DTI" in html, f"{f.name} links a negative candidate without its holdout label"

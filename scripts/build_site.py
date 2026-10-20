@@ -489,25 +489,25 @@ It is a <b>HOLDOUT-DTI</b> result only:
 """
 
 
-LIDAR03_STEM = "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z"
+LIDAR04_STEM = "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z"
 
 
-def lidar03_block() -> str:
-    """LIDAR-03 (2026-10-20) banner: newest unique file, verdict NEGATIVE — NOT OK TO SUBMIT.
+def lidar04_block() -> str:
+    """LIDAR-04 (2026-10-20) banner: parallel-session unique file, verdict NEGATIVE — NOT OK TO SUBMIT.
 
-    Reads its own run card (docs/data/run-card-lidar03.json); returns "" if absent so a
+    Reads its own run card (docs/data/run-card-lidar04.json); returns "" if absent so a
     checkout without the session's card never invents a status. Rendered FIRST on the
     overview and executive-summary pages so the newest candidate's status is the first
     thing a visitor sees.
     """
-    card = load(DOCS / "data" / "run-card-lidar03.json", None)
+    card = load(DOCS / "data" / "run-card-lidar04.json", None)
     if not card:
         return ""
-    stem = LIDAR03_STEM
+    stem = LIDAR04_STEM
     return f"""
 <div class="warn" style="border:3px solid #f85149">
-<h2>&#128308; LIDAR-03 (2026-10-20, NEWEST): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
-<p><b>Is it OK to download and submit the new LIDAR-03 file? NO.</b> It is unique and
+<h2>&#128308; LIDAR-04 (2026-10-20, parallel session): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
+<p><b>Is it OK to download and submit the new LIDAR-04 file? NO.</b> It is unique and
 format-valid, and it is the first file in this lane whose hide-and-recover holdout beats
 mass-matched random with a confidence interval excluding zero &mdash; but it <b>failed</b>
 two other pre-registered gates (it does not beat the incumbent on the off-catalogue proxy,
@@ -541,8 +541,8 @@ incumbent h33-2-b2 0.0954 (does not beat), and the low-relief stratum scores 0.0
 0.0047 (basin-floor placement no better than random). No ORGANIZER-CONFIRMED score exists or
 is claimed.</td></tr>
 </table>
-<p class="small">Full record: <a href="data/run-card-lidar03.json">run-card-lidar03.json</a> (verdict
-<b>negative</b>) and <code>docs/review/2026-10-20-lidar03-session.md</code> in the repository. Method:
+<p class="small">Full record: <a href="data/run-card-lidar04.json">run-card-lidar04.json</a> (verdict
+<b>negative</b>) and <code>docs/review/2026-10-20-lidar04-session.md</code> in the repository. Method:
 local-contrast SNR &times; scarp-pixel fraction &times; crest/toe curvature pairing &times; unsigned
 polarity dominance + Frangi/Steger on the detrended SNR surface; LIDAR-02's emission geometry kept
 identical (37,654 dots, &ge;3 px separation, &gt;200 m from catalogue, relief-stratified) so the field
@@ -613,7 +613,7 @@ plus the evidence for why it looks the way it does. The scored truth is <b>fault
 in the given public catalogue</b>, so every design choice here is aimed at that and not at
 recovering the 60,988 labelled pixels we were given.</p>
 
-{lidar03_block()}
+{lidar04_block()}
 
 {lidar02_block()}
 
@@ -696,7 +696,7 @@ def exec_page() -> str:
     return page("How to submit", f"""
 <h2>Executive summary</h2>
 
-{lidar03_block()}
+{lidar04_block()}
 
 {lidar02_block()}
 

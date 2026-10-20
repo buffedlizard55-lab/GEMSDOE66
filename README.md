@@ -78,13 +78,13 @@ and it spent no submission slot. See
 > [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
 > session-66 design.
 
-## LIDAR-03 session (branch `arena/6c75ae04`, 2026-10-20) — NEGATIVE, no slot used
+## LIDAR-04 session (branch `arena/6c75ae04`, 2026-10-20; renamed at merge — see review) — NEGATIVE, no slot used
 
 New unique in-lane candidate `gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z`
 (local-contrast SNR × scarp-fraction × crest/toe pairing × unsigned polarity field;
 signed antislope net removed after reproducing its anti-signal canary AUC 0.3014;
 LIDAR-02 emission geometry kept identical so the field is the only variable; builder
-`scripts/build_lidar03.py`). **🔴 NOT OK TO SUBMIT** — the site banner says so first.
+`scripts/build_lidar04.py`). **🔴 NOT OK TO SUBMIT** — the site banner says so first.
 First file in this lane to pass the prescribed holdout gate (HOLDOUT-DTI paired diff vs
 random **+0.0241, 95% CI [0.0059, 0.0378]**, 48,465 withheld positives), canary PASS
 (0.774), uniqueness PASS vs 70 rasters (max |ρ| 0.020; comparable overlap 0.644 vs
@@ -95,8 +95,8 @@ shared Steger-threshold unit bug (IR-L03-TOOL-01), removed live merge-conflict m
 from the site (IR-L03-SITE-01), fixed two pre-existing red tests (IR-L03-04), flagged
 the release-pointer conflation (IR-L03-03). `current_release.json` unchanged; no
 ORGANIZER-CONFIRMED score claimed. Full record:
-[`docs/review/2026-10-20-lidar03-session.md`](docs/review/2026-10-20-lidar03-session.md),
-[`docs/data/run-card-lidar03.json`](docs/data/run-card-lidar03.json).
+[`docs/review/2026-10-20-lidar04-session.md`](docs/review/2026-10-20-lidar04-session.md),
+[`docs/data/run-card-lidar04.json`](docs/data/run-card-lidar04.json).
 
 ## LIDAR-02 session (branch `arena/e21dbf98`, 2026-10-20) — NEGATIVE, no slot used
 

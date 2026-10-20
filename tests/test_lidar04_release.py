@@ -1,4 +1,4 @@
-"""LIDAR-03 release invariants: negative verdict, honest banner, byte-level receipts.
+"""LIDAR-04 release invariants: negative verdict, honest banner, byte-level receipts.
 
 The candidate is unique and format-valid but failed pre-registered gates G3/G4.
 These tests pin that state so a future rebuild cannot silently promote it:
@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 STEM = "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z"
-CARD = json.loads((DOCS / "data" / "run-card-lidar03.json").read_text())
+CARD = json.loads((DOCS / "data" / "run-card-lidar04.json").read_text())
 
 
 def _sha(p: Path) -> str:
@@ -52,7 +52,7 @@ def test_published_siblings_match_card_hashes_and_receipts():
 
 def test_validator_evidence_passed_with_no_failures_or_skips():
     for suffix in ("zeros", "nan"):
-        v = json.loads((ROOT / "evidence" / f"lidar03_validate_{suffix}.json").read_text())
+        v = json.loads((ROOT / "evidence" / f"lidar04_validate_{suffix}.json").read_text())
         assert v["passed"] is True and v["has_failures"] is False
         statuses = [c["status"] for c in v["checks"]]
         assert "FAIL" not in statuses and "SKIPPED" not in statuses
@@ -71,5 +71,5 @@ def test_site_banner_is_negative_wherever_the_file_is_linked():
     # overview first screen and the how-to-submit page both carry the banner
     assert "index.html" in linked and "executive-summary.html" in linked
     idx = (DOCS / "index.html").read_text()
-    assert idx.index("LIDAR-03") < idx.index("LIDAR-02 ("), "newest verdict must render first"
+    assert idx.index("LIDAR-04") < idx.index("LIDAR-02 ("), "this session banner must precede LIDAR-02"
     assert "<<<<<<<" not in idx and ">>>>>>>" not in idx  # IR-L03-SITE-01 stays fixed
