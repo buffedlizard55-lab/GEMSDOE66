@@ -1,0 +1,305 @@
+{
+  "experiment": "E2_spatial_block_holdout_and_relief_strata",
+  "elapsed_s": 285.4,
+  "label": "HOLDOUT-DTI (evaluator: src/gems/metric.py :: dti v1.0, alpha=0.2, beta=0.8, 300 m triangular kernel; splitter: src/gems/holdout.py :: spatial_block_holdout, 4 folds, 20 km blocks, 500 m buffer around whole fault segments from trace_segments_utm11.csv; n_withheld=27379)",
+  "evaluator_version": "src/gems/metric.py::dti@v1.0 (alpha=0.2, beta=0.8, 300m triangular kernel)",
+  "withheld_positive_count": 27379,
+  "pooled_arms": {
+    "random_null": {
+      "pooled_dti": 0.12703,
+      "mean_fold_dti": 0.12662,
+      "ci95": [
+        0.11954,
+        0.13132
+      ],
+      "tp_w": 3752.16,
+      "fp_w": 34424.06,
+      "fn_w": 23626.84
+    },
+    "geophys_rad_baseline": {
+      "pooled_dti": 0.19484,
+      "mean_fold_dti": 0.19582,
+      "ci95": [
+        0.18451,
+        0.20648
+      ],
+      "tp_w": 5767.17,
+      "fp_w": 32710.79,
+      "fn_w": 21611.83
+    },
+    "lidar03_no_cultural_mask": {
+      "pooled_dti": 0.2184,
+      "mean_fold_dti": 0.21861,
+      "ci95": [
+        0.21335,
+        0.22197
+      ],
+      "tp_w": 6477.63,
+      "fp_w": 32304.39,
+      "fn_w": 20901.37
+    },
+    "lidar03_full": {
+      "pooled_dti": 0.21392,
+      "mean_fold_dti": 0.2142,
+      "ci95": [
+        0.20743,
+        0.2182
+      ],
+      "tp_w": 6346.63,
+      "fp_w": 32475.18,
+      "fn_w": 21032.37
+    }
+  },
+  "paired_gains": {
+    "lidar03_vs_random_null": {
+      "pooled_gain": 0.08689,
+      "mean_fold_gain": 0.08758,
+      "ci95": [
+        0.07875,
+        0.09764
+      ],
+      "folds_won": 4
+    },
+    "lidar03_vs_geophys_rad_baseline": {
+      "pooled_gain": 0.01908,
+      "mean_fold_gain": 0.01838,
+      "ci95": [
+        0.01158,
+        0.02518
+      ],
+      "folds_won": 4
+    },
+    "cultural_mask_ablation_gain": {
+      "pooled_gain": -0.00448
+    }
+  },
+  "relief_stratification": {
+    "tercile_cuts_m": [
+      13.7,
+      35.9
+    ],
+    "strata": {
+      "low_relief_basin_le_13p7m": {
+        "n_withheld_truth": 14432,
+        "arms": {
+          "random_null": {
+            "pooled_dti": 0.11487,
+            "emitted_dots": 21904
+          },
+          "geophys_rad_baseline": {
+            "pooled_dti": 0.10531,
+            "emitted_dots": 8668
+          },
+          "lidar03_no_cultural_mask": {
+            "pooled_dti": 0.16249,
+            "emitted_dots": 15151
+          },
+          "lidar03_full": {
+            "pooled_dti": 0.16016,
+            "emitted_dots": 14865
+          }
+        },
+        "lidar03_lift_over_random": 1.394,
+        "lidar03_gain_over_random": 0.04529,
+        "lidar03_gain_over_baseline": 0.05485
+      },
+      "mid_relief_piedmont_13p7_35p9m": {
+        "n_withheld_truth": 9010,
+        "arms": {
+          "random_null": {
+            "pooled_dti": 0.09496,
+            "emitted_dots": 8210
+          },
+          "geophys_rad_baseline": {
+            "pooled_dti": 0.21512,
+            "emitted_dots": 16178
+          },
+          "lidar03_no_cultural_mask": {
+            "pooled_dti": 0.21239,
+            "emitted_dots": 13376
+          },
+          "lidar03_full": {
+            "pooled_dti": 0.20579,
+            "emitted_dots": 13349
+          }
+        },
+        "lidar03_lift_over_random": 2.167,
+        "lidar03_gain_over_random": 0.11083,
+        "lidar03_gain_over_baseline": -0.00933
+      },
+      "high_relief_rangefront_gt_35p9m": {
+        "n_withheld_truth": 3937,
+        "arms": {
+          "random_null": {
+            "pooled_dti": 0.08122,
+            "emitted_dots": 5886
+          },
+          "geophys_rad_baseline": {
+            "pooled_dti": 0.19566,
+            "emitted_dots": 11154
+          },
+          "lidar03_no_cultural_mask": {
+            "pooled_dti": 0.19221,
+            "emitted_dots": 7473
+          },
+          "lidar03_full": {
+            "pooled_dti": 0.1887,
+            "emitted_dots": 7786
+          }
+        },
+        "lidar03_lift_over_random": 2.323,
+        "lidar03_gain_over_random": 0.10748,
+        "lidar03_gain_over_baseline": -0.00696
+      }
+    },
+    "all_three_strata_beat_random": true,
+    "all_three_strata_beat_baseline": false,
+    "not_confined_to_range_fronts": true
+  },
+  "per_fold": {
+    "fold_0": {
+      "n_withheld_positives": 7454,
+      "n_held_blocks": 14,
+      "n_held_segments": 430,
+      "dots_removed_from_road_canal_mask": 1030,
+      "arms": {
+        "random_null": {
+          "dti": 0.12823,
+          "tp_w": 1010.49,
+          "fp_w": 8575.67,
+          "fn_w": 6443.51,
+          "emitted_dots": 9000
+        },
+        "geophys_rad_baseline": {
+          "dti": 0.17803,
+          "tp_w": 1404.32,
+          "fp_w": 8220.25,
+          "fn_w": 6049.68,
+          "emitted_dots": 9000
+        },
+        "lidar03_no_cultural_mask": {
+          "dti": 0.21095,
+          "tp_w": 1668.79,
+          "fp_w": 8068.89,
+          "fn_w": 5785.21,
+          "emitted_dots": 9000
+        },
+        "lidar03_full": {
+          "dti": 0.20412,
+          "tp_w": 1615.11,
+          "fp_w": 8131.66,
+          "fn_w": 5838.89,
+          "emitted_dots": 9000
+        }
+      }
+    },
+    "fold_1": {
+      "n_withheld_positives": 5791,
+      "n_held_blocks": 14,
+      "n_held_segments": 329,
+      "dots_removed_from_road_canal_mask": 971,
+      "arms": {
+        "random_null": {
+          "dti": 0.11564,
+          "tp_w": 753.81,
+          "fp_w": 8675.22,
+          "fn_w": 5037.19,
+          "emitted_dots": 9000
+        },
+        "geophys_rad_baseline": {
+          "dti": 0.20903,
+          "tp_w": 1367.97,
+          "fp_w": 8190.08,
+          "fn_w": 4423.03,
+          "emitted_dots": 9000
+        },
+        "lidar03_no_cultural_mask": {
+          "dti": 0.22246,
+          "tp_w": 1457.5,
+          "fp_w": 8136.87,
+          "fn_w": 4333.5,
+          "emitted_dots": 9000
+        },
+        "lidar03_full": {
+          "dti": 0.21738,
+          "tp_w": 1424.52,
+          "fp_w": 8177.12,
+          "fn_w": 4366.48,
+          "emitted_dots": 9000
+        }
+      }
+    },
+    "fold_2": {
+      "n_withheld_positives": 6019,
+      "n_held_blocks": 14,
+      "n_held_segments": 307,
+      "dots_removed_from_road_canal_mask": 1536,
+      "arms": {
+        "random_null": {
+          "dti": 0.1314,
+          "tp_w": 882.81,
+          "fp_w": 8634.26,
+          "fn_w": 5136.19,
+          "emitted_dots": 9000
+        },
+        "geophys_rad_baseline": {
+          "dti": 0.20393,
+          "tp_w": 1374.19,
+          "fp_w": 8243.21,
+          "fn_w": 4644.81,
+          "emitted_dots": 9000
+        },
+        "lidar03_no_cultural_mask": {
+          "dti": 0.2205,
+          "tp_w": 1487.69,
+          "fp_w": 8170.19,
+          "fn_w": 4531.31,
+          "emitted_dots": 9000
+        },
+        "lidar03_full": {
+          "dti": 0.21873,
+          "tp_w": 1476.3,
+          "fp_w": 8195.44,
+          "fn_w": 4542.7,
+          "emitted_dots": 9000
+        }
+      }
+    },
+    "fold_3": {
+      "n_withheld_positives": 8115,
+      "n_held_blocks": 14,
+      "n_held_segments": 546,
+      "dots_removed_from_road_canal_mask": 897,
+      "arms": {
+        "random_null": {
+          "dti": 0.13123,
+          "tp_w": 1105.05,
+          "fp_w": 8538.9,
+          "fn_w": 7009.95,
+          "emitted_dots": 9000
+        },
+        "geophys_rad_baseline": {
+          "dti": 0.19231,
+          "tp_w": 1620.7,
+          "fp_w": 8057.25,
+          "fn_w": 6494.3,
+          "emitted_dots": 9000
+        },
+        "lidar03_no_cultural_mask": {
+          "dti": 0.22054,
+          "tp_w": 1863.66,
+          "fp_w": 7928.44,
+          "fn_w": 6251.34,
+          "emitted_dots": 9000
+        },
+        "lidar03_full": {
+          "dti": 0.21659,
+          "tp_w": 1830.7,
+          "fp_w": 7970.95,
+          "fn_w": 6284.3,
+          "emitted_dots": 9000
+        }
+      }
+    }
+  }
+}

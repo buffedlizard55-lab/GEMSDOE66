@@ -120,6 +120,10 @@ UNIQUE_MSC_FILES = [
     "current_release_unique_msc.json",
 ]
 
+_L5 = "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc"
+LIDAR05_FILES = [f"{_L5}-{s}" for s in ("zeros.tif", "zeros.zip", "zeros.tif.receipt.json",
+                                        "nan.tif", "nan.zip", "nan.tif.receipt.json")]
+
 PUBLISHED = sorted([
     "README.md",
     "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
@@ -153,7 +157,7 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     names = {path.name for path in (DOCS / "downloads").iterdir()}
     assert not (names & historical_names)
     allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES
-                  + LIDAR02_FILES + LIDAR02M_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES + LIDAR04_FILES + H68_FILES)
+                  + LIDAR02_FILES + LIDAR02M_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES + LIDAR04_FILES + LIDAR05_FILES + H68_FILES)
     assert names <= allowed, names - allowed
     # and if the H67 geophysics lane is NOT cleared, none of its files may be present
     if not H67_GEOPHYS_FILES:

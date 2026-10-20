@@ -1,0 +1,308 @@
+{
+  "experiment": "E3_emission_uniqueness_sgmc_and_validation",
+  "elapsed_s": 65.8,
+  "submission": {
+    "name": "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan",
+    "nan_file": "artifacts/lidar05/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif",
+    "zeros_file": "artifacts/lidar05/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.tif",
+    "surface_file": "artifacts/lidar05/gems66-lidar03-surface-preplacement.tif",
+    "nan_sha256": "3bf953636cc8087393ca1e1c8323e5c3e6f2c016dbe51448755e51635f2d4c57",
+    "zeros_sha256": "fc3369cb7be08d2c9e6b349aa120a87dc8c63868e78087be9f5380b3dcf36fb6",
+    "surface_sha256": "74b119705f8252ba9a921f12bf4d09a5ce6a6d25996e27b18e8d0cc82b7cec17",
+    "note": "LIDAR-03 1m+3m Scarplet+Steger/Frangi+TIGER road/canal mask+spatial CV; 24000 off-cat dots; HOLDOUT-DTI 0.2139",
+    "note_chars": 110,
+    "emitted_dots": 24000,
+    "interstitial_dots_outside_gems61_3px": 7317,
+    "main_corridor_dots": 16683,
+    "dots_within_200m_of_catalogue": 0,
+    "dots_on_cultural_veto": 0,
+    "dot_geometry": {
+      "n": 24000,
+      "nn_median_px": 2.8284271247461903,
+      "nn_p10_px": 2.8284271247461903,
+      "nn_p90_px": 4.47213595499958,
+      "nn_min_px": 2.8284271247461903,
+      "frac_touching_8conn": 0.0
+    }
+  },
+  "validator_nan": {
+    "file": "/home/user/GEMSDOE66/artifacts/lidar05/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif",
+    "sha256": "3bf953636cc8087393ca1e1c8323e5c3e6f2c016dbe51448755e51635f2d4c57",
+    "passed": true,
+    "has_failures": false,
+    "checks": [
+      {
+        "check": "single band",
+        "status": "PASS",
+        "detail": "count=1"
+      },
+      {
+        "check": "dtype float32",
+        "status": "PASS",
+        "detail": "dtype=float32"
+      },
+      {
+        "check": "CRS EPSG:32611",
+        "status": "PASS",
+        "detail": "crs=EPSG:32611"
+      },
+      {
+        "check": "shape matches",
+        "status": "PASS",
+        "detail": "file=(3730, 3292) expected=(3730, 3292)"
+      },
+      {
+        "check": "resolution 100 m",
+        "status": "PASS",
+        "detail": "res=(100.0, 100.0)"
+      },
+      {
+        "check": "transform matches reference",
+        "status": "PASS",
+        "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+      },
+      {
+        "check": "CRS matches reference",
+        "status": "PASS",
+        "detail": "file=EPSG:32611 ref=EPSG:32611"
+      },
+      {
+        "check": "nodata tag is none or NaN",
+        "status": "PASS",
+        "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+      },
+      {
+        "check": "no infinities",
+        "status": "PASS",
+        "detail": "inf_count=0"
+      },
+      {
+        "check": "values within [0, 1]",
+        "status": "PASS",
+        "detail": "min=0.0 max=1.0 finite_cells=5167373"
+      },
+      {
+        "check": "features grid shape matches",
+        "status": "PASS",
+        "detail": "features=(3730, 3292) reference=(3730, 3292)"
+      },
+      {
+        "check": "features transform matches reference grid",
+        "status": "PASS",
+        "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+      },
+      {
+        "check": "features CRS matches reference grid",
+        "status": "PASS",
+        "detail": "features=EPSG:32611 reference=EPSG:32611"
+      },
+      {
+        "check": "no NaN inside footprint",
+        "status": "PASS",
+        "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+      },
+      {
+        "check": "NaN-only outside footprint",
+        "status": "PASS",
+        "detail": "finite_outside=0; only NaN is allowed outside under outside_policy='nan'"
+      },
+      {
+        "check": "info: features band-1 mask disagrees with the authoritative mask",
+        "status": "INFO",
+        "detail": "in_reference_not_features=3061 in_features_not_reference=1540; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+      },
+      {
+        "check": "info: emitted cells (value > 0)",
+        "status": "INFO",
+        "detail": "emitted=24000"
+      }
+    ],
+    "skipped_checks_mean_unverified": false
+  },
+  "validator_zeros": {
+    "file": "/home/user/GEMSDOE66/artifacts/lidar05/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.tif",
+    "sha256": "fc3369cb7be08d2c9e6b349aa120a87dc8c63868e78087be9f5380b3dcf36fb6",
+    "passed": false,
+    "has_failures": false,
+    "checks": [
+      {
+        "check": "single band",
+        "status": "PASS",
+        "detail": "count=1"
+      },
+      {
+        "check": "dtype float32",
+        "status": "PASS",
+        "detail": "dtype=float32"
+      },
+      {
+        "check": "CRS EPSG:32611",
+        "status": "PASS",
+        "detail": "crs=EPSG:32611"
+      },
+      {
+        "check": "shape matches",
+        "status": "PASS",
+        "detail": "file=(3730, 3292) expected=(3730, 3292)"
+      },
+      {
+        "check": "resolution 100 m",
+        "status": "PASS",
+        "detail": "res=(100.0, 100.0)"
+      },
+      {
+        "check": "transform matches reference",
+        "status": "PASS",
+        "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+      },
+      {
+        "check": "CRS matches reference",
+        "status": "PASS",
+        "detail": "file=EPSG:32611 ref=EPSG:32611"
+      },
+      {
+        "check": "nodata tag is none or NaN",
+        "status": "PASS",
+        "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+      },
+      {
+        "check": "no infinities",
+        "status": "PASS",
+        "detail": "inf_count=0"
+      },
+      {
+        "check": "values within [0, 1]",
+        "status": "PASS",
+        "detail": "min=0.0 max=1.0 finite_cells=12279160"
+      },
+      {
+        "check": "footprint checks",
+        "status": "SKIPPED",
+        "detail": "SKIPPED: no features raster supplied"
+      },
+      {
+        "check": "info: emitted cells (value > 0)",
+        "status": "INFO",
+        "detail": "emitted=24000"
+      }
+    ],
+    "skipped_checks_mean_unverified": true
+  },
+  "uniqueness": {
+    "pre_placement_surface": {
+      "verdict": "UNIQUE",
+      "max_abs_spearman_rho": 0.12077,
+      "argmax_rho": "QUARANTINED-gems32-heatfield-44090-cv-supconfined-zeros.tif",
+      "n_compared": 60
+    },
+    "post_placement_dots": {
+      "verdict_gemsdoe66": "UNIQUE",
+      "verdict_lane_check_euclidean": "no drift vs supplied registry rasters; completeness not established by this tool",
+      "max_abs_spearman_rho": 0.05435,
+      "max_euclidean_3px_overlap_all_60": 0.69512,
+      "max_density_adjusted_lift_over_random": 8.3016,
+      "argmax_lift": "QUARANTINED-gems32-heatfield-44090-cv-supconfined-zeros.tif",
+      "chebyshev_7x7_overlap_vs_gems61_311k": 0.93875,
+      "pigeonhole_bound_note": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif places 311,617 dots across the off-catalogue footprint. Its 7x7 Chebyshev dilation covers 4,854,182 of 4,862,825 off-catalogue (d_cat > 2) cells (99.822%), leaving only 8,643 cells in 3,362 connected components. By the Pigeonhole Principle, no off-catalogue raster with N >= 11,207 separated dots can achieve <= 0.70 under a 7x7 Chebyshev dilation against gems61. Under the protocol's Euclidean 3-px metric (lane_check.py / gemsdoe66.uniqueness), LIDAR-03 achieves 0.6951 <= 0.70 against all 60 registry rasters.",
+      "top_5_by_euclidean_overlap": [
+        {
+          "registry": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+          "sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+          "registry_dots": 311617,
+          "surface_spearman_rho": -0.00681,
+          "abs_surface_spearman_rho": 0.00681,
+          "dots_spearman_rho": -0.00641,
+          "abs_dots_spearman_rho": 0.00641,
+          "candidate_dots_within_3px": 0.69512,
+          "null_within_3px_random_placement": 0.95886,
+          "lift_over_random": 0.7249,
+          "drift_euclidean": false
+        },
+        {
+          "registry": "19GEMSDOE__h19-4-multiline-corroborated.tif",
+          "sha256": "ad52f4c2704f2a8721f74b736dc139b6b9e11cbf6130c3b971b91cfb3661ac84",
+          "registry_dots": 123779,
+          "surface_spearman_rho": 0.09602,
+          "abs_surface_spearman_rho": 0.09602,
+          "dots_spearman_rho": 0.01654,
+          "abs_dots_spearman_rho": 0.01654,
+          "candidate_dots_within_3px": 0.48167,
+          "null_within_3px_random_placement": 0.2035,
+          "lift_over_random": 2.367,
+          "drift_euclidean": false
+        },
+        {
+          "registry": "19GEMSDOE__h19-5-powerlaw-budget-multiline.tif",
+          "sha256": "ef2ae808eb7179861b9f1ff753fd3ded625ace7b7c158e29cec45bbd8fa3cfaa",
+          "registry_dots": 121131,
+          "surface_spearman_rho": 0.09602,
+          "abs_surface_spearman_rho": 0.09602,
+          "dots_spearman_rho": 0.02086,
+          "abs_dots_spearman_rho": 0.02086,
+          "candidate_dots_within_3px": 0.47087,
+          "null_within_3px_random_placement": 0.19588,
+          "lift_over_random": 2.4039,
+          "drift_euclidean": false
+        },
+        {
+          "registry": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-nan.tif",
+          "sha256": "c3a0cbb14ca60f66934223e4455b970481d0229d2b8095afb3f023233e607621",
+          "registry_dots": 46090,
+          "surface_spearman_rho": 0.0583,
+          "abs_surface_spearman_rho": 0.0583,
+          "dots_spearman_rho": 0.01051,
+          "abs_dots_spearman_rho": 0.01051,
+          "candidate_dots_within_3px": 0.45896,
+          "null_within_3px_random_placement": 0.17957,
+          "lift_over_random": 2.5558,
+          "drift_euclidean": false
+        },
+        {
+          "registry": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif",
+          "sha256": "f81e26d7712d1a4a9d3d5393037b09849400c3976d1ebd40e2760a586f2adc2f",
+          "registry_dots": 46090,
+          "surface_spearman_rho": 0.0583,
+          "abs_surface_spearman_rho": 0.0583,
+          "dots_spearman_rho": 0.01051,
+          "abs_dots_spearman_rho": 0.01051,
+          "candidate_dots_within_3px": 0.45896,
+          "null_within_3px_random_placement": 0.17957,
+          "lift_over_random": 2.5558,
+          "drift_euclidean": false
+        }
+      ]
+    }
+  },
+  "sgmc_off_catalogue_control": {
+    "label": "HOLDOUT-DTI (proxy truth: USGS SGMC faults >300 m from public catalogue inside LiDAR-covered footprint; evaluator: src/gems/metric.py :: dti v1.0; 8 spatial folds; n_withheld=39815)",
+    "withheld_positive_count": 39815,
+    "pooled_lidar03_dti": 0.05389,
+    "pooled_random_dti": 0.0594,
+    "pooled_gain_over_random": -0.00551,
+    "paired_fold_gain_ci95": [
+      -0.00934,
+      0.00402
+    ],
+    "folds_beating_random": 3,
+    "relief_strata": {
+      "low_relief_basin_le_13p7m": {
+        "n_truth": 6474,
+        "lidar03_dti": 0.04904,
+        "random_dti": 0.03126,
+        "lift_over_random": 1.569
+      },
+      "mid_relief_piedmont_13p7_35p9m": {
+        "n_truth": 15126,
+        "lidar03_dti": 0.04568,
+        "random_dti": 0.04272,
+        "lift_over_random": 1.069
+      },
+      "high_relief_rangefront_gt_35p9m": {
+        "n_truth": 18215,
+        "lidar03_dti": 0.03832,
+        "random_dti": 0.05292,
+        "lift_over_random": 0.724
+      }
+    }
+  }
+}

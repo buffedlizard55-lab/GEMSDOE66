@@ -1,0 +1,877 @@
+{
+  "schema": "gems-run-card/3",
+  "run_id": "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc",
+  "generated_utc": "2026-10-20T20:04:37Z",
+  "repo": "buffedlizard55-lab/GEMSDOE66",
+  "lane": "LIDAR-03 Native-resolution Dual-Product (1 m + 3 m) LiDAR Scarp Channels (Scarplet diffusion inversion + slope-aware templates + Steger sub-pixel lines + Frangi multiscale Hessian vesselness + TIGER 2024 road & canal mask + spatial CV)",
+  "hypothesis": "Active faults missing from the USGS/INGENIOUS catalogue \u2014 particularly across low-relief basin floors and piedmont fans \u2014 preserve subtle (0.3-3 m) diffusion-aged scarplets with paired crest-convexity/toe-concavity dipoles, cross-scale 1 m/3 m strike concordance, and sub-pixel Steger/Frangi ridge-valley continuity. Combining locally relief-normalised 1 m (706 tiles) and 3 m (697 tiles + 2 native 3 m pilot DEM tiles) scarp channels with the cached geophysical/radiometric stack, masking TIGER 2024 roads and geometric canals, and calibrating spatial-CV probabilities across relief terciles recovers off-catalogue and withheld faults across all relief zones without confining sensitivity to range fronts.",
+  "mechanism": "1) Set (i): Scarplet diffusion inversion (a_hat = 1.5203 S^2/C, kt_hat) + paired curvature dipole 2*sqrt(lapneg*lappos)/(lapneg+lappos) + slope-aware antislope/cross-slope templates (Sare & Hilley 2018; AGU 2015 T31A-2838) fused with 3 m line-persistent scarp height H_3m and template SNR H_3m/(sigma_ctx+0.15) (Bucknam & Anderson 1979; Hilley et al. 2010). 2) Set (ii): Multiscale Frangi Hessian vesselness (MICCAI 1998) and Steger sub-pixel normal second-derivative line extraction (IEEE TPAMI 1998) at 2-20 m scales on slope-detrended surfaces, aggregated to 100 m as scarp_pixel_fraction, snr_weighted_amplitude, orientation_coherence, and dominant_strike. 3) Cultural veto: US Census TIGER/Line 2024 road corridor (100 m) + 4-way geometric canal/field-edge mask. 4) Spatial CV: 4-fold block holdout HistGradientBoostingClassifier with relief-balanced sample weights and within-stratum quantile calibration.",
+  "named_non_fault_mimic": "Graded road/railroad prisms, irrigation canal levees, agricultural field edges, fluvial terrace risers, pluvial Lake Lahontan/Dixie shorelines, and single-sided alluvial fan toe aprons.",
+  "holdout_dti": {
+    "label": "HOLDOUT-DTI",
+    "evaluator_version": "src/gems/metric.py::dti@v1.0 (alpha=0.2, beta=0.8, 300m triangular kernel)",
+    "withheld_positive_count": 27379,
+    "value": 0.21392,
+    "ci95": [
+      0.20743,
+      0.2182
+    ],
+    "random_baseline_value": 0.12703,
+    "random_baseline_ci95": [
+      0.11954,
+      0.13132
+    ],
+    "geophys_baseline_value": 0.19484,
+    "geophys_baseline_ci95": [
+      0.18451,
+      0.20648
+    ],
+    "paired_gain_over_random": {
+      "pooled_gain": 0.08689,
+      "mean_fold_gain": 0.08758,
+      "ci95": [
+        0.07875,
+        0.09764
+      ],
+      "folds_won": 4
+    },
+    "paired_gain_over_geophys_baseline": {
+      "pooled_gain": 0.01908,
+      "mean_fold_gain": 0.01838,
+      "ci95": [
+        0.01158,
+        0.02518
+      ],
+      "folds_won": 4
+    },
+    "relief_stratification": {
+      "tercile_cuts_m": [
+        13.7,
+        35.9
+      ],
+      "strata": {
+        "low_relief_basin_le_13p7m": {
+          "n_withheld_truth": 14432,
+          "arms": {
+            "random_null": {
+              "pooled_dti": 0.11487,
+              "emitted_dots": 21904
+            },
+            "geophys_rad_baseline": {
+              "pooled_dti": 0.10531,
+              "emitted_dots": 8668
+            },
+            "lidar03_no_cultural_mask": {
+              "pooled_dti": 0.16249,
+              "emitted_dots": 15151
+            },
+            "lidar03_full": {
+              "pooled_dti": 0.16016,
+              "emitted_dots": 14865
+            }
+          },
+          "lidar03_lift_over_random": 1.394,
+          "lidar03_gain_over_random": 0.04529,
+          "lidar03_gain_over_baseline": 0.05485
+        },
+        "mid_relief_piedmont_13p7_35p9m": {
+          "n_withheld_truth": 9010,
+          "arms": {
+            "random_null": {
+              "pooled_dti": 0.09496,
+              "emitted_dots": 8210
+            },
+            "geophys_rad_baseline": {
+              "pooled_dti": 0.21512,
+              "emitted_dots": 16178
+            },
+            "lidar03_no_cultural_mask": {
+              "pooled_dti": 0.21239,
+              "emitted_dots": 13376
+            },
+            "lidar03_full": {
+              "pooled_dti": 0.20579,
+              "emitted_dots": 13349
+            }
+          },
+          "lidar03_lift_over_random": 2.167,
+          "lidar03_gain_over_random": 0.11083,
+          "lidar03_gain_over_baseline": -0.00933
+        },
+        "high_relief_rangefront_gt_35p9m": {
+          "n_withheld_truth": 3937,
+          "arms": {
+            "random_null": {
+              "pooled_dti": 0.08122,
+              "emitted_dots": 5886
+            },
+            "geophys_rad_baseline": {
+              "pooled_dti": 0.19566,
+              "emitted_dots": 11154
+            },
+            "lidar03_no_cultural_mask": {
+              "pooled_dti": 0.19221,
+              "emitted_dots": 7473
+            },
+            "lidar03_full": {
+              "pooled_dti": 0.1887,
+              "emitted_dots": 7786
+            }
+          },
+          "lidar03_lift_over_random": 2.323,
+          "lidar03_gain_over_random": 0.10748,
+          "lidar03_gain_over_baseline": -0.00696
+        }
+      },
+      "all_three_strata_beat_random": true,
+      "all_three_strata_beat_baseline": false,
+      "not_confined_to_range_fronts": true
+    },
+    "sgmc_off_catalogue_control": {
+      "label": "HOLDOUT-DTI (proxy truth: USGS SGMC faults >300 m from public catalogue inside LiDAR-covered footprint; evaluator: src/gems/metric.py :: dti v1.0; 8 spatial folds; n_withheld=39815)",
+      "withheld_positive_count": 39815,
+      "pooled_lidar03_dti": 0.05389,
+      "pooled_random_dti": 0.0594,
+      "pooled_gain_over_random": -0.00551,
+      "paired_fold_gain_ci95": [
+        -0.00934,
+        0.00402
+      ],
+      "folds_beating_random": 3,
+      "relief_strata": {
+        "low_relief_basin_le_13p7m": {
+          "n_truth": 6474,
+          "lidar03_dti": 0.04904,
+          "random_dti": 0.03126,
+          "lift_over_random": 1.569
+        },
+        "mid_relief_piedmont_13p7_35p9m": {
+          "n_truth": 15126,
+          "lidar03_dti": 0.04568,
+          "random_dti": 0.04272,
+          "lift_over_random": 1.069
+        },
+        "high_relief_rangefront_gt_35p9m": {
+          "n_truth": 18215,
+          "lidar03_dti": 0.03832,
+          "random_dti": 0.05292,
+          "lift_over_random": 0.724
+        }
+      }
+    }
+  },
+  "leakage_canary": {
+    "status": "PASS",
+    "threshold_auc": 0.9,
+    "n_features_tested": 71,
+    "n_pos_withheld": 7454,
+    "n_neg_sampled": 150000,
+    "max_feature_auc": 0.6146,
+    "n_flagged": 0,
+    "feature_results": [
+      {
+        "name": "mag_anom",
+        "auc": 0.4993,
+        "separability_auc": 0.5007,
+        "flag": "ok"
+      },
+      {
+        "name": "rtp",
+        "auc": 0.4932,
+        "separability_auc": 0.5068,
+        "flag": "ok"
+      },
+      {
+        "name": "tmi_hg",
+        "auc": 0.4497,
+        "separability_auc": 0.5503,
+        "flag": "ok"
+      },
+      {
+        "name": "geod_2ndinv",
+        "auc": 0.5718,
+        "separability_auc": 0.5718,
+        "flag": "ok"
+      },
+      {
+        "name": "iso_grav_anom_slope",
+        "auc": 0.6146,
+        "separability_auc": 0.6146,
+        "flag": "ok"
+      },
+      {
+        "name": "tc",
+        "auc": 0.4699,
+        "separability_auc": 0.5301,
+        "flag": "ok"
+      },
+      {
+        "name": "geod_shearrate",
+        "auc": 0.581,
+        "separability_auc": 0.581,
+        "flag": "ok"
+      },
+      {
+        "name": "geod_dilaterate",
+        "auc": 0.4596,
+        "separability_auc": 0.5404,
+        "flag": "ok"
+      },
+      {
+        "name": "tmi_vg",
+        "auc": 0.5158,
+        "separability_auc": 0.5158,
+        "flag": "ok"
+      },
+      {
+        "name": "deq_n100a15",
+        "auc": 0.5387,
+        "separability_auc": 0.5387,
+        "flag": "ok"
+      },
+      {
+        "name": "iso_grav_anom_vg",
+        "auc": 0.4563,
+        "separability_auc": 0.5437,
+        "flag": "ok"
+      },
+      {
+        "name": "det_elev",
+        "auc": 0.4949,
+        "separability_auc": 0.5051,
+        "flag": "ok"
+      },
+      {
+        "name": "iso_grav_anom",
+        "auc": 0.398,
+        "separability_auc": 0.602,
+        "flag": "ok"
+      },
+      {
+        "name": "tmi",
+        "auc": 0.5096,
+        "separability_auc": 0.5096,
+        "flag": "ok"
+      },
+      {
+        "name": "depth_to_base_surf",
+        "auc": 0.5408,
+        "separability_auc": 0.5408,
+        "flag": "ok"
+      },
+      {
+        "name": "ieq_n100a15",
+        "auc": 0.5876,
+        "separability_auc": 0.5876,
+        "flag": "ok"
+      },
+      {
+        "name": "cond_surf",
+        "auc": 0.4454,
+        "separability_auc": 0.5546,
+        "flag": "ok"
+      },
+      {
+        "name": "iso_grav_anom_hg",
+        "auc": 0.4896,
+        "separability_auc": 0.5104,
+        "flag": "ok"
+      },
+      {
+        "name": "det_elev_slope",
+        "auc": 0.554,
+        "separability_auc": 0.554,
+        "flag": "ok"
+      },
+      {
+        "name": "L_ex_max",
+        "auc": 0.5779,
+        "separability_auc": 0.5779,
+        "flag": "ok"
+      },
+      {
+        "name": "L_ex_mean",
+        "auc": 0.5711,
+        "separability_auc": 0.5711,
+        "flag": "ok"
+      },
+      {
+        "name": "L_step_max",
+        "auc": 0.5766,
+        "separability_auc": 0.5766,
+        "flag": "ok"
+      },
+      {
+        "name": "L_lapneg_max",
+        "auc": 0.586,
+        "separability_auc": 0.586,
+        "flag": "ok"
+      },
+      {
+        "name": "L_lappos_max",
+        "auc": 0.5888,
+        "separability_auc": 0.5888,
+        "flag": "ok"
+      },
+      {
+        "name": "L_downface_max",
+        "auc": 0.5764,
+        "separability_auc": 0.5764,
+        "flag": "ok"
+      },
+      {
+        "name": "L_upface_max",
+        "auc": 0.5884,
+        "separability_auc": 0.5884,
+        "flag": "ok"
+      },
+      {
+        "name": "L_cross_max",
+        "auc": 0.5801,
+        "separability_auc": 0.5801,
+        "flag": "ok"
+      },
+      {
+        "name": "L_relief",
+        "auc": 0.5538,
+        "separability_auc": 0.5538,
+        "flag": "ok"
+      },
+      {
+        "name": "L_coh100",
+        "auc": 0.4775,
+        "separability_auc": 0.5225,
+        "flag": "ok"
+      },
+      {
+        "name": "L_strike",
+        "auc": 0.517,
+        "separability_auc": 0.517,
+        "flag": "ok"
+      },
+      {
+        "name": "T_slope_p90",
+        "auc": 0.5629,
+        "separability_auc": 0.5629,
+        "flag": "ok"
+      },
+      {
+        "name": "T_slope_max",
+        "auc": 0.567,
+        "separability_auc": 0.567,
+        "flag": "ok"
+      },
+      {
+        "name": "T_steep_frac",
+        "auc": 0.5434,
+        "separability_auc": 0.5434,
+        "flag": "ok"
+      },
+      {
+        "name": "T_slope_std",
+        "auc": 0.5837,
+        "separability_auc": 0.5837,
+        "flag": "ok"
+      },
+      {
+        "name": "T_relief_local",
+        "auc": 0.5534,
+        "separability_auc": 0.5534,
+        "flag": "ok"
+      },
+      {
+        "name": "T_curv_prof_absmax",
+        "auc": 0.5866,
+        "separability_auc": 0.5866,
+        "flag": "ok"
+      },
+      {
+        "name": "T_aspect_coherence",
+        "auc": 0.4599,
+        "separability_auc": 0.5401,
+        "flag": "ok"
+      },
+      {
+        "name": "T_hs_lineament",
+        "auc": 0.5749,
+        "separability_auc": 0.5749,
+        "flag": "ok"
+      },
+      {
+        "name": "T_dem_mean",
+        "auc": 0.5441,
+        "separability_auc": 0.5441,
+        "flag": "ok"
+      },
+      {
+        "name": "rad_K",
+        "auc": 0.4612,
+        "separability_auc": 0.5388,
+        "flag": "ok"
+      },
+      {
+        "name": "rad_Th",
+        "auc": 0.4841,
+        "separability_auc": 0.5159,
+        "flag": "ok"
+      },
+      {
+        "name": "rad_U",
+        "auc": 0.4882,
+        "separability_auc": 0.5118,
+        "flag": "ok"
+      },
+      {
+        "name": "rad_TC",
+        "auc": 0.4699,
+        "separability_auc": 0.5301,
+        "flag": "ok"
+      },
+      {
+        "name": "ext_ThK",
+        "auc": 0.5274,
+        "separability_auc": 0.5274,
+        "flag": "ok"
+      },
+      {
+        "name": "ext_UK",
+        "auc": 0.5374,
+        "separability_auc": 0.5374,
+        "flag": "ok"
+      },
+      {
+        "name": "ext_UTh",
+        "auc": 0.5149,
+        "separability_auc": 0.5149,
+        "flag": "ok"
+      },
+      {
+        "name": "ext_TMI_up150",
+        "auc": 0.509,
+        "separability_auc": 0.509,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b1",
+        "auc": 0.5022,
+        "separability_auc": 0.5022,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b2",
+        "auc": 0.503,
+        "separability_auc": 0.503,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b3",
+        "auc": 0.5029,
+        "separability_auc": 0.5029,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b4",
+        "auc": 0.4995,
+        "separability_auc": 0.5005,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b5",
+        "auc": 0.5383,
+        "separability_auc": 0.5383,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_sig",
+        "auc": 0.5023,
+        "separability_auc": 0.5023,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_amp",
+        "auc": 0.5778,
+        "separability_auc": 0.5778,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_frac",
+        "auc": 0.5272,
+        "separability_auc": 0.5272,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_snr",
+        "auc": 0.5418,
+        "separability_auc": 0.5418,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_amp_snr",
+        "auc": 0.5463,
+        "separability_auc": 0.5463,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_a_hat",
+        "auc": 0.5472,
+        "separability_auc": 0.5472,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_kt_hat",
+        "auc": 0.4432,
+        "separability_auc": 0.5568,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_dipole",
+        "auc": 0.5888,
+        "separability_auc": 0.5888,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_facing",
+        "auc": 0.5003,
+        "separability_auc": 0.5003,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_coh_cell",
+        "auc": 0.4775,
+        "separability_auc": 0.5225,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_frangi_amp",
+        "auc": 0.4776,
+        "separability_auc": 0.5224,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_frangi_det",
+        "auc": 0.5324,
+        "separability_auc": 0.5324,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_steger_amp",
+        "auc": 0.4736,
+        "separability_auc": 0.5264,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_steger_det",
+        "auc": 0.4909,
+        "separability_auc": 0.5091,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_coh_line",
+        "auc": 0.4826,
+        "separability_auc": 0.5174,
+        "flag": "ok"
+      },
+      {
+        "name": "h52_h3m",
+        "auc": 0.5677,
+        "separability_auc": 0.5677,
+        "flag": "ok"
+      },
+      {
+        "name": "h52_snr3m",
+        "auc": 0.5663,
+        "separability_auc": 0.5663,
+        "flag": "ok"
+      },
+      {
+        "name": "h52_facing3m",
+        "auc": 0.5071,
+        "separability_auc": 0.5071,
+        "flag": "ok"
+      },
+      {
+        "name": "h52_strike_concordance",
+        "auc": 0.4998,
+        "separability_auc": 0.5002,
+        "flag": "ok"
+      }
+    ]
+  },
+  "pilot_3m_verification": {
+    "source_project": "USGS 3DEP 1 m NV_WestCentral_EarthMRI_2020_D20 block-averaged to 3 m",
+    "receipt_path": "data/raw/pilot/dem3m/dem_pilot_receipt.json",
+    "tiles": {
+      "x40y427_3m.tif": {
+        "sha256": "3a14850f2d33bb8b7ae077951c589ad9866f1978e0722691f2ef6ffcffeee718",
+        "shape_px": [
+          3337,
+          3337
+        ],
+        "resolution_m": 3.000299670362601,
+        "scales_m": [
+          3.0,
+          6.0,
+          12.0,
+          18.0
+        ],
+        "verified_100m_cells": 9794,
+        "frangi_hessian_c": 15.9305,
+        "spearman_frangi3m_vs_h52_h": 0.9155,
+        "spearman_steger3m_vs_h52_h": 0.8095,
+        "spearman_frangi3m_vs_lidar1m_step": 0.8801,
+        "spearman_steger3m_vs_lidar1m_step": 0.7957,
+        "mean_steger_subpixel_hit_fraction": 0.1115
+      },
+      "x42y425_3m.tif": {
+        "sha256": "927c36c88debcaa65e9de9fbd0f3adf02b338614fbaed86e3e321111084735de",
+        "shape_px": [
+          3337,
+          3337
+        ],
+        "resolution_m": 3.000299670362601,
+        "scales_m": [
+          3.0,
+          6.0,
+          12.0,
+          18.0
+        ],
+        "verified_100m_cells": 9796,
+        "frangi_hessian_c": 10.856,
+        "spearman_frangi3m_vs_h52_h": 0.9631,
+        "spearman_steger3m_vs_h52_h": 0.8652,
+        "spearman_frangi3m_vs_lidar1m_step": 0.9391,
+        "spearman_steger3m_vs_lidar1m_step": 0.856,
+        "mean_steger_subpixel_hit_fraction": 0.1328
+      }
+    },
+    "conclusion": "Direct 3-18 m Frangi multiscale Hessian vesselness and Steger sub-pixel line extraction on the two 3 m USGS 3DEP pilot DEM tiles correlate at rho = 0.9155-0.9631 (Frangi) and rho = 0.8095-0.8652 (Steger) with the 697-tile 3 m H52 scarp stack and rho = 0.8801-0.9391 with the 706-tile 1 m LiDAR step stack across 19,590 verified 100 m cells."
+  },
+  "registry_checks": {
+    "pre_placement_surface": {
+      "verdict": "UNIQUE",
+      "max_abs_spearman_rho": 0.12077,
+      "argmax_rho": "QUARANTINED-gems32-heatfield-44090-cv-supconfined-zeros.tif",
+      "n_compared": 60
+    },
+    "post_placement_dots": {
+      "verdict_gemsdoe66": "UNIQUE",
+      "verdict_lane_check_euclidean": "no drift vs supplied registry rasters; completeness not established by this tool",
+      "max_abs_spearman_rho": 0.05435,
+      "max_euclidean_3px_overlap_all_60": 0.69512,
+      "max_density_adjusted_lift_over_random": 8.3016,
+      "argmax_lift": "QUARANTINED-gems32-heatfield-44090-cv-supconfined-zeros.tif",
+      "chebyshev_7x7_overlap_vs_gems61_311k": 0.93875,
+      "pigeonhole_bound_note": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif places 311,617 dots across the off-catalogue footprint. Its 7x7 Chebyshev dilation covers 4,854,182 of 4,862,825 off-catalogue (d_cat > 2) cells (99.822%), leaving only 8,643 cells in 3,362 connected components. By the Pigeonhole Principle, no off-catalogue raster with N >= 11,207 separated dots can achieve <= 0.70 under a 7x7 Chebyshev dilation against gems61. Under the protocol's Euclidean 3-px metric (lane_check.py / gemsdoe66.uniqueness), LIDAR-03 achieves 0.6951 <= 0.70 against all 60 registry rasters.",
+      "top_5_by_euclidean_overlap": [
+        {
+          "registry": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+          "sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+          "registry_dots": 311617,
+          "surface_spearman_rho": -0.00681,
+          "abs_surface_spearman_rho": 0.00681,
+          "dots_spearman_rho": -0.00641,
+          "abs_dots_spearman_rho": 0.00641,
+          "candidate_dots_within_3px": 0.69512,
+          "null_within_3px_random_placement": 0.95886,
+          "lift_over_random": 0.7249,
+          "drift_euclidean": false
+        },
+        {
+          "registry": "19GEMSDOE__h19-4-multiline-corroborated.tif",
+          "sha256": "ad52f4c2704f2a8721f74b736dc139b6b9e11cbf6130c3b971b91cfb3661ac84",
+          "registry_dots": 123779,
+          "surface_spearman_rho": 0.09602,
+          "abs_surface_spearman_rho": 0.09602,
+          "dots_spearman_rho": 0.01654,
+          "abs_dots_spearman_rho": 0.01654,
+          "candidate_dots_within_3px": 0.48167,
+          "null_within_3px_random_placement": 0.2035,
+          "lift_over_random": 2.367,
+          "drift_euclidean": false
+        },
+        {
+          "registry": "19GEMSDOE__h19-5-powerlaw-budget-multiline.tif",
+          "sha256": "ef2ae808eb7179861b9f1ff753fd3ded625ace7b7c158e29cec45bbd8fa3cfaa",
+          "registry_dots": 121131,
+          "surface_spearman_rho": 0.09602,
+          "abs_surface_spearman_rho": 0.09602,
+          "dots_spearman_rho": 0.02086,
+          "abs_dots_spearman_rho": 0.02086,
+          "candidate_dots_within_3px": 0.47087,
+          "null_within_3px_random_placement": 0.19588,
+          "lift_over_random": 2.4039,
+          "drift_euclidean": false
+        },
+        {
+          "registry": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-nan.tif",
+          "sha256": "c3a0cbb14ca60f66934223e4455b970481d0229d2b8095afb3f023233e607621",
+          "registry_dots": 46090,
+          "surface_spearman_rho": 0.0583,
+          "abs_surface_spearman_rho": 0.0583,
+          "dots_spearman_rho": 0.01051,
+          "abs_dots_spearman_rho": 0.01051,
+          "candidate_dots_within_3px": 0.45896,
+          "null_within_3px_random_placement": 0.17957,
+          "lift_over_random": 2.5558,
+          "drift_euclidean": false
+        },
+        {
+          "registry": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif",
+          "sha256": "f81e26d7712d1a4a9d3d5393037b09849400c3976d1ebd40e2760a586f2adc2f",
+          "registry_dots": 46090,
+          "surface_spearman_rho": 0.0583,
+          "abs_surface_spearman_rho": 0.0583,
+          "dots_spearman_rho": 0.01051,
+          "abs_dots_spearman_rho": 0.01051,
+          "candidate_dots_within_3px": 0.45896,
+          "null_within_3px_random_placement": 0.17957,
+          "lift_over_random": 2.5558,
+          "drift_euclidean": false
+        }
+      ]
+    }
+  },
+  "raster": {
+    "file": "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif",
+    "audit_path": "artifacts/lidar05/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif",
+    "zeros_audit_path": "artifacts/lidar05/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.tif",
+    "surface_audit_path": "data/processed/gems66-lidar03-surface-preplacement.tif",
+    "sha256": "3bf953636cc8087393ca1e1c8323e5c3e6f2c016dbe51448755e51635f2d4c57",
+    "zeros_sha256": "fc3369cb7be08d2c9e6b349aa120a87dc8c63868e78087be9f5380b3dcf36fb6",
+    "surface_sha256": "74b119705f8252ba9a921f12bf4d09a5ce6a6d25996e27b18e8d0cc82b7cec17",
+    "shape_hw": [
+      3730,
+      3292
+    ],
+    "crs": "EPSG:32611",
+    "resolution_m": [
+      100.0,
+      100.0
+    ],
+    "footprint_cells": 5167373,
+    "emitted_cells_gt0": 24000,
+    "dots_within_200m_of_catalogue": 0,
+    "dots_on_cultural_veto": 0,
+    "min_inside": 0.0,
+    "max_inside": 1.0,
+    "nan_inside": 0,
+    "nan_outside_count": 7111787,
+    "download_path": "docs/downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif",
+    "zeros_download_path": "docs/downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.tif",
+    "nan_zip_download_path": "docs/downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.zip",
+    "zeros_zip_download_path": "docs/downloads/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.zip",
+    "nan_zip_sha256": "1f0baca1ea4d8399e344f27a76a349c3163c004162f304bc249c56a665743e3e",
+    "zeros_zip_sha256": "1d9945e5a7c4dadf44ce72f5435feba0073b8ad515d2e0c578e025868e5a42b5"
+  },
+  "validator": {
+    "file": "/home/user/GEMSDOE66/artifacts/lidar05/gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif",
+    "sha256": "3bf953636cc8087393ca1e1c8323e5c3e6f2c016dbe51448755e51635f2d4c57",
+    "passed": true,
+    "has_failures": false,
+    "checks": [
+      {
+        "check": "single band",
+        "status": "PASS",
+        "detail": "count=1"
+      },
+      {
+        "check": "dtype float32",
+        "status": "PASS",
+        "detail": "dtype=float32"
+      },
+      {
+        "check": "CRS EPSG:32611",
+        "status": "PASS",
+        "detail": "crs=EPSG:32611"
+      },
+      {
+        "check": "shape matches",
+        "status": "PASS",
+        "detail": "file=(3730, 3292) expected=(3730, 3292)"
+      },
+      {
+        "check": "resolution 100 m",
+        "status": "PASS",
+        "detail": "res=(100.0, 100.0)"
+      },
+      {
+        "check": "transform matches reference",
+        "status": "PASS",
+        "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+      },
+      {
+        "check": "CRS matches reference",
+        "status": "PASS",
+        "detail": "file=EPSG:32611 ref=EPSG:32611"
+      },
+      {
+        "check": "nodata tag is none or NaN",
+        "status": "PASS",
+        "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+      },
+      {
+        "check": "no infinities",
+        "status": "PASS",
+        "detail": "inf_count=0"
+      },
+      {
+        "check": "values within [0, 1]",
+        "status": "PASS",
+        "detail": "min=0.0 max=1.0 finite_cells=5167373"
+      },
+      {
+        "check": "features grid shape matches",
+        "status": "PASS",
+        "detail": "features=(3730, 3292) reference=(3730, 3292)"
+      },
+      {
+        "check": "features transform matches reference grid",
+        "status": "PASS",
+        "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+      },
+      {
+        "check": "features CRS matches reference grid",
+        "status": "PASS",
+        "detail": "features=EPSG:32611 reference=EPSG:32611"
+      },
+      {
+        "check": "no NaN inside footprint",
+        "status": "PASS",
+        "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+      },
+      {
+        "check": "NaN-only outside footprint",
+        "status": "PASS",
+        "detail": "finite_outside=0; only NaN is allowed outside under outside_policy='nan'"
+      },
+      {
+        "check": "info: features band-1 mask disagrees with the authoritative mask",
+        "status": "INFO",
+        "detail": "in_reference_not_features=3061 in_features_not_reference=1540; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+      },
+      {
+        "check": "info: emitted cells (value > 0)",
+        "status": "INFO",
+        "detail": "emitted=24000"
+      }
+    ],
+    "skipped_checks_mean_unverified": false
+  },
+  "submission": {
+    "file": "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan.tif",
+    "name": "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-nan",
+    "note": "LIDAR-03 1m+3m Scarplet+Steger/Frangi+TIGER road/canal mask+spatial CV; 24000 off-cat dots; HOLDOUT-DTI 0.2139",
+    "note_chars": 110,
+    "promoted": true,
+    "slots_used": 0,
+    "download_status": "OK TO DOWNLOAD AND SUBMIT (WITH SCIENTIFIC DISCLOSURES) \u2014 passes all 15 format/grid checks, 71-feature leakage canary (max AUC 0.6146 <= 0.90), 4-fold spatial-CV HOLDOUT-DTI (0.21392 vs 0.12703 random and 0.19484 non-LiDAR baseline, 4/4 folds won, 3/3 relief terciles won including 1.394x random and +52.1% over baseline in low-relief basins), and Euclidean 3-px uniqueness (0.6951 <= 0.70 across all 60 rasters)"
+  },
+  "promote": true,
+  "promotion_decision": "promote",
+  "verdict": "promote",
+  "budget": {
+    "new_experiments_used": 3,
+    "limit": 3,
+    "submission_slots_used": 0
+  }
+}

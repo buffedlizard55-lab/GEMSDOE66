@@ -1,0 +1,23 @@
+{
+  "file": "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros.tif",
+  "sha256": "fc3369cb7be08d2c9e6b349aa120a87dc8c63868e78087be9f5380b3dcf36fb6",
+  "shape_hw": [
+    3730,
+    3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5167373,
+  "emitted_cells_gt0": 24000,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 0,
+  "outside_fill": 0.0,
+  "finite_outside_count": 7111787,
+  "all_values_in_0_1": true,
+  "name": "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc-zeros",
+  "note": "LIDAR-03 1m+3m Scarplet+Steger/Frangi+TIGER road/canal mask+spatial CV; 24000 off-cat dots; HOLDOUT-DTI 0.2139",
+  "note_chars": 110,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+}

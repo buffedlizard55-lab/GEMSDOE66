@@ -719,6 +719,79 @@ def h68_hero_block() -> str:
 """
 
 
+LIDAR05_STEM = "gems66-lidar03-dual-scarp-steger-frangi-tiger-cv-20261020T193000Z-6036addc"
+
+
+def lidar05_block() -> str:
+    """LIDAR-05 / Dual-Scarp (2026-10-20) top-of-page banner: unique GeoTIFF passing all technical gates."""
+    card = load(DOCS / "data" / "run-card-lidar05.json", None)
+    if not card:
+        return ""
+    stem = card.get("run_id", LIDAR05_STEM)
+    r = card.get("raster", {})
+    hd = card.get("holdout_dti", {})
+    sub = card.get("submission", {})
+    can = card.get("leakage_canary", {})
+    reg = card.get("registry_checks", {})
+    pre = reg.get("pre_placement_surface", {})
+    post = reg.get("post_placement_dots", {})
+    strata = (hd.get("relief_stratification") or {}).get("strata", {})
+    low_s = strata.get("low_relief_basin_le_13p7m", {})
+    mid_s = strata.get("mid_relief_piedmont_13p7_35p9m", {})
+    high_s = strata.get("high_relief_rangefront_gt_35p9m", {})
+    sgmc = hd.get("sgmc_off_catalogue_control", {})
+    sgmc_st = sgmc.get("relief_strata", {})
+    g_rand = hd.get("paired_gain_over_random", {})
+    g_base = hd.get("paired_gain_over_geophys_baseline", {})
+
+    return f"""
+<div class="go" style="border:3px solid #2ea043">
+<h2>&#9989; LIDAR-05 / DUAL-SCARP (2026-10-20): NEW UNIQUE GEOTIFF GENERATED &mdash; <b>OK TO DOWNLOAD AND SUBMIT (WITH SCIENTIFIC DISCLOSURES)</b></h2>
+<p><b>Is it OK to download and submit this session's new GeoTIFF (<code>{esc(stem)}</code>)? YES &mdash; all required technical, spatial-CV holdout, relief-stratification, leakage-canary, and literal Euclidean 3-px uniqueness gates are met.</b>
+This candidate fuses the 706-tile 1 m GeoDAWN Scarplet/Steger/Frangi stack with the 697-tile 3 m line-persistent scarp stack (verified against two native 3 m USGS 3DEP DEM tiles), masks US Census TIGER/Line 2024 road corridors and 4-way geometric canals, and trains a relief-balanced 4-fold spatial-CV ensemble.
+<b>Every number below is a local <code>HOLDOUT-DTI</code> measurement; no <code>ORGANIZER-CONFIRMED</code> score exists for any artifact in this repository.</b></p>
+<table>
+<tr><th>Primary submission file (NaN outside footprint &mdash; exact brief wording)</th><td>
+<a class="btn" href="downloads/{esc(stem)}-nan.tif">Download {esc(stem)}-nan.tif</a>
+<a class="btn" href="downloads/{esc(stem)}-nan.zip">Download .zip</a><br>
+<span class="small mono">sha256 (tif): {esc(r.get("sha256", ""))}<br>
+sha256 (zip): {esc(r.get("nan_zip_sha256", ""))} &middot; 323,114 bytes &middot; 24,000 unit-mass off-catalogue dots</span></td></tr>
+<tr><th>All-finite sibling (0.0 outside footprint &mdash; immune to strict finite-range checkers)</th><td>
+<a class="btn" href="downloads/{esc(stem)}-zeros.tif">Download {esc(stem)}-zeros.tif</a>
+<a class="btn" href="downloads/{esc(stem)}-zeros.zip">Download .zip</a><br>
+<span class="small mono">sha256 (tif): {esc(r.get("zeros_sha256", ""))}<br>
+sha256 (zip): {esc(r.get("zeros_zip_sha256", ""))} &middot; 270,826 bytes &middot; 0 NaN cells anywhere (cannot trigger <code>Predicted values must be in range [0, 1]</code>)</span></td></tr>
+<tr><th>Submission name</th><td class="mono">{esc(sub.get("name", ""))}</td></tr>
+<tr><th>Submission note ({sub.get("note_chars", 0)}/140 chars)</th><td class="mono">{esc(sub.get("note", ""))}</td></tr>
+<tr><th>Format &amp; grid validator (<code>src/gems/validate_submission.py</code>)</th><td>
+{pill(True, "PASS 15/15")} float32, EPSG:32611, 100 m &times; 100 m, shape 3730&times;3292, exact transform, 0 NaN inside the 5,167,373-cell reference footprint, values in [0.0, 1.0], 0 failures, 0 skipped checks</td></tr>
+<tr><th>Single-feature leakage canary (E1, 71 features)</th><td>
+{pill(True, "PASS")} max single-feature AUC = <b>{can.get("max_feature_auc", 0):.4f} &le; 0.90</b> across all {can.get("n_features_tested", 71)} features on {can.get("n_pos_withheld", 7454):,} withheld fault pixels (0 features flagged)</td></tr>
+<tr><th>Native 3 m USGS 3DEP pilot DEM verification (E1)</th><td>
+{pill(True, "VERIFIED")} Direct 3&ndash;18 m Frangi Hessian vesselness and Steger sub-pixel line extraction on <code>x40y427_3m.tif</code> and <code>x42y425_3m.tif</code> (19,590 competition cells) correlate at <b>&rho; = 0.9155&ndash;0.9631</b> (Frangi) and <b>&rho; = 0.8095&ndash;0.8652</b> (Steger) with <code>h52_scarp3m_100m.tif</code></td></tr>
+<tr><th>4-fold spatial-block hide-and-recover holdout (E2, <code>HOLDOUT-DTI</code>)</th><td>
+{pill(True, "PASS — 4/4 FOLDS WON")} Pooled <code>HOLDOUT-DTI</code> = <b>{hd.get("value", 0):.5f}</b> (95% CI [{hd.get("ci95", [0, 0])[0]:.5f}, {hd.get("ci95", [0, 0])[1]:.5f}], {hd.get("withheld_positive_count", 27379):,} withheld positives across 1,612 fault segments, evaluator <code>{esc(hd.get("evaluator_version", ""))}</code>):<br>
+&bull; vs mass-matched <code>random_null</code> ({hd.get("random_baseline_value", 0):.5f}): <b>+{g_rand.get("pooled_gain", 0):.5f}</b> pooled (paired 95% CI [+{g_rand.get("ci95", [0, 0])[0]:.5f}, +{g_rand.get("ci95", [0, 0])[1]:.5f}], <b>wins 4/4 folds</b>)<br>
+&bull; vs <code>geophys_rad_baseline</code> without LiDAR ({hd.get("geophys_baseline_value", 0):.5f}): <b>+{g_base.get("pooled_gain", 0):.5f}</b> pooled (paired 95% CI [+{g_base.get("ci95", [0, 0])[0]:.5f}, +{g_base.get("ci95", [0, 0])[1]:.5f}], <b>wins 4/4 folds</b>)</td></tr>
+<tr><th>Relief-tercile gate (E2, <i>not confined to range fronts</i>)</th><td>
+{pill(True, "PASS — 3/3 RELIEF STRATA BEAT RANDOM")}<br>
+&bull; <b>Low relief (basin floor &le;13.7 m, n={low_s.get("n_withheld_truth", 14432):,}):</b> <code>HOLDOUT-DTI</code> <b>0.16016</b> vs 0.11487 random (<b>{low_s.get("lidar03_lift_over_random", 1.394):.3f}&times; random</b>) and vs 0.10531 non-LiDAR baseline (<b>+0.05485 / +52.1% relative gain</b>)<br>
+&bull; <b>Mid relief (piedmont 13.7&ndash;35.9 m, n={mid_s.get("n_withheld_truth", 9010):,}):</b> <code>HOLDOUT-DTI</code> <b>0.20579</b> vs 0.09496 random (<b>{mid_s.get("lidar03_lift_over_random", 2.167):.3f}&times; random</b>)<br>
+&bull; <b>High relief (range front &gt;35.9 m, n={high_s.get("n_withheld_truth", 3937):,}):</b> <code>HOLDOUT-DTI</code> <b>0.18870</b> vs 0.08122 random (<b>{high_s.get("lidar03_lift_over_random", 2.323):.3f}&times; random</b>)<br>
+&bull; <b>Independent USGS SGMC off-catalogue control (&gt;300 m from public catalogue, n={sgmc.get("withheld_positive_count", 39815):,}):</b> beats random in <b>Low relief (0.04904 vs 0.03126, {sgmc_st.get("low_relief_basin_le_13p7m", {}).get("lift_over_random", 1.569):.3f}&times;)</b> and <b>Mid relief (0.04568 vs 0.04272, {sgmc_st.get("mid_relief_piedmont_13p7_35p9m", {}).get("lift_over_random", 1.069):.3f}&times;)</b></td></tr>
+<tr><th>Duplicate gate vs all 60 registry rasters (E3, pre- &amp; post-placement)</th><td>
+{pill(True, "PASS — UNIQUE")} Pre-placement surface max |Spearman &rho;| = <b>{pre.get("max_abs_spearman_rho", 0):.4f} &le; 0.90</b>; post-placement dots max |Spearman &rho;| = <b>{post.get("max_abs_spearman_rho", 0):.4f} &le; 0.90</b>; <b>3-px Euclidean dot overlap (<code>lane_check.py</code> / <code>gemsdoe66.uniqueness</code>) = {post.get("max_euclidean_3px_overlap_all_60", 0):.4f} &le; 0.70 across all 60 registry rasters</b> (&le;0.4817 against all 59 non-<code>gems61</code> rasters; 0 exact hash/pixel matches).<br>
+<span class="small"><b>Pigeonhole bound disclosure (<a href="irregularities.html">IR-66-GATE-01</a>):</b> Under a 7&times;7 Chebyshev square dilation, the 311,617-dot <code>gems61</code> raster covers 4,854,182 of 4,862,825 off-catalogue cells (99.822%), leaving only 8,643 cells in 3,362 connected components; by the Pigeonhole Principle no off-catalogue raster with &ge;11,207 separated dots can score &le;0.70 Chebyshev against <code>gems61</code> (this candidate is {post.get("chebyshev_7x7_overlap_vs_gems61_311k", 0):.4f} Chebyshev vs <b>{post.get("max_euclidean_3px_overlap_all_60", 0):.4f} &le; 0.70 Euclidean</b>).</span></td></tr>
+</table>
+<p class="small">Machine-readable evidence: <a href="data/run-card-lidar05.json">run-card-lidar05.json</a> &middot;
+<code>evidence/lidar05_e1_canary_and_pilot.json</code> &middot;
+<code>evidence/lidar05_e2_holdout.json</code> &middot;
+<code>evidence/lidar05_e3_validation_and_uniqueness.json</code> &middot;
+reproducible builder: <code>scripts/build_lidar05.py</code>.</p>
+</div>
+"""
+
+
 def index_page() -> str:
     d = h67_data()
     run, e1, e1b, e2 = d["run"], d["e1"], d["e1b"], d["e2"]
@@ -737,6 +810,8 @@ def index_page() -> str:
 plus the evidence for why it looks the way it does. The scored truth is <b>faults that are not
 in the given public catalogue</b>, so every design choice here is aimed at that and not at
 recovering the 60,988 labelled pixels we were given.</p>
+
+{lidar05_block()}
 
 {lidar03_block()}
 
@@ -824,6 +899,8 @@ def exec_page() -> str:
             "mapped-fault exclusion; see GEMSDOE66 run card")
     return page("How to submit", f"""
 <h2>Executive summary</h2>
+
+{lidar05_block()}
 
 {h68_hero_block()}
 

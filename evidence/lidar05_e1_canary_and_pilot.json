@@ -1,0 +1,490 @@
+{
+  "experiment": "E1_pilot_3m_verification_and_leakage_canary",
+  "elapsed_s": 63.7,
+  "pilot_3m_dem_verification": {
+    "source_project": "USGS 3DEP 1 m NV_WestCentral_EarthMRI_2020_D20 block-averaged to 3 m",
+    "receipt_path": "data/raw/pilot/dem3m/dem_pilot_receipt.json",
+    "tiles": {
+      "x40y427_3m.tif": {
+        "sha256": "3a14850f2d33bb8b7ae077951c589ad9866f1978e0722691f2ef6ffcffeee718",
+        "shape_px": [
+          3337,
+          3337
+        ],
+        "resolution_m": 3.000299670362601,
+        "scales_m": [
+          3.0,
+          6.0,
+          12.0,
+          18.0
+        ],
+        "verified_100m_cells": 9794,
+        "frangi_hessian_c": 15.9305,
+        "spearman_frangi3m_vs_h52_h": 0.9155,
+        "spearman_steger3m_vs_h52_h": 0.8095,
+        "spearman_frangi3m_vs_lidar1m_step": 0.8801,
+        "spearman_steger3m_vs_lidar1m_step": 0.7957,
+        "mean_steger_subpixel_hit_fraction": 0.1115
+      },
+      "x42y425_3m.tif": {
+        "sha256": "927c36c88debcaa65e9de9fbd0f3adf02b338614fbaed86e3e321111084735de",
+        "shape_px": [
+          3337,
+          3337
+        ],
+        "resolution_m": 3.000299670362601,
+        "scales_m": [
+          3.0,
+          6.0,
+          12.0,
+          18.0
+        ],
+        "verified_100m_cells": 9796,
+        "frangi_hessian_c": 10.856,
+        "spearman_frangi3m_vs_h52_h": 0.9631,
+        "spearman_steger3m_vs_h52_h": 0.8652,
+        "spearman_frangi3m_vs_lidar1m_step": 0.9391,
+        "spearman_steger3m_vs_lidar1m_step": 0.856,
+        "mean_steger_subpixel_hit_fraction": 0.1328
+      }
+    },
+    "conclusion": "Direct 3-18 m Frangi multiscale Hessian vesselness and Steger sub-pixel line extraction on the two 3 m USGS 3DEP pilot DEM tiles correlate at rho = 0.9155-0.9631 (Frangi) and rho = 0.8095-0.8652 (Steger) with the 697-tile 3 m H52 scarp stack and rho = 0.8801-0.9391 with the 706-tile 1 m LiDAR step stack across 19,590 verified 100 m cells."
+  },
+  "leakage_canary": {
+    "status": "PASS",
+    "threshold_auc": 0.9,
+    "n_features_tested": 71,
+    "n_pos_withheld": 7454,
+    "n_neg_sampled": 150000,
+    "max_feature_auc": 0.6146,
+    "n_flagged": 0,
+    "feature_results": [
+      {
+        "name": "mag_anom",
+        "auc": 0.4993,
+        "separability_auc": 0.5007,
+        "flag": "ok"
+      },
+      {
+        "name": "rtp",
+        "auc": 0.4932,
+        "separability_auc": 0.5068,
+        "flag": "ok"
+      },
+      {
+        "name": "tmi_hg",
+        "auc": 0.4497,
+        "separability_auc": 0.5503,
+        "flag": "ok"
+      },
+      {
+        "name": "geod_2ndinv",
+        "auc": 0.5718,
+        "separability_auc": 0.5718,
+        "flag": "ok"
+      },
+      {
+        "name": "iso_grav_anom_slope",
+        "auc": 0.6146,
+        "separability_auc": 0.6146,
+        "flag": "ok"
+      },
+      {
+        "name": "tc",
+        "auc": 0.4699,
+        "separability_auc": 0.5301,
+        "flag": "ok"
+      },
+      {
+        "name": "geod_shearrate",
+        "auc": 0.581,
+        "separability_auc": 0.581,
+        "flag": "ok"
+      },
+      {
+        "name": "geod_dilaterate",
+        "auc": 0.4596,
+        "separability_auc": 0.5404,
+        "flag": "ok"
+      },
+      {
+        "name": "tmi_vg",
+        "auc": 0.5158,
+        "separability_auc": 0.5158,
+        "flag": "ok"
+      },
+      {
+        "name": "deq_n100a15",
+        "auc": 0.5387,
+        "separability_auc": 0.5387,
+        "flag": "ok"
+      },
+      {
+        "name": "iso_grav_anom_vg",
+        "auc": 0.4563,
+        "separability_auc": 0.5437,
+        "flag": "ok"
+      },
+      {
+        "name": "det_elev",
+        "auc": 0.4949,
+        "separability_auc": 0.5051,
+        "flag": "ok"
+      },
+      {
+        "name": "iso_grav_anom",
+        "auc": 0.398,
+        "separability_auc": 0.602,
+        "flag": "ok"
+      },
+      {
+        "name": "tmi",
+        "auc": 0.5096,
+        "separability_auc": 0.5096,
+        "flag": "ok"
+      },
+      {
+        "name": "depth_to_base_surf",
+        "auc": 0.5408,
+        "separability_auc": 0.5408,
+        "flag": "ok"
+      },
+      {
+        "name": "ieq_n100a15",
+        "auc": 0.5876,
+        "separability_auc": 0.5876,
+        "flag": "ok"
+      },
+      {
+        "name": "cond_surf",
+        "auc": 0.4454,
+        "separability_auc": 0.5546,
+        "flag": "ok"
+      },
+      {
+        "name": "iso_grav_anom_hg",
+        "auc": 0.4896,
+        "separability_auc": 0.5104,
+        "flag": "ok"
+      },
+      {
+        "name": "det_elev_slope",
+        "auc": 0.554,
+        "separability_auc": 0.554,
+        "flag": "ok"
+      },
+      {
+        "name": "L_ex_max",
+        "auc": 0.5779,
+        "separability_auc": 0.5779,
+        "flag": "ok"
+      },
+      {
+        "name": "L_ex_mean",
+        "auc": 0.5711,
+        "separability_auc": 0.5711,
+        "flag": "ok"
+      },
+      {
+        "name": "L_step_max",
+        "auc": 0.5766,
+        "separability_auc": 0.5766,
+        "flag": "ok"
+      },
+      {
+        "name": "L_lapneg_max",
+        "auc": 0.586,
+        "separability_auc": 0.586,
+        "flag": "ok"
+      },
+      {
+        "name": "L_lappos_max",
+        "auc": 0.5888,
+        "separability_auc": 0.5888,
+        "flag": "ok"
+      },
+      {
+        "name": "L_downface_max",
+        "auc": 0.5764,
+        "separability_auc": 0.5764,
+        "flag": "ok"
+      },
+      {
+        "name": "L_upface_max",
+        "auc": 0.5884,
+        "separability_auc": 0.5884,
+        "flag": "ok"
+      },
+      {
+        "name": "L_cross_max",
+        "auc": 0.5801,
+        "separability_auc": 0.5801,
+        "flag": "ok"
+      },
+      {
+        "name": "L_relief",
+        "auc": 0.5538,
+        "separability_auc": 0.5538,
+        "flag": "ok"
+      },
+      {
+        "name": "L_coh100",
+        "auc": 0.4775,
+        "separability_auc": 0.5225,
+        "flag": "ok"
+      },
+      {
+        "name": "L_strike",
+        "auc": 0.517,
+        "separability_auc": 0.517,
+        "flag": "ok"
+      },
+      {
+        "name": "T_slope_p90",
+        "auc": 0.5629,
+        "separability_auc": 0.5629,
+        "flag": "ok"
+      },
+      {
+        "name": "T_slope_max",
+        "auc": 0.567,
+        "separability_auc": 0.567,
+        "flag": "ok"
+      },
+      {
+        "name": "T_steep_frac",
+        "auc": 0.5434,
+        "separability_auc": 0.5434,
+        "flag": "ok"
+      },
+      {
+        "name": "T_slope_std",
+        "auc": 0.5837,
+        "separability_auc": 0.5837,
+        "flag": "ok"
+      },
+      {
+        "name": "T_relief_local",
+        "auc": 0.5534,
+        "separability_auc": 0.5534,
+        "flag": "ok"
+      },
+      {
+        "name": "T_curv_prof_absmax",
+        "auc": 0.5866,
+        "separability_auc": 0.5866,
+        "flag": "ok"
+      },
+      {
+        "name": "T_aspect_coherence",
+        "auc": 0.4599,
+        "separability_auc": 0.5401,
+        "flag": "ok"
+      },
+      {
+        "name": "T_hs_lineament",
+        "auc": 0.5749,
+        "separability_auc": 0.5749,
+        "flag": "ok"
+      },
+      {
+        "name": "T_dem_mean",
+        "auc": 0.5441,
+        "separability_auc": 0.5441,
+        "flag": "ok"
+      },
+      {
+        "name": "rad_K",
+        "auc": 0.4612,
+        "separability_auc": 0.5388,
+        "flag": "ok"
+      },
+      {
+        "name": "rad_Th",
+        "auc": 0.4841,
+        "separability_auc": 0.5159,
+        "flag": "ok"
+      },
+      {
+        "name": "rad_U",
+        "auc": 0.4882,
+        "separability_auc": 0.5118,
+        "flag": "ok"
+      },
+      {
+        "name": "rad_TC",
+        "auc": 0.4699,
+        "separability_auc": 0.5301,
+        "flag": "ok"
+      },
+      {
+        "name": "ext_ThK",
+        "auc": 0.5274,
+        "separability_auc": 0.5274,
+        "flag": "ok"
+      },
+      {
+        "name": "ext_UK",
+        "auc": 0.5374,
+        "separability_auc": 0.5374,
+        "flag": "ok"
+      },
+      {
+        "name": "ext_UTh",
+        "auc": 0.5149,
+        "separability_auc": 0.5149,
+        "flag": "ok"
+      },
+      {
+        "name": "ext_TMI_up150",
+        "auc": 0.509,
+        "separability_auc": 0.509,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b1",
+        "auc": 0.5022,
+        "separability_auc": 0.5022,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b2",
+        "auc": 0.503,
+        "separability_auc": 0.503,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b3",
+        "auc": 0.5029,
+        "separability_auc": 0.5029,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b4",
+        "auc": 0.4995,
+        "separability_auc": 0.5005,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_b5",
+        "auc": 0.5383,
+        "separability_auc": 0.5383,
+        "flag": "ok"
+      },
+      {
+        "name": "chi_sig",
+        "auc": 0.5023,
+        "separability_auc": 0.5023,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_amp",
+        "auc": 0.5778,
+        "separability_auc": 0.5778,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_frac",
+        "auc": 0.5272,
+        "separability_auc": 0.5272,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_snr",
+        "auc": 0.5418,
+        "separability_auc": 0.5418,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_amp_snr",
+        "auc": 0.5463,
+        "separability_auc": 0.5463,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_a_hat",
+        "auc": 0.5472,
+        "separability_auc": 0.5472,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_kt_hat",
+        "auc": 0.4432,
+        "separability_auc": 0.5568,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_dipole",
+        "auc": 0.5888,
+        "separability_auc": 0.5888,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_facing",
+        "auc": 0.5003,
+        "separability_auc": 0.5003,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_coh_cell",
+        "auc": 0.4775,
+        "separability_auc": 0.5225,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_frangi_amp",
+        "auc": 0.4776,
+        "separability_auc": 0.5224,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_frangi_det",
+        "auc": 0.5324,
+        "separability_auc": 0.5324,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_steger_amp",
+        "auc": 0.4736,
+        "separability_auc": 0.5264,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_steger_det",
+        "auc": 0.4909,
+        "separability_auc": 0.5091,
+        "flag": "ok"
+      },
+      {
+        "name": "sc_coh_line",
+        "auc": 0.4826,
+        "separability_auc": 0.5174,
+        "flag": "ok"
+      },
+      {
+        "name": "h52_h3m",
+        "auc": 0.5677,
+        "separability_auc": 0.5677,
+        "flag": "ok"
+      },
+      {
+        "name": "h52_snr3m",
+        "auc": 0.5663,
+        "separability_auc": 0.5663,
+        "flag": "ok"
+      },
+      {
+        "name": "h52_facing3m",
+        "auc": 0.5071,
+        "separability_auc": 0.5071,
+        "flag": "ok"
+      },
+      {
+        "name": "h52_strike_concordance",
+        "auc": 0.4998,
+        "separability_auc": 0.5002,
+        "flag": "ok"
+      }
+    ]
+  }
+}
