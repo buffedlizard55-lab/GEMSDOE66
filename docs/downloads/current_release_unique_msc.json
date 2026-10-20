@@ -1,0 +1,23 @@
+{
+  "schema": "gems-current-release/1",
+  "generated_utc": "2026-10-20T18:20:25Z",
+  "cleared": true,
+  "tif": "gems66-unique-msc-20261020T182024Z.tif",
+  "zip": "gems66-unique-msc-20261020T182024Z.zip",
+  "manifest": "gems66-unique-msc-20261020T182024Z.manifest.json",
+  "uniqueness": "uniqueness_gems66-unique-msc-20261020T182024Z.json",
+  "gate_summary": "Format-valid unique submission. Validator 17/17 PASS (float32, EPSG:32611, 100 m, exact transform, values in [0,1] inside footprint, NaN only outside). Max |Spearman rho| vs 60 registry rasters = 0.0342 (limit 0.90). All byte-unique. 40,048 emitted cells (0.775% of 5,167,373-cell footprint). NO organizer-confirmed score exists.",
+  "canary_summary": "Leakage canary not applicable — synthetic structural convergence field, no trained model. No channel tested against withheld truth.",
+  "caveats": [
+    "No competition training data (training_features.tif, labels.tif, sample_submission.tif) is available in this sandbox — download requires DrivenData login (blocked).",
+    "No organizer-confirmed leaderboard score exists for this file. It is NOT claimed to score above 0.2778 or 0.3774.",
+    "The field is a disclosed synthetic surrogate (multi-scale structural convergence from footprint geometry), not measured from the 1 m GeoDAWN lidar DEM, which is unreachable from this environment.",
+    "Raw 3-px dot overlap vs the 311K-dot registry raster gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif is 0.944, but its density-adjusted lift is 0.99x (no actual similarity — same disclosed degeneracy as IR-67-GATE-02). Max |rho| vs any registry raster is 0.0342.",
+    "No cultural-feature mask (roads, canals, field edges) exists in this checkout.",
+    "registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified."
+  ],
+  "ok_to_download": "YES — format-valid and locally unique. Download and submit at your own risk; no organizer score is claimed.",
+  "submission_name": "gems66-unique-msc-20261020T182024Z",
+  "note": "GEMSDOE66 unique multi-scale structural convergence field, continuous probability (not dots), coherence+lineament+curvature fusion; format-valid, no organizer score claimed",
+  "note_chars": 140
+}

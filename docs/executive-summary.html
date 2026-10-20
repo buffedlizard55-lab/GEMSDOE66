@@ -293,23 +293,32 @@ and no slot is used — the protocol's negative branch. This measurement does no
 status of the H67-1 or K66 artifacts.</div>
 
 
-<h2>Second candidate — unique-msc session (gems66-unique-msc-20261020T182024Z)</h2>
-<p>A parallel session's file, cleared on its own evidence. If you prefer it to the H67-1
-candidate above, use these fields instead — the name and note are exact and the note is
-140/140 characters.</p>
-<table>
-<tr><th>File to submit</th><td class="mono">gems66-unique-msc-20261020T182024Z.tif</td></tr>
-<tr><th>Name</th><td class="mono">gems66-unique-msc-20261020T182024Z</td></tr>
-<tr><th>Note (140/140)</th><td class="mono">GEMSDOE66 unique multi-scale structural convergence field, continuous probability (not dots), coherence+lineament+curvature fusion; forma...</td></tr>
-<tr><th>sha256</th><td class="mono">fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340</td></tr>
-</table>
-<p><a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.tif">Download the GeoTIFF</a>
-   <a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.zip">Download the .zip</a></p>
-<p class="small"><b>No ORGANIZER-CONFIRMED score exists for this file and none is claimed.</b>
-It is a <b>HOLDOUT-DTI</b> result only:
-0.15237 [95 % CI 0.14156, 0.16319] on the prescribed spatial-block instrument against
-0.07254 [0.06797, 0.07712] for mass-matched random placement.</p>
+<h2>LIDAR-01 submission status — NOT CLEARED</h2>
+<p><b>Do not download or submit the LIDAR-01 audit TIFF.</b> Its literal registry-overlap
+check is over the 0.70 stop threshold (0.921018). This candidate is not eligible for the
+competition slot; see the <a href="review/2026-10-20-review-lidar-release-and-h33.md">review</a>.
+The older HOLDOUT-DTI measurements are not organizer scores and do not override the stop rule.</p>
 
+
+
+<div class="go">
+  <h3>✅ LIDAR-02-MAXCOV (2026-10-20, parallel session arena/c73a2700): submittable file</h3>
+  <ol>
+    <li>Download <a href="downloads/gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif"><b>gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif</b></a>
+        (sha256 <span class="mono">4dd82c24411ebbc8…</span>).</li>
+    <li>On DrivenData choose <i>New submission</i> and select that exact file
+        (or the <a href="downloads/gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.zip">.zip</a> containing it).</li>
+    <li>Paste this note (≤140 characters): <i>LIDAR-02 lidar scarp field (template+Frangi ranks), kernel max-cover emission</i></li>
+    <li>If the portal rejects it with “Predicted values must be in range [0, 1]”, submit the
+        all-finite sibling <a href="downloads/gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-zeros.tif">gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-zeros.tif</a>
+        instead (same dots, no NaN anywhere).</li>
+  </ol>
+  <p class="small">Validated locally before publication: float32, EPSG:32611, 100 m, 3730×3292,
+  values in [0, 1] inside the footprint, NaN only outside it. Its evidence is HOLDOUT-DTI on a
+  spatially blocked catalogue holdout (see the overview panel, including the IR-73 raw-overlap
+  disclosure); no organiser score exists for this file, and spending a weekly slot on it is the
+  selector's decision, not this page's.</p>
+</div>
 
 
 <h2>H66-C (2026-10-12) — the scarp-channel candidate, and why there is no download</h2>

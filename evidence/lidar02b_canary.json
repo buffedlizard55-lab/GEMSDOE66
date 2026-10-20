@@ -1,0 +1,30 @@
+{
+ "generated_utc": "2026-10-20T18:43:38Z",
+ "stage": "E2b leakage canary for amendment-3 channels (LIDAR-02)",
+ "instrument": "identical to evidence/lidar02_canary.json (same folds, same bg recipe/seed)",
+ "per_channel": {
+  "prominence_up": {
+   "n_folds": 6,
+   "auc_mean": 0.561445,
+   "auc_max": 0.595136,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "field_promup": {
+   "n_folds": 6,
+   "auc_mean": 0.504725,
+   "auc_max": 0.50818,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  },
+  "field_promup_cov": {
+   "n_folds": 6,
+   "auc_mean": 0.561695,
+   "auc_max": 0.594947,
+   "flag_leakage_if_above": 0.9,
+   "leakage_flag": false
+  }
+ },
+ "flagged": [],
+ "max_auc_observed": 0.595136
+}

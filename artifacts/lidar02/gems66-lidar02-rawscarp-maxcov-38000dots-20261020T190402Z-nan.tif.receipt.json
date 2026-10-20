@@ -1,0 +1,23 @@
+{
+  "file": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif",
+  "sha256": "4dd82c24411ebbc810eaa806a326c57763a06ac156a0d69bc3d8c3200594f0a7",
+  "shape_hw": [
+    3730,
+    3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5167373,
+  "emitted_cells_gt0": 38000,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 7111787,
+  "outside_fill": null,
+  "finite_outside_count": 0,
+  "all_values_in_0_1": false,
+  "name": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan",
+  "note": "LIDAR-02 lidar scarp field (template+Frangi ranks), kernel max-cover emission",
+  "note_chars": 77,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+}

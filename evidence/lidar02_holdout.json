@@ -1,0 +1,239 @@
+{
+ "generated_utc": "2026-10-20T18:39:44Z",
+ "stage": "E2 blocked holdout (LIDAR-02)",
+ "evaluator": "src/gems/metric.py :: tversky_terms (alpha=0.2, beta=0.8, triangular R=300 m, eps=1e-9)",
+ "holdout_spec": {
+  "function": "src/gems/holdout.py spatial_block_holdout",
+  "block_px": 60,
+  "buffer_px": 3,
+  "n_folds": 6,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "holdout_fraction": 0.16666666666666666,
+  "min_lidar_fraction": 0.9,
+  "segment_ids": "8-connected components (PROXY - authoritative trace IDs not in reachable manifest)",
+  "domain": "held blocks dilated 300 m, intersect footprint & lidar",
+  "eligibility": "domain & NOT visible-fault pixels & NOT buffer-dropped fault pixels (pixel-exact)",
+  "dots_full_grid_budget": 38000,
+  "dots_per_fold": [
+   4437,
+   4438,
+   4452,
+   4423,
+   4434,
+   4420
+  ],
+  "eligible_full_grid_cells": 3845995,
+  "withheld_positives_per_fold": [
+   6422,
+   6429,
+   7245,
+   6765,
+   7548,
+   5917
+  ],
+  "withheld_positives_pooled": 40326,
+  "note": "folds are independent seed draws; held blocks may overlap across folds, so pooled terms double-count cells - pooled values are descriptive; gate also requires paired per-fold CIs"
+ },
+ "arms": {
+  "random": "uniform random field, spacing-constrained top-K (mass-matched null)",
+  "raw_topk": "field_raw (global ranks) + spacing top-K; deterministic LIDAR-01-like baseline WITHOUT its HGB and catalogue-distance features (disclosed simplification)",
+  "new_topk": "field_new (LIDAR-02-A) + spacing top-K",
+  "new_maxcov": "field_new_cov (= field_new + 0.01*rank01(prominence), amendment 2) + batched greedy kernel max-cover (PRIMARY)"
+ },
+ "results": {
+  "random": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.090196,
+    0.100363,
+    0.094882,
+    0.099454,
+    0.097852,
+    0.090228
+   ],
+   "mean": 0.095496,
+   "ci95": [
+    0.091898,
+    0.099094
+   ],
+   "pooled": 0.09563,
+   "terms_pooled": [
+    3635.783,
+    25156.362,
+    36690.217
+   ]
+  },
+  "raw_topk": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.107091,
+    0.11101,
+    0.101516,
+    0.100431,
+    0.121805,
+    0.108568
+   ],
+   "mean": 0.108404,
+   "ci95": [
+    0.102215,
+    0.114593
+   ],
+   "pooled": 0.108552,
+   "terms_pooled": [
+    4132.152,
+    24894.935,
+    36193.848
+   ]
+  },
+  "new_topk": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.067814,
+    0.070589,
+    0.056823,
+    0.054743,
+    0.075577,
+    0.059429
+   ],
+   "mean": 0.064163,
+   "ci95": [
+    0.057469,
+    0.070856
+   ],
+   "pooled": 0.064297,
+   "terms_pooled": [
+    2432.593,
+    25431.041,
+    37893.407
+   ]
+  },
+  "new_maxcov": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.093339,
+    0.082456,
+    0.080058,
+    0.069876,
+    0.090363,
+    0.079822
+   ],
+   "mean": 0.082652,
+   "ci95": [
+    0.075942,
+    0.089363
+   ],
+   "pooled": 0.082735,
+   "terms_pooled": [
+    3129.901,
+    24718.821,
+    37196.099
+   ]
+  }
+ },
+ "paired": {
+  "new_maxcov_minus_raw_topk": {
+   "mean": -0.025751,
+   "ci95": [
+    -0.031234,
+    -0.020269
+   ],
+   "ci_lower_gt_0": false,
+   "per_fold": [
+    -0.013752,
+    -0.028554,
+    -0.021458,
+    -0.030555,
+    -0.031443,
+    -0.028746
+   ]
+  },
+  "new_maxcov_minus_random": {
+   "mean": -0.012844,
+   "ci95": [
+    -0.021607,
+    -0.00408
+   ],
+   "ci_lower_gt_0": false,
+   "per_fold": [
+    0.003143,
+    -0.017907,
+    -0.014824,
+    -0.029578,
+    -0.007489,
+    -0.010406
+   ]
+  },
+  "new_topk_minus_raw_topk": {
+   "mean": -0.044241,
+   "ci95": [
+    -0.047224,
+    -0.041259
+   ],
+   "ci_lower_gt_0": false,
+   "per_fold": [
+    -0.039277,
+    -0.040421,
+    -0.044693,
+    -0.045688,
+    -0.046228,
+    -0.049139
+   ]
+  },
+  "new_maxcov_minus_new_topk": {
+   "mean": 0.01849,
+   "ci95": [
+    0.014188,
+    0.022791
+   ],
+   "ci_lower_gt_0": true,
+   "per_fold": [
+    0.025525,
+    0.011867,
+    0.023235,
+    0.015133,
+    0.014786,
+    0.020393
+   ]
+  }
+ },
+ "relief_strata": {
+  "cuts_m_from_lidar_relief_band_over_footprint_and_lidar": [
+   4.469,
+   18.456
+  ],
+  "per_stratum_pooled_holdout_dti": {
+   "low_relief_basin": {
+    "pooled_withheld_positives": 8097,
+    "judged": true,
+    "random": 0.085779,
+    "raw_topk": 0.028335,
+    "new_topk": 0.005383,
+    "new_maxcov": 0.00922
+   },
+   "mid_relief": {
+    "pooled_withheld_positives": 16918,
+    "judged": true,
+    "random": 0.076006,
+    "raw_topk": 0.076464,
+    "new_topk": 0.045939,
+    "new_maxcov": 0.047746
+   },
+   "high_relief_range_front": {
+    "pooled_withheld_positives": 15311,
+    "judged": true,
+    "random": 0.079903,
+    "raw_topk": 0.107117,
+    "new_topk": 0.080036,
+    "new_maxcov": 0.117677
+   }
+  }
+ },
+ "scale_disclosure": "Steger/Frangi at sigma=1.0-4.0 x 100 m cells on the cached 100 m aggregate of 2 m descriptors; native 2-20 m operators NOT measured (1 m DEM unreachable from this sandbox)."
+}

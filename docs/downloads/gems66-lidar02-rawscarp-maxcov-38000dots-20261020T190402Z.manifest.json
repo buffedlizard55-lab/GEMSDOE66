@@ -1,0 +1,13 @@
+{
+ "name": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z",
+ "tif": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif",
+ "zeros_tif": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-zeros.tif",
+ "zip": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.zip",
+ "sha256": "4dd82c24411ebbc810eaa806a326c57763a06ac156a0d69bc3d8c3200594f0a7",
+ "sha256_zeros": "28592cbdb7c13c2640843855a850a52476ac44ae93a2145f2b52ff14e5863cf9",
+ "sha256_zip": "958fa415fe168ffe7673ff472ea2c88fae47830318723cba964c2a84a84f0888",
+ "dots": 38000,
+ "note": "LIDAR-02 lidar scarp field (template+Frangi ranks), kernel max-cover emission",
+ "generator": "scripts/run_lidar02b.py emit",
+ "validator_passed": true
+}

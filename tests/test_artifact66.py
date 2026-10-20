@@ -53,6 +53,22 @@ def _h68_files():
 H67_GEOPHYS_FILES = _h67_geophys_files()
 H68_FILES = _h68_files()
 
+
+def _lidar02m_files():
+    """LIDAR-02-MAXCOV (parallel session arena/c73a2700) cleared files -- fail closed."""
+    p = ROOT / "docs" / "data" / "run-card-lidar02-maxcov.json"
+    if not p.exists():
+        return []
+    card = json.loads(p.read_text())
+    rel = card.get("release") or {}
+    if not card.get("promote") or not rel.get("offered_for_download"):
+        return []
+    return sorted({rel["tif"], rel["zeros_tif"], rel["zip"], rel["manifest"],
+                   rel["tif"] + ".receipt.json", rel["zeros_tif"] + ".receipt.json"})
+
+
+LIDAR02M_FILES = _lidar02m_files()
+
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 
 LIDAR02_FILES = [
@@ -68,6 +84,8 @@ UNIQUE_MSC_FILES = [
     "gems66-unique-msc-20261020T182024Z.zip",
     "gems66-unique-msc-20261020T182024Z.manifest.json",
     "uniqueness_gems66-unique-msc-20261020T182024Z.json",
+    "current_release_unique_msc.json",
+    "current_release_unique_msc.json",
 ]
 LIDAR03_FILES = [
     "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
@@ -99,6 +117,7 @@ UNIQUE_MSC_FILES = [
     "gems66-unique-msc-20261020T182024Z.zip",
     "gems66-unique-msc-20261020T182024Z.manifest.json",
     "uniqueness_gems66-unique-msc-20261020T182024Z.json",
+    "current_release_unique_msc.json",
 ]
 
 PUBLISHED = sorted([
@@ -134,7 +153,7 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     names = {path.name for path in (DOCS / "downloads").iterdir()}
     assert not (names & historical_names)
     allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES
-                  + LIDAR02_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES + LIDAR04_FILES + H68_FILES)
+                  + LIDAR02_FILES + LIDAR02M_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES + LIDAR04_FILES + H68_FILES)
     assert names <= allowed, names - allowed
     # and if the H67 geophysics lane is NOT cleared, none of its files may be present
     if not H67_GEOPHYS_FILES:

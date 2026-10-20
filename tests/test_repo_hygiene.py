@@ -113,9 +113,21 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
                     _r68 = _c68["raster"]
                     h68_names = {Path(_r68["file"]).name, Path(_r68["zeros_file"]).name, Path(_r68["zip_file"]).name}
             h68 = rel.split("/")[-1] in h68_names
-            assert rel in allowed or k66 or h68 or rel.split("/")[-1] in _ptr, f"{f.name} links an unlisted raster: {href}"
+            # LIDAR-02-MAXCOV (arena/c73a2700): names from its own run card, fail closed
+            _l02m = set()
+            _c2p = ROOT / "docs" / "data" / "run-card-lidar02-maxcov.json"
+            if _c2p.exists():
+                _c2 = _json.loads(_c2p.read_text())
+                _rel2 = _c2.get("release") or {}
+                if _c2.get("promote") and _rel2.get("offered_for_download"):
+                    _l02m = {_rel2["tif"], _rel2["zeros_tif"], _rel2["zip"]}
+            l02m = rel.split("/")[-1] in _l02m
+            assert rel in allowed or k66 or h68 or l02m or rel.split("/")[-1] in _ptr, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
+            if any("gems66-lidar02-rawscarp" in h for h in hits):
+                assert "HOLDOUT-DTI" in html, f"{f.name} links the lidar02-maxcov raster without labelled holdout numbers"
+                assert "IR-73" in html, f"{f.name} links the lidar02-maxcov raster without the raw-overlap disclosure"
             links_h67 = any("gems66-h67" in h for h in hits)
             links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
             links_h68 = any("gems66-h68" in h for h in hits)

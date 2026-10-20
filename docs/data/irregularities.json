@@ -584,6 +584,48 @@
    "source_ids": [
     "S02"
    ]
+  },
+  {
+   "id": "IR-LIDAR02-SITE-01",
+   "severity": "medium",
+   "status": "fixed in this session",
+   "title": "Published site HTML contained literal git merge-conflict markers",
+   "detail": "scripts/build_site.py held unresolved '<<<<<<< HEAD ... >>>>>>> origin/main' markers inside two page templates (index + executive-summary), and the rendered docs/index.html / docs/executive-summary.html on main contained the same markers (verified by grep 2026-10-20). Fixed by resolving both conflicts in favour of rendering BOTH sessions' blocks (lidar01 + h66c), as scripts/h66c_blocks.py prescribes, then rebuilding the site in this session."
+  },
+  {
+   "id": "IR-LIDAR02-CULT-01",
+   "severity": "medium",
+   "status": "open - disclosed",
+   "title": "No cultural-feature (TIGER) mask reachable in this session",
+   "detail": "The lane requires masking roads/canals/field edges with the existing cultural-feature mask. registry/data_manifest.json contains no TIGER entry and census.gov is unreachable from the sandbox (outbound limited to github/pypi; curl returned no response 2026-10-20). The cross-scale persistence gate is only a partial proxy, and in E2/E2b it in fact destroyed catalogue-holdout signal. The promoted candidate (raw scarp field + max-cover) carries NO cultural mask; field-edge/road-cut contamination is unquantified."
+  },
+  {
+   "id": "IR-LIDAR02-SCALE-01",
+   "severity": "medium",
+   "status": "open - disclosed",
+   "title": "Native 2-20 m Steger/Frangi not measured; operators run at 100-400 m",
+   "detail": "Only the cached 100 m aggregate of 2 m descriptors (external/lidar_scarp_features_u8.tif) is reachable; the 1 m/2 m bare-earth DEM (USGS 3DEP via prd-tnm.s3.amazonaws.com / TNMAccess, or the login-walled competition 1m_DEM_links.csv) cannot be fetched from this sandbox. Same disclosed deviation as LIDAR-01/H66-C. Scarplet is used as its template-response formulation on the aggregate bands, not re-run on native profiles."
+  },
+  {
+   "id": "IR-LIDAR02-SEG-01",
+   "severity": "low",
+   "status": "open - disclosed",
+   "title": "Holdout segment IDs are the 8-connected-component proxy",
+   "detail": "Authoritative INGENIOUS trace segment IDs (trace_segments_utm11.csv used by scripts/lane_run.py in the LIDAR-01 session) are not in the reachable data manifest, so src/gems/holdout.py fell back to 8-connected raster components. Touching distinct faults may be merged into one withheld segment; a held component is still never split across visible/holdout."
+  },
+  {
+   "id": "IR-LIDAR02-GATE-01",
+   "severity": "medium",
+   "status": "open - disclosed on site",
+   "title": "Promoted candidate's off-range-front gate margin is +0.0012 pooled DTI (mid stratum)",
+   "detail": "The preregistered 'not confined to range fronts' condition (candidate beats random in low OR mid relief stratum, per-stratum pooled HOLDOUT-DTI) is met only via mid relief: raw_maxcov 0.077189 vs random 0.076006. Low relief remains below random (0.029967 vs 0.085779; kernel-credit lift 0.38). The condition was applied exactly as preregistered (no post-hoc margin), but the pooled gain remains carried mainly by higher-relief terrain; disclosed in the run card and on the download panel."
+  },
+  {
+   "id": "IR-LIDAR02-INSTR-01",
+   "severity": "high",
+   "status": "open - structural",
+   "title": "Catalogue-rediscovery holdout is an unvalidated surrogate for the hidden score",
+   "detail": "E2/E2b score recovery of withheld PUBLIC catalogue segments, while the organiser's truth is explicitly disjoint from that catalogue. H66-C measured a same-family instrument anti-correlated with owner-reported live scores (Spearman -0.708). The promotion therefore rests on the emission-geometry effect (max-cover > top-K on identical fields, replicated on 3 fields), which is a property of the metric rather than of field-truth alignment, plus the field's own holdout gain over random. No leaderboard projection is made anywhere."
   }
  ]
 }

@@ -1,0 +1,711 @@
+{
+ "schema": "gems-run-card/1",
+ "run_id": "lidar02-2026-10-20",
+ "generated_utc": "2026-10-20T19:06:11Z",
+ "repo": "buffedlizard55-lab/GEMSDOE66",
+ "branch": "arena/c73a2700-gemsdoe66",
+ "lane": "native-resolution lidar scarp channels (executed at 100-400 m on the cached 100 m aggregate of 2 m descriptors - native 2-20 m NOT measured, 1 m DEM unreachable from sandbox)",
+ "hypothesis": "LIDAR-02-A: local-SNR scarp prominence (slope-aware antislope template amplitude / 1 km local roughness) x cross-scale signed Steger persistence, emitted by kernel max-cover, beats the global raw scarp field at equal budget on lidar-covered blocked holdout, with gain not confined to range fronts. E2 FALSIFIED the veto-subtracted field; E2b (preregistration amendment 3) tested the two surviving mechanisms: no-veto prominence and max-cover emission on the raw field.",
+ "mechanism": "Detectability ranking (amplitude relative to local roughness) should promote low-relief basin/piedmont scarps that global amplitude ranking starves (IR-74); cross-scale persistence should reject single-scale cultural edges; max-cover emission matches the DTI marginal-credit structure (alpha=0.2, 300 m kernel).",
+ "named_non_fault_mimic": "Fluvial terrace riser / alluvial-fan head incision. Secondary: landslide headscarps, paleo-shorelines, canal banks, road cuts and field edges (no TIGER cultural mask reachable - IR-LIDAR02-CULT-01).",
+ "preregistration": "registry/preregistration-lidar02.json (3 amendments, each timestamped before the run it affected)",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator_version": "src/gems/metric.py :: tversky_terms (alpha=0.2, beta=0.8, triangular R=300 m, eps=1e-9)",
+  "withheld_positives_pooled": 40326,
+  "withheld_positives_per_fold": [
+   6422,
+   6429,
+   7245,
+   6765,
+   7548,
+   5917
+  ],
+  "n_folds": 6,
+  "segment_id_source": "8-connected components (PROXY, disclosed)",
+  "arms_e2b": {
+   "random": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.090196,
+     0.100363,
+     0.094882,
+     0.099454,
+     0.097852,
+     0.090228
+    ],
+    "mean": 0.095496,
+    "ci95": [
+     0.091898,
+     0.099094
+    ],
+    "pooled": 0.09563,
+    "terms_pooled": [
+     3635.783,
+     25156.362,
+     36690.217
+    ],
+    "dots_placed_per_fold": [
+     4437,
+     4438,
+     4452,
+     4423,
+     4434,
+     4420
+    ]
+   },
+   "raw_topk": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.107091,
+     0.11101,
+     0.101516,
+     0.100431,
+     0.121805,
+     0.108568
+    ],
+    "mean": 0.108404,
+    "ci95": [
+     0.102215,
+     0.114593
+    ],
+    "pooled": 0.108552,
+    "terms_pooled": [
+     4132.152,
+     24894.935,
+     36193.848
+    ],
+    "dots_placed_per_fold": [
+     4437,
+     4438,
+     4452,
+     4423,
+     4434,
+     4420
+    ]
+   },
+   "raw_maxcov": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.120269,
+     0.116765,
+     0.111402,
+     0.108946,
+     0.131893,
+     0.120927
+    ],
+    "mean": 0.118367,
+    "ci95": [
+     0.111837,
+     0.124897
+    ],
+    "pooled": 0.118481,
+    "terms_pooled": [
+     4517.353,
+     24815.616,
+     35808.647
+    ],
+    "dots_placed_per_fold": [
+     4437,
+     4438,
+     4452,
+     4423,
+     4434,
+     4420
+    ]
+   },
+   "promup_topk": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.068655,
+     0.07181,
+     0.05809,
+     0.056622,
+     0.07621,
+     0.061788
+    ],
+    "mean": 0.065529,
+    "ci95": [
+     0.059209,
+     0.07185
+    ],
+    "pooled": 0.065637,
+    "terms_pooled": [
+     2483.72,
+     25414.852,
+     37842.28
+    ],
+    "dots_placed_per_fold": [
+     4437,
+     4438,
+     4452,
+     4423,
+     4434,
+     4420
+    ]
+   },
+   "promup_maxcov": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.091536,
+     0.083682,
+     0.079035,
+     0.073272,
+     0.087825,
+     0.079539
+    ],
+    "mean": 0.082481,
+    "ci95": [
+     0.077206,
+     0.087757
+    ],
+    "pooled": 0.082517,
+    "terms_pooled": [
+     3121.756,
+     24731.913,
+     37204.244
+    ],
+    "dots_placed_per_fold": [
+     4437,
+     4438,
+     4452,
+     4423,
+     4434,
+     4420
+    ]
+   }
+  },
+  "paired_e2b": {
+   "promup_maxcov_minus_raw_topk": {
+    "mean": -0.025922,
+    "ci95": [
+     -0.03095,
+     -0.020895
+    ],
+    "ci_lower_gt_0": false,
+    "per_fold": [
+     -0.015555,
+     -0.027328,
+     -0.022481,
+     -0.027159,
+     -0.03398,
+     -0.029029
+    ]
+   },
+   "raw_maxcov_minus_raw_topk": {
+    "mean": 0.009963,
+    "ci95": [
+     0.007819,
+     0.012107
+    ],
+    "ci_lower_gt_0": true,
+    "per_fold": [
+     0.013178,
+     0.005754,
+     0.009885,
+     0.008515,
+     0.010088,
+     0.012359
+    ]
+   },
+   "promup_maxcov_minus_random": {
+    "mean": -0.013015,
+    "ci95": [
+     -0.020307,
+     -0.005723
+    ],
+    "ci_lower_gt_0": false,
+    "per_fold": [
+     0.00134,
+     -0.016682,
+     -0.015847,
+     -0.026183,
+     -0.010026,
+     -0.01069
+    ]
+   },
+   "raw_maxcov_minus_random": {
+    "mean": 0.022871,
+    "ci95": [
+     0.014876,
+     0.030865
+    ],
+    "ci_lower_gt_0": true,
+    "per_fold": [
+     0.030073,
+     0.016401,
+     0.01652,
+     0.009492,
+     0.034041,
+     0.030698
+    ]
+   },
+   "promup_maxcov_minus_promup_topk": {
+    "mean": 0.016952,
+    "ci95": [
+     0.013266,
+     0.020639
+    ],
+    "ci_lower_gt_0": true,
+    "per_fold": [
+     0.022881,
+     0.011871,
+     0.020945,
+     0.01665,
+     0.011615,
+     0.01775
+    ]
+   },
+   "raw_maxcov_minus_raw_topk_dup": {
+    "mean": 0.009963,
+    "ci95": [
+     0.007819,
+     0.012107
+    ],
+    "ci_lower_gt_0": true,
+    "per_fold": [
+     0.013178,
+     0.005754,
+     0.009885,
+     0.008515,
+     0.010088,
+     0.012359
+    ]
+   }
+  },
+  "candidate_arm_by_preregistered_rule": "raw_maxcov",
+  "arms_e2_falsified_field": {
+   "random": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.090196,
+     0.100363,
+     0.094882,
+     0.099454,
+     0.097852,
+     0.090228
+    ],
+    "mean": 0.095496,
+    "ci95": [
+     0.091898,
+     0.099094
+    ],
+    "pooled": 0.09563,
+    "terms_pooled": [
+     3635.783,
+     25156.362,
+     36690.217
+    ]
+   },
+   "raw_topk": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.107091,
+     0.11101,
+     0.101516,
+     0.100431,
+     0.121805,
+     0.108568
+    ],
+    "mean": 0.108404,
+    "ci95": [
+     0.102215,
+     0.114593
+    ],
+    "pooled": 0.108552,
+    "terms_pooled": [
+     4132.152,
+     24894.935,
+     36193.848
+    ]
+   },
+   "new_topk": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.067814,
+     0.070589,
+     0.056823,
+     0.054743,
+     0.075577,
+     0.059429
+    ],
+    "mean": 0.064163,
+    "ci95": [
+     0.057469,
+     0.070856
+    ],
+    "pooled": 0.064297,
+    "terms_pooled": [
+     2432.593,
+     25431.041,
+     37893.407
+    ]
+   },
+   "new_maxcov": {
+    "label": "HOLDOUT-DTI",
+    "per_fold": [
+     0.093339,
+     0.082456,
+     0.080058,
+     0.069876,
+     0.090363,
+     0.079822
+    ],
+    "mean": 0.082652,
+    "ci95": [
+     0.075942,
+     0.089363
+    ],
+    "pooled": 0.082735,
+    "terms_pooled": [
+     3129.901,
+     24718.821,
+     37196.099
+    ]
+   }
+  },
+  "paired_e2": {
+   "new_maxcov_minus_raw_topk": {
+    "mean": -0.025751,
+    "ci95": [
+     -0.031234,
+     -0.020269
+    ],
+    "ci_lower_gt_0": false,
+    "per_fold": [
+     -0.013752,
+     -0.028554,
+     -0.021458,
+     -0.030555,
+     -0.031443,
+     -0.028746
+    ]
+   },
+   "new_maxcov_minus_random": {
+    "mean": -0.012844,
+    "ci95": [
+     -0.021607,
+     -0.00408
+    ],
+    "ci_lower_gt_0": false,
+    "per_fold": [
+     0.003143,
+     -0.017907,
+     -0.014824,
+     -0.029578,
+     -0.007489,
+     -0.010406
+    ]
+   },
+   "new_topk_minus_raw_topk": {
+    "mean": -0.044241,
+    "ci95": [
+     -0.047224,
+     -0.041259
+    ],
+    "ci_lower_gt_0": false,
+    "per_fold": [
+     -0.039277,
+     -0.040421,
+     -0.044693,
+     -0.045688,
+     -0.046228,
+     -0.049139
+    ]
+   },
+   "new_maxcov_minus_new_topk": {
+    "mean": 0.01849,
+    "ci95": [
+     0.014188,
+     0.022791
+    ],
+    "ci_lower_gt_0": true,
+    "per_fold": [
+     0.025525,
+     0.011867,
+     0.023235,
+     0.015133,
+     0.014786,
+     0.020393
+    ]
+   }
+  },
+  "relief_strata_e2b": {
+   "cuts_m": [
+    4.469,
+    18.456
+   ],
+   "per_stratum_pooled_holdout_dti": {
+    "low_relief_basin": {
+     "pooled_withheld_positives": 8097,
+     "judged": true,
+     "random": 0.085779,
+     "raw_topk": 0.028335,
+     "raw_maxcov": 0.029967,
+     "promup_topk": 0.003162,
+     "promup_maxcov": 0.006331
+    },
+    "mid_relief": {
+     "pooled_withheld_positives": 16918,
+     "judged": true,
+     "random": 0.076006,
+     "raw_topk": 0.076464,
+     "raw_maxcov": 0.077189,
+     "promup_topk": 0.041173,
+     "promup_maxcov": 0.039752
+    },
+    "high_relief_range_front": {
+     "pooled_withheld_positives": 15311,
+     "judged": true,
+     "random": 0.079903,
+     "raw_topk": 0.107117,
+     "raw_maxcov": 0.122443,
+     "promup_topk": 0.092433,
+     "promup_maxcov": 0.124636
+    }
+   },
+   "kernel_credit_lift_diagnostic": {
+    "low_relief_basin": {
+     "diagnostic_only_not_a_gate": true,
+     "kernel_credit_per_truth_pixel": {
+      "random": 0.091896,
+      "raw_topk": 0.032651,
+      "raw_maxcov": 0.03475,
+      "promup_topk": 0.005807,
+      "promup_maxcov": 0.008541
+     },
+     "lift_vs_random": {
+      "random": 1.0,
+      "raw_topk": 0.3553,
+      "raw_maxcov": 0.3781,
+      "promup_topk": 0.0632,
+      "promup_maxcov": 0.0929
+     }
+    },
+    "mid_relief": {
+     "diagnostic_only_not_a_gate": true,
+     "kernel_credit_per_truth_pixel": {
+      "random": 0.087706,
+      "raw_topk": 0.093778,
+      "raw_maxcov": 0.098176,
+      "promup_topk": 0.050391,
+      "promup_maxcov": 0.050498
+     },
+     "lift_vs_random": {
+      "random": 1.0,
+      "raw_topk": 1.0692,
+      "raw_maxcov": 1.1194,
+      "promup_topk": 0.5745,
+      "promup_maxcov": 0.5758
+     }
+    },
+    "high_relief_range_front": {
+     "diagnostic_only_not_a_gate": true,
+     "kernel_credit_per_truth_pixel": {
+      "random": 0.091952,
+      "raw_topk": 0.148994,
+      "raw_maxcov": 0.168182,
+      "promup_topk": 0.103467,
+      "promup_maxcov": 0.143575
+     },
+     "lift_vs_random": {
+      "random": 1.0,
+      "raw_topk": 1.6203,
+      "raw_maxcov": 1.829,
+      "promup_topk": 1.1252,
+      "promup_maxcov": 1.5614
+     }
+    }
+   }
+  },
+  "adaptivity_disclosure": "E2b arms were motivated by E2 diagnostics (evidence/lidar02_holdout.json) and the E1 canary; folds/budgets/gate are identical to E2 but the holdout is no longer untouched - read as exploratory-confirmatory.",
+  "organizer_score": null,
+  "organizer_score_label": "no ORGANIZER-CONFIRMED score exists; nothing was uploaded"
+ },
+ "leakage_canary": {
+  "threshold_auc": 0.9,
+  "max_auc_E1_channels": 0.583868,
+  "max_auc_E2b_channels": 0.595136,
+  "flagged": []
+ },
+ "gate_checks": {
+  "canary_clear_E1_and_E2b": true,
+  "pooled_candidate_gt_raw_topk": true,
+  "paired_candidate_minus_raw_topk_ci_lower_gt_0": true,
+  "paired_candidate_minus_random_ci_lower_gt_0": true,
+  "not_confined_to_range_fronts": true
+ },
+ "registry_checks": {
+  "n_comparators": 81,
+  "identical_to_any": false,
+  "max_abs_spearman_dots": 0.112225,
+  "surface_max_abs_spearman": 0.149297,
+  "worst_raw_overlap": {
+   "raster": "registry/rasters/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+   "dot_overlap_within_3px": 0.994868,
+   "random_control_overlap": 0.979026,
+   "lift_over_random": 1.016,
+   "density_ratio": 8.2
+  },
+  "literal_rule_trips_gt_0p70": [
+   {
+    "raster": "registry/rasters/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "overlap": 0.994868,
+    "random_control": 0.979026,
+    "lift": 1.016
+   }
+  ],
+  "unique_chance_corrected": true,
+  "evidence": "evidence/lidar02b_uniqueness.json",
+  "post_merge_recheck": "2026-10-20 vs merged main 1152c8c (PRs #26-#32 comparators included); candidate bytes unchanged",
+  "literal_rule_convention_note": "PR #26 withdrew LIDAR-01 under the literal within-3px rule. This candidate trips the same literal rule vs the same 311k-dot comparator (raw 0.995) whose matched random control is 0.979 (lift 1.016): no 38k-dot raster can pass the literal rule there. Promotion follows the preregistered chance-corrected IR-73 reading with all numbers disclosed; under the literal reading this file would be withdrawn like LIDAR-01. Selector owns the call."
+ },
+ "raster": {
+  "exists": true,
+  "file": "docs/downloads/gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif",
+  "sha256": "4dd82c24411ebbc810eaa806a326c57763a06ac156a0d69bc3d8c3200594f0a7",
+  "dots": 38000,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "shape_hw": [
+   3730,
+   3292
+  ],
+  "values": "binary dots 1.0 on 0.0; NaN only outside footprint (-nan) / all-finite sibling (-zeros)"
+ },
+ "release": {
+  "offered_for_download": true,
+  "tif": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif",
+  "zeros_tif": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-zeros.tif",
+  "zip": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.zip",
+  "manifest": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z.manifest.json",
+  "sha256": "4dd82c24411ebbc810eaa806a326c57763a06ac156a0d69bc3d8c3200594f0a7",
+  "sha256_zeros": "28592cbdb7c13c2640843855a850a52476ac44ae93a2145f2b52ff14e5863cf9",
+  "dots": 38000
+ },
+ "validator": {
+  "summary": "15 PASS / 0 FAIL / 0 SKIPPED",
+  "passed": true,
+  "checks": [
+   {
+    "check": "single band",
+    "status": "PASS",
+    "detail": "count=1"
+   },
+   {
+    "check": "dtype float32",
+    "status": "PASS",
+    "detail": "dtype=float32"
+   },
+   {
+    "check": "CRS EPSG:32611",
+    "status": "PASS",
+    "detail": "crs=EPSG:32611"
+   },
+   {
+    "check": "shape matches",
+    "status": "PASS",
+    "detail": "file=(3730, 3292) expected=(3730, 3292)"
+   },
+   {
+    "check": "resolution 100 m",
+    "status": "PASS",
+    "detail": "res=(100.0, 100.0)"
+   },
+   {
+    "check": "transform matches reference",
+    "status": "PASS",
+    "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "CRS matches reference",
+    "status": "PASS",
+    "detail": "file=EPSG:32611 ref=EPSG:32611"
+   },
+   {
+    "check": "nodata tag is none or NaN",
+    "status": "PASS",
+    "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+   },
+   {
+    "check": "no infinities",
+    "status": "PASS",
+    "detail": "inf_count=0"
+   },
+   {
+    "check": "values within [0, 1]",
+    "status": "PASS",
+    "detail": "min=0.0 max=1.0 finite_cells=5167373"
+   },
+   {
+    "check": "features grid shape matches",
+    "status": "PASS",
+    "detail": "features=(3730, 3292) reference=(3730, 3292)"
+   },
+   {
+    "check": "features transform matches reference grid",
+    "status": "PASS",
+    "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+   },
+   {
+    "check": "features CRS matches reference grid",
+    "status": "PASS",
+    "detail": "features=EPSG:32611 reference=EPSG:32611"
+   },
+   {
+    "check": "no NaN inside footprint",
+    "status": "PASS",
+    "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+   },
+   {
+    "check": "NaN-only outside footprint",
+    "status": "PASS",
+    "detail": "finite_outside=0; only NaN is allowed outside under outside_policy='nan'"
+   },
+   {
+    "check": "info: features band-1 mask disagrees with the authoritative mask",
+    "status": "INFO",
+    "detail": "in_reference_not_features=3061 in_features_not_reference=1540; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+   },
+   {
+    "check": "info: emitted cells (value > 0)",
+    "status": "INFO",
+    "detail": "emitted=38000"
+   }
+  ],
+  "zeros_sibling_passed": true
+ },
+ "submission": {
+  "name": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z",
+  "note": "LIDAR-02 lidar scarp field (template+Frangi ranks), kernel max-cover emission",
+  "note_chars": 77,
+  "slots_used": 0,
+  "uploaded": false
+ },
+ "budget": {
+  "experiments_used": 3,
+  "experiments": [
+   "E1 channels+canary",
+   "E2 LIDAR-02-A holdout (falsified)",
+   "E2b amendment-3 holdout"
+  ],
+  "wall_clock_note": "session 2026-10-20; see review doc"
+ },
+ "open_irregularities": [
+  "IR-LIDAR02-CULT-01",
+  "IR-LIDAR02-SCALE-01",
+  "IR-LIDAR02-SITE-01",
+  "IR-LIDAR02-SEG-01"
+ ],
+ "promote": true,
+ "promotion_decision": "promote",
+ "verdict": "promote - all preregistered gates met (see gate_checks); download offered, slot NOT spent by this session",
+ "evidence_files": [
+  "evidence/lidar02_canary.json",
+  "evidence/lidar02_holdout.json",
+  "evidence/lidar02b_canary.json",
+  "evidence/lidar02b_holdout.json",
+  "evidence/lidar02b_emission.json",
+  "evidence/lidar02b_uniqueness.json"
+ ]
+}

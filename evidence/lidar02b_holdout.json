@@ -1,0 +1,374 @@
+{
+ "generated_utc": "2026-10-20T18:56:17Z",
+ "stage": "E2b blocked holdout (LIDAR-02, preregistration amendment 3)",
+ "adaptivity_disclosure": "E2b arms were motivated by E2 diagnostics (evidence/lidar02_holdout.json) and the E1 canary; folds/budgets/gate are identical to E2 but the holdout is no longer untouched - read as exploratory-confirmatory.",
+ "evaluator": "src/gems/metric.py :: tversky_terms (alpha=0.2, beta=0.8, triangular R=300 m, eps=1e-9)",
+ "holdout_spec": {
+  "identical_to_E2": true,
+  "dots_per_fold": [
+   4437,
+   4438,
+   4452,
+   4423,
+   4434,
+   4420
+  ],
+  "withheld_positives_per_fold": [
+   6422,
+   6429,
+   7245,
+   6765,
+   7548,
+   5917
+  ],
+  "withheld_positives_pooled": 40326,
+  "eligible_full_grid_cells": 3845995
+ },
+ "arms": {
+  "random": "uniform random field, spacing top-K (mass-matched null)",
+  "raw_topk": "field_raw + spacing top-K (E2 reference, identical recipe)",
+  "raw_maxcov": "field_raw + batched greedy kernel max-cover (diagnostic candidate)",
+  "promup_topk": "field_promup (no-veto prominence x persistence) + spacing top-K",
+  "promup_maxcov": "field_promup_cov + batched greedy kernel max-cover (primary candidate)"
+ },
+ "candidate_selection_rule_preregistered": "higher pooled DTI among {promup_maxcov, raw_maxcov}; all original gate conditions vs raw_topk/random must hold; CIs unadjusted for the 2-candidate selection (disclosed)",
+ "results": {
+  "random": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.090196,
+    0.100363,
+    0.094882,
+    0.099454,
+    0.097852,
+    0.090228
+   ],
+   "mean": 0.095496,
+   "ci95": [
+    0.091898,
+    0.099094
+   ],
+   "pooled": 0.09563,
+   "terms_pooled": [
+    3635.783,
+    25156.362,
+    36690.217
+   ],
+   "dots_placed_per_fold": [
+    4437,
+    4438,
+    4452,
+    4423,
+    4434,
+    4420
+   ]
+  },
+  "raw_topk": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.107091,
+    0.11101,
+    0.101516,
+    0.100431,
+    0.121805,
+    0.108568
+   ],
+   "mean": 0.108404,
+   "ci95": [
+    0.102215,
+    0.114593
+   ],
+   "pooled": 0.108552,
+   "terms_pooled": [
+    4132.152,
+    24894.935,
+    36193.848
+   ],
+   "dots_placed_per_fold": [
+    4437,
+    4438,
+    4452,
+    4423,
+    4434,
+    4420
+   ]
+  },
+  "raw_maxcov": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.120269,
+    0.116765,
+    0.111402,
+    0.108946,
+    0.131893,
+    0.120927
+   ],
+   "mean": 0.118367,
+   "ci95": [
+    0.111837,
+    0.124897
+   ],
+   "pooled": 0.118481,
+   "terms_pooled": [
+    4517.353,
+    24815.616,
+    35808.647
+   ],
+   "dots_placed_per_fold": [
+    4437,
+    4438,
+    4452,
+    4423,
+    4434,
+    4420
+   ]
+  },
+  "promup_topk": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.068655,
+    0.07181,
+    0.05809,
+    0.056622,
+    0.07621,
+    0.061788
+   ],
+   "mean": 0.065529,
+   "ci95": [
+    0.059209,
+    0.07185
+   ],
+   "pooled": 0.065637,
+   "terms_pooled": [
+    2483.72,
+    25414.852,
+    37842.28
+   ],
+   "dots_placed_per_fold": [
+    4437,
+    4438,
+    4452,
+    4423,
+    4434,
+    4420
+   ]
+  },
+  "promup_maxcov": {
+   "label": "HOLDOUT-DTI",
+   "per_fold": [
+    0.091536,
+    0.083682,
+    0.079035,
+    0.073272,
+    0.087825,
+    0.079539
+   ],
+   "mean": 0.082481,
+   "ci95": [
+    0.077206,
+    0.087757
+   ],
+   "pooled": 0.082517,
+   "terms_pooled": [
+    3121.756,
+    24731.913,
+    37204.244
+   ],
+   "dots_placed_per_fold": [
+    4437,
+    4438,
+    4452,
+    4423,
+    4434,
+    4420
+   ]
+  }
+ },
+ "paired": {
+  "promup_maxcov_minus_raw_topk": {
+   "mean": -0.025922,
+   "ci95": [
+    -0.03095,
+    -0.020895
+   ],
+   "ci_lower_gt_0": false,
+   "per_fold": [
+    -0.015555,
+    -0.027328,
+    -0.022481,
+    -0.027159,
+    -0.03398,
+    -0.029029
+   ]
+  },
+  "raw_maxcov_minus_raw_topk": {
+   "mean": 0.009963,
+   "ci95": [
+    0.007819,
+    0.012107
+   ],
+   "ci_lower_gt_0": true,
+   "per_fold": [
+    0.013178,
+    0.005754,
+    0.009885,
+    0.008515,
+    0.010088,
+    0.012359
+   ]
+  },
+  "promup_maxcov_minus_random": {
+   "mean": -0.013015,
+   "ci95": [
+    -0.020307,
+    -0.005723
+   ],
+   "ci_lower_gt_0": false,
+   "per_fold": [
+    0.00134,
+    -0.016682,
+    -0.015847,
+    -0.026183,
+    -0.010026,
+    -0.01069
+   ]
+  },
+  "raw_maxcov_minus_random": {
+   "mean": 0.022871,
+   "ci95": [
+    0.014876,
+    0.030865
+   ],
+   "ci_lower_gt_0": true,
+   "per_fold": [
+    0.030073,
+    0.016401,
+    0.01652,
+    0.009492,
+    0.034041,
+    0.030698
+   ]
+  },
+  "promup_maxcov_minus_promup_topk": {
+   "mean": 0.016952,
+   "ci95": [
+    0.013266,
+    0.020639
+   ],
+   "ci_lower_gt_0": true,
+   "per_fold": [
+    0.022881,
+    0.011871,
+    0.020945,
+    0.01665,
+    0.011615,
+    0.01775
+   ]
+  },
+  "raw_maxcov_minus_raw_topk_dup": {
+   "mean": 0.009963,
+   "ci95": [
+    0.007819,
+    0.012107
+   ],
+   "ci_lower_gt_0": true,
+   "per_fold": [
+    0.013178,
+    0.005754,
+    0.009885,
+    0.008515,
+    0.010088,
+    0.012359
+   ]
+  }
+ },
+ "relief_strata": {
+  "cuts_m": [
+   4.469,
+   18.456
+  ],
+  "per_stratum_pooled_holdout_dti": {
+   "low_relief_basin": {
+    "pooled_withheld_positives": 8097,
+    "judged": true,
+    "random": 0.085779,
+    "raw_topk": 0.028335,
+    "raw_maxcov": 0.029967,
+    "promup_topk": 0.003162,
+    "promup_maxcov": 0.006331
+   },
+   "mid_relief": {
+    "pooled_withheld_positives": 16918,
+    "judged": true,
+    "random": 0.076006,
+    "raw_topk": 0.076464,
+    "raw_maxcov": 0.077189,
+    "promup_topk": 0.041173,
+    "promup_maxcov": 0.039752
+   },
+   "high_relief_range_front": {
+    "pooled_withheld_positives": 15311,
+    "judged": true,
+    "random": 0.079903,
+    "raw_topk": 0.107117,
+    "raw_maxcov": 0.122443,
+    "promup_topk": 0.092433,
+    "promup_maxcov": 0.124636
+   }
+  },
+  "kernel_credit_lift_diagnostic": {
+   "low_relief_basin": {
+    "diagnostic_only_not_a_gate": true,
+    "kernel_credit_per_truth_pixel": {
+     "random": 0.091896,
+     "raw_topk": 0.032651,
+     "raw_maxcov": 0.03475,
+     "promup_topk": 0.005807,
+     "promup_maxcov": 0.008541
+    },
+    "lift_vs_random": {
+     "random": 1.0,
+     "raw_topk": 0.3553,
+     "raw_maxcov": 0.3781,
+     "promup_topk": 0.0632,
+     "promup_maxcov": 0.0929
+    }
+   },
+   "mid_relief": {
+    "diagnostic_only_not_a_gate": true,
+    "kernel_credit_per_truth_pixel": {
+     "random": 0.087706,
+     "raw_topk": 0.093778,
+     "raw_maxcov": 0.098176,
+     "promup_topk": 0.050391,
+     "promup_maxcov": 0.050498
+    },
+    "lift_vs_random": {
+     "random": 1.0,
+     "raw_topk": 1.0692,
+     "raw_maxcov": 1.1194,
+     "promup_topk": 0.5745,
+     "promup_maxcov": 0.5758
+    }
+   },
+   "high_relief_range_front": {
+    "diagnostic_only_not_a_gate": true,
+    "kernel_credit_per_truth_pixel": {
+     "random": 0.091952,
+     "raw_topk": 0.148994,
+     "raw_maxcov": 0.168182,
+     "promup_topk": 0.103467,
+     "promup_maxcov": 0.143575
+    },
+    "lift_vs_random": {
+     "random": 1.0,
+     "raw_topk": 1.6203,
+     "raw_maxcov": 1.829,
+     "promup_topk": 1.1252,
+     "promup_maxcov": 1.5614
+    }
+   }
+  }
+ },
+ "scale_disclosure": "Steger/Frangi at sigma=1.0-4.0 x 100 m cells on the cached 100 m aggregate of 2 m descriptors; native 2-20 m operators NOT measured (1 m DEM unreachable from this sandbox)."
+}
