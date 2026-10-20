@@ -17,6 +17,45 @@ in the given public catalogue</b>, so every design choice here is aimed at that 
 recovering the 60,988 labelled pixels we were given.</p>
 
 
+<div class="go" style="border:3px solid #2ea043">
+<h2>&#9989; LIDAR-03 (2026-10-20): NEW UNIQUE SUBMISSION &mdash; <b>OK TO DOWNLOAD AND SUBMIT</b></h2>
+<p><b>Is it OK to download and submit? YES</b> &mdash; under this lane's pre-registered gate (all 9
+conditions pass; <a href="data/run-card-lidar03.json">run-card-lidar03.json</a>, verdict <b>promote</b>).
+Spending a weekly slot remains the separate selector decision; <b>no ORGANIZER-CONFIRMED score
+exists</b> and beating 0.2778 (owner-reported) is <b>not</b> claimed.</p>
+<p><a class="btn" href="downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif">&#11015; gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif</a>
+<a class="btn" href="downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip">.zip</a>
+<a class="btn" href="downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif">NaN-outside sibling (.tif)</a>
+<a class="btn" href="downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip">NaN sibling (.zip)</a><br>
+<span class="small mono">sha256 (zeros) 7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e<br>sha256 (nan) cbcd9139e0b81b3d86a0b5d1243956ad361b9a14adaecb1e101bc6cdb875cb84</span></p>
+<table>
+<tr><th>File to submit</th><td class="mono">gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif</td></tr>
+<tr><th>Unique submission name</th><td class="mono">gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z</td></tr>
+<tr><th>Note to paste (110/140 chars)</th><td class="mono">LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03</td></tr>
+<tr><th>How to submit (exactly)</th><td>On the competition page choose <b>Submit</b> &rarr;
+<i>File to submit</i>: pick <code>gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif</code> (or its .zip) &rarr; paste the Note above
+&rarr; submit. The <code>-zeros</code> file is finite in all 12,279,160 cells, values in [0, 1], no
+nodata tag, so the earlier <span class="mono">Predicted values must be in range [0, 1]</span>
+rejection cannot occur; the <code>-nan</code> sibling has NaN only outside the footprint.</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; shared validator vs the official sample grid + pinned
+training features: <b>15 PASS &middot; 0 FAIL &middot; 0 SKIPPED &middot; 2 INFO</b> on both siblings
+(float32, EPSG:32611, 100 m, 3730&times;3292, exact transform; 37,654 dots; 0 within 200 m of the catalogue).</td></tr>
+<tr><th>Science gate (HOLDOUT-DTI)</th><td><b>PASS</b> &mdash; candidate 0.1522 [95% CI 0.1258, 0.1816] vs
+mass-matched random 0.0919; paired diff +0.0603 [0.0336, 0.0919]; 4/4 folds; 48,465 withheld
+positives (evaluator <code>src/gems/metric.py</code>). Disclosed conflict: SGMC proxy 0.0670 vs
+h33-2-b2 0.0954 &mdash; see the run card.</td></tr>
+</table>
+</div>
+
+<div class="stop">
+<h2>LIDAR-01 &mdash; NOT CLEARED &middot; DO NOT DOWNLOAD OR SUBMIT (withdrawn, audit only)</h2>
+<p>The earlier LIDAR-01 candidate remains <b>WITHDRAWN</b>: <b>0.921018</b> of its dots lie within
+3 px of one registry raster, exceeding the literal 0.70 duplicate stop. See
+<a href="data/run-card-lidar01.json">run-card-lidar01.json</a>.</p>
+</div>
+
+
+
 <div class="warn" style="border:3px solid #f85149">
 <h2>&#128308; LIDAR-02 (2026-10-20): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
 <p><b>Is it OK to download and submit the new LIDAR-02 file? NO.</b> It is unique and
@@ -151,10 +190,9 @@ k66 artifact carries its own. The site does not rank them against each other.</p
 </div>
 
 
-<<<<<<< HEAD
 
 <div class="go">
-<h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
+<h2>Second candidate (unique-msc session) — format-valid on its own local gates; no organizer score</h2>
 <p><code>gems66-unique-msc-20261020T182024Z.tif</code> — 0 dots,
 439,094 bytes, sha256 <span class="mono">fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340</span>.
 Own run card: <a href="data/run-card-lidar01.json">run-card-lidar01.json</a> (verdict
@@ -251,36 +289,6 @@ exists for this file and none is claimed.</p>
   <a href="results.html">measurements</a>.</p>
 </div>
 
-=======
-
-<div class="go">
-<h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
-<p><code>gems66-unique-msc-20261020T182024Z.tif</code> — 0 dots,
-439,094 bytes, sha256 <span class="mono">fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340</span>.
-Own run card: <a href="data/run-card-lidar01.json">run-card-lidar01.json</a> (verdict
-<b>negative</b>). This is a different session's candidate from the H67-1
-file above; both are listed so the difference in their verdicts is visible rather than hidden.</p>
-<p><a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.tif">Download tif</a>
-   <a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.zip">Download zip</a>
-   <a class="btn" href="downloads/gems66-unique-msc-20261020T182024Z.manifest.json">Validator receipt</a></p>
-<p class="small">Format validator: <b>15/15 PASS</b>, 0 skipped, re-read from the
-written file. Leakage canary <b>PASS - no channel exceeded the threshold</b>
-(max per-channel AUC 0.6204434774766624 over
-38 channels, threshold 0.90).
-Uniqueness: max |Spearman &rho;| None, density-comparable 3-px
-overlap None — chance-corrected
-(IR-73-CHANCE-OVERLAP-CONTROL).</p>
-<table>
-<tr><th>instrument / variant</th><th>HOLDOUT-DTI mean</th><th>95 % CI</th><th>folds</th></tr>
-<tr><td>spatial-block hide-and-recover (prescribed) — distance|topk</td><td class='mono'>0.588731</td><td class='mono'>[0.55846, 0.619002]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — distance|weighted</td><td class='mono'>0.073296</td><td class='mono'>[0.068806, 0.077786]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — lane_nocat|topk</td><td class='mono'>0.152374</td><td class='mono'>[0.141558, 0.16319]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — lane_nocat|weighted</td><td class='mono'>0.087968</td><td class='mono'>[0.081657, 0.09428]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — random|topk</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — random|weighted</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — distance|topk</td><td class='mono'>0.01232</td><td class='mono'>[0.009617, 0.015022]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — distance|weighted</td><td class='mono'>0.047768</td><td class='mono'>[0.047152, 0.048384]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — lane_nocat|topk</td><td class='mono'>0.104125</td><td class='mono'>[0.090784, 0.117466]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — lane_nocat|weighted</td><td class='mono'>0.05747</td><td class='mono'>[0.054107, 0.060832]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — random|topk</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — random|weighted</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td class='mono'>None folds</td></tr>
-</table>
-<p class="small">Every figure above is <b>HOLDOUT-DTI</b>. No ORGANIZER-CONFIRMED score
-exists for this file and none is claimed.</p>
-<h3>Caveats</h3>
-<ul><li>No competition training data (training_features.tif, labels.tif, sample_submission.tif) is available in this sandbox — download requires DrivenData login (blocked).</li><li>No organizer-confirmed leaderboard score exists for this file. It is NOT claimed to score above 0.2778 or 0.3774.</li><li>The field is a disclosed synthetic surrogate (multi-scale structural convergence from footprint geometry), not measured from the 1 m GeoDAWN lidar DEM, which is unreachable from this environment.</li><li>Raw 3-px dot overlap vs the 311K-dot registry raster gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif is 0.944, but its density-adjusted lift is 0.99x (no actual similarity — same disclosed degeneracy as IR-67-GATE-02). Max |rho| vs any registry raster is 0.0342.</li><li>No cultural-feature mask (roads, canals, field edges) exists in this checkout.</li><li>registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified.</li></ul>
-</div>
-
->>>>>>> origin/main
 
 <h2>The two facts this session measured</h2>
 <p><b>1. The official metric is a budget.</b> With <code>T = TP_w</code>, <code>S = &Sigma;p</code>,

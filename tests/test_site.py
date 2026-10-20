@@ -41,6 +41,18 @@ LIDAR02_FILES = [
     "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif.receipt.json",
 ]
 
+# LIDAR-03 (2026-10-20): spatial-CV-retrained classifier; verdict PROMOTE under its
+# pre-registered gate (run-card-lidar03.json). Listed explicitly, fail-closed style.
+LIDAR03_FILES = [
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif.receipt.json",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif.receipt.json",
+    "current_release_lidar03.json",
+]
+
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -115,7 +127,7 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
             path_part = urlsplit(href).path.lower()
             if path_part.endswith((".tif", ".tiff", ".zip")):
                 rel = urlsplit(href).path
-                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + LIDAR02_FILES + UNIQUE_MSC_FILES), f"{name}: {href}"
+                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + LIDAR02_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES), f"{name}: {href}"
     # the H67 geophysics lane may publish exactly what its own run card clears (fail closed)
     import glob as _glob
     _h67 = []
@@ -130,7 +142,7 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
-    ] + K66_FILES + LIDAR01_FILES + LIDAR02_FILES + UNIQUE_MSC_FILES)
+    ] + K66_FILES + LIDAR01_FILES + LIDAR02_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES)
 
 
 def test_run_card_labels_every_number_and_claims_no_qualified_score():

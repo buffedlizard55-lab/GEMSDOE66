@@ -41,6 +41,30 @@ def _h67_geophys_files():
 H67_GEOPHYS_FILES = _h67_geophys_files()
 
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
+
+LIDAR02_FILES = [
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif.receipt.json",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.zip",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif.receipt.json",
+]
+UNIQUE_MSC_FILES = [
+    "gems66-unique-msc-20261020T182024Z.tif",
+    "gems66-unique-msc-20261020T182024Z.zip",
+    "gems66-unique-msc-20261020T182024Z.manifest.json",
+    "uniqueness_gems66-unique-msc-20261020T182024Z.json",
+]
+LIDAR03_FILES = [
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif.receipt.json",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip",
+    "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif.receipt.json",
+    "current_release_lidar03.json",
+]
 # LIDAR-01's pointer remains for audit/status; its raster is not a public download.
 LIDAR01_FILES = ["current_release.json"]
 
@@ -79,7 +103,8 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     historical_names = {item["file"] for item in historical}
     names = {path.name for path in (DOCS / "downloads").iterdir()}
     assert not (names & historical_names)
-    allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES)
+    allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES
+                    + LIDAR02_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES)
     assert names <= allowed, names - allowed
     # and if the H67 geophysics lane is NOT cleared, none of its files may be present
     if not H67_GEOPHYS_FILES:
