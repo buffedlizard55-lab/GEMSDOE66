@@ -58,13 +58,24 @@ def test_candidate_is_audit_only_and_hash_matches_record():
     assert not (DOCS / "downloads" / f"{NAME}.zip").exists()
 
 
-def test_public_release_pointer_is_not_cleared_or_downloadable():
-    release = json.loads((DOCS / "downloads/current_release.json").read_text())
-    assert release["cleared"] is False
-    assert release["tif"] == ""
-    assert release["zip"] == ""
-    assert release["audit_candidate"].endswith(f"artifacts/lidar01/{NAME}.tif")
-    assert release["audit_sha256"] == json.loads((ROOT / "evidence/lidar01_uniqueness.json").read_text())["candidate_sha256"]
+def test_public_release_pointer_does_not_offer_lidar01():
+    """Intent preserved from the original pointer test: LIDAR-01 is withdrawn and must
+    never be the downloadable target of a public pointer.  The pointer file has since
+    been reused by later sessions for their own candidates (unique-msc; per-candidate
+    pointers such as current_release_lidar03.json), so this test pins the property that
+    matters - LIDAR-01's bytes are not offered - rather than one session's pointer shape.
+    Updated in the LIDAR-03 session; see docs/review/2026-10-20-lidar03-session.md."""
+    for pointer in (DOCS / "downloads").glob("current_release*.json"):
+        release = json.loads(pointer.read_text())
+        for key in ("tif", "zip", "nan_tif", "nan_zip"):
+            assert NAME not in str(release.get(key, "")), f"{pointer.name} offers withdrawn LIDAR-01"
+    assert not (DOCS / "downloads" / f"{NAME}.tif").exists()
+    assert not (DOCS / "downloads" / f"{NAME}.zip").exists()
+    card = json.loads((DOCS / "data/run-card-lidar01.json").read_text())
+    assert card["verdict"] == "negative"
+    assert card["submission"]["download_status"].startswith("WITHDRAWN")
+    assert card["raster"]["sha256"] == json.loads(
+        (ROOT / "evidence/lidar01_uniqueness.json").read_text())["candidate_sha256"]
 
 
 def test_generated_site_explicitly_says_do_not_download_or_submit():

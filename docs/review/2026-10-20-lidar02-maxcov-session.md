@@ -93,7 +93,7 @@ simply do not present as clean single lines persisting across 100–400 m smooth
 
 ## Uniqueness and format
 
-75 comparators post-merge (registry + downloads + artifacts, incl. the parallel sharpersist
+81 comparators post-merge (registry + downloads + artifacts, incl. the parallel sharpersist
 LIDAR-02 and unique-msc candidates that landed via PRs #26–#28 during this session; candidate's
 own staged copies excluded): no sha256/pixel twin; max |Spearman| 0.112 (dots, vs the sharpersist
 raster), 0.149 (pre-placement surface); vs the same-lane LIDAR-01 raster ρ = 0.0003, within-3px

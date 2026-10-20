@@ -1,0 +1,276 @@
+{
+ "generated_utc": "2026-10-20T19:14:33Z",
+ "evaluator_version": "src/gems/metric.py :: tversky_terms (alpha=0.2, beta=0.8, R=300 m triangular kernel)",
+ "holdout_protocol": "4-fold whole-segment hide-and-recover (authoritative INGENIOUS record_id via trace_segments_utm11.csv, 300 m training buffer, pixel-exact visible fault mask, LiDAR-covered 20 km spatial blocks)",
+ "withheld_positives_pooled": 37543,
+ "summary_arms": {
+  "random_null": {
+   "label": "HOLDOUT-DTI",
+   "pooled_dti": 0.06588,
+   "ci95": [
+    0.06185,
+    0.06934
+   ],
+   "n_blocks_bootstrapped": 85,
+   "per_fold": [
+    0.06554,
+    0.06627,
+    0.06578,
+    0.06593
+   ],
+   "total_emitted_dots": 19645
+  },
+  "visible_distance_only": {
+   "label": "HOLDOUT-DTI",
+   "pooled_dti": 0.09515,
+   "ci95": [
+    0.08069,
+    0.11132
+   ],
+   "n_blocks_bootstrapped": 85,
+   "per_fold": [
+    0.09721,
+    0.09123,
+    0.10752,
+    0.08431
+   ],
+   "total_emitted_dots": 19645
+  },
+  "raw_elevation_confounded": {
+   "label": "HOLDOUT-DTI",
+   "pooled_dti": 0.1487,
+   "ci95": [
+    0.11766,
+    0.18281
+   ],
+   "n_blocks_bootstrapped": 85,
+   "per_fold": [
+    0.1598,
+    0.12504,
+    0.12287,
+    0.18751
+   ],
+   "total_emitted_dots": 19645
+  },
+  "h68_2_scarp_only": {
+   "label": "HOLDOUT-DTI",
+   "pooled_dti": 0.13368,
+   "ci95": [
+    0.11145,
+    0.15443
+   ],
+   "n_blocks_bootstrapped": 85,
+   "per_fold": [
+    0.13885,
+    0.13532,
+    0.11623,
+    0.14398
+   ],
+   "total_emitted_dots": 19645
+  },
+  "h68_3_vent_only": {
+   "label": "HOLDOUT-DTI",
+   "pooled_dti": 0.09153,
+   "ci95": [
+    0.06729,
+    0.11092
+   ],
+   "n_blocks_bootstrapped": 85,
+   "per_fold": [
+    0.09685,
+    0.08487,
+    0.0744,
+    0.11016
+   ],
+   "total_emitted_dots": 19645
+  },
+  "h68_1_full_synthesis": {
+   "label": "HOLDOUT-DTI",
+   "pooled_dti": 0.16052,
+   "ci95": [
+    0.13093,
+    0.1828
+   ],
+   "n_blocks_bootstrapped": 85,
+   "per_fold": [
+    0.15619,
+    0.16498,
+    0.13801,
+    0.18348
+   ],
+   "total_emitted_dots": 19645
+  }
+ },
+ "relief_stratification": {
+  "low_relief_basin_floor": {
+   "n_withheld_positives": 12960,
+   "relief_cuts_m": [
+    8.2,
+    20.87
+   ],
+   "random_null": 0.04992,
+   "raw_elevation_confounded": 0.05497,
+   "h68_2_scarp_only": 0.07132,
+   "h68_3_vent_only": 0.07723,
+   "h68_1_full_synthesis": 0.06918,
+   "h68_1_lift_vs_random": 1.386,
+   "h68_1_gain_vs_random": 0.01926
+  },
+  "mid_relief_piedmont": {
+   "n_withheld_positives": 12238,
+   "relief_cuts_m": [
+    8.2,
+    20.87
+   ],
+   "random_null": 0.04899,
+   "raw_elevation_confounded": 0.15612,
+   "h68_2_scarp_only": 0.12146,
+   "h68_3_vent_only": 0.0641,
+   "h68_1_full_synthesis": 0.16332,
+   "h68_1_lift_vs_random": 3.334,
+   "h68_1_gain_vs_random": 0.11433
+  },
+  "high_relief_range_front": {
+   "n_withheld_positives": 12345,
+   "relief_cuts_m": [
+    8.2,
+    20.87
+   ],
+   "random_null": 0.05885,
+   "raw_elevation_confounded": 0.13769,
+   "h68_2_scarp_only": 0.12139,
+   "h68_3_vent_only": 0.09014,
+   "h68_1_full_synthesis": 0.14766,
+   "h68_1_lift_vs_random": 2.509,
+   "h68_1_gain_vs_random": 0.08881
+  }
+ },
+ "folds": [
+  {
+   "fold": 0,
+   "withheld_positives": 9905,
+   "fold_budget": 5344,
+   "scores": {
+    "random_null": {
+     "dti": 0.06554,
+     "dots": 5344
+    },
+    "visible_distance_only": {
+     "dti": 0.09721,
+     "dots": 5344
+    },
+    "raw_elevation_confounded": {
+     "dti": 0.1598,
+     "dots": 5344
+    },
+    "h68_2_scarp_only": {
+     "dti": 0.13885,
+     "dots": 5344
+    },
+    "h68_3_vent_only": {
+     "dti": 0.09685,
+     "dots": 5344
+    },
+    "h68_1_full_synthesis": {
+     "dti": 0.15619,
+     "dots": 5344
+    }
+   }
+  },
+  {
+   "fold": 1,
+   "withheld_positives": 9495,
+   "fold_budget": 4921,
+   "scores": {
+    "random_null": {
+     "dti": 0.06627,
+     "dots": 4921
+    },
+    "visible_distance_only": {
+     "dti": 0.09123,
+     "dots": 4921
+    },
+    "raw_elevation_confounded": {
+     "dti": 0.12504,
+     "dots": 4921
+    },
+    "h68_2_scarp_only": {
+     "dti": 0.13532,
+     "dots": 4921
+    },
+    "h68_3_vent_only": {
+     "dti": 0.08487,
+     "dots": 4921
+    },
+    "h68_1_full_synthesis": {
+     "dti": 0.16498,
+     "dots": 4921
+    }
+   }
+  },
+  {
+   "fold": 2,
+   "withheld_positives": 9176,
+   "fold_budget": 4747,
+   "scores": {
+    "random_null": {
+     "dti": 0.06578,
+     "dots": 4747
+    },
+    "visible_distance_only": {
+     "dti": 0.10752,
+     "dots": 4747
+    },
+    "raw_elevation_confounded": {
+     "dti": 0.12287,
+     "dots": 4747
+    },
+    "h68_2_scarp_only": {
+     "dti": 0.11623,
+     "dots": 4747
+    },
+    "h68_3_vent_only": {
+     "dti": 0.0744,
+     "dots": 4747
+    },
+    "h68_1_full_synthesis": {
+     "dti": 0.13801,
+     "dots": 4747
+    }
+   }
+  },
+  {
+   "fold": 3,
+   "withheld_positives": 8967,
+   "fold_budget": 4633,
+   "scores": {
+    "random_null": {
+     "dti": 0.06593,
+     "dots": 4633
+    },
+    "visible_distance_only": {
+     "dti": 0.08431,
+     "dots": 4633
+    },
+    "raw_elevation_confounded": {
+     "dti": 0.18751,
+     "dots": 4633
+    },
+    "h68_2_scarp_only": {
+     "dti": 0.14398,
+     "dots": 4633
+    },
+    "h68_3_vent_only": {
+     "dti": 0.11016,
+     "dots": 4633
+    },
+    "h68_1_full_synthesis": {
+     "dti": 0.18348,
+     "dots": 4633
+    }
+   }
+  }
+ ],
+ "gate_passed": true,
+ "non_range_front_gate_passed": true
+}

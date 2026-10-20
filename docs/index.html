@@ -17,6 +17,45 @@ in the given public catalogue</b>, so every design choice here is aimed at that 
 recovering the 60,988 labelled pixels we were given.</p>
 
 
+<div class="go" style="border:3px solid #2ea043">
+<h2>&#9989; LIDAR-03 (2026-10-20): NEW UNIQUE SUBMISSION &mdash; <b>OK TO DOWNLOAD AND SUBMIT</b></h2>
+<p><b>Is it OK to download and submit? YES</b> &mdash; under this lane's pre-registered gate (all 9
+conditions pass; <a href="data/run-card-lidar03.json">run-card-lidar03.json</a>, verdict <b>promote</b>).
+Spending a weekly slot remains the separate selector decision; <b>no ORGANIZER-CONFIRMED score
+exists</b> and beating 0.2778 (owner-reported) is <b>not</b> claimed.</p>
+<p><a class="btn" href="downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif">&#11015; gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif</a>
+<a class="btn" href="downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip">.zip</a>
+<a class="btn" href="downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif">NaN-outside sibling (.tif)</a>
+<a class="btn" href="downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip">NaN sibling (.zip)</a><br>
+<span class="small mono">sha256 (zeros) 7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e<br>sha256 (nan) cbcd9139e0b81b3d86a0b5d1243956ad361b9a14adaecb1e101bc6cdb875cb84</span></p>
+<table>
+<tr><th>File to submit</th><td class="mono">gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif</td></tr>
+<tr><th>Unique submission name</th><td class="mono">gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z</td></tr>
+<tr><th>Note to paste (110/140 chars)</th><td class="mono">LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03</td></tr>
+<tr><th>How to submit (exactly)</th><td>On the competition page choose <b>Submit</b> &rarr;
+<i>File to submit</i>: pick <code>gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif</code> (or its .zip) &rarr; paste the Note above
+&rarr; submit. The <code>-zeros</code> file is finite in all 12,279,160 cells, values in [0, 1], no
+nodata tag, so the earlier <span class="mono">Predicted values must be in range [0, 1]</span>
+rejection cannot occur; the <code>-nan</code> sibling has NaN only outside the footprint.</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; shared validator vs the official sample grid + pinned
+training features: <b>15 PASS &middot; 0 FAIL &middot; 0 SKIPPED &middot; 2 INFO</b> on both siblings
+(float32, EPSG:32611, 100 m, 3730&times;3292, exact transform; 37,654 dots; 0 within 200 m of the catalogue).</td></tr>
+<tr><th>Science gate (HOLDOUT-DTI)</th><td><b>PASS</b> &mdash; candidate 0.1522 [95% CI 0.1258, 0.1816] vs
+mass-matched random 0.0919; paired diff +0.0603 [0.0336, 0.0919]; 4/4 folds; 48,465 withheld
+positives (evaluator <code>src/gems/metric.py</code>). Disclosed conflict: SGMC proxy 0.0670 vs
+h33-2-b2 0.0954 &mdash; see the run card.</td></tr>
+</table>
+</div>
+
+<div class="stop">
+<h2>LIDAR-01 &mdash; NOT CLEARED &middot; DO NOT DOWNLOAD OR SUBMIT (withdrawn, audit only)</h2>
+<p>The earlier LIDAR-01 candidate remains <b>WITHDRAWN</b>: <b>0.921018</b> of its dots lie within
+3 px of one registry raster, exceeding the literal 0.70 duplicate stop. See
+<a href="data/run-card-lidar01.json">run-card-lidar01.json</a>.</p>
+</div>
+
+
+
 <div class="warn" style="border:3px solid #f85149">
 <h2>&#128308; LIDAR-02 (2026-10-20): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
 <p><b>Is it OK to download and submit the new LIDAR-02 file? NO.</b> It is unique and
@@ -273,7 +312,7 @@ this candidate. No ORGANIZER-CONFIRMED result exists.</p>
   
   <p class="small"><b>Uniqueness (WARN disclosure):</b> max |Spearman| 0.1122
   on dots and 0.1493 on the pre-placement surface over
-  75 comparators (limit 0.90). The literal within-3px rule trips once, at
+  81 comparators (limit 0.90). The literal within-3px rule trips once, at
   0.9949 against <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>,
   but a matched random placement scores 0.9790 against the same
   8×-denser raster (lift 1.0160) — the IR-73 density artifact, reported

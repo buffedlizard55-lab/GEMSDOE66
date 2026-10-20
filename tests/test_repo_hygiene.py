@@ -66,6 +66,19 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
         # H66-C is deliberately absent: its gate is not met, so it is never offered here.
+        # LIDAR-02: audit-linked only under a NOT OK TO SUBMIT banner (2026-10-20).
+        "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+        "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip",
+        "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+        "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.zip",
+        # unique-msc session file, cleared on its own local gates (2026-10-20).
+        "downloads/gems66-unique-msc-20261020T182024Z.tif",
+        "downloads/gems66-unique-msc-20261020T182024Z.zip",
+        # LIDAR-03: verdict PROMOTE under its pre-registered gate (run-card-lidar03.json).
+        "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+        "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip",
+        "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+        "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip",
     }
     linked_any = False
     for f in sorted((ROOT / "docs").glob("*.html")):
@@ -92,7 +105,15 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             # parallel 2026-10-20 sessions on main (PRs #26-#28): their published rasters
             _par = rel.split("/")[-1].startswith(
                 ("gems66-lidar02-sharpersist-", "gems66-unique-msc-"))
-            assert rel in allowed or k66 or l02 or _par, f"{f.name} links an unlisted raster: {href}"
+            h68_names = set()
+            _h68_p = ROOT / "docs" / "data" / "run-card-h68.json"
+            if _h68_p.exists():
+                _c68 = _json.loads(_h68_p.read_text(encoding="utf-8"))
+                if _c68.get("cleared_for_download"):
+                    _r68 = _c68["raster"]
+                    h68_names = {Path(_r68["file"]).name, Path(_r68["zeros_file"]).name, Path(_r68["zip_file"]).name}
+            h68 = rel.split("/")[-1] in h68_names
+            assert rel in allowed or k66 or l02 or _par or h68, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
             links_h67 = any("gems66-h67" in h for h in hits)
@@ -100,6 +121,11 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             if any("gems66-lidar02-rawscarp" in h for h in hits):  # LIDAR-02-MAXCOV session only
                 assert "HOLDOUT-DTI" in html, f"{f.name} links the lidar02 raster without labelled holdout numbers"
                 assert "IR-73" in html, f"{f.name} links the lidar02 raster without the raw-overlap disclosure"
+            links_h68 = any("gems66-h68" in h for h in hits)
+            if links_h68:
+                assert "HOLDOUT-DTI" in html, f"{f.name} links H68 without HOLDOUT-DTI label"
+                assert "95% CI" in html, f"{f.name} links H68 without its 95% CI"
+                assert "No ORGANIZER-CONFIRMED score" in html, f"{f.name} links H68 without organizer-score disclaimer"
             if links_h67:
                 assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
                 assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"
@@ -114,6 +140,15 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
                 assert ("No ORGANIZER-CONFIRMED score" in html
                         or "no ORGANIZER-CONFIRMED score" in html), (
                     f"{f.name} links LIDAR-01 without disclaiming an organizer score")
+            if any("gems66-lidar03" in h for h in hits):
+                # LIDAR-03 links must sit next to its labelled holdout numbers,
+                # its CI and its no-organizer-score disclaimer.
+                flat = " ".join(html.split())
+                assert "HOLDOUT-DTI" in flat, f"{f.name} links LIDAR-03 without its holdout label"
+                assert "95% CI" in flat, f"{f.name} links LIDAR-03 without its CI"
+                assert "ORGANIZER-CONFIRMED" in flat, f"{f.name} links LIDAR-03 without disclaiming an organizer score"
+            if any("gems66-lidar02" in h for h in hits):
+                assert "NOT OK TO SUBMIT" in html, f"{f.name} links LIDAR-02 without its NOT OK banner"
     assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 

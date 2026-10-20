@@ -6,11 +6,12 @@
 [`docs/review/`](docs/review/). Keep **Maximize P(Win)** and **Own the Outcome** central;
 negative results and disclosed stops are valid outcomes.
 
-**The site has separate candidate histories; none has an `ORGANIZER-CONFIRMED` score in this checkout. The LIDAR-01 artifact is now withdrawn and explicitly marked NOT CLEARED because its literal dot-overlap stop rule was exceeded. Two parallel 2026-10-20 sessions share the LIDAR-02 label: `arena/e21dbf98` (sharpersist, NEGATIVE) and `arena/c73a2700` (LIDAR-02-MAXCOV, promoted on its own gate with the same literal-rule caveat disclosed — see its section). The site does not rank candidates against each other.**
+**The site has separate candidate histories; none has an `ORGANIZER-CONFIRMED` score in this checkout. The LIDAR-01 artifact is now withdrawn and explicitly marked NOT CLEARED because its literal dot-overlap stop rule was exceeded. Two parallel sessions share the LIDAR-02 label (sharpersist NEGATIVE; LIDAR-02-MAXCOV promoted, literal-rule caveat disclosed).**
 
 | candidate | lane | status | download |
 |---|---|---|---|
-| `gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z` | **LIDAR-02-MAXCOV lidar scarp field + kernel max-cover emission** | **promoted on its own preregistered gate (2026-10-20); slim off-range-front margin and a falsified sister field disclosed in the run card** | yes |
+| `gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z` | **LIDAR-02-MAXCOV scarp field + max-cover** | **promoted on its own preregistered gate (2026-10-20); see run card** | yes |
+| `gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z` | **LIDAR-03 spatial-CV-retrained scarp classifier** | **PROMOTE — pre-registered gate passed (see below)** | yes |
 | `gems66-h67-scarp-lane-novelty-40000dots-v2` | H67-1 scarp-lane novelty | disclosed, not promoted | yes |
 | k66 `K^0.5` consensus (parallel session 66) | K-anchored consensus | listed with its own register | yes |
 | `gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59` | **H66-C LiDAR scarp channels** | **NOT offered — scientific gate not met; bytes retained under `artifacts/h66c/`** | no |
@@ -73,6 +74,29 @@ negative results and disclosed stops are valid outcomes.
 > [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
 > session-66 design.
 
+## LIDAR-03 session (branch `arena/a04a3451-gemsdoe66`, 2026-10-20) — PROMOTE, download offered, no slot used
+
+New unique in-lane candidate `gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z`
+(first execution of the lane's prescribed **retrain-under-spatial-CV** step: per-quadrant
+HistGradientBoosting on 21 scarplet/Steger/Frangi/tensor channels incl. unsigned template
+amplitude, Steger sub-pixel offset density, strike discontinuity, damage fraction; probability
+re-ranked within relief deciles; builder `scripts/build_lidar03.py`).
+**✅ OK TO DOWNLOAD AND SUBMIT** — first scarp-lane candidate to pass its full pre-registered gate:
+canary PASS (worst AUC 0.780); HOLDOUT-DTI paired diff vs mass-matched random **+0.0603,
+95% CI [+0.0336, +0.0919]**, 4/4 folds (quadrant hide-and-recover, `src/gems/metric.py`,
+48,465 withheld positives; LIDAR-02 on the same instrument: diff CI crossed zero);
+uniqueness PASS (max |ρ| 0.020, comparable 3-px overlap 0.316); format PASS both siblings
+(**15 PASS · 0 FAIL · 0 SKIPPED** vs official grid + pinned features). Upload the `-zeros` file
+(all-finite — the `[0, 1]` portal rejection cannot occur); the `-nan` sibling has NaN only
+outside the footprint. **Disclosed conflict:** SGMC off-catalogue proxy disagrees (0.0670 vs
+h33-2-b2 0.0954) — see run card. **No ORGANIZER-CONFIRMED score; beating 0.2778 not claimed**
+(0.2778 remains owner-reported; GEMSDOE32's site labels that raster UNSCORED, projected 0.2747).
+0 submission slots used. Full record:
+[`docs/review/2026-10-20-lidar03-session.md`](docs/review/2026-10-20-lidar03-session.md),
+[`docs/data/run-card-lidar03.json`](docs/data/run-card-lidar03.json). Arrival breakage also
+fixed: committed merge-conflict markers in the live site/generator (IR-L03-01) and a
+mislabelled cross-session panel (IR-L03-02); suite now **165 passed, 1 skipped** (was 4 failed).
+
 ## LIDAR-02 session (branch `arena/e21dbf98`, 2026-10-20) — NEGATIVE, no slot used
 
 New unique in-lane candidate `gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z`
@@ -113,7 +137,7 @@ excludes 0), and the promoted candidate is therefore the conventional scarp fiel
 HOLDOUT-DTI pooled **0.1185** vs raw top-K 0.1086 and random 0.0956 (6 folds, 40,326 withheld
 positives pooled, `src/gems/metric.py`). The off-range-front condition passes only via mid relief
 (+0.0012 over random; basin still below random, kernel-credit lift 0.38) — disclosed on the
-download panel, not hidden (IR-LIDAR02-GATE-01). Uniqueness over 75 comparators (post-merge recheck incl. PRs #26–#28): max |ρ| 0.112
+download panel, not hidden (IR-LIDAR02-GATE-01). Uniqueness over 81 comparators (post-merge recheck incl. PRs #26–#32): max |ρ| 0.112
 (dots, vs the parallel sharpersist session's raster) / 0.149 (surface); one literal within-3px trip against the 311k-dot raster at lift 1.016
 over its own random control (IR-73 density artifact, reported verbatim).
 

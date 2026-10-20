@@ -536,7 +536,7 @@
   "not_confined_to_range_fronts": true
  },
  "registry_checks": {
-  "n_comparators": 75,
+  "n_comparators": 81,
   "identical_to_any": false,
   "max_abs_spearman_dots": 0.112225,
   "surface_max_abs_spearman": 0.149297,
@@ -557,7 +557,7 @@
   ],
   "unique_chance_corrected": true,
   "evidence": "evidence/lidar02b_uniqueness.json",
-  "post_merge_recheck": "2026-10-20 vs merged main (PRs #26-#28 comparators included); candidate bytes unchanged",
+  "post_merge_recheck": "2026-10-20 vs merged main 1152c8c (PRs #26-#32 comparators included); candidate bytes unchanged",
   "literal_rule_convention_note": "PR #26 withdrew LIDAR-01 under the literal within-3px rule. This candidate trips the same literal rule vs the same 311k-dot comparator (raw 0.995) whose matched random control is 0.979 (lift 1.016): no 38k-dot raster can pass the literal rule there. Promotion follows the preregistered chance-corrected IR-73 reading with all numbers disclosed; under the literal reading this file would be withdrawn like LIDAR-01. Selector owns the call."
  },
  "raster": {
