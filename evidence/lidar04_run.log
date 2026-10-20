@@ -1,0 +1,30 @@
+footprint=5167373 lidar_valid=3894418 catalogue=60988 sgmc_off=62122
+E1 worst AUC 0.7739084724486136 relief pass True
+fold 0 0.08856071381968485 0.09295253171097745 22989
+fold 1 0.1253369444337249 0.08865082355274424 7135
+fold 2 0.11974992879040162 0.09438130082719229 9350
+fold 3 0.13037227378980581 0.09147308338266896 8991
+E2 candidate 0.1160049652084043 [0.09775477147319485, 0.12785460911176535] random 0.09186443486839573 [0.08972625059230255, 0.09366691626908488] diff 0.02414053034000856 [0.005877666801775712, 0.03779265564405875]
+SGMC control {'candidate': 0.08011321091442948, 'candidate_dots': 37654, 'h33_2_b2': 0.0953861146048237, 'h33_2_b2_dots': 37654, 'lidar01': 0.04993141672807747, 'lidar01_dots': 37654, 'lidar02': 0.09514837679760879, 'lidar02_dots': 37654, 'random_matched': 0.06456987711392141, 'random_matched_dots': 37654}
+strata [{'stratum': 0, 'truth_px': 23406, 'candidate_dots': 12707, 'candidate_dti_in_stratum_truth': 0.003514299348601208, 'random_matched_dti_in_stratum_truth': 0.0046613669150627575, 'h33_2_b2_dti_in_stratum_truth': 0.06410132619819801}, {'stratum': 1, 'truth_px': 8508, 'candidate_dots': 12626, 'candidate_dti_in_stratum_truth': 0.05757204204263471, 'random_matched_dti_in_stratum_truth': 0.05208958974498028, 'h33_2_b2_dti_in_stratum_truth': 0.09037172893221772}, {'stratum': 2, 'truth_px': 30208, 'candidate_dots': 12321, 'candidate_dti_in_stratum_truth': 0.11538936557140206, 'random_matched_dti_in_stratum_truth': 0.08901146236173954, 'h33_2_b2_dti_in_stratum_truth': 0.0788279427607696}]
+uniq rho 0.019832531336804314 ov_comp 0.6441546714824454 ov_raw 0.9914484516917194 dup_lift 0
+GATE (pre-format) {'G1_canary_pass': True, 'G2_holdout_diff_ci_lower_gt0': True, 'G3_sgmc_beats_h33': False, 'low_relief_dot_share': 0.3374674669357837, 'G4_low_share_ge_0p25_and_low_stratum_ge_random': False, 'G5_max_abs_rho_le_0p90': True, 'G5_no_identical': True, 'G5_no_lift_duplicate': True, 'G5_comparable_overlap_le_0p70': True}
+zeros 6b8e14be5aec8cde validator_passed False
+nan 09883a2f1498f2a4 validator_passed False
+DONE gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z gate_all_pass False
+{
+ "base": "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z",
+ "gate": {
+  "G1_canary_pass": true,
+  "G2_holdout_diff_ci_lower_gt0": true,
+  "G3_sgmc_beats_h33": false,
+  "low_relief_dot_share": 0.3374674669357837,
+  "G4_low_share_ge_0p25_and_low_stratum_ge_random": false,
+  "G5_max_abs_rho_le_0p90": true,
+  "G5_no_identical": true,
+  "G5_no_lift_duplicate": true,
+  "G5_comparable_overlap_le_0p70": true,
+  "G6_validator_pass_both": false,
+  "all_pass": false
+ }
+}

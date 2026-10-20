@@ -1,0 +1,18 @@
+{
+ "zeros": {
+  "passed": true,
+  "counts": {
+   "PASS": 15,
+   "INFO": 2
+  },
+  "sha256": "6b8e14be5aec8cde4c97b77003aa477922c1594a2bf60c3a53eed6ec52f33a94"
+ },
+ "nan": {
+  "passed": true,
+  "counts": {
+   "PASS": 15,
+   "INFO": 2
+  },
+  "sha256": "09883a2f1498f2a4312c73f95d7909f17737d32b2b72e1d94d19d1bca105b544"
+ }
+}

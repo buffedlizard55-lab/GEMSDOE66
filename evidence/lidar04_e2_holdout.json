@@ -1,0 +1,153 @@
+{
+ "experiment": "E2 quadrant hide-and-recover on catalogue (visible-only buffer; field is catalogue-free)",
+ "label": "HOLDOUT-DTI",
+ "evaluator": "src/gems/metric.py dti (alpha=0.2, beta=0.8, triangular R=300m, eps=1e-9)",
+ "folds": [
+  {
+   "fold": 0,
+   "withheld_positives": 22989,
+   "k_fold": 19663,
+   "candidate_dti": 0.08856071381968485,
+   "random_dti": 0.09295253171097745,
+   "strata": {
+    "relief_tercile_cuts_m": [
+     3.3898568153381348,
+     15.107880592346191
+    ],
+    "strata_eligible_share": [
+     0.3394607175057136,
+     0.3317399828067012,
+     0.3287992996875852
+    ],
+    "strata_k": [
+     6675,
+     6523,
+     6465
+    ],
+    "strata_placed": [
+     6675,
+     6523,
+     6465
+    ]
+   },
+   "h33_dots_in_block": 18028,
+   "h33_dti_asis": 0.006080369766419162,
+   "lidar02_dots_in_block": 18280,
+   "lidar02_dti_asis": 0.005123881307360344
+  },
+  {
+   "fold": 1,
+   "withheld_positives": 7135,
+   "k_fold": 7404,
+   "candidate_dti": 0.1253369444337249,
+   "random_dti": 0.08865082355274424,
+   "strata": {
+    "relief_tercile_cuts_m": [
+     5.063859939575195,
+     25.463451385498047
+    ],
+    "strata_eligible_share": [
+     0.3365957482349273,
+     0.33197008842067754,
+     0.3314341633443952
+    ],
+    "strata_k": [
+     2494,
+     2457,
+     2453
+    ],
+    "strata_placed": [
+     2494,
+     2457,
+     2453
+    ]
+   },
+   "h33_dots_in_block": 9588,
+   "h33_dti_asis": 0.006533305656764038,
+   "lidar02_dots_in_block": 4341,
+   "lidar02_dti_asis": 0.0049757045361105805
+  },
+  {
+   "fold": 2,
+   "withheld_positives": 9350,
+   "k_fold": 5530,
+   "candidate_dti": 0.11974992879040162,
+   "random_dti": 0.09438130082719229,
+   "strata": {
+    "relief_tercile_cuts_m": [
+     5.696261405944824,
+     22.138694763183594
+    ],
+    "strata_eligible_share": [
+     0.33727596695792206,
+     0.33667581188679807,
+     0.32604822115527987
+    ],
+    "strata_k": [
+     1866,
+     1861,
+     1803
+    ],
+    "strata_placed": [
+     1866,
+     1861,
+     1803
+    ]
+   },
+   "h33_dots_in_block": 4795,
+   "h33_dti_asis": 0.007502080475992336,
+   "lidar02_dots_in_block": 6049,
+   "lidar02_dti_asis": 0.00774998113267689
+  },
+  {
+   "fold": 3,
+   "withheld_positives": 8991,
+   "k_fold": 7538,
+   "candidate_dti": 0.13037227378980581,
+   "random_dti": 0.09147308338266896,
+   "strata": {
+    "relief_tercile_cuts_m": [
+     5.696261405944824,
+     19.646289825439453
+    ],
+    "strata_eligible_share": [
+     0.342662601348118,
+     0.33112703208958283,
+     0.3262103665622992
+    ],
+    "strata_k": [
+     2584,
+     2496,
+     2458
+    ],
+    "strata_placed": [
+     2584,
+     2496,
+     2458
+    ]
+   },
+   "h33_dots_in_block": 5243,
+   "h33_dti_asis": 0.005153864821037326,
+   "lidar02_dots_in_block": 8984,
+   "lidar02_dti_asis": 0.007056643166006868
+  }
+ ],
+ "candidate_mean": 0.1160049652084043,
+ "candidate_ci95": [
+  0.09775477147319485,
+  0.12785460911176535
+ ],
+ "random_mean": 0.09186443486839573,
+ "random_ci95": [
+  0.08972625059230255,
+  0.09366691626908488
+ ],
+ "paired_diff_mean": 0.02414053034000856,
+ "paired_diff_ci95": [
+  0.005877666801775712,
+  0.03779265564405875
+ ],
+ "folds_won_vs_random": 3,
+ "total_withheld_positives": 48465,
+ "note": "Catalogue-truth holdout penalises off-catalogue designs by construction (h33 as-is ~0.006/fold); reported for falsification, paired with the SGMC off-catalogue pooled control in E3."
+}
