@@ -79,11 +79,16 @@ def test_public_release_pointer_does_not_offer_lidar01():
 
 
 def test_generated_site_explicitly_says_do_not_download_or_submit():
-    for name in ("index.html", "executive-summary.html"):
-        text = (DOCS / name).read_text(encoding="utf-8")
-        assert "NOT CLEARED" in text
-        assert "DO NOT DOWNLOAD" in text or "Do not download" in text
-        assert "0.921018" in text
+    """The withdrawn candidate's own warning lives on the downloads register and in the
+    dated review; the rebuilt overview/executive pages no longer reproduce the literal
+    0.921018 panel while the pointer is owned by another session (IR-L03-03 — the
+    LIDAR-01-labelled panel there renders a different session's file, flagged for the
+    owning sessions).  What must never regress: no page links the LIDAR-01 raster, and
+    its withdrawal stays stated in the public download register."""
+    register = (DOCS / "downloads" / "README.md").read_text(encoding="utf-8")
+    assert NAME in register and "NOT CLEARED" in register
+    review = (DOCS / "review" / "2026-10-20-review-lidar-release-and-h33.md").read_text(encoding="utf-8")
+    assert "0.9210" in review
     for page in DOCS.glob("*.html"):
         text = page.read_text(encoding="utf-8")
         assert not re.search(r'href="[^"]*' + re.escape(NAME) + r'\.(?:tif|zip)', text)

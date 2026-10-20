@@ -66,11 +66,18 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
         # H66-C is deliberately absent: its gate is not met, so it is never offered here.
+        # Parallel-session audit downloads (IR-L03-04: missing here since their sessions,
+        # failing on main).  Each linked page must carry its own negative banner (asserted
+        # below), so listing a file never implies clearance.
         # LIDAR-02: audit-linked only under a NOT OK TO SUBMIT banner (2026-10-20).
         "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
         "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip",
         "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
         "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.zip",
+        "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-zeros.tif",
+        "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-zeros.zip",
+        "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-nan.tif",
+        "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-nan.zip",
         # unique-msc session file, cleared on its own local gates (2026-10-20).
         "downloads/gems66-unique-msc-20261020T182024Z.tif",
         "downloads/gems66-unique-msc-20261020T182024Z.zip",
@@ -80,6 +87,11 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
         "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip",
     }
+    # the current_release pointer target (unique-msc session): linkable only while its own
+    # pointer says cleared — read dynamically so withdrawal is automatic (fail closed)
+    import json as _j2
+    _rel = _j2.loads((ROOT / "docs" / "downloads" / "current_release.json").read_text())
+    _ptr = {Path(_rel[k]).name for k in ("tif", "zip") if _rel.get(k)} if _rel.get("cleared") else set()
     linked_any = False
     for f in sorted((ROOT / "docs").glob("*.html")):
         html = f.read_text()
@@ -93,18 +105,6 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             _r = _card["raster"]
             k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
             k66 = rel.split("/")[-1] in k66_names
-            # LIDAR-02 (2026-10-20): names read from its own run card, fail closed.
-            _c2p = ROOT / "docs" / "data" / "run-card-lidar02-maxcov.json"
-            _l02 = set()
-            if _c2p.exists():
-                _c2 = _json.loads(_c2p.read_text())
-                _rel2 = _c2.get("release") or {}
-                if _c2.get("promote") and _rel2.get("offered_for_download"):
-                    _l02 = {_rel2["tif"], _rel2["zeros_tif"], _rel2["zip"]}
-            l02 = rel.split("/")[-1] in _l02
-            # parallel 2026-10-20 sessions on main (PRs #26-#28): their published rasters
-            _par = rel.split("/")[-1].startswith(
-                ("gems66-lidar02-sharpersist-", "gems66-unique-msc-"))
             h68_names = set()
             _h68_p = ROOT / "docs" / "data" / "run-card-h68.json"
             if _h68_p.exists():
@@ -113,14 +113,23 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
                     _r68 = _c68["raster"]
                     h68_names = {Path(_r68["file"]).name, Path(_r68["zeros_file"]).name, Path(_r68["zip_file"]).name}
             h68 = rel.split("/")[-1] in h68_names
-            assert rel in allowed or k66 or l02 or _par or h68, f"{f.name} links an unlisted raster: {href}"
+            # LIDAR-02-MAXCOV (arena/c73a2700): names from its own run card, fail closed
+            _l02m = set()
+            _c2p = ROOT / "docs" / "data" / "run-card-lidar02-maxcov.json"
+            if _c2p.exists():
+                _c2 = _json.loads(_c2p.read_text())
+                _rel2 = _c2.get("release") or {}
+                if _c2.get("promote") and _rel2.get("offered_for_download"):
+                    _l02m = {_rel2["tif"], _rel2["zeros_tif"], _rel2["zip"]}
+            l02m = rel.split("/")[-1] in _l02m
+            assert rel in allowed or k66 or h68 or l02m or rel.split("/")[-1] in _ptr, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
+            if any("gems66-lidar02-rawscarp" in h for h in hits):
+                assert "HOLDOUT-DTI" in html, f"{f.name} links the lidar02-maxcov raster without labelled holdout numbers"
+                assert "IR-73" in html, f"{f.name} links the lidar02-maxcov raster without the raw-overlap disclosure"
             links_h67 = any("gems66-h67" in h for h in hits)
             links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
-            if any("gems66-lidar02-rawscarp" in h for h in hits):  # LIDAR-02-MAXCOV session only
-                assert "HOLDOUT-DTI" in html, f"{f.name} links the lidar02 raster without labelled holdout numbers"
-                assert "IR-73" in html, f"{f.name} links the lidar02 raster without the raw-overlap disclosure"
             links_h68 = any("gems66-h68" in h for h in hits)
             if links_h68:
                 assert "HOLDOUT-DTI" in html, f"{f.name} links H68 without HOLDOUT-DTI label"
@@ -133,6 +142,10 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             if links_k66:
                 assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
                 assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
+            if any(("gems66-lidar02" in h or "localsnr-fracpair" in h) for h in hits):  # LIDAR-04 stem retained (IR-L04-RENAME)
+                # negative-verdict audit downloads: the banner is the whole point
+                assert "NOT OK TO SUBMIT" in html, f"{f.name} links a negative candidate without its banner"
+                assert "HOLDOUT-DTI" in html, f"{f.name} links a negative candidate without its holdout label"
             if any("gems66-lidar01" in h for h in hits):
                 # the LIDAR-01 candidate must carry its own labelling next to the buttons
                 assert "HOLDOUT-DTI" in html, f"{f.name} links LIDAR-01 without its holdout label"

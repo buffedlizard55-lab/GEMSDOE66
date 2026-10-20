@@ -1,0 +1,23 @@
+{
+  "file": "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-zeros.tif",
+  "sha256": "6b8e14be5aec8cde4c97b77003aa477922c1594a2bf60c3a53eed6ec52f33a94",
+  "shape_hw": [
+    3730,
+    3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5167373,
+  "emitted_cells_gt0": 37654,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 0,
+  "outside_fill": 0.0,
+  "finite_outside_count": 7111787,
+  "all_values_in_0_1": true,
+  "name": "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z",
+  "note": "LIDAR-03 local-SNR x scarp-fraction x crest/toe pair, antislope-net removed, relief-stratified; GEMSDOE66 lidar03",
+  "note_chars": 113,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+}

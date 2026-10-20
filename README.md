@@ -97,6 +97,26 @@ h33-2-b2 0.0954) — see run card. **No ORGANIZER-CONFIRMED score; beating 0.277
 fixed: committed merge-conflict markers in the live site/generator (IR-L03-01) and a
 mislabelled cross-session panel (IR-L03-02); suite now **165 passed, 1 skipped** (was 4 failed).
 
+## LIDAR-04 session (branch `arena/6c75ae04`, 2026-10-20; renamed at merge — see review) — NEGATIVE, no slot used
+
+New unique in-lane candidate `gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z`
+(local-contrast SNR × scarp-fraction × crest/toe pairing × unsigned polarity field;
+signed antislope net removed after reproducing its anti-signal canary AUC 0.3014;
+LIDAR-02 emission geometry kept identical so the field is the only variable; builder
+`scripts/build_lidar04.py`). **🔴 NOT OK TO SUBMIT** — the site banner says so first.
+First file in this lane to pass the prescribed holdout gate (HOLDOUT-DTI paired diff vs
+random **+0.0241, 95% CI [0.0059, 0.0378]**, 48,465 withheld positives), canary PASS
+(0.774), uniqueness PASS vs 70 rasters (max |ρ| 0.020; comparable overlap 0.644 vs
+LIDAR-02), format PASS both siblings (15 PASS + 2 INFO) — but G3/G4 FAIL: SGMC control
+**0.0801 vs h33-2-b2 0.0954** and low-relief stratum **0.0035 < random 0.0047** (h33:
+0.0641 — the incumbent's edge is basin-floor placement this lane lacks). Also: fixed a
+shared Steger-threshold unit bug (IR-L04-TOOL-01), removed live merge-conflict markers
+from the site (IR-L04-SITE-01), fixed two pre-existing red tests (IR-L04-04), flagged
+the release-pointer conflation (IR-L04-03). `current_release.json` unchanged; no
+ORGANIZER-CONFIRMED score claimed. Full record:
+[`docs/review/2026-10-20-lidar04-session.md`](docs/review/2026-10-20-lidar04-session.md),
+[`docs/data/run-card-lidar04.json`](docs/data/run-card-lidar04.json).
+
 ## LIDAR-02 session (branch `arena/e21dbf98`, 2026-10-20) — NEGATIVE, no slot used
 
 New unique in-lane candidate `gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z`

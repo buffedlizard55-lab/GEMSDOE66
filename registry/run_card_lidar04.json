@@ -1,0 +1,188 @@
+{
+ "session": "LIDAR-04 (branch arena/6c75ae04-gemsdoe66, 2026-10-20; originally labelled LIDAR-03, renamed at merge)",
+ "lane": "Native-resolution lidar scarp channels: slope-aware scarplet template (Sare & Hilley JOSS 2018 doi:10.21105/joss.01066; AGU 2015 T31A-2838) + Steger (IEEE TPAMI 20(2):113-125, 1998) + Frangi (MICCAI 1998 LNCS 1496:130-137) on slope-detrended local-SNR surface; aggregate channels = scarp-pixel fraction, local-contrast SNR amplitude, crest/toe pairing, unsigned polarity dominance. Operators at 100-400 m on 2 m-descriptor aggregates \u2014 native 2-20 m execution NOT measured (raw USGS 3DEP 1 m tiles unreachable from sandbox).",
+ "hypothesis": "Subtle off-catalogue scarps are locally anomalous (high step/ex relative to ~1 km background roughness), spatially distributed within the cell (scarp fraction), and show paired convex-crest/concave-toe curvature with one dominant facing; the signed antislope preference used by LIDAR-01/02 is an anti-signal (AUC 0.3014 reproduced) whose removal plus local-SNR deconfounding yields DTI gain not confined to range fronts.",
+ "mechanism": "rank01( (0.25*snr + 0.20*persist_snr + 0.15*frac + 0.15*pair + 0.10*pdom + 0.10*frangi_rank + 0.05*steger_offset_rank) * (0.5+0.5*sqrt(step_rank*ex_rank)) ); snr = 0.5*rank(step/bg_step) + 0.5*rank(ex/bg_ex), bg = gaussian sigma=5 cells; greedy emission identical to LIDAR-02: K=37654, >=3 px separation, >2 px (200 m) from catalogue, relief-tercile allocation by eligible-footprint share (truth-free). Field is the only changed variable vs LIDAR-02.",
+ "named_nonfault_mimic": "Fluvial terrace risers / irrigation canal banks (locally anomalous, single-polarity, paired-curvature steps). No pinned cultural-feature mask exists in this checkout; pairing+persistence demote but do not eliminate them.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator": "src/gems/metric.py dti (alpha=0.2, beta=0.8, triangular R=300m, eps=1e-9)",
+  "instrument": "E2 quadrant hide-and-recover on catalogue (visible-only buffer; field is catalogue-free)",
+  "candidate_mean": 0.1160049652084043,
+  "candidate_ci95": [
+   0.09775477147319485,
+   0.12785460911176535
+  ],
+  "random_mean": 0.09186443486839573,
+  "random_ci95": [
+   0.08972625059230255,
+   0.09366691626908488
+  ],
+  "paired_diff_mean": 0.02414053034000856,
+  "paired_diff_ci95": [
+   0.005877666801775712,
+   0.03779265564405875
+  ],
+  "total_withheld_positives": 48465,
+  "n_folds": 4,
+  "folds_won_vs_random": "3 of 4 (NW quadrant fold 0 lost: 0.0886 vs 0.0930; 22,989 withheld px)",
+  "vs_lidar02_same_instrument": "LIDAR-02 candidate 0.1062, paired diff +0.0144 [-0.0015,+0.0238] (CI crossed zero). LIDAR-03 candidate 0.1160, paired diff +0.0241 [0.0059,0.0378] (CI excludes zero) \u2014 the prescribed instrument improved.",
+  "sgmc_offcatalogue_pooled_control": {
+   "candidate": 0.08011321091442948,
+   "candidate_dots": 37654,
+   "h33_2_b2": 0.0953861146048237,
+   "h33_2_b2_dots": 37654,
+   "lidar01": 0.04993141672807747,
+   "lidar01_dots": 37654,
+   "lidar02": 0.09514837679760879,
+   "lidar02_dots": 37654,
+   "random_matched": 0.06456987711392141,
+   "random_matched_dots": 37654
+  },
+  "relief_strata_sgmc": [
+   {
+    "stratum": 0,
+    "truth_px": 23406,
+    "candidate_dots": 12707,
+    "candidate_dti_in_stratum_truth": 0.003514299348601208,
+    "random_matched_dti_in_stratum_truth": 0.0046613669150627575,
+    "h33_2_b2_dti_in_stratum_truth": 0.06410132619819801
+   },
+   {
+    "stratum": 1,
+    "truth_px": 8508,
+    "candidate_dots": 12626,
+    "candidate_dti_in_stratum_truth": 0.05757204204263471,
+    "random_matched_dti_in_stratum_truth": 0.05208958974498028,
+    "h33_2_b2_dti_in_stratum_truth": 0.09037172893221772
+   },
+   {
+    "stratum": 2,
+    "truth_px": 30208,
+    "candidate_dots": 12321,
+    "candidate_dti_in_stratum_truth": 0.11538936557140206,
+    "random_matched_dti_in_stratum_truth": 0.08901146236173954,
+    "h33_2_b2_dti_in_stratum_truth": 0.0788279427607696
+   }
+  ],
+  "sgmc_note": "Candidate 0.08011 < h33-2-b2 0.09539 and < LIDAR-02 0.09515 on the SGMC off-catalogue proxy; low-relief stratum 0.00351 < random 0.00466 while h33-2-b2 scores 0.06410 there. The two instruments disagree: deconfounding from relief helps catalogue hide-and-recover and hurts the relief-biased SGMC inventory proxy. Pre-registered gate required both; it is not met."
+ },
+ "leakage_canary": {
+  "label": "HOLDOUT-DTI instrument, E1",
+  "worst_auc": 0.7739084724486136,
+  "worst_channel": "relief (relief vs SGMC off-catalogue; relief-confounded proxy, below 0.90 stop)",
+  "pass": true,
+  "n_channels": 31,
+  "template_net_removed_auc_sgmc": 0.3014156586953581,
+  "template_net_removed_auc_catalogue": 0.4436190648858867
+ },
+ "uniqueness_vs_registry": {
+  "n_compared": 70,
+  "max_abs_surface_spearman_sample200k": 0.019832531336804314,
+  "max_dot_overlap3px_density_comparable": 0.6441546714824454,
+  "worst_comparable_file": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+  "worst_comparable_lift": 2.6988984088127292,
+  "max_dot_overlap3px_raw": 0.9914484516917194,
+  "raw_note": "Raw 0.9914 is vs the 311,617-dot dense raster whose random-placement overlap gives lift 0.998 \u2014 the documented IR-73 degeneracy. Density-comparable worst is LIDAR-02 itself (0.6442 at lift 2.70): same emission geometry, overlapping field peaks; below the 0.70 stop but disclosed as close.",
+  "any_identical": false,
+  "duplicate_under_lift_rule": [],
+  "post_merge_addendum_vs_lidar03_cvretrain": {
+   "addendum": "Post-merge lane check vs the parallel LIDAR-03 cvretrain raster (PR #30), which did not exist in this session's checkout during its E3 scan of 70 rasters.",
+   "candidate": "LIDAR-04 (stem gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z)",
+   "against": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+   "against_sha256": "7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e",
+   "ref_dots": 37654,
+   "my_dots": 37654,
+   "surface_spearman_sample200k_field_vs_their_values": 0.008217026510522927,
+   "my_dot_overlap3px_vs_theirs": 0.24852605300897648,
+   "their_dot_overlap3px_vs_mine": 0.273277739416795,
+   "random_overlap3px_vs_theirs": 0.20900833908748073,
+   "lift": 1.1890724269377384,
+   "identical": false,
+   "lane_rule": "duplicate if |rho|>0.90 or comparable-density overlap>0.70 (raw also reported)",
+   "duplicate": false
+  },
+  "n_compared_incl_addendum": 71
+ },
+ "gate": {
+  "G1_canary_pass": true,
+  "G2_holdout_diff_ci_lower_gt0": true,
+  "G3_sgmc_beats_h33": false,
+  "low_relief_dot_share": 0.3374674669357837,
+  "G4_low_share_ge_0p25_and_low_stratum_ge_random": false,
+  "G5_max_abs_rho_le_0p90": true,
+  "G5_no_identical": true,
+  "G5_no_lift_duplicate": true,
+  "G5_comparable_overlap_le_0p70": true,
+  "G6_validator_pass_both": true,
+  "all_pass": false
+ },
+ "validator": {
+  "zeros_passed": true,
+  "nan_passed": true,
+  "summary": "Both siblings: 15 PASS + 2 INFO, 0 FAIL, 0 SKIPPED with training_features supplied (sha256-pinned 4371c82e\u2026); float32 EPSG:32611 3730x3292, exact transform, 0 NaN inside 5,167,373-cell footprint, values in [0,1]; -nan has NaN on all 7,111,787 outside cells, -zeros finite everywhere; siblings pixel-identical inside footprint (independent re-read); min dot-to-catalogue 2.236 px, median 23.54 px; 0 dots with a neighbour inside a 5x5 window."
+ },
+ "rasters": {
+  "zeros": {
+   "file": "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-zeros.tif",
+   "sha256": "6b8e14be5aec8cde4c97b77003aa477922c1594a2bf60c3a53eed6ec52f33a94"
+  },
+  "nan": {
+   "file": "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-nan.tif",
+   "sha256": "09883a2f1498f2a4312c73f95d7909f17737d32b2b72e1d94d19d1bca105b544"
+  },
+  "dots": 37654,
+  "strata_emission": {
+   "relief_tercile_cuts_m": [
+    4.185008525848389,
+    18.455886840820312
+   ],
+   "strata_eligible_share": [
+    0.33740920507772726,
+    0.33535844970339046,
+    0.3272323452188823
+   ],
+   "strata_k": [
+    12706,
+    12627,
+    12321
+   ],
+   "strata_placed": [
+    12706,
+    12627,
+    12321
+   ]
+  }
+ },
+ "submission_name": "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z",
+ "submission_note": "LIDAR-03 local-SNR x scarp-fraction x crest/toe pair, antislope-net removed, relief-stratified; GEMSDOE66 lidar03",
+ "note_chars": 113,
+ "organizer_confirmed_score": null,
+ "experiments_used": "3 of 3 (E1 canary, E2 holdout, E3 emission/uniqueness/validation)",
+ "verdict": "negative",
+ "promote": false,
+ "download_status": "NOT CLEARED FOR SUBMISSION. Unique and format-valid audit artifact only: pre-registered gates G3 (SGMC pooled 0.08011 does not beat h33-2-b2 0.09539) and G4 (low-relief SGMC stratum 0.00351 < random 0.00466) fail, although G2 hide-and-recover paired diff vs random now passes (+0.0241, 95% CI [0.0059,0.0378]). Do not spend a weekly slot on this file. current_release.json (unique-msc session) unchanged.",
+ "inputs_sha256": {
+  "data/raw/external/lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+  "data/raw/labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "data/raw/sample_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "data/raw/external/derived_sgmc_faults_100m_u8.tif": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+  "data/raw/training_features.tif": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5"
+ },
+ "irregularities": [
+  "IR-L04-RENAME: a parallel session independently used the label LIDAR-03 for a spatial-CV-retrained classifier and merged first (PR #30, verdict promote, raster gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z). This session was renamed LIDAR-04 at merge to avoid overwriting that record; its own raster stem gems66-lidar03-localsnr-fracpair-... is kept verbatim because it is baked into GeoTIFF tags, receipts and sha256 values. The two rasters are different methods, different bytes, opposite verdicts.",
+  "IR-L04-TOOL-01 FIXED: gems66.lidar_channels.multiscale_line_fields thresholded the Steger Hessian response with a percentile of the Frangi vesselness (unit mismatch). Fixed once in the template to threshold on the Steger response's own distribution; LIDAR-01/02 steger_frac300 values are not reproducible from the fixed code.",
+  "IR-L04-SITE-01 FIXED: scripts/build_site.py contained literal git merge-conflict markers (<<<<<<< HEAD / ======= / >>>>>>> origin/main) that were rendering as text on the live index and executive-summary pages. Resolved keeping both panels.",
+  "IR-L04-02: GitHub REST API rate limit (5000/hr shared token) was exhausted when fetching training_features via scripts/fetch_mirrors.py; the 5 parts were instead retrieved by git sparse partial-clone at the pinned ref and the concatenated file verified against the manifest sha256 (4371c82e\u2026) before use. fetch_mirrors.py verified the other 4 inputs normally.",
+  "IR-L04-03 (pre-existing, not fixed here): docs/downloads/current_release.json points at the unique-msc session's raster with cleared=true, while scripts/build_site.py's lidar01_block() renders that pointer under a 'LIDAR-01 session' heading using run-card-lidar01.json's holdout rows \u2014 two different candidates' evidence conflated in one panel. docs/downloads/README.md still describes the pointer as LIDAR-01. Left untouched to avoid overwriting a parallel session's release semantics; flagged for the owning session.",
+  "IR-L04-04 (pre-existing): tests/test_artifact66.py and tests/test_repo_hygiene.py were failing on main because their download/link allowlists were never updated for the LIDAR-02 and unique-msc files (test_site.py was). Allowlists extended this session with the same fail-closed disclosure conditions.",
+  "IR-L04-05: GEMSDOE32's own site (re-fetched 2026-10-20) labels h33-2-b2 UNSCORED with projected 0.2747 and states no organiser score exists; the brief's 0.2778 / 0.3195 / 0.3774 figures therefore remain owner-reported/unverified, never ORGANIZER-CONFIRMED."
+ ],
+ "caveats": [
+  "Operators at 100-400 m on 2 m-descriptor aggregates, not native 2-20 m on 1 m DEM (USGS 3DEP host unreachable from sandbox; egress limited to github.com/pypi.org).",
+  "No pinned roads/canals/field-edge cultural mask; terrace/canal mimicry only demoted, not masked.",
+  "Registry = 70 local rasters (registry + downloads + artifacts); complete organizer corpus not certified.",
+  "Inputs are owner-supplied hash-pinned mirrors, not organizer-authenticated (DrivenData login-walled).",
+  "Catalogue hide-and-recover and SGMC inventory proxy disagree for this field; neither certifies discovery of the hidden expert-added faults."
+ ]
+}

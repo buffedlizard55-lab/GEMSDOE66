@@ -53,8 +53,9 @@ def _h68_files():
 H67_GEOPHYS_FILES = _h67_geophys_files()
 H68_FILES = _h68_files()
 
+
 def _lidar02m_files():
-    """Whatever the LIDAR-02-MAXCOV run card clears (NOT the sharpersist LIDAR02_FILES below) -- fail closed."""
+    """LIDAR-02-MAXCOV (parallel session arena/c73a2700) cleared files -- fail closed."""
     p = ROOT / "docs" / "data" / "run-card-lidar02-maxcov.json"
     if not p.exists():
         return []
@@ -67,23 +68,6 @@ def _lidar02m_files():
 
 
 LIDAR02M_FILES = _lidar02m_files()
-
-# Parallel 2026-10-20 sessions already on main (PRs #26-#28): their published
-# downloads, listed exactly as tests/test_site.py lists them. Added here at the
-# LIDAR-02-MAXCOV merge because main was red without them (d4b5aed).
-SHARPERM_MSC_FILES = [
-    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
-    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip",
-    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif.receipt.json",
-    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
-    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.zip",
-    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif.receipt.json",
-    "gems66-unique-msc-20261020T182024Z.tif",
-    "gems66-unique-msc-20261020T182024Z.zip",
-    "gems66-unique-msc-20261020T182024Z.manifest.json",
-    "uniqueness_gems66-unique-msc-20261020T182024Z.json",
-    "current_release_unique_msc.json",
-]
 
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 
@@ -100,6 +84,8 @@ UNIQUE_MSC_FILES = [
     "gems66-unique-msc-20261020T182024Z.zip",
     "gems66-unique-msc-20261020T182024Z.manifest.json",
     "uniqueness_gems66-unique-msc-20261020T182024Z.json",
+    "current_release_unique_msc.json",
+    "current_release_unique_msc.json",
 ]
 LIDAR03_FILES = [
     "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
@@ -115,6 +101,24 @@ LIDAR01_FILES = ["current_release.json"]
 
 # The only files this project may offer: the two disclosed H67-1 siblings and their receipts.
 H66C_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"
+
+# Parallel-session downloads, listed with their own verdicts exactly as in
+# tests/test_site.py (IR-L03-04: this file's allowlist was never updated for them and
+# was failing on main).  LIDAR-02 and LIDAR-03 are NEGATIVE-verdict audit downloads;
+# unique-msc is its own session's cleared pointer target.
+_L2 = "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z"
+_L4 = "gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z"
+LIDAR02_FILES = [f"{_L2}-{s}" for s in ("zeros.tif", "zeros.zip", "zeros.tif.receipt.json",
+                                        "nan.tif", "nan.zip", "nan.tif.receipt.json")]
+LIDAR04_FILES = [f"{_L4}-{s}" for s in ("zeros.tif", "zeros.zip", "zeros.tif.receipt.json",
+                                        "nan.tif", "nan.zip", "nan.tif.receipt.json")]
+UNIQUE_MSC_FILES = [
+    "gems66-unique-msc-20261020T182024Z.tif",
+    "gems66-unique-msc-20261020T182024Z.zip",
+    "gems66-unique-msc-20261020T182024Z.manifest.json",
+    "uniqueness_gems66-unique-msc-20261020T182024Z.json",
+    "current_release_unique_msc.json",
+]
 
 PUBLISHED = sorted([
     "README.md",
@@ -149,7 +153,7 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     names = {path.name for path in (DOCS / "downloads").iterdir()}
     assert not (names & historical_names)
     allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES
-                    + LIDAR02_FILES + LIDAR02M_FILES + SHARPERM_MSC_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES + H68_FILES)
+                  + LIDAR02_FILES + LIDAR02M_FILES + UNIQUE_MSC_FILES + LIDAR03_FILES + LIDAR04_FILES + H68_FILES)
     assert names <= allowed, names - allowed
     # and if the H67 geophysics lane is NOT cleared, none of its files may be present
     if not H67_GEOPHYS_FILES:
