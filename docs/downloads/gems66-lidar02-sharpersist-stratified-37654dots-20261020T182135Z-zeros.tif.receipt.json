@@ -1,0 +1,23 @@
+{
+  "file": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+  "sha256": "26b264d7d7b2a3a8d2b477b9e6d914d64e1f7105894724edb4bcfbd078484a0c",
+  "shape_hw": [
+    3730,
+    3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5167373,
+  "emitted_cells_gt0": 37654,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 0,
+  "outside_fill": 0.0,
+  "finite_outside_count": 7111787,
+  "all_values_in_0_1": true,
+  "name": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z",
+  "note": "LIDAR-02 sharpness x persistence x antislope polarity, relief-stratified emission; GEMSDOE66 run card lidar02",
+  "note_chars": 109,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+}

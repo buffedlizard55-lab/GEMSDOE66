@@ -489,6 +489,49 @@ It is a <b>HOLDOUT-DTI</b> result only:
 """
 
 
+LIDAR02_STEM = "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z"
+
+
+def lidar02_block() -> str:
+    """LIDAR-02 (2026-10-20) banner: new unique file, verdict NEGATIVE — NOT OK TO SUBMIT.
+
+    Reads its own run card (docs/data/run-card-lidar02.json); returns "" if absent so a
+    checkout without the session's card never invents a status.
+    """
+    card = load(DOCS / "data" / "run-card-lidar02.json", None)
+    if not card:
+        return ""
+    stem = LIDAR02_STEM
+    return f"""
+<div class="warn" style="border:3px solid #f85149">
+<h2>&#128308; LIDAR-02 (2026-10-20): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
+<p><b>Is it OK to download and submit the new LIDAR-02 file? NO.</b> It is unique and
+format-valid, but it did <b>not</b> pass this project's science gate, so do not spend a
+weekly submission slot on it. This banner changes no other candidate's status:
+the machine-readable pointer is <code>downloads/current_release.json</code> and each
+candidate's own panel below carries its own verdict.</p>
+<table>
+<tr><th>New unique file (audit download only)</th><td>
+<a class="btn" href="downloads/{stem}-zeros.tif">{stem}-zeros.tif</a>
+<a class="btn" href="downloads/{stem}-zeros.zip">.zip</a>
+<a class="btn" href="downloads/{stem}-nan.tif">NaN-outside sibling</a><br>
+<span class="small mono">sha256 (zeros) {esc(card.get("rasters", {}).get("zeros", {}).get("sha256", ""))}<br>
+sha256 (nan) {esc(card.get("rasters", {}).get("nan", {}).get("sha256", ""))}</span></td></tr>
+<tr><th>Submission name (if ever cleared)</th><td class="mono">{esc(card.get("submission_name", ""))}</td></tr>
+<tr><th>Note ({card.get("note_chars", 0)}/140)</th><td class="mono">{esc(card.get("submission_note", ""))}</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; both siblings 15 PASS + 2 INFO, 0 FAIL/SKIPPED; float32 EPSG:32611 100 m 3730&times;3292; 0 NaN inside footprint; values in [0,1] (the <span class="mono">Predicted values must be in range [0, 1]</span> rejection cannot occur on the -zeros file: every cell finite, no nodata tag)</td></tr>
+<tr><th>Uniqueness gate</th><td><b>PASS (unique)</b> &mdash; max |Spearman &rho;| 0.021 (limit 0.90); density-comparable 3-px dot overlap max 0.430 (limit 0.70) at lift 1.91; not identical to any of the rasters compared; hash differs from every prior raster</td></tr>
+<tr><th>Leakage canary</th><td><b>PASS</b> &mdash; worst feature-alone AUC 0.786 &lt; 0.90 stop (25 channels)</td></tr>
+<tr><th>Science gate</th><td><b>FAIL &mdash; this is why the answer is NO.</b> HOLDOUT-DTI (quadrant hide-and-recover, evaluator src/gems/metric.py, 48,465 withheld positives): candidate 0.1062 [0.0906, 0.1173] vs mass-matched random 0.0919; paired diff +0.0144, 95% CI [&minus;0.0015, +0.0238] <b>crosses zero</b>. SGMC off-catalogue control: 0.09515 vs incumbent h33-2-b2 0.09539 &mdash; ties, does not beat. No ORGANIZER-CONFIRMED score exists or is claimed.</td></tr>
+</table>
+<p class="small">Full record: <a href="data/run-card-lidar02.json">run-card-lidar02.json</a> (verdict <b>negative</b>) and
+<code>docs/review/2026-10-20-lidar02-session.md</code> in the repository. Method: slope-aware scarplet template +
+Steger/Frangi line channels, sharpness&times;persistence&times;antislope-polarity field, relief-stratified emission,
+37,654 dots, &ge;3 px separation, &gt;200 m from catalogue.</p>
+</div>
+"""
+
+
 def index_page() -> str:
     d = h67_data()
     run, e1, e1b, e2 = d["run"], d["e1"], d["e1b"], d["e2"]
@@ -507,6 +550,8 @@ def index_page() -> str:
 plus the evidence for why it looks the way it does. The scored truth is <b>faults that are not
 in the given public catalogue</b>, so every design choice here is aimed at that and not at
 recovering the 60,988 labelled pixels we were given.</p>
+
+{lidar02_block()}
 
 {submission_block()}
 
@@ -590,6 +635,8 @@ def exec_page() -> str:
             "mapped-fault exclusion; see GEMSDOE66 run card")
     return page("How to submit", f"""
 <h2>Executive summary</h2>
+
+{lidar02_block()}
 
 <div class="warn">
 <h2>Status: FORMAT-READY, NOT PROMOTED &mdash; download enabled with disclosures</h2>

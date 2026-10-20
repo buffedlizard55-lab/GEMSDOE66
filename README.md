@@ -78,6 +78,22 @@ and it spent no submission slot. See
 > [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
 > session-66 design.
 
+## LIDAR-02 session (branch `arena/e21dbf98`, 2026-10-20) — NEGATIVE, no slot used
+
+New unique in-lane candidate `gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z`
+(sharpness×persistence×antislope-polarity field + relief-stratified emission; builder
+`scripts/build_lidar02.py`). **🔴 NOT OK TO SUBMIT** — the site banner says so at the very top.
+Uniqueness PASS (max |ρ| 0.021; density-comparable 3-px overlap 0.430 ≤ 0.70 at lift 1.91),
+canary PASS (worst AUC 0.786), format PASS on both siblings (15 PASS + 2 INFO), but the
+science gate FAILS: HOLDOUT-DTI paired diff vs mass-matched random **+0.0144, 95% CI
+[−0.0015, +0.0238]** (quadrant hide-and-recover, `src/gems/metric.py`, 48,465 withheld
+positives) and SGMC off-catalogue control **0.09515 vs incumbent 0.09539** (ties, does not
+beat). `current_release.json` (LIDAR-01) unchanged; no ORGANIZER-CONFIRMED score claimed.
+Also verified (IR-L02-01): GEMSDOE32's own site labels h33-2-b2 **UNSCORED / projected
+0.2747**, so 0.2778 remains owner-reported. Full record:
+[`docs/review/2026-10-20-lidar02-session.md`](docs/review/2026-10-20-lidar02-session.md),
+[`docs/data/run-card-lidar02.json`](docs/data/run-card-lidar02.json).
+
 ## H67 geophysics lane (branch `arena/855725e1`, 2026-10-12) — ONE candidate CLEARED
 
 Pages: [`docs/h67/`](https://buffedlizard55-lab.github.io/GEMSDOE66/h67/) · run card
