@@ -1,5 +1,7 @@
 # LIDAR-01 session review — 2026-10-12 (`arena/f3c2dd8a-gemsdoe66`)
 
+> **Historical decision superseded on 2026-10-20.** The former `promote` recommendation relied on chance-corrected overlap and conflicted with the binding literal >70% / 3-px stop rule. The raster is now withdrawn and audit-only; do not download or submit it. See [`2026-10-20-review-lidar-release-and-h33.md`](2026-10-20-review-lidar-release-and-h33.md).
+
 ## Answer first
 
 A second candidate is cleared: `gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif`.

@@ -392,8 +392,21 @@ def lidar01_block() -> str:
     overwritten by the other's.
     """
     rel = load(DOCS / "downloads" / "current_release.json", None)
-    if not rel or not rel.get("cleared"):
+    if not rel:
         return ""
+    if not rel.get("cleared"):
+        return f"""
+<div class="warn">
+<h2>LIDAR-01 — NOT CLEARED · DO NOT DOWNLOAD OR SUBMIT</h2>
+<p>The candidate is retained only as an audit artifact. The literal duplicate stop rule is
+triggered: <b>0.921018</b> of its dots are within 3 px of one registry raster, exceeding the
+<b>0.70</b> limit. A chance-corrected diagnostic does not waive the stated stop rule.
+No submission slot was used. See the <a href="review/2026-10-20-review-lidar-release-and-h33.md">dated review</a>
+and <a href="data/run-card-lidar01.json">run card</a>.</p>
+<p>Prior holdout numbers are historical <b>HOLDOUT-DTI</b> evidence only; they do not clear
+this candidate. No ORGANIZER-CONFIRMED result exists.</p>
+</div>
+"""
     man = load(DOCS / "downloads" / rel["manifest"], {})
     card = load(DOCS / "data" / "run-card-lidar01.json", {})
     uni = load(ROOT / "evidence" / rel["uniqueness"], {})
@@ -445,8 +458,16 @@ exists for this file and none is claimed.</p>
 def lidar01_exec_block() -> str:
     """The LIDAR-01 submission recipe, appended to the executive-summary page."""
     rel = load(DOCS / "downloads" / "current_release.json", None)
-    if not rel or not rel.get("cleared"):
+    if not rel:
         return ""
+    if not rel.get("cleared"):
+        return """
+<h2>LIDAR-01 submission status — NOT CLEARED</h2>
+<p><b>Do not download or submit the LIDAR-01 audit TIFF.</b> Its literal registry-overlap
+check is over the 0.70 stop threshold (0.921018). This candidate is not eligible for the
+competition slot; see the <a href="review/2026-10-20-review-lidar-release-and-h33.md">review</a>.
+The older HOLDOUT-DTI measurements are not organizer scores and do not override the stop rule.</p>
+"""
     man = load(DOCS / "downloads" / rel["manifest"], {})
     return f"""
 <h2>Second candidate — LIDAR-01 ({esc(man.get("name", ""))})</h2>
