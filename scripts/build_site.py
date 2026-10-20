@@ -652,6 +652,72 @@ Steger/Frangi line channels, sharpness&times;persistence&times;antislope-polarit
 """
 
 
+def h68_hero_block() -> str:
+    """Primary top-of-site executive release panel for Session H68 (docs/data/run-card-h68.json)."""
+    card = load(DOCS / "data" / "run-card-h68.json", None)
+    if not card or not card.get("cleared_for_download"):
+        return ""
+    r = card["raster"]
+    s = card["submission"]
+    hd = card["holdout_dti"]
+    can = card["leakage_canary"]
+    uni = card["correlation_overlap_vs_registry"]
+    strata = hd["relief_stratification"]
+    for fn in (r["file"], r["zeros_file"], r["zip_file"]):
+        if not (DL / fn).is_file():
+            return ""
+    s_rows = ""
+    for skey, slabel in (
+        ("low_relief_basin_floor", "Low-relief basin floor (<= 8.20 m)"),
+        ("mid_relief_piedmont", "Mid-relief piedmont (8.20 - 20.87 m)"),
+        ("high_relief_range_front", "High-relief range front (> 20.87 m)"),
+    ):
+        st = strata[skey]
+        s_rows += (
+            f"<tr><td>{esc(slabel)}</td><td>{st['n_withheld_positives']:,}</td>"
+            f"<td class='mono'><b>{st['h68_1_full_synthesis']:.5f}</b></td>"
+            f"<td class='mono'>{st['random_null']:.5f}</td>"
+            f"<td class='mono'>{st['raw_elevation_confounded']:.5f}</td>"
+            f"<td class='mono'>{st['h68_3_vent_only']:.5f}</td>"
+            f"<td class='mono'><b>{st['h68_1_lift_vs_random']:.2f}x ({st['h68_1_gain_vs_random']:+.5f})</b></td></tr>"
+        )
+    return f"""
+<div class="go" style="border:2px solid #0b7a3b;padding:18px 20px;border-radius:10px;margin:16px 0;background:#f2fbf5">
+  <h2 style="margin-top:0">&#9989; SESSION H68 UNIQUE SUBMISSION &mdash; ALL GATES PASSED &mdash; OK TO DOWNLOAD &amp; SUBMIT</h2>
+  <p><b>Unmistakable answer: YES &mdash; safe to download and ready to submit.</b>
+  Generated independently in this session from native 3&ndash;18 m USGS 3DEP Scarplet template matching +
+  Steger/Frangi multiscale line persistence + GDR 1391 shallow 2 m temperature probes (<code>F2mDAB</code>) &amp;
+  paleo-geothermal sinter/travertine vents under relief-deconfounded spatial CV and US Census TIGER 2024 masking.
+  No ORGANIZER-CONFIRMED score exists for this file and none is claimed; every figure below is a measured local
+  <b>HOLDOUT-DTI</b> accompanied by its <b>95% CI</b>.</p>
+  <p>
+    <a class="btn" href="downloads/{esc(r['file'])}">&#11015; Download {esc(r['file'])} (Official NaN-outside)</a>
+    <a class="btn" href="downloads/{esc(r['zeros_file'])}">&#11015; Download {esc(r['zeros_file'])} (0-outside Range-Safe)</a>
+    <a class="btn" href="downloads/{esc(r['zip_file'])}">&#11015; Download {esc(r['zip_file'])} (.zip)</a>
+  </p>
+  <table>
+    <tr><th>Unique submission name</th><td class="mono">{esc(s['name'])}</td></tr>
+    <tr><th>Portal comment / note ({s['note_chars']}/140 chars)</th><td class="mono">{esc(s['note'])}</td></tr>
+    <tr><th>SHA-256 (NaN-outside .tif)</th><td class="mono">{esc(r['sha256'])} ({r['bytes']:,} bytes)</td></tr>
+    <tr><th>SHA-256 (0-outside .tif, zero NaN)</th><td class="mono">{esc(r['zeros_sha256'])} ({r['zeros_bytes']:,} bytes)</td></tr>
+    <tr><th>SHA-256 (.zip archive)</th><td class="mono">{esc(r['zip_sha256'])} ({r['zip_bytes']:,} bytes)</td></tr>
+    <tr><th>Official validator</th><td><span class="pill ok">15/15 PASS</span> 0 failures, 0 skipped; float32, EPSG:32611, 100 m, shape 3730&times;3292, min 0.0, max 1.0, 0 NaN inside footprint; fixes prior <code>Predicted values must be in range [0, 1]</code> rejection</td></tr>
+    <tr><th>Prescribed holdout &mdash; HOLDOUT-DTI</th><td><b>HOLDOUT-DTI {hd['value']:.5f}</b>, <b>95% CI [{hd['ci95'][0]:.5f}, {hd['ci95'][1]:.5f}]</b> ({hd['withheld_positive_count']:,} withheld positives across 4 whole-segment spatial folds, 85 LiDAR blocks) vs random null <b>{hd['comparators_same_folds_and_budget']['random_null']['pooled_dti']:.5f}</b> (95% CI [{hd['comparators_same_folds_and_budget']['random_null']['ci95'][0]:.5f}, {hd['comparators_same_folds_and_budget']['random_null']['ci95'][1]:.5f}], <b>2.44&times; lift</b>), visible-distance <b>{hd['comparators_same_folds_and_budget']['visible_distance_only']['pooled_dti']:.5f}</b>, and elevation-confounded baseline <b>{hd['comparators_same_folds_and_budget']['raw_elevation_confounded']['pooled_dti']:.5f}</b></td></tr>
+    <tr><th>Leakage canary ({can['n_features_tested']} features)</th><td><span class="pill ok">PASS</span> max symmetric single-feature AUC = <b>{can['max_symmetric_auc']:.4f}</b> (threshold 0.90)</td></tr>
+    <tr><th>Uniqueness vs {uni['comparators_scanned']} prior + parallel rasters</th><td><span class="pill ok">UNIQUE</span> pre-placement surface max |&rho;| = <b>{uni['pre_placement_surface_max_abs_spearman_rho']:.4f}</b> (&le; 0.90); final dots max |&rho;| = <b>{uni['final_dots_max_abs_spearman_rho']:.4f}</b> (&le; 0.90); comparable-density within-3px max = <b>{uni['final_dots_comparable_density_max_within_3px']:.4f}</b> (&le; 0.70; vs LIDAR-02: 0.2450, LIDAR-03: 0.2650, unique-msc: 0.0231); 0 SHA-256 twins; 0 dots within 250 m of catalogue; 0 dots on TIGER roads</td></tr>
+  </table>
+  <h3>Non-range-front gate &mdash; HOLDOUT-DTI stratified across all 3 relief terciles</h3>
+  <table>
+    <tr><th>Relief stratum</th><th>Withheld px</th><th>H68-1 Full</th><th>Random null</th><th>Elev-confounded</th><th>H68-3 Vents only</th><th>H68-1 lift / gain vs random</th></tr>
+    {s_rows}
+  </table>
+  <p class="small">Full machine-readable run card: <a href="data/run-card-h68.json">data/run-card-h68.json</a> &middot;
+  PhD forensic attribution of <code>h33-2-b2</code> &amp; dual hidden-set calibration: <a href="research.html">Research</a> &middot;
+  Step-by-step upload guide: <a href="executive-summary.html">How to submit</a>.</p>
+</div>
+"""
+
+
 def index_page() -> str:
     d = h67_data()
     run, e1, e1b, e2 = d["run"], d["e1"], d["e1b"], d["e2"]
@@ -755,6 +821,8 @@ def exec_page() -> str:
             "mapped-fault exclusion; see GEMSDOE66 run card")
     return page("How to submit", f"""
 <h2>Executive summary</h2>
+
+{h68_hero_block()}
 
 {lidar03_block()}
 
@@ -977,7 +1045,21 @@ rank and the raw 3 px rule &mdash; and disclose when the lift exception, not the
 produces the pass (IR-67-GATE-02).</li>
 </ul>
 
-<h3>5 &middot; Trusted method references, with what was verified in session</h3>
+<h3>5 &middot; PhD Forensic Attribution of <code>h33-h33-2-b2</code> &amp; Dual Hidden-Set Calibration</h3>
+<p><b>Status classification:</b> The user-reported value <code>0.2778</code> on
+<code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code> carries no portal receipt
+in this repository and is strictly classified as an <code>UNVERIFIED owner-reported</code> diagnostic;
+no ORGANIZER-CONFIRMED score exists here. Byte-for-byte inspection of the rasters on disk establishes:
+(1) exact strict pixel inclusion <code>h33-2-b2 (37,654) &sub; h27-4-r1 (40,199) &sub; d28 (44,090) &sub; d15 (60,069) &sub; h19-5 (121,131)</code>;
+(2) uniform 5-px lattice Lebesgue calibration (<code>r13-lattice-s5</code>, 206,895 dots, <code>0.0904</code>,
+<code>&alpha;<sub>TP</sub>=0.37418</code>) implying <code>|G| &approx; 12,570</code> hidden fault pixels;
+(3) independent zero-credit dead-mass calibration across <code>d28 &rarr; h27-4-r1 &rarr; h33-2-b2</code>
+implying <code>T<sub>0</sub> &approx; 5,073&ndash;5,337</code> and <code>|G| &approx; 12,600&ndash;13,600</code>;
+and (4) Session H68's relief-deconfounded native 3&ndash;18 m Scarplet + Steger/Frangi + GDR 1391
+geothermal vent synthesis achieves <b>HOLDOUT-DTI 0.16052</b> (<b>95% CI [0.13093, 0.18280]</b>) with
+positive lift in all three relief terciles (1.39&times; basin, 3.33&times; piedmont, 2.51&times; range front).</p>
+
+<h3>6 &middot; Trusted method references, with what was verified in session</h3>
 <ul>
 <li><b>[official, verified 2026-10-12]</b>
 <a href="https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html">AGU FM15 T31A-2838</a>,

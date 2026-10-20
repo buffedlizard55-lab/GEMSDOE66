@@ -376,9 +376,14 @@ def block_bootstrap_dti(pred: np.ndarray, truth: np.ndarray, region: np.ndarray,
     p = np.clip(p, 0.0, 1.0)
     g = truth & region
     per = {}
+    h_tot, w_tot = truth.shape
     for b in region_blocks:
-        m = (bids == b)
-        tp, fpw, fnw = tversky_terms(p * m, g & m)
+        r0 = max(0, (b // ((w_tot + block_px - 1) // block_px)) * block_px - 4)
+        c0 = max(0, (b % ((w_tot + block_px - 1) // block_px)) * block_px - 4)
+        r1 = min(h_tot, r0 + block_px + 8)
+        c1 = min(w_tot, c0 + block_px + 8)
+        m_sub = bids[r0:r1, c0:c1] == b
+        tp, fpw, fnw = tversky_terms(p[r0:r1, c0:c1] * m_sub, g[r0:r1, c0:c1] & m_sub)
         per[b] = (tp, fpw, fnw)
     rng = np.random.default_rng(seed)
     vals = []

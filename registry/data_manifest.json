@@ -263,25 +263,157 @@
     },
     {
       "id": "ext_topo_10m_derived_100m_u8",
-      "repo": null,
-      "ref": null,
+      "repo": "buffedlizard55-lab/60GEMSDOE",
+      "ref": "main",
       "path": "data/external/topo_10m_derived_100m_u8.tif",
       "dest": "external/topo_10m_derived_100m_u8.tif",
       "group": "external",
-      "sha256": null,
-      "bytes": null,
-      "provenance": "Required by scripts/run_h66.py and src/gems66/channels66.py; a verified source/hash/bytes were not available during this review. Intentionally unpinned: s0 must fail until provenance and exact SHA-256 are supplied."
+      "sha256": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4",
+      "bytes": 32523329,
+      "provenance": "USGS 3DEP 10 m derived 9-band 100 m topography stack; SHA-256 verified from sibling repo 60GEMSDOE"
     },
     {
       "id": "ext_lidar_scarp_features_sidecar",
-      "repo": null,
-      "ref": null,
+      "repo": "buffedlizard55-lab/GEMSDOE24",
+      "ref": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
       "path": "data/external/lidar_scarp_features.json",
       "dest": "external/lidar_scarp_features.json",
       "group": "external",
-      "sha256": null,
-      "bytes": null,
-      "provenance": "Required by src/gems66/spec66.py to decode lidar_scarp_features_u8.tif; exact sidecar bytes/source were not verified in this review. Intentionally unpinned; s0 must fail until provenance and SHA-256 are supplied."
+      "sha256": "9ef0df6e87598a8b0cd52fe821661e5fdb3a00568c5d9b1c5d61fd6b242dcd41",
+      "bytes": 3531,
+      "provenance": "Quantisation sidecar for lidar_scarp_features_u8.tif; SHA-256 verified from GEMSDOE24"
+    },
+    {
+      "id": "ext_dem10_chi_100m_i16",
+      "repo": "buffedlizard55-lab/60GEMSDOE",
+      "ref": "main",
+      "path": "data/external/dem10_chi_100m_i16.tif",
+      "dest": "external/dem10_chi_100m_i16.tif",
+      "group": "external",
+      "sha256": "8897ba9c30ef1cd7ad5f23c16c6dfd7bb070e7e757f36fd9486eb45edfd973a5",
+      "bytes": 12777098,
+      "provenance": "USGS 3DEP 10 m channel steepness chi (25/36 survey blocks)"
+    },
+    {
+      "id": "ext_dem10_chi_100m_sig_i32",
+      "repo": "buffedlizard55-lab/60GEMSDOE",
+      "ref": "main",
+      "path": "data/external/dem10_chi_100m_sig_i32.tif",
+      "dest": "external/dem10_chi_100m_sig_i32.tif",
+      "group": "external",
+      "sha256": "0ba7816bc082b8a71ebcb26596b5e330abb63231be94abad4e447eb316ffb95c",
+      "bytes": 2804587,
+      "provenance": "USGS 3DEP 10 m channel steepness chi significance"
+    },
+    {
+      "id": "ext_trace_segments_utm11",
+      "repo": "buffedlizard55-lab/60GEMSDOE",
+      "ref": "main",
+      "path": "data/external/trace_segments_utm11.csv",
+      "dest": "external/trace_segments_utm11.csv",
+      "group": "external",
+      "sha256": "c5edf9df3e0e1413c52784884fc38e5b9ca54627b27c6f8baf7713e908f48513",
+      "bytes": 5283577,
+      "provenance": "GDR 1391 INGENIOUS authoritative fault trace segments (record_id)"
+    },
+    {
+      "id": "ext_tiger_road_distance_m",
+      "repo": "buffedlizard55-lab/GEMSDOE24",
+      "ref": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+      "path": "data/external/audit_sources/tiger_road_distance_m.tif",
+      "dest": "external/tiger_road_distance_m.tif",
+      "group": "external",
+      "sha256": "e5350423508968fa2d32b0a6ae0d3fb4ae3ea645e3b8736f0c8e7ad9ff2f2988",
+      "bytes": 10492276,
+      "provenance": "US Census TIGER/Line 2024 road distance raster (m)"
+    },
+    {
+      "id": "ext_tiger_road_receipt",
+      "repo": "buffedlizard55-lab/GEMSDOE24",
+      "ref": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+      "path": "data/external/audit_sources/tiger_road_receipt.json",
+      "dest": "external/tiger_road_receipt.json",
+      "group": "external",
+      "sha256": "8a3cdadb134c58b731dcb1f78411903803cfef1a8d44dbae6af9fe6d3edc9bf6",
+      "bytes": 10686,
+      "provenance": "Provenance receipt for US Census TIGER/Line 2024 road distance raster"
+    },
+    {
+      "id": "ext_blm_closed_claim_distance_m",
+      "repo": "buffedlizard55-lab/GEMSDOE24",
+      "ref": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+      "path": "data/external/audit_sources/blm_closed_claim_distance_m.tif",
+      "dest": "external/blm_closed_claim_distance_m.tif",
+      "group": "external",
+      "sha256": "a88356423c03fc8b6510a84f77cee2b1d38c4ccbd7761bc95c1ca8332a2e166a",
+      "bytes": 5752587,
+      "provenance": "BLM closed mining claim distance raster (m)"
+    },
+    {
+      "id": "ext_2m_temperature_probe_zip",
+      "repo": "buffedlizard55-lab/GEMSDOE24",
+      "ref": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+      "path": "data/external/2m_temperature_probe_INGENIOUS_regional_data.zip",
+      "dest": "external/2m_temperature_probe_INGENIOUS_regional_data.zip",
+      "group": "external",
+      "sha256": "1301f70d230058e616ea5d34d1c7a32fabf7d49198172f376c59c89bd652eca3",
+      "bytes": 1080530,
+      "provenance": "GDR 1391 INGENIOUS shallow 2-meter temperature probe data (DOI 10.15121/1881483, CC BY 4.0)"
+    },
+    {
+      "id": "ext_paleo_geothermal_zip",
+      "repo": "buffedlizard55-lab/GEMSDOE24",
+      "ref": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+      "path": "data/external/paleo_geothermal_regional.zip",
+      "dest": "external/paleo_geothermal_regional.zip",
+      "group": "external",
+      "sha256": "faffcf697f32dbbf6cbb317cd1effb3e305538ce38eb239d72d0c6fa071e91ca",
+      "bytes": 84008,
+      "provenance": "GDR 1391 regional paleo-geothermal sinter/travertine/opalite deposits (DOI 10.15121/1881483, CC BY 4.0)"
+    },
+    {
+      "id": "gems48_h52_scarp3m_100m",
+      "repo": "buffedlizard55-lab/GEMSDOE48",
+      "ref": "main",
+      "path": "data/external/h52_scarp3m_100m.tif",
+      "dest": "gems48/h52_scarp3m_100m.tif",
+      "group": "external",
+      "sha256": "b5e53d67c3a7d3d1ca44ae04ae1e84d8574857da3fcd5e34ba47276d6c04b923",
+      "bytes": 43839078,
+      "provenance": "7-band native 1m->3m scarp height/facing/cover stack from 697 USGS 3DEP 1m tiles"
+    },
+    {
+      "id": "pilot_dem3m_receipt",
+      "repo": "buffedlizard55-lab/GEMSDOE48",
+      "ref": "main",
+      "path": "data/pilot/dem3m/dem_pilot_receipt.json",
+      "dest": "pilot/dem3m/dem_pilot_receipt.json",
+      "group": "pilot",
+      "sha256": "b2747403576e5c0f3a63d637eaebcc0549f9933aca2f12fadb9ccd1633e8defd",
+      "bytes": 2803,
+      "provenance": "USGS 3DEP 1m EarthMRI D20 -> 3m int16 decimetre DEM tile receipt"
+    },
+    {
+      "id": "pilot_dem3m_x40y427",
+      "repo": "buffedlizard55-lab/GEMSDOE48",
+      "ref": "main",
+      "path": "data/pilot/dem3m/x40y427_3m.tif",
+      "dest": "pilot/dem3m/x40y427_3m.tif",
+      "group": "pilot",
+      "sha256": "3a14850f2d33bb8b7ae077951c589ad9866f1978e0722691f2ef6ffcffeee718",
+      "bytes": 5677887,
+      "provenance": "USGS 3DEP 1m EarthMRI D20 3m bare-earth DEM tile x40y427"
+    },
+    {
+      "id": "pilot_dem3m_x42y425",
+      "repo": "buffedlizard55-lab/GEMSDOE48",
+      "ref": "main",
+      "path": "data/pilot/dem3m/x42y425_3m.tif",
+      "dest": "pilot/dem3m/x42y425_3m.tif",
+      "group": "pilot",
+      "sha256": "927c36c88debcaa65e9de9fbd0f3adf02b338614fbaed86e3e321111084735de",
+      "bytes": 4156097,
+      "provenance": "USGS 3DEP 1m EarthMRI D20 3m bare-earth DEM tile x42y425"
     }
   ]
 }

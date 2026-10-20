@@ -4,6 +4,7 @@ Only candidates that pass every applicable release gate belong in this directory
 
 | Candidate | Public status | Audit record |
 |---|---|---|
+| [`gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif`](gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif) | `b42aae62a11bfb825829cebfde09bc124924ef8d127905e484dd3a98c5f0a40e` | **CLEARED (`promote`, Session H68):** 35,800 dots, NaN outside footprint (`-zeros.tif` sha256 `f222ec9e...`, `.zip` sha256 `7e83ded5...`), 15/15 PASS, HOLDOUT-DTI 0.16052 [0.13093, 0.18280], positive lift in all 3 relief strata, max comparable overlap 0.4868. |
 | `gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z` (zeros sha256 `7c7d30c2…d5972b7e`, nan `cbcd9139…75cb84`) | **✅ CLEARED — OK TO DOWNLOAD AND SUBMIT** (pre-registered gate passed; no organizer score claimed; SGMC conflict disclosed) | `../review/2026-10-20-lidar03-session.md`; `../data/run-card-lidar03.json` (verdict `promote`); pointer `current_release_lidar03.json` |
 | `gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z` | **NOT CLEARED — DO NOT DOWNLOAD OR SUBMIT** | `../review/2026-10-20-review-lidar-release-and-h33.md`; audit-only TIFF/ZIP under `../../artifacts/lidar01/` |
 | `gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z` (zeros sha256 `26b264d7…484a0c`, nan `23195d6c…2d6858`) | **🔴 NOT CLEARED — DO NOT SUBMIT** (unique + format-valid audit artifact; science gate FAIL) | `../review/2026-10-20-lidar02-session.md`; `../data/run-card-lidar02.json` (verdict `negative`) |
