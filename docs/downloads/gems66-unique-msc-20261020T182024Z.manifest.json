@@ -1,23 +1,18 @@
 {
- "generated_utc": "2026-10-12T02:16:13Z",
- "name": "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z",
- "note": "LIDAR-01: slope-aware antislope scarplet template + Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, spacing-cons...",
+ "generated_utc": "2026-10-20T18:20:25Z",
+ "name": "gems66-unique-msc-20261020T182024Z",
+ "note": "GEMSDOE66 unique multi-scale structural convergence field, continuous probability (not dots), coherence+lineament+curvature fusion; forma...",
  "note_chars": 140,
- "tif": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
- "tif_sha256": "0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2",
- "zip": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
- "zip_sha256": "134e3694d76eaee5a26824fbf543d305055fc40f82d75c7de553650c39c2825b",
- "bytes": 359188,
- "dots": 37654,
- "budget": 37654,
- "separation_px": 2.8,
- "gamma": null,
- "seed": 4242,
- "score_field": "data/derived/lane01_final_score.npy",
- "score_sha256": "c0f162ef120fe575cef30b0714c15adbd543358891596c46010389c572271c89",
+ "tif": "artifacts/unique_submission/gems66-unique-msc-20261020T182024Z.tif",
+ "tif_sha256": "fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340",
+ "zip": "artifacts/unique_submission/gems66-unique-msc-20261020T182024Z.zip",
+ "zip_sha256": "030ba1ba0b4cf552ce4cb980655dc8460013a48a10b05edd4eb8469fcfdebbc3",
+ "bytes": 439094,
  "footprint_cells": 5167373,
+ "emitted_cells": 40048,
  "validator": {
-  "file": "/home/user/GEMSDOE66/artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+  "file": "/home/user/GEMSDOE66/artifacts/unique_submission/gems66-unique-msc-20261020T182024Z.tif",
+  "sha256": "fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340",
   "passed": true,
   "has_failures": false,
   "checks": [
@@ -89,21 +84,32 @@
    {
     "check": "no NaN inside footprint",
     "status": "PASS",
-    "detail": "nan_inside=0 footprint_cells=5167373"
+    "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
    },
    {
     "check": "NaN-only outside footprint",
     "status": "PASS",
-    "detail": "finite_outside=0; only NaN is allowed outside"
+    "detail": "finite_outside=0; only NaN is allowed outside under outside_policy='nan'"
+   },
+   {
+    "check": "info: features band-1 mask disagrees with the authoritative mask",
+    "status": "INFO",
+    "detail": "in_reference_not_features=0 in_features_not_reference=0; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
    },
    {
     "check": "info: emitted cells (value > 0)",
     "status": "INFO",
-    "detail": "emitted=37654"
+    "detail": "emitted=40048"
    }
   ],
   "skipped_checks_mean_unverified": false
  },
  "validator_passed": true,
- "receipt_kind": "local writer/validator receipt; NOT an organizer receipt"
+ "method": "multi-scale structural convergence (unique lane variant)",
+ "hypothesis": "subtle faults produce multi-scale structural convergence (coherence x lineament x curvature)",
+ "mimic_process": "alluvial-fan distributary networks and drainage antecedence",
+ "differentiation": "continuous field, multi-scale structure, no dots, no inventory layers, no geophysics-only",
+ "organizer_score_claimed": false,
+ "receipt_kind": "local writer/validator receipt; NOT an organizer receipt",
+ "ok_to_download": "format-valid and unique locally; no organizer-confirmed score exists \u2014 download at your own risk"
 }

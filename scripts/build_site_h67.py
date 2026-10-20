@@ -145,9 +145,7 @@ def assess(card_path: Path | None) -> dict:
     card = json.loads(card_path.read_text())
     out["card"] = card
     tif = ART / card["raster"]["file"]
-    if not tif.exists() and (DL / card["raster"]["file"]).exists():
-        tif = DL / card["raster"]["file"]
-    zips = list(ART.glob(card["submission"]["name"] + ".zip")) or list(DL.glob(card["submission"]["name"] + ".zip"))
+    zips = list(ART.glob(card["submission"]["name"] + ".zip"))
     if not tif.exists():
         out["reasons"].append(f"raster {tif.name} is not on disk")
         return out
@@ -297,14 +295,10 @@ def download_block(a: dict) -> str:
 so nothing is published in <code>docs/downloads/</code>. This is a deliberate, logged outcome,
 not an error.</p></div>"""
     c = a["card"]
-    r = a.get("raster")
-    if not r:
-        fails = "".join(f"<li><b>{html.escape(k)}</b></li>" for k in a.get("reasons", []))
-        return f"""<div class="banner stop"><h2>&#10060; Download status: NOT CLEARED</h2>
-<p>An H67 artifact exists (<code>{html.escape(c['submission']['name'])}</code>) but
-<b>{len(a.get('reasons', []))} release gate(s) fail</b>, so it is <b>not</b> published as a download.
-Do not upload it.</p><ul>{fails}</ul></div>"""
     if a["cleared"]:
+        # A failed or incomplete assessment may have no raster payload at all. Keep the
+        # site builder fail-closed: do not index release-only fields until every gate clears.
+        r = a["raster"]
         rows = "".join(
             f'<tr><th>{html.escape(k)}</th><td><span class="pill ok">PASS</span> '
             f'<span class="small">{html.escape(str(v["detail"]))}</span></td></tr>'
@@ -400,21 +394,12 @@ def main() -> int:
     # Publish or withdraw THIS lane's download bytes according to the recomputed verdict.
     # docs/downloads/ is shared with the other lanes on main, so only our own prefix is touched --
     # a blanket *.tif unlink here deleted the session-66 and H67-1 candidates during the merge.
-    keep_paths = set()
-    if a["cleared"]:
-        src_tif = a["raster"]["path"]
-        src_zip = a["raster"]["zip"]
-        dst_tif = DL / src_tif.name
-        dst_zip = DL / src_zip.name
-        if src_tif.resolve() != dst_tif.resolve():
-            shutil.copy2(src_tif, dst_tif)
-        if src_zip.resolve() != dst_zip.resolve():
-            shutil.copy2(src_zip, dst_zip)
-        keep_paths = {dst_tif.resolve(), dst_zip.resolve()}
     for f in list(DL.glob("gems66-h67-geophys-maxcov-*.tif")) + \
              list(DL.glob("gems66-h67-geophys-maxcov-*.zip")):
-        if f.resolve() not in keep_paths:
-            f.unlink()
+        f.unlink()
+    if a["cleared"]:
+        shutil.copy2(a["raster"]["path"], DL / a["raster"]["path"].name)
+        shutil.copy2(a["raster"]["zip"], DL / a["raster"]["zip"].name)
     (SITE / "DOWNLOADS.md").write_text(
         "# Submission downloads\n\n" +
         (f"**CLEARED:** `{a['raster']['path'].name}` "

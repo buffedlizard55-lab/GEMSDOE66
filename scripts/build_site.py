@@ -392,8 +392,21 @@ def lidar01_block() -> str:
     overwritten by the other's.
     """
     rel = load(DOCS / "downloads" / "current_release.json", None)
-    if not rel or not rel.get("cleared"):
+    if not rel:
         return ""
+    if not rel.get("cleared"):
+        return f"""
+<div class="warn">
+<h2>LIDAR-01 — NOT CLEARED · DO NOT DOWNLOAD OR SUBMIT</h2>
+<p>The candidate is retained only as an audit artifact. The literal duplicate stop rule is
+triggered: <b>0.921018</b> of its dots are within 3 px of one registry raster, exceeding the
+<b>0.70</b> limit. A chance-corrected diagnostic does not waive the stated stop rule.
+No submission slot was used. See the <a href="review/2026-10-20-review-lidar-release-and-h33.md">dated review</a>
+and <a href="data/run-card-lidar01.json">run card</a>.</p>
+<p>Prior holdout numbers are historical <b>HOLDOUT-DTI</b> evidence only; they do not clear
+this candidate. No ORGANIZER-CONFIRMED result exists.</p>
+</div>
+"""
     man = load(DOCS / "downloads" / rel["manifest"], {})
     card = load(DOCS / "data" / "run-card-lidar01.json", {})
     uni = load(ROOT / "evidence" / rel["uniqueness"], {})
@@ -403,19 +416,18 @@ def lidar01_block() -> str:
     rows = ""
     for inst_key, label in (("blocks", "spatial-block hide-and-recover (prescribed)"),
                             ("traces", "global whole-trace holdout")):
-        inst_obj = card.get("holdout_dti", {}).get("instruments", {}).get(inst_key, {}) or {}
-        vs = inst_obj.get("variants", {}) or {}
-        nf = inst_obj.get("n_folds", 4)
+        vs = (card.get("holdout_dti", {}).get("instruments", {})
+              .get(inst_key, {}).get("variants", {}) or {})
         for k in sorted(vs):
             v = vs[k]
             rows += (f"<tr><td>{esc(label)} — {esc(k)}</td>"
                      f"<td class='mono'>{v.get('mean')}</td>"
                      f"<td class='mono'>{v.get('ci95')}</td>"
-                     f"<td class='mono'>{v.get('n_folds') or nf} folds</td></tr>")
+                     f"<td class='mono'>{v.get('n_folds')} folds</td></tr>")
     caveats = "".join(f"<li>{esc(c)}</li>" for c in rel.get("caveats", []))
     return f"""
 <div class="go">
-<h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
+<h2>Second candidate (unique-msc session) — format-valid on its own local gates; no organizer score</h2>
 <p><code>{esc(rel["tif"])}</code> — {man.get("dots", 0):,} dots,
 {man.get("bytes", 0):,} bytes, sha256 <span class="mono">{esc(man.get("tif_sha256", ""))}</span>.
 Own run card: <a href="data/run-card-lidar01.json">run-card-lidar01.json</a> (verdict
@@ -446,11 +458,19 @@ exists for this file and none is claimed.</p>
 def lidar01_exec_block() -> str:
     """The LIDAR-01 submission recipe, appended to the executive-summary page."""
     rel = load(DOCS / "downloads" / "current_release.json", None)
-    if not rel or not rel.get("cleared"):
+    if not rel:
         return ""
+    if not rel.get("cleared"):
+        return """
+<h2>LIDAR-01 submission status — NOT CLEARED</h2>
+<p><b>Do not download or submit the LIDAR-01 audit TIFF.</b> Its literal registry-overlap
+check is over the 0.70 stop threshold (0.921018). This candidate is not eligible for the
+competition slot; see the <a href="review/2026-10-20-review-lidar-release-and-h33.md">review</a>.
+The older HOLDOUT-DTI measurements are not organizer scores and do not override the stop rule.</p>
+"""
     man = load(DOCS / "downloads" / rel["manifest"], {})
     return f"""
-<h2>Second candidate — LIDAR-01 ({esc(man.get("name", ""))})</h2>
+<h2>Second candidate — unique-msc session ({esc(man.get("name", ""))})</h2>
 <p>A parallel session's file, cleared on its own evidence. If you prefer it to the H67-1
 candidate above, use these fields instead — the name and note are exact and the note is
 {man.get("note_chars", 0)}/140 characters.</p>
@@ -469,12 +489,108 @@ It is a <b>HOLDOUT-DTI</b> result only:
 """
 
 
-def h68_hero_block() -> str:
-    """Primary top-of-site executive release panel for Session H68 (docs/data/run-card-h68.json).
+LIDAR02_STEM = "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z"
 
-    Fail-closed: renders the green CLEARED banner and download buttons ONLY when run-card-h68.json
-    exists, every release gate passed, and the published GeoTIFF/ZIP files exist in docs/downloads/.
+
+LIDAR03_STEM = "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z"
+
+
+def lidar03_block() -> str:
+    """LIDAR-03 (2026-10-20) banner: spatial-CV-retrained classifier, verdict PROMOTE.
+
+    Reads its own run card (docs/data/run-card-lidar03.json); returns "" if absent or
+    if the card's verdict is not promote, so a rebuild can never invent a clearance.
+    The verbatim banner text is kept in sync with the hand-patched HTML of the
+    LIDAR-03 session (docs/review/2026-10-20-lidar03-session.md).
     """
+    card = load(DOCS / "data" / "run-card-lidar03.json", None)
+    if not card or card.get("verdict") != "promote":
+        return ""
+    stem = LIDAR03_STEM
+    sha_z = card["raster"]["zeros"]["sha256"]
+    sha_n = card["raster"]["nan"]["sha256"]
+    return f"""
+<div class="go" style="border:3px solid #2ea043">
+<h2>&#9989; LIDAR-03 (2026-10-20): NEW UNIQUE SUBMISSION &mdash; <b>OK TO DOWNLOAD AND SUBMIT</b></h2>
+<p><b>Is it OK to download and submit? YES</b> &mdash; under this lane's pre-registered gate (all 9
+conditions pass; <a href="data/run-card-lidar03.json">run-card-lidar03.json</a>, verdict <b>promote</b>).
+Spending a weekly slot remains the separate selector decision; <b>no ORGANIZER-CONFIRMED score
+exists</b> and beating 0.2778 (owner-reported) is <b>not</b> claimed.</p>
+<p><a class="btn" href="downloads/{stem}-zeros.tif">&#11015; {stem}-zeros.tif</a>
+<a class="btn" href="downloads/{stem}-zeros.zip">.zip</a>
+<a class="btn" href="downloads/{stem}-nan.tif">NaN-outside sibling (.tif)</a>
+<a class="btn" href="downloads/{stem}-nan.zip">NaN sibling (.zip)</a><br>
+<span class="small mono">sha256 (zeros) {sha_z}<br>sha256 (nan) {sha_n}</span></p>
+<table>
+<tr><th>File to submit</th><td class="mono">{stem}-zeros.tif</td></tr>
+<tr><th>Unique submission name</th><td class="mono">{stem}</td></tr>
+<tr><th>Note to paste (110/140 chars)</th><td class="mono">LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03</td></tr>
+<tr><th>How to submit (exactly)</th><td>On the competition page choose <b>Submit</b> &rarr;
+<i>File to submit</i>: pick <code>{stem}-zeros.tif</code> (or its .zip) &rarr; paste the Note above
+&rarr; submit. The <code>-zeros</code> file is finite in all 12,279,160 cells, values in [0, 1], no
+nodata tag, so the earlier <span class="mono">Predicted values must be in range [0, 1]</span>
+rejection cannot occur; the <code>-nan</code> sibling has NaN only outside the footprint.</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; shared validator vs the official sample grid + pinned
+training features: <b>15 PASS &middot; 0 FAIL &middot; 0 SKIPPED &middot; 2 INFO</b> on both siblings
+(float32, EPSG:32611, 100 m, 3730&times;3292, exact transform; 37,654 dots; 0 within 200 m of the catalogue).</td></tr>
+<tr><th>Science gate (HOLDOUT-DTI)</th><td><b>PASS</b> &mdash; candidate 0.1522 [95% CI 0.1258, 0.1816] vs
+mass-matched random 0.0919; paired diff +0.0603 [0.0336, 0.0919]; 4/4 folds; 48,465 withheld
+positives (evaluator <code>src/gems/metric.py</code>). Disclosed conflict: SGMC proxy 0.0670 vs
+h33-2-b2 0.0954 &mdash; see the run card.</td></tr>
+</table>
+</div>
+
+<div class="stop">
+<h2>LIDAR-01 &mdash; NOT CLEARED &middot; DO NOT DOWNLOAD OR SUBMIT (withdrawn, audit only)</h2>
+<p>The earlier LIDAR-01 candidate remains <b>WITHDRAWN</b>: <b>0.921018</b> of its dots lie within
+3 px of one registry raster, exceeding the literal 0.70 duplicate stop. See
+<a href="data/run-card-lidar01.json">run-card-lidar01.json</a>.</p>
+</div>
+"""
+
+
+def lidar02_block() -> str:
+    """LIDAR-02 (2026-10-20) banner: new unique file, verdict NEGATIVE — NOT OK TO SUBMIT.
+
+    Reads its own run card (docs/data/run-card-lidar02.json); returns "" if absent so a
+    checkout without the session's card never invents a status.
+    """
+    card = load(DOCS / "data" / "run-card-lidar02.json", None)
+    if not card:
+        return ""
+    stem = LIDAR02_STEM
+    return f"""
+<div class="warn" style="border:3px solid #f85149">
+<h2>&#128308; LIDAR-02 (2026-10-20): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
+<p><b>Is it OK to download and submit the new LIDAR-02 file? NO.</b> It is unique and
+format-valid, but it did <b>not</b> pass this project's science gate, so do not spend a
+weekly submission slot on it. This banner changes no other candidate's status:
+the machine-readable pointer is <code>downloads/current_release.json</code> and each
+candidate's own panel below carries its own verdict.</p>
+<table>
+<tr><th>New unique file (audit download only)</th><td>
+<a class="btn" href="downloads/{stem}-zeros.tif">{stem}-zeros.tif</a>
+<a class="btn" href="downloads/{stem}-zeros.zip">.zip</a>
+<a class="btn" href="downloads/{stem}-nan.tif">NaN-outside sibling</a><br>
+<span class="small mono">sha256 (zeros) {esc(card.get("rasters", {}).get("zeros", {}).get("sha256", ""))}<br>
+sha256 (nan) {esc(card.get("rasters", {}).get("nan", {}).get("sha256", ""))}</span></td></tr>
+<tr><th>Submission name (if ever cleared)</th><td class="mono">{esc(card.get("submission_name", ""))}</td></tr>
+<tr><th>Note ({card.get("note_chars", 0)}/140)</th><td class="mono">{esc(card.get("submission_note", ""))}</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; both siblings 15 PASS + 2 INFO, 0 FAIL/SKIPPED; float32 EPSG:32611 100 m 3730&times;3292; 0 NaN inside footprint; values in [0,1] (the <span class="mono">Predicted values must be in range [0, 1]</span> rejection cannot occur on the -zeros file: every cell finite, no nodata tag)</td></tr>
+<tr><th>Uniqueness gate</th><td><b>PASS (unique)</b> &mdash; max |Spearman &rho;| 0.021 (limit 0.90); density-comparable 3-px dot overlap max 0.430 (limit 0.70) at lift 1.91; not identical to any of the rasters compared; hash differs from every prior raster</td></tr>
+<tr><th>Leakage canary</th><td><b>PASS</b> &mdash; worst feature-alone AUC 0.786 &lt; 0.90 stop (25 channels)</td></tr>
+<tr><th>Science gate</th><td><b>FAIL &mdash; this is why the answer is NO.</b> HOLDOUT-DTI (quadrant hide-and-recover, evaluator src/gems/metric.py, 48,465 withheld positives): candidate 0.1062 [0.0906, 0.1173] vs mass-matched random 0.0919; paired diff +0.0144, 95% CI [&minus;0.0015, +0.0238] <b>crosses zero</b>. SGMC off-catalogue control: 0.09515 vs incumbent h33-2-b2 0.09539 &mdash; ties, does not beat. No ORGANIZER-CONFIRMED score exists or is claimed.</td></tr>
+</table>
+<p class="small">Full record: <a href="data/run-card-lidar02.json">run-card-lidar02.json</a> (verdict <b>negative</b>) and
+<code>docs/review/2026-10-20-lidar02-session.md</code> in the repository. Method: slope-aware scarplet template +
+Steger/Frangi line channels, sharpness&times;persistence&times;antislope-polarity field, relief-stratified emission,
+37,654 dots, &ge;3 px separation, &gt;200 m from catalogue.</p>
+</div>
+"""
+
+
+def h68_hero_block() -> str:
+    """Primary top-of-site executive release panel for Session H68 (docs/data/run-card-h68.json)."""
     card = load(DOCS / "data" / "run-card-h68.json", None)
     if not card or not card.get("cleared_for_download"):
         return ""
@@ -525,7 +641,7 @@ def h68_hero_block() -> str:
     <tr><th>Official validator</th><td><span class="pill ok">15/15 PASS</span> 0 failures, 0 skipped; float32, EPSG:32611, 100 m, shape 3730&times;3292, min 0.0, max 1.0, 0 NaN inside footprint; fixes prior <code>Predicted values must be in range [0, 1]</code> rejection</td></tr>
     <tr><th>Prescribed holdout &mdash; HOLDOUT-DTI</th><td><b>HOLDOUT-DTI {hd['value']:.5f}</b>, <b>95% CI [{hd['ci95'][0]:.5f}, {hd['ci95'][1]:.5f}]</b> ({hd['withheld_positive_count']:,} withheld positives across 4 whole-segment spatial folds, 85 LiDAR blocks) vs random null <b>{hd['comparators_same_folds_and_budget']['random_null']['pooled_dti']:.5f}</b> (95% CI [{hd['comparators_same_folds_and_budget']['random_null']['ci95'][0]:.5f}, {hd['comparators_same_folds_and_budget']['random_null']['ci95'][1]:.5f}], <b>2.44&times; lift</b>), visible-distance <b>{hd['comparators_same_folds_and_budget']['visible_distance_only']['pooled_dti']:.5f}</b>, and elevation-confounded baseline <b>{hd['comparators_same_folds_and_budget']['raw_elevation_confounded']['pooled_dti']:.5f}</b></td></tr>
     <tr><th>Leakage canary ({can['n_features_tested']} features)</th><td><span class="pill ok">PASS</span> max symmetric single-feature AUC = <b>{can['max_symmetric_auc']:.4f}</b> (threshold 0.90)</td></tr>
-    <tr><th>Uniqueness vs {uni['comparators_scanned']} prior rasters</th><td><span class="pill ok">UNIQUE</span> pre-placement surface max |&rho;| = <b>{uni['pre_placement_surface_max_abs_spearman_rho']:.4f}</b> (&le; 0.90); final dots max |&rho;| = <b>{uni['final_dots_max_abs_spearman_rho']:.4f}</b> (&le; 0.90); comparable-density within-3px max = <b>{uni['final_dots_comparable_density_max_within_3px']:.4f}</b> (&le; 0.70); 0 SHA-256 twins; 0 dots within 250 m of catalogue; 0 dots on TIGER roads</td></tr>
+    <tr><th>Uniqueness vs {uni['comparators_scanned']} prior + parallel rasters</th><td><span class="pill ok">UNIQUE</span> pre-placement surface max |&rho;| = <b>{uni['pre_placement_surface_max_abs_spearman_rho']:.4f}</b> (&le; 0.90); final dots max |&rho;| = <b>{uni['final_dots_max_abs_spearman_rho']:.4f}</b> (&le; 0.90); comparable-density within-3px max = <b>{uni['final_dots_comparable_density_max_within_3px']:.4f}</b> (&le; 0.70; vs LIDAR-02: 0.2450, LIDAR-03: 0.2650, unique-msc: 0.0231); 0 SHA-256 twins; 0 dots within 250 m of catalogue; 0 dots on TIGER roads</td></tr>
   </table>
   <h3>Non-range-front gate &mdash; HOLDOUT-DTI stratified across all 3 relief terciles</h3>
   <table>
@@ -558,7 +674,9 @@ plus the evidence for why it looks the way it does. The scored truth is <b>fault
 in the given public catalogue</b>, so every design choice here is aimed at that and not at
 recovering the 60,988 labelled pixels we were given.</p>
 
-{h68_hero_block()}
+{lidar03_block()}
+
+{lidar02_block()}
 
 {submission_block()}
 
@@ -640,6 +758,10 @@ def exec_page() -> str:
 <h2>Executive summary</h2>
 
 {h68_hero_block()}
+
+{lidar03_block()}
+
+{lidar02_block()}
 
 <div class="warn">
 <h2>Status: FORMAT-READY, NOT PROMOTED &mdash; download enabled with disclosures</h2>
@@ -858,44 +980,19 @@ produces the pass (IR-67-GATE-02).</li>
 
 <h3>5 &middot; PhD Forensic Attribution of <code>h33-h33-2-b2</code> &amp; Dual Hidden-Set Calibration</h3>
 <p><b>Status classification:</b> The user-reported value <code>0.2778</code> on
-<code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code> (and the sibling owner-reported
-values across GEMSDOE..GEMSDOE49) carry no portal receipt in this repository and are strictly
-classified as <code>UNVERIFIED owner-reported</code> diagnostics; no ORGANIZER-CONFIRMED score exists
-here. Within that explicit provenance boundary, byte-for-byte inspection of the rasters in
-<code>registry/rasters/</code> and <code>data/raw/scored/</code> establishes four exact facts:</p>
-<ol>
-<li><b>Exact nested subset lineage:</b> Every single positive pixel of <code>h33-2-b2</code> (37,654 dots)
-is strictly a pixel subset of <code>h27-4-r1</code> (40,199 dots) &sub; <code>d28</code> (44,090 dots)
-&sub; <code>d15</code> (60,069 dots) &sub; <code>h19-5</code> (121,131 continuous 1-px skeleton cells,
-SHA-256 <code>ec1f9b56&hellip;</code>). None of <code>d15</code>, <code>d28</code>, <code>h27-4-r1</code>,
-or <code>h33-2-b2</code> changed the underlying belief field: the entire jump from <code>0.1922</code> to
-<code>0.2778</code> came from (a) 4-line multi-physics corroboration in <code>h19-5</code> (power-law
-tip/relay deficit + GDR 1391 thermal/geochemical inversion + DEM openness + potential-field strike worms),
-(b) Poisson-disk thinning inside the 300 m triangular kernel (<code>121,131 &rarr; 44,090</code> dots),
-and (c) deleting dead mass within 100 m (<code>&minus;3,891</code> dots) and 100&ndash;200 m
-(<code>&minus;2,545</code> dots) of already-mapped <code>labels.tif</code> traces.</li>
-<li><b>Independent Identifier 1 (Lebesgue Lattice Integrator):</b> The translation-invariant uniform
-5-pixel (500 m) lattice <code>13gems_20261001_r13-lattice-s5_v2_nan-outside.tif</code> (206,895 dots,
-owner-reported <code>0.0904</code>) covers real 1D fault traces with exact kernel recall
-<code>&alpha;<sub>TP</sub> = 0.37418</code> and <code>&alpha;<sub>M</sub> = 0.13800</code>, algebraically
-implying <code>|G| &approx; 12,570</code> hidden fault pixels (&approx;17.1% of mapped+hidden faults).</li>
-<li><b>Independent Identifier 2 (Dead-Mass Derivative):</b> Deleting strictly zero-credit pixels on
-<code>labels.tif</code> between <code>d28</code> (44,090 dots, <code>0.2600</code>) and
-<code>h27-4-r1</code> (40,199 dots, <code>0.2708</code>) gives
-<code>1/0.2600 &minus; 1/0.2708 = 0.2 &times; 3,891 / T<sub>0</sub></code>, yielding
-<code>T<sub>0</sub> &approx; 5,073&ndash;5,337</code> kernel-weighted pixels and
-<code>|G| &approx; 12,600&ndash;13,600</code> hidden fault pixels &mdash; independent agreement within 8%.</li>
-<li><b>Why Session H68 breaks the range-front ceiling:</b> Surpassing <code>0.2778</code> requires
-raising true off-catalogue recall <code>T</code> in low-relief basins and piedmonts while eliminating
-double-covered kernel balls (<code>d<sub>min</sub> = 3.15 px = 315 m &gt; 300 m</code>) and cultural
-mimics. Session H68 implements orthogonal 3 m Scarplet template matching + 3&ndash;18 m Steger/Frangi
-lines + GDR 1391 shallow 2 m thermal probe plumes (<code>F2mDAB</code>) &amp; paleo-sinter vents +
-Bayesian relief-matched CV, achieving <b>HOLDOUT-DTI 0.16052</b> (<b>95% CI [0.13093, 0.18280]</b>) with
-positive gains across all three relief strata (basin 1.39&times;, piedmont 3.33&times;, range front
-2.51&times;) and full uniqueness (comparable-density within-3px max 0.4868 &le; 0.70).</li>
-</ol>
+<code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code> carries no portal receipt
+in this repository and is strictly classified as an <code>UNVERIFIED owner-reported</code> diagnostic;
+no ORGANIZER-CONFIRMED score exists here. Byte-for-byte inspection of the rasters on disk establishes:
+(1) exact strict pixel inclusion <code>h33-2-b2 (37,654) &sub; h27-4-r1 (40,199) &sub; d28 (44,090) &sub; d15 (60,069) &sub; h19-5 (121,131)</code>;
+(2) uniform 5-px lattice Lebesgue calibration (<code>r13-lattice-s5</code>, 206,895 dots, <code>0.0904</code>,
+<code>&alpha;<sub>TP</sub>=0.37418</code>) implying <code>|G| &approx; 12,570</code> hidden fault pixels;
+(3) independent zero-credit dead-mass calibration across <code>d28 &rarr; h27-4-r1 &rarr; h33-2-b2</code>
+implying <code>T<sub>0</sub> &approx; 5,073&ndash;5,337</code> and <code>|G| &approx; 12,600&ndash;13,600</code>;
+and (4) Session H68's relief-deconfounded native 3&ndash;18 m Scarplet + Steger/Frangi + GDR 1391
+geothermal vent synthesis achieves <b>HOLDOUT-DTI 0.16052</b> (<b>95% CI [0.13093, 0.18280]</b>) with
+positive lift in all three relief terciles (1.39&times; basin, 3.33&times; piedmont, 2.51&times; range front).</p>
 
-<h3>6 &middot; Trusted method &amp; data references, verified line by line</h3>
+<h3>6 &middot; Trusted method references, with what was verified in session</h3>
 <ul>
 <li><b>[official, verified 2026-10-12]</b>
 <a href="https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html">AGU FM15 T31A-2838</a>,

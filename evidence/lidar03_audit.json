@@ -1,0 +1,136 @@
+{
+ "label": "independent re-read audit (not a score); sgmc_offcat_dti is HOLDOUT-DTI-class proxy control, evaluator src/gems/metric.py",
+ "footprint_cells": 5167373,
+ "catalogue_cells": 60988,
+ "sgmc_offcat_cells": 62122,
+ "results": [
+  {
+   "name": "lidar03-zeros",
+   "file": "artifacts/lidar03/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+   "dots": 37654,
+   "min_finite": 0.0,
+   "max_finite": 1.0,
+   "nan_total": 0,
+   "nan_inside_footprint": 0,
+   "dots_within_200m_of_catalogue": 0,
+   "dot_dist_to_catalogue_m": {
+    "median": 1486.6068747318507,
+    "p25": 640.3124237432849,
+    "p75": 3104.834939252005,
+    "mean": 2291.003791362581
+   },
+   "sgmc_offcat_dti": 0.06698954806723138,
+   "meta": {
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": "(3730, 3292)",
+    "bands": "1",
+    "nodata": "None"
+   }
+  },
+  {
+   "name": "lidar03-nan",
+   "file": "artifacts/lidar03/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+   "dots": 37654,
+   "min_finite": 0.0,
+   "max_finite": 1.0,
+   "nan_total": 7111787,
+   "nan_inside_footprint": 0,
+   "dots_within_200m_of_catalogue": 0,
+   "dot_dist_to_catalogue_m": {
+    "median": 1486.6068747318507,
+    "p25": 640.3124237432849,
+    "p75": 3104.834939252005,
+    "mean": 2291.003791362581
+   },
+   "sgmc_offcat_dti": 0.06698954806723138,
+   "meta": {
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": "(3730, 3292)",
+    "bands": "1",
+    "nodata": "None"
+   }
+  },
+  {
+   "name": "h33-2-b2 (registry mirror)",
+   "file": "registry/rasters/GEMSDOE32__h33-2-b2-zeros.tif",
+   "dots": 37654,
+   "min_finite": 0.0,
+   "max_finite": 1.0,
+   "nan_total": 0,
+   "nan_inside_footprint": 0,
+   "dots_within_200m_of_catalogue": 0,
+   "dot_dist_to_catalogue_m": {
+    "median": 1964.68827043885,
+    "p25": 806.2257748298549,
+    "p75": 4244.997055358224,
+    "mean": 2899.659393237177
+   },
+   "sgmc_offcat_dti": 0.0953861146048237,
+   "meta": {
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": "(3730, 3292)",
+    "bands": "1",
+    "nodata": "None"
+   }
+  },
+  {
+   "name": "lidar02-zeros",
+   "file": "docs/downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+   "dots": 37654,
+   "min_finite": 0.0,
+   "max_finite": 1.0,
+   "nan_total": 0,
+   "nan_inside_footprint": 0,
+   "dots_within_200m_of_catalogue": 0,
+   "dot_dist_to_catalogue_m": {
+    "median": 2376.9728648009427,
+    "p25": 1118.033988749895,
+    "p75": 4517.7427992306075,
+    "mean": 3169.0419634766945
+   },
+   "sgmc_offcat_dti": 0.09514837679760879,
+   "meta": {
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": "(3730, 3292)",
+    "bands": "1",
+    "nodata": "None"
+   }
+  }
+ ]
+}

@@ -1,0 +1,272 @@
+{
+ "generated_utc": "20261020T182135Z",
+ "name": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z",
+ "note": "LIDAR-02 sharpness x persistence x antislope polarity, relief-stratified emission; GEMSDOE66 run card lidar02",
+ "note_chars": 109,
+ "dots": 37654,
+ "strata_emission": {
+  "relief_tercile_cuts_m": [
+   4.185008525848389,
+   18.455886840820312
+  ],
+  "strata_eligible_share": [
+   0.33740920507772726,
+   0.33535844970339046,
+   0.3272323452188823
+  ],
+  "strata_k": [
+   12706,
+   12627,
+   12321
+  ],
+  "strata_placed": [
+   12706,
+   12627,
+   12321
+  ]
+ },
+ "sgmc_control": {
+  "candidate": 0.09514837679760879,
+  "h33_2_b2": 0.0953861146048237,
+  "h33_2_b2_dots": 37654,
+  "lidar01": 0.04993141672807747,
+  "lidar01_dots": 37654,
+  "random_matched": 0.06456987711392141
+ },
+ "relief_strata_sgmc": [
+  {
+   "stratum": 0,
+   "truth_px": 23406,
+   "candidate_dots": 12728,
+   "candidate_dti_in_stratum_truth": 0.0037737589893037625
+  },
+  {
+   "stratum": 1,
+   "truth_px": 8508,
+   "candidate_dots": 12605,
+   "candidate_dti_in_stratum_truth": 0.07106728382499672
+  },
+  {
+   "stratum": 2,
+   "truth_px": 30208,
+   "candidate_dots": 12321,
+   "candidate_dti_in_stratum_truth": 0.13612633323940956
+  }
+ ],
+ "gate": {
+  "canary_pass": true,
+  "holdout_diff_ci_lower_gt0": false,
+  "low_relief_dot_share": 0.3380251766080629,
+  "low_relief_share_ge_0p25": true,
+  "max_abs_rho_le_0p90": true,
+  "no_identical": true,
+  "no_lift_duplicate": true,
+  "comparable_overlap_le_0p70": true,
+  "all_pass": false
+ },
+ "receipts": {
+  "zeros": {
+   "file": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+   "zip": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip",
+   "sha256": "26b264d7d7b2a3a8d2b477b9e6d914d64e1f7105894724edb4bcfbd078484a0c",
+   "zip_sha256": "ee926f97371bc9c307aaa31eaf44f81fd4ffab6c6e8286f85e1f586815f6f168",
+   "writer_receipt": {
+    "file": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+    "sha256": "26b264d7d7b2a3a8d2b477b9e6d914d64e1f7105894724edb4bcfbd078484a0c",
+    "shape_hw": [
+     3730,
+     3292
+    ],
+    "crs": "EPSG:32611",
+    "footprint_cells": 5167373,
+    "emitted_cells_gt0": 37654,
+    "min_inside": 0.0,
+    "max_inside": 1.0,
+    "nan_inside": 0,
+    "nan_outside_count": 0,
+    "outside_fill": 0.0,
+    "finite_outside_count": 7111787,
+    "all_values_in_0_1": true,
+    "name": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z",
+    "note": "LIDAR-02 sharpness x persistence x antislope polarity, relief-stratified emission; GEMSDOE66 run card lidar02",
+    "note_chars": 109,
+    "reference": "sample_submission.tif",
+    "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+   },
+   "validator": {
+    "file": "/home/user/GEMSDOE66/docs/downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+    "sha256": "26b264d7d7b2a3a8d2b477b9e6d914d64e1f7105894724edb4bcfbd078484a0c",
+    "passed": false,
+    "has_failures": false,
+    "checks": [
+     {
+      "check": "single band",
+      "status": "PASS",
+      "detail": "count=1"
+     },
+     {
+      "check": "dtype float32",
+      "status": "PASS",
+      "detail": "dtype=float32"
+     },
+     {
+      "check": "CRS EPSG:32611",
+      "status": "PASS",
+      "detail": "crs=EPSG:32611"
+     },
+     {
+      "check": "shape matches",
+      "status": "PASS",
+      "detail": "file=(3730, 3292) expected=(3730, 3292)"
+     },
+     {
+      "check": "resolution 100 m",
+      "status": "PASS",
+      "detail": "res=(100.0, 100.0)"
+     },
+     {
+      "check": "transform matches reference",
+      "status": "PASS",
+      "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+     },
+     {
+      "check": "CRS matches reference",
+      "status": "PASS",
+      "detail": "file=EPSG:32611 ref=EPSG:32611"
+     },
+     {
+      "check": "nodata tag is none or NaN",
+      "status": "PASS",
+      "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+     },
+     {
+      "check": "no infinities",
+      "status": "PASS",
+      "detail": "inf_count=0"
+     },
+     {
+      "check": "values within [0, 1]",
+      "status": "PASS",
+      "detail": "min=0.0 max=1.0 finite_cells=12279160"
+     },
+     {
+      "check": "footprint checks",
+      "status": "SKIPPED",
+      "detail": "SKIPPED: no features raster supplied"
+     },
+     {
+      "check": "info: emitted cells (value > 0)",
+      "status": "INFO",
+      "detail": "emitted=37654"
+     }
+    ],
+    "skipped_checks_mean_unverified": true
+   }
+  },
+  "nan": {
+   "file": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+   "zip": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.zip",
+   "sha256": "23195d6cd24a378af6b805a2ef27baa860c3a74b6174e99f28cf4c337f2d6858",
+   "zip_sha256": "f51d5c4bdeaf7a3f6101dd06f946416ad2969f4be8506eed32a14db546acd5dd",
+   "writer_receipt": {
+    "file": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+    "sha256": "23195d6cd24a378af6b805a2ef27baa860c3a74b6174e99f28cf4c337f2d6858",
+    "shape_hw": [
+     3730,
+     3292
+    ],
+    "crs": "EPSG:32611",
+    "footprint_cells": 5167373,
+    "emitted_cells_gt0": 37654,
+    "min_inside": 0.0,
+    "max_inside": 1.0,
+    "nan_inside": 0,
+    "nan_outside_count": 7111787,
+    "outside_fill": null,
+    "finite_outside_count": 0,
+    "all_values_in_0_1": false,
+    "name": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z",
+    "note": "LIDAR-02 sharpness x persistence x antislope polarity, relief-stratified emission; GEMSDOE66 run card lidar02",
+    "note_chars": 109,
+    "reference": "sample_submission.tif",
+    "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+   },
+   "validator": {
+    "file": "/home/user/GEMSDOE66/docs/downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+    "sha256": "23195d6cd24a378af6b805a2ef27baa860c3a74b6174e99f28cf4c337f2d6858",
+    "passed": false,
+    "has_failures": false,
+    "checks": [
+     {
+      "check": "single band",
+      "status": "PASS",
+      "detail": "count=1"
+     },
+     {
+      "check": "dtype float32",
+      "status": "PASS",
+      "detail": "dtype=float32"
+     },
+     {
+      "check": "CRS EPSG:32611",
+      "status": "PASS",
+      "detail": "crs=EPSG:32611"
+     },
+     {
+      "check": "shape matches",
+      "status": "PASS",
+      "detail": "file=(3730, 3292) expected=(3730, 3292)"
+     },
+     {
+      "check": "resolution 100 m",
+      "status": "PASS",
+      "detail": "res=(100.0, 100.0)"
+     },
+     {
+      "check": "transform matches reference",
+      "status": "PASS",
+      "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+     },
+     {
+      "check": "CRS matches reference",
+      "status": "PASS",
+      "detail": "file=EPSG:32611 ref=EPSG:32611"
+     },
+     {
+      "check": "nodata tag is none or NaN",
+      "status": "PASS",
+      "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+     },
+     {
+      "check": "no infinities",
+      "status": "PASS",
+      "detail": "inf_count=0"
+     },
+     {
+      "check": "values within [0, 1]",
+      "status": "PASS",
+      "detail": "min=0.0 max=1.0 finite_cells=5167373"
+     },
+     {
+      "check": "footprint checks",
+      "status": "SKIPPED",
+      "detail": "SKIPPED: no features raster supplied"
+     },
+     {
+      "check": "info: emitted cells (value > 0)",
+      "status": "INFO",
+      "detail": "emitted=37654"
+     }
+    ],
+    "skipped_checks_mean_unverified": true
+   }
+  }
+ },
+ "field_formula": "rank01( (0.25*sharp + 0.25*persist + 0.20*polarity + 0.15*frangi_rank + 0.10*coh_rank + 0.05*steger_rank) * (0.5+0.5*sqrt(step_rank*ex_rank)) )",
+ "inputs_sha256": {
+  "data/raw/external/lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+  "data/raw/labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "data/raw/sample_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "data/raw/external/derived_sgmc_faults_100m_u8.tif": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0"
+ }
+}

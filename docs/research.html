@@ -71,44 +71,19 @@ produces the pass (IR-67-GATE-02).</li>
 
 <h3>5 &middot; PhD Forensic Attribution of <code>h33-h33-2-b2</code> &amp; Dual Hidden-Set Calibration</h3>
 <p><b>Status classification:</b> The user-reported value <code>0.2778</code> on
-<code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code> (and the sibling owner-reported
-values across GEMSDOE..GEMSDOE49) carry no portal receipt in this repository and are strictly
-classified as <code>UNVERIFIED owner-reported</code> diagnostics; no ORGANIZER-CONFIRMED score exists
-here. Within that explicit provenance boundary, byte-for-byte inspection of the rasters in
-<code>registry/rasters/</code> and <code>data/raw/scored/</code> establishes four exact facts:</p>
-<ol>
-<li><b>Exact nested subset lineage:</b> Every single positive pixel of <code>h33-2-b2</code> (37,654 dots)
-is strictly a pixel subset of <code>h27-4-r1</code> (40,199 dots) &sub; <code>d28</code> (44,090 dots)
-&sub; <code>d15</code> (60,069 dots) &sub; <code>h19-5</code> (121,131 continuous 1-px skeleton cells,
-SHA-256 <code>ec1f9b56&hellip;</code>). None of <code>d15</code>, <code>d28</code>, <code>h27-4-r1</code>,
-or <code>h33-2-b2</code> changed the underlying belief field: the entire jump from <code>0.1922</code> to
-<code>0.2778</code> came from (a) 4-line multi-physics corroboration in <code>h19-5</code> (power-law
-tip/relay deficit + GDR 1391 thermal/geochemical inversion + DEM openness + potential-field strike worms),
-(b) Poisson-disk thinning inside the 300 m triangular kernel (<code>121,131 &rarr; 44,090</code> dots),
-and (c) deleting dead mass within 100 m (<code>&minus;3,891</code> dots) and 100&ndash;200 m
-(<code>&minus;2,545</code> dots) of already-mapped <code>labels.tif</code> traces.</li>
-<li><b>Independent Identifier 1 (Lebesgue Lattice Integrator):</b> The translation-invariant uniform
-5-pixel (500 m) lattice <code>13gems_20261001_r13-lattice-s5_v2_nan-outside.tif</code> (206,895 dots,
-owner-reported <code>0.0904</code>) covers real 1D fault traces with exact kernel recall
-<code>&alpha;<sub>TP</sub> = 0.37418</code> and <code>&alpha;<sub>M</sub> = 0.13800</code>, algebraically
-implying <code>|G| &approx; 12,570</code> hidden fault pixels (&approx;17.1% of mapped+hidden faults).</li>
-<li><b>Independent Identifier 2 (Dead-Mass Derivative):</b> Deleting strictly zero-credit pixels on
-<code>labels.tif</code> between <code>d28</code> (44,090 dots, <code>0.2600</code>) and
-<code>h27-4-r1</code> (40,199 dots, <code>0.2708</code>) gives
-<code>1/0.2600 &minus; 1/0.2708 = 0.2 &times; 3,891 / T<sub>0</sub></code>, yielding
-<code>T<sub>0</sub> &approx; 5,073&ndash;5,337</code> kernel-weighted pixels and
-<code>|G| &approx; 12,600&ndash;13,600</code> hidden fault pixels &mdash; independent agreement within 8%.</li>
-<li><b>Why Session H68 breaks the range-front ceiling:</b> Surpassing <code>0.2778</code> requires
-raising true off-catalogue recall <code>T</code> in low-relief basins and piedmonts while eliminating
-double-covered kernel balls (<code>d<sub>min</sub> = 3.15 px = 315 m &gt; 300 m</code>) and cultural
-mimics. Session H68 implements orthogonal 3 m Scarplet template matching + 3&ndash;18 m Steger/Frangi
-lines + GDR 1391 shallow 2 m thermal probe plumes (<code>F2mDAB</code>) &amp; paleo-sinter vents +
-Bayesian relief-matched CV, achieving <b>HOLDOUT-DTI 0.16052</b> (<b>95% CI [0.13093, 0.18280]</b>) with
-positive gains across all three relief strata (basin 1.39&times;, piedmont 3.33&times;, range front
-2.51&times;) and full uniqueness (comparable-density within-3px max 0.4868 &le; 0.70).</li>
-</ol>
+<code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code> carries no portal receipt
+in this repository and is strictly classified as an <code>UNVERIFIED owner-reported</code> diagnostic;
+no ORGANIZER-CONFIRMED score exists here. Byte-for-byte inspection of the rasters on disk establishes:
+(1) exact strict pixel inclusion <code>h33-2-b2 (37,654) &sub; h27-4-r1 (40,199) &sub; d28 (44,090) &sub; d15 (60,069) &sub; h19-5 (121,131)</code>;
+(2) uniform 5-px lattice Lebesgue calibration (<code>r13-lattice-s5</code>, 206,895 dots, <code>0.0904</code>,
+<code>&alpha;<sub>TP</sub>=0.37418</code>) implying <code>|G| &approx; 12,570</code> hidden fault pixels;
+(3) independent zero-credit dead-mass calibration across <code>d28 &rarr; h27-4-r1 &rarr; h33-2-b2</code>
+implying <code>T<sub>0</sub> &approx; 5,073&ndash;5,337</code> and <code>|G| &approx; 12,600&ndash;13,600</code>;
+and (4) Session H68's relief-deconfounded native 3&ndash;18 m Scarplet + Steger/Frangi + GDR 1391
+geothermal vent synthesis achieves <b>HOLDOUT-DTI 0.16052</b> (<b>95% CI [0.13093, 0.18280]</b>) with
+positive lift in all three relief terciles (1.39&times; basin, 3.33&times; piedmont, 2.51&times; range front).</p>
 
-<h3>6 &middot; Trusted method &amp; data references, verified line by line</h3>
+<h3>6 &middot; Trusted method references, with what was verified in session</h3>
 <ul>
 <li><b>[official, verified 2026-10-12]</b>
 <a href="https://studio.m-anage.com/agu/fm15/webprogram/Paper70055.html">AGU FM15 T31A-2838</a>,
