@@ -41,15 +41,8 @@ def _h67_geophys_files():
 H67_GEOPHYS_FILES = _h67_geophys_files()
 
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
-# The LIDAR-01 session's cleared release (see docs/data/run-card-lidar01.json). A second,
-# separately-named candidate from a parallel session; it is allow-listed here for the same
-# reason the H67 and K66 files are.
-LIDAR01_FILES = [
-    "current_release.json",
-    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
-    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
-    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json",
-]
+# LIDAR-01's pointer remains for audit/status; its raster is not a public download.
+LIDAR01_FILES = ["current_release.json"]
 
 # The only files this project may offer: the two disclosed H67-1 siblings and their receipts.
 H66C_STEM = "gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59"

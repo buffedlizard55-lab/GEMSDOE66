@@ -404,12 +404,21 @@
   "rasters_compared": 60,
   "max_abs_spearman": 0.069009,
   "max_dot_overlap_fraction": 0.921018,
-  "duplicate": false,
-  "verdict": "no duplicate detected in the compared set (chance-corrected rule)",
-  "completeness": "registry/rasters is the local mirror only; it is not certified to be the complete organizer corpus"
+  "duplicate": true,
+  "verdict": "DUPLICATE - STOP (literal protocol threshold exceeded)",
+  "completeness": "registry/rasters is the local mirror only; it is not certified to be the complete organizer corpus",
+  "stop_rule": "More than 70% of candidate dots within 3 px of any one registry raster is a stop; no density correction exception is authorized by the standing protocol.",
+  "strict_protocol_result": "NEGATIVE",
+  "overlap_metric": {
+   "historical_checker_kernel": "7x7 square dilation",
+   "historical_checker_recomputed_fraction": 0.9210176873638923,
+   "euclidean_radius_3px_recomputed_fraction": 0.8481967387262973,
+   "both_exceed_limit": true,
+   "irregularity": "IR-2026-OVERLAP-KERNEL-01"
+  }
  },
  "raster": {
-  "status": "GENERATED",
+  "status": "GENERATED \u2014 AUDIT ONLY, NOT CLEARED",
   "file": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
   "sha256": "0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2",
   "bytes": 359188,
@@ -516,10 +525,10 @@
   "note_chars": 140,
   "note_limit_chars": 140,
   "file": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
-  "download_status": "OFFERED - published in docs/downloads/ and linked from the site index",
+  "download_status": "WITHDRAWN \u2014 audit-only; literal overlap stop rule exceeded; do not download or submit",
   "download_urls": {
-   "tif": "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
-   "zip": "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip"
+   "tif": null,
+   "zip": null
   },
   "organizer_confirmed_receipt": null
  },
@@ -536,5 +545,6 @@
   "IR-75-SCORE-COMPRESSION",
   "IR-76-TRACE-SUPERSET"
  ],
- "verdict": "promote"
+ "verdict": "negative",
+ "verdict_reason": "Literal protocol duplicate gate fails: 0.921018 candidate-side dot overlap within 3 px exceeds 0.70. Candidate is retained only as an audit artifact; no submission download or slot use."
 }
