@@ -1,0 +1,786 @@
+{
+ "schema": "gems-run-card/3",
+ "run_id": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan",
+ "generated_utc": "2026-10-20T19:16:23Z",
+ "repo": "buffedlizard55-lab/GEMSDOE66",
+ "lane": "native-resolution LiDAR scarp channels + GDR 1391 geothermal vent/conduit corroboration",
+ "hypothesis": "H68-1: Orthogonal slope-aware Scarplet template matching + 3-18 m Steger sub-pixel and Frangi Hessian line persistence calibrated from native 3 m USGS 3DEP bare-earth DEM tiles across the 697/706-tile LiDAR stack, de-confounded by local 10 km relief normalization and relief-matched spatial CV and corroborated by GDR 1391 shallow 2 m temperature probe F2mDAB heat plumes, paleo-geothermal sinter/travertine vents, hydrothermal K/Th alteration, and active geodetic strain, recovers hidden off-catalogue faults across basin floors, piedmonts, and range fronts without wasting budget near already-mapped catalogue traces or cultural features.",
+ "mechanism": "Gram-Schmidt projection onto {1, s, erf(s/w) - c_w*s} at 3 m removes planar fan/range slope analytically before estimating scarp throw and fit SNR; dual-head spatial CV combines Bayesian relief-matched conditional likelihood P(fault | X, relief) with calibrated multi-physics posterior; convolving out-of-fold probabilities with the official 300 m triangular kernel and greedy packing at d_min = 3.15 px > 3.0 px outside a 250 m catalogue standoff and 120 m TIGER road mask maximizes expected TP_w.",
+ "named_non_fault_mimic": "Fluvial terrace risers, pluvial Lake Lahontan shoreline strandlines, graded dirt roads and irrigation canals (suppressed by official US Census TIGER 2024 road mask + 4-way straight/flat/constant/amagnetic canal conjunction), and lateral shallow aquifer outflow.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator_version": "src/gems/metric.py :: tversky_terms (alpha=0.2, beta=0.8, R=300 m triangular kernel)",
+  "protocol": "4-fold whole-segment hide-and-recover (authoritative INGENIOUS record_id via trace_segments_utm11.csv, 300 m training buffer, pixel-exact visible fault mask, LiDAR-covered 20 km spatial blocks)",
+  "withheld_positive_count": 37543,
+  "value": 0.16052,
+  "ci95": [
+   0.13093,
+   0.1828
+  ],
+  "per_fold": [
+   0.15619,
+   0.16498,
+   0.13801,
+   0.18348
+  ],
+  "comparators_same_folds_and_budget": {
+   "random_null": {
+    "label": "HOLDOUT-DTI",
+    "pooled_dti": 0.06588,
+    "ci95": [
+     0.06185,
+     0.06934
+    ],
+    "n_blocks_bootstrapped": 85,
+    "per_fold": [
+     0.06554,
+     0.06627,
+     0.06578,
+     0.06593
+    ],
+    "total_emitted_dots": 19645
+   },
+   "visible_distance_only": {
+    "label": "HOLDOUT-DTI",
+    "pooled_dti": 0.09515,
+    "ci95": [
+     0.08069,
+     0.11132
+    ],
+    "n_blocks_bootstrapped": 85,
+    "per_fold": [
+     0.09721,
+     0.09123,
+     0.10752,
+     0.08431
+    ],
+    "total_emitted_dots": 19645
+   },
+   "raw_elevation_confounded": {
+    "label": "HOLDOUT-DTI",
+    "pooled_dti": 0.1487,
+    "ci95": [
+     0.11766,
+     0.18281
+    ],
+    "n_blocks_bootstrapped": 85,
+    "per_fold": [
+     0.1598,
+     0.12504,
+     0.12287,
+     0.18751
+    ],
+    "total_emitted_dots": 19645
+   },
+   "h68_2_scarp_only": {
+    "label": "HOLDOUT-DTI",
+    "pooled_dti": 0.13368,
+    "ci95": [
+     0.11145,
+     0.15443
+    ],
+    "n_blocks_bootstrapped": 85,
+    "per_fold": [
+     0.13885,
+     0.13532,
+     0.11623,
+     0.14398
+    ],
+    "total_emitted_dots": 19645
+   },
+   "h68_3_vent_only": {
+    "label": "HOLDOUT-DTI",
+    "pooled_dti": 0.09153,
+    "ci95": [
+     0.06729,
+     0.11092
+    ],
+    "n_blocks_bootstrapped": 85,
+    "per_fold": [
+     0.09685,
+     0.08487,
+     0.0744,
+     0.11016
+    ],
+    "total_emitted_dots": 19645
+   },
+   "h68_1_full_synthesis": {
+    "label": "HOLDOUT-DTI",
+    "pooled_dti": 0.16052,
+    "ci95": [
+     0.13093,
+     0.1828
+    ],
+    "n_blocks_bootstrapped": 85,
+    "per_fold": [
+     0.15619,
+     0.16498,
+     0.13801,
+     0.18348
+    ],
+    "total_emitted_dots": 19645
+   }
+  },
+  "relief_stratification": {
+   "low_relief_basin_floor": {
+    "n_withheld_positives": 12960,
+    "relief_cuts_m": [
+     8.2,
+     20.87
+    ],
+    "random_null": 0.04992,
+    "raw_elevation_confounded": 0.05497,
+    "h68_2_scarp_only": 0.07132,
+    "h68_3_vent_only": 0.07723,
+    "h68_1_full_synthesis": 0.06918,
+    "h68_1_lift_vs_random": 1.386,
+    "h68_1_gain_vs_random": 0.01926
+   },
+   "mid_relief_piedmont": {
+    "n_withheld_positives": 12238,
+    "relief_cuts_m": [
+     8.2,
+     20.87
+    ],
+    "random_null": 0.04899,
+    "raw_elevation_confounded": 0.15612,
+    "h68_2_scarp_only": 0.12146,
+    "h68_3_vent_only": 0.0641,
+    "h68_1_full_synthesis": 0.16332,
+    "h68_1_lift_vs_random": 3.334,
+    "h68_1_gain_vs_random": 0.11433
+   },
+   "high_relief_range_front": {
+    "n_withheld_positives": 12345,
+    "relief_cuts_m": [
+     8.2,
+     20.87
+    ],
+    "random_null": 0.05885,
+    "raw_elevation_confounded": 0.13769,
+    "h68_2_scarp_only": 0.12139,
+    "h68_3_vent_only": 0.09014,
+    "h68_1_full_synthesis": 0.14766,
+    "h68_1_lift_vs_random": 2.509,
+    "h68_1_gain_vs_random": 0.08881
+   }
+  },
+  "non_range_front_gate_passed": true
+ },
+ "leakage_canary": {
+  "status": "PASS",
+  "threshold_auc": 0.9,
+  "n_features_tested": 36,
+  "max_symmetric_auc": 0.5941,
+  "withheld_positives_tested": 9905,
+  "controls_tested": 40000,
+  "features": [
+   {
+    "name": "nat_scarp_frac_z10k",
+    "auc": 0.5434,
+    "symmetric_auc": 0.5434,
+    "leakage_flag": false
+   },
+   {
+    "name": "nat_snr_amp_z10k",
+    "auc": 0.5484,
+    "symmetric_auc": 0.5484,
+    "leakage_flag": false
+   },
+   {
+    "name": "nat_line_pers_z10k",
+    "auc": 0.551,
+    "symmetric_auc": 0.551,
+    "leakage_flag": false
+   },
+   {
+    "name": "nat_tensor_coh",
+    "auc": 0.4687,
+    "symmetric_auc": 0.5313,
+    "leakage_flag": false
+   },
+   {
+    "name": "nat_snr_amp_phys",
+    "auc": 0.5677,
+    "symmetric_auc": 0.5677,
+    "leakage_flag": false
+   },
+   {
+    "name": "sc_a_hat_z10k",
+    "auc": 0.5275,
+    "symmetric_auc": 0.5275,
+    "leakage_flag": false
+   },
+   {
+    "name": "sc_kt_hat_log",
+    "auc": 0.4339,
+    "symmetric_auc": 0.5661,
+    "leakage_flag": false
+   },
+   {
+    "name": "sc_dipole_z10k",
+    "auc": 0.5778,
+    "symmetric_auc": 0.5778,
+    "leakage_flag": false
+   },
+   {
+    "name": "sc_antislope",
+    "auc": 0.4955,
+    "symmetric_auc": 0.5045,
+    "leakage_flag": false
+   },
+   {
+    "name": "h52_height_z10k",
+    "auc": 0.5511,
+    "symmetric_auc": 0.5511,
+    "leakage_flag": false
+   },
+   {
+    "name": "h52_height_phys",
+    "auc": 0.5755,
+    "symmetric_auc": 0.5755,
+    "leakage_flag": false
+   },
+   {
+    "name": "L_ex_max",
+    "auc": 0.569,
+    "symmetric_auc": 0.569,
+    "leakage_flag": false
+   },
+   {
+    "name": "L_step_max",
+    "auc": 0.5739,
+    "symmetric_auc": 0.5739,
+    "leakage_flag": false
+   },
+   {
+    "name": "steger_100m_z10k",
+    "auc": 0.4784,
+    "symmetric_auc": 0.5216,
+    "leakage_flag": false
+   },
+   {
+    "name": "frangi_100m_z10k",
+    "auc": 0.5764,
+    "symmetric_auc": 0.5764,
+    "leakage_flag": false
+   },
+   {
+    "name": "cul_clean_score",
+    "auc": 0.55,
+    "symmetric_auc": 0.55,
+    "leakage_flag": false
+   },
+   {
+    "name": "geo_probe2m_plume",
+    "auc": 0.5665,
+    "symmetric_auc": 0.5665,
+    "leakage_flag": false
+   },
+   {
+    "name": "geo_paleo_sinter_plume",
+    "auc": 0.4741,
+    "symmetric_auc": 0.5259,
+    "leakage_flag": false
+   },
+   {
+    "name": "geo_spring_geotherm_plume",
+    "auc": 0.5262,
+    "symmetric_auc": 0.5262,
+    "leakage_flag": false
+   },
+   {
+    "name": "geo_volcanic_vent_prox",
+    "auc": 0.5362,
+    "symmetric_auc": 0.5362,
+    "leakage_flag": false
+   },
+   {
+    "name": "rad_K_z10k",
+    "auc": 0.4292,
+    "symmetric_auc": 0.5708,
+    "leakage_flag": false
+   },
+   {
+    "name": "ext_UK",
+    "auc": 0.5311,
+    "symmetric_auc": 0.5311,
+    "leakage_flag": false
+   },
+   {
+    "name": "ext_ThK",
+    "auc": 0.4291,
+    "symmetric_auc": 0.5709,
+    "leakage_flag": false
+   },
+   {
+    "name": "cond_surf_grad",
+    "auc": 0.5103,
+    "symmetric_auc": 0.5103,
+    "leakage_flag": false
+   },
+   {
+    "name": "iso_grav_anom_hg",
+    "auc": 0.4796,
+    "symmetric_auc": 0.5204,
+    "leakage_flag": false
+   },
+   {
+    "name": "iso_grav_anom_vg",
+    "auc": 0.5405,
+    "symmetric_auc": 0.5405,
+    "leakage_flag": false
+   },
+   {
+    "name": "depth_to_base_surf",
+    "auc": 0.5017,
+    "symmetric_auc": 0.5017,
+    "leakage_flag": false
+   },
+   {
+    "name": "T_slope_p90",
+    "auc": 0.5769,
+    "symmetric_auc": 0.5769,
+    "leakage_flag": false
+   },
+   {
+    "name": "basement_step_frangi",
+    "auc": 0.5716,
+    "symmetric_auc": 0.5716,
+    "leakage_flag": false
+   },
+   {
+    "name": "tmi_hg",
+    "auc": 0.5404,
+    "symmetric_auc": 0.5404,
+    "leakage_flag": false
+   },
+   {
+    "name": "tc",
+    "auc": 0.4059,
+    "symmetric_auc": 0.5941,
+    "leakage_flag": false
+   },
+   {
+    "name": "geod_dilaterate",
+    "auc": 0.4779,
+    "symmetric_auc": 0.5221,
+    "leakage_flag": false
+   },
+   {
+    "name": "geod_shearrate",
+    "auc": 0.5619,
+    "symmetric_auc": 0.5619,
+    "leakage_flag": false
+   },
+   {
+    "name": "geod_2ndinv",
+    "auc": 0.5593,
+    "symmetric_auc": 0.5593,
+    "leakage_flag": false
+   },
+   {
+    "name": "deq_n100a15",
+    "auc": 0.579,
+    "symmetric_auc": 0.579,
+    "leakage_flag": false
+   },
+   {
+    "name": "chi_cross_grad",
+    "auc": 0.4997,
+    "symmetric_auc": 0.5003,
+    "leakage_flag": false
+   }
+  ]
+ },
+ "native_3m_calibration": {
+  "native_scarp_fraction": {
+   "cross_tile_folds": [
+    {
+     "held_out_tile": "x40y427_3m.tif",
+     "n_cells_100m": 10197,
+     "spearman_rho": 0.5927
+    },
+    {
+     "held_out_tile": "x42y425_3m.tif",
+     "n_cells_100m": 10197,
+     "spearman_rho": 0.5889
+    }
+   ],
+   "mean_out_of_tile_spearman_rho": 0.5908,
+   "total_exact_3m_100m_cells": 20394,
+   "total_calibrated_lidar_cells": 3891315
+  },
+  "native_snr_amp": {
+   "cross_tile_folds": [
+    {
+     "held_out_tile": "x40y427_3m.tif",
+     "n_cells_100m": 10197,
+     "spearman_rho": 0.9363
+    },
+    {
+     "held_out_tile": "x42y425_3m.tif",
+     "n_cells_100m": 10197,
+     "spearman_rho": 0.9024
+    }
+   ],
+   "mean_out_of_tile_spearman_rho": 0.9194,
+   "total_exact_3m_100m_cells": 20394,
+   "total_calibrated_lidar_cells": 3891315
+  },
+  "native_line_persistence": {
+   "cross_tile_folds": [
+    {
+     "held_out_tile": "x40y427_3m.tif",
+     "n_cells_100m": 10197,
+     "spearman_rho": 0.9059
+    },
+    {
+     "held_out_tile": "x42y425_3m.tif",
+     "n_cells_100m": 10197,
+     "spearman_rho": 0.8439
+    }
+   ],
+   "mean_out_of_tile_spearman_rho": 0.8749,
+   "total_exact_3m_100m_cells": 20394,
+   "total_calibrated_lidar_cells": 3891315
+  },
+  "native_tensor_coherence": {
+   "cross_tile_folds": [
+    {
+     "held_out_tile": "x40y427_3m.tif",
+     "n_cells_100m": 10197,
+     "spearman_rho": 0.1955
+    },
+    {
+     "held_out_tile": "x42y425_3m.tif",
+     "n_cells_100m": 10197,
+     "spearman_rho": 0.2157
+    }
+   ],
+   "mean_out_of_tile_spearman_rho": 0.2056,
+   "total_exact_3m_100m_cells": 20394,
+   "total_calibrated_lidar_cells": 3891315
+  }
+ },
+ "correlation_overlap_vs_registry": {
+  "verdict": "UNIQUE",
+  "comparators_scanned": 72,
+  "pre_placement_surface_max_abs_spearman_rho": 0.061,
+  "pre_placement_argmax_raster": "rasters/57GEMSDOE__h57-anatomy-enechelon-zeros.tif",
+  "final_dots_max_abs_spearman_rho": 0.2725,
+  "final_dots_comparable_density_max_within_3px": 0.4868,
+  "final_dots_comparable_density_argmax_raster": "scored/gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+  "final_dots_raw_all_rasters_max_within_3px": 0.9995,
+  "raw_note": "Raw all-raster max occurs solely against 206,895-311,617 dot dense lattices whose 3 px halo covers 96-99.9% of random footprint cells (IR-66-GATE-01 / IR-73); all density-comparable comparators (1/3..3x dots) are well below 0.70.",
+  "sha256_twins": 0,
+  "top_comparable_overlaps": [
+   {
+    "raster": "scored/gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+    "other_dots": 69281,
+    "frac_within_3px": 0.4868,
+    "neighbourhood_null_within_3px": 0.4373,
+    "lift_vs_neighbourhood": 1.1134,
+    "coincident_exact_dots": 1008,
+    "density_comparable_1_3_to_3x": true
+   },
+   {
+    "raster": "rasters/GEMSDOE27__topo-gap-closure-t-v2-on-d1-5.tif",
+    "other_dots": 61328,
+    "frac_within_3px": 0.3529,
+    "neighbourhood_null_within_3px": 0.2919,
+    "lift_vs_neighbourhood": 1.2089,
+    "coincident_exact_dots": 984,
+    "density_comparable_1_3_to_3x": true
+   },
+   {
+    "raster": "scored/gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+    "other_dots": 61328,
+    "frac_within_3px": 0.3529,
+    "neighbourhood_null_within_3px": 0.2919,
+    "lift_vs_neighbourhood": 1.2089,
+    "coincident_exact_dots": 984,
+    "density_comparable_1_3_to_3x": true
+   },
+   {
+    "raster": "rasters/gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-nan.tif",
+    "other_dots": 46090,
+    "frac_within_3px": 0.3527,
+    "neighbourhood_null_within_3px": 0.289,
+    "lift_vs_neighbourhood": 1.2204,
+    "coincident_exact_dots": 719,
+    "density_comparable_1_3_to_3x": true
+   },
+   {
+    "raster": "rasters/gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-zeros.tif",
+    "other_dots": 46090,
+    "frac_within_3px": 0.3527,
+    "neighbourhood_null_within_3px": 0.289,
+    "lift_vs_neighbourhood": 1.2204,
+    "coincident_exact_dots": 719,
+    "density_comparable_1_3_to_3x": true
+   },
+   {
+    "raster": "rasters/GEMSDOE24__h25-1-dotted-h19-5-d1-5.tif",
+    "other_dots": 60069,
+    "frac_within_3px": 0.3472,
+    "neighbourhood_null_within_3px": 0.2847,
+    "lift_vs_neighbourhood": 1.2194,
+    "coincident_exact_dots": 967,
+    "density_comparable_1_3_to_3x": true
+   },
+   {
+    "raster": "scored/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+    "other_dots": 60069,
+    "frac_within_3px": 0.3472,
+    "neighbourhood_null_within_3px": 0.2847,
+    "lift_vs_neighbourhood": 1.2194,
+    "coincident_exact_dots": 967,
+    "density_comparable_1_3_to_3x": true
+   },
+   {
+    "raster": "rasters/gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-nan.tif",
+    "other_dots": 46090,
+    "frac_within_3px": 0.3468,
+    "neighbourhood_null_within_3px": 0.2864,
+    "lift_vs_neighbourhood": 1.2111,
+    "coincident_exact_dots": 714,
+    "density_comparable_1_3_to_3x": true
+   }
+  ]
+ },
+ "dot_profile": {
+  "n_dots": 35800,
+  "footprint_fraction": 0.006928,
+  "lidar_covered_dot_fraction": 0.8356,
+  "off_lidar_bridge_dot_fraction": 0.1644,
+  "dots_within_250m_of_catalogue": 0,
+  "dots_on_tiger_roads_120m": 0,
+  "dot_relief_median_m": 16.74,
+  "dot_relief_tercile_shares": {
+   "low_basin": 0.2379,
+   "mid_piedmont": 0.3641,
+   "high_range_front": 0.398
+  },
+  "geometry": {
+   "n": 35800,
+   "nn_median_px": 3.1622776601683795,
+   "nn_p10_px": 3.1622776601683795,
+   "nn_p90_px": 3.605551275463989,
+   "nn_min_px": 3.1622776601683795,
+   "frac_touching_8conn": 0.0
+  },
+  "posthoc_sgmc_offcatalogue_dti_diagnostic": 0.07048
+ },
+ "raster": {
+  "file": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif",
+  "sha256": "b42aae62a11bfb825829cebfde09bc124924ef8d127905e484dd3a98c5f0a40e",
+  "bytes": 356977,
+  "zeros_file": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif",
+  "zeros_sha256": "f222ec9ef44ce044de15575cf374097f0e76a4ad322d99be5c7d8b64e4132178",
+  "zeros_bytes": 369214,
+  "zip_file": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip",
+  "zip_sha256": "7e83ded56a9134a3b399c664b96671b2af5cb19cd13ad263e0bb0c7b413f704b",
+  "zip_bytes": 239887,
+  "shape_hw": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "emitted_cells": 35800,
+  "nan_inside_footprint": 0,
+  "nan_outside_footprint": 7111787,
+  "min_inside": 0.0,
+  "max_inside": 1.0
+ },
+ "validator": {
+  "official_nan": {
+   "file": "/home/user/GEMSDOE66/artifacts/h68/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif",
+   "sha256": "b42aae62a11bfb825829cebfde09bc124924ef8d127905e484dd3a98c5f0a40e",
+   "passed": true,
+   "has_failures": false,
+   "checks": [
+    {
+     "check": "single band",
+     "status": "PASS",
+     "detail": "count=1"
+    },
+    {
+     "check": "dtype float32",
+     "status": "PASS",
+     "detail": "dtype=float32"
+    },
+    {
+     "check": "CRS EPSG:32611",
+     "status": "PASS",
+     "detail": "crs=EPSG:32611"
+    },
+    {
+     "check": "shape matches",
+     "status": "PASS",
+     "detail": "file=(3730, 3292) expected=(3730, 3292)"
+    },
+    {
+     "check": "resolution 100 m",
+     "status": "PASS",
+     "detail": "res=(100.0, 100.0)"
+    },
+    {
+     "check": "transform matches reference",
+     "status": "PASS",
+     "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    {
+     "check": "CRS matches reference",
+     "status": "PASS",
+     "detail": "file=EPSG:32611 ref=EPSG:32611"
+    },
+    {
+     "check": "nodata tag is none or NaN",
+     "status": "PASS",
+     "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+    },
+    {
+     "check": "no infinities",
+     "status": "PASS",
+     "detail": "inf_count=0"
+    },
+    {
+     "check": "values within [0, 1]",
+     "status": "PASS",
+     "detail": "min=0.0 max=1.0 finite_cells=5167373"
+    },
+    {
+     "check": "features grid shape matches",
+     "status": "PASS",
+     "detail": "features=(3730, 3292) reference=(3730, 3292)"
+    },
+    {
+     "check": "features transform matches reference grid",
+     "status": "PASS",
+     "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    {
+     "check": "features CRS matches reference grid",
+     "status": "PASS",
+     "detail": "features=EPSG:32611 reference=EPSG:32611"
+    },
+    {
+     "check": "no NaN inside footprint",
+     "status": "PASS",
+     "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+    },
+    {
+     "check": "NaN-only outside footprint",
+     "status": "PASS",
+     "detail": "finite_outside=0; only NaN is allowed outside under outside_policy='nan'"
+    },
+    {
+     "check": "info: features band-1 mask disagrees with the authoritative mask",
+     "status": "INFO",
+     "detail": "in_reference_not_features=3061 in_features_not_reference=1540; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+    },
+    {
+     "check": "info: emitted cells (value > 0)",
+     "status": "INFO",
+     "detail": "emitted=35800"
+    }
+   ],
+   "skipped_checks_mean_unverified": false
+  },
+  "sibling_nan": {
+   "ok": true,
+   "checks": {
+    "single_band": true,
+    "dtype_float32": true,
+    "dimensions_3730x3292": true,
+    "crs_epsg_32611": true,
+    "transform_matches_template": true,
+    "in_footprint_zero_nan": true,
+    "in_footprint_zero_inf": true,
+    "in_footprint_no_sentinel": true,
+    "in_footprint_range_0_1": true,
+    "in_footprint_has_positive": true,
+    "outside_footprint_nan": true,
+    "zero_positive_within_2.5px_of_catalogue": true,
+    "emitted_count_matches_budget": true
+   },
+   "stats": {
+    "in_footprint_pixels": 5167373,
+    "in_footprint_finite": 5167373,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "in_footprint_mean": 0.006928085349500179,
+    "positive_pixels": 35800,
+    "outside_footprint_pixels": 7111787,
+    "positive_within_catalogue_buffer": 0,
+    "emitted_count": 35800,
+    "expected_count": 35800
+   },
+   "filename": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif",
+   "size_bytes": 356977,
+   "sha256": "b42aae62a11bfb825829cebfde09bc124924ef8d127905e484dd3a98c5f0a40e"
+  },
+  "sibling_zeros": {
+   "ok": true,
+   "checks": {
+    "single_band": true,
+    "dtype_float32": true,
+    "dimensions_3730x3292": true,
+    "crs_epsg_32611": true,
+    "transform_matches_template": true,
+    "in_footprint_zero_nan": true,
+    "in_footprint_zero_inf": true,
+    "in_footprint_no_sentinel": true,
+    "in_footprint_range_0_1": true,
+    "in_footprint_has_positive": true,
+    "outside_footprint_zero": true,
+    "zero_positive_within_2.5px_of_catalogue": true,
+    "emitted_count_matches_budget": true
+   },
+   "stats": {
+    "in_footprint_pixels": 5167373,
+    "in_footprint_finite": 5167373,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "in_footprint_mean": 0.006928085349500179,
+    "positive_pixels": 35800,
+    "outside_footprint_pixels": 7111787,
+    "positive_within_catalogue_buffer": 0,
+    "emitted_count": 35800,
+    "expected_count": 35800
+   },
+   "filename": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif",
+   "size_bytes": 369214,
+   "sha256": "f222ec9ef44ce044de15575cf374097f0e76a4ad322d99be5c7d8b64e4132178"
+  }
+ },
+ "submission": {
+  "name": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan",
+  "note": "H68-1 native 3-18m Scarplet+Steger/Frangi + GDR1391 2m-probe/sinter vents, relief-deconfounded OOF CV, TIGER mask, 35800 dots",
+  "note_chars": 125,
+  "primary_file": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif",
+  "allfinite_zeros_file": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif",
+  "zip_file": "gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip",
+  "organizer_confirmed_receipt": null
+ },
+ "budget": {
+  "experiments_used": 3,
+  "experiments_allowed": 3,
+  "wall_clock_seconds": 611.4,
+  "submission_slots_used": 0
+ },
+ "cleared_for_download": true,
+ "promote": true,
+ "promotion_decision": "promote",
+ "verdict": "promote",
+ "scores_claimed": "NONE. Every figure is HOLDOUT-DTI with 95% CI; no ORGANIZER-CONFIRMED score exists."
+}

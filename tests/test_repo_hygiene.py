@@ -84,11 +84,24 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             _r = _card["raster"]
             k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
             k66 = rel.split("/")[-1] in k66_names
-            assert rel in allowed or k66, f"{f.name} links an unlisted raster: {href}"
+            h68_names = set()
+            _h68_p = ROOT / "docs" / "data" / "run-card-h68.json"
+            if _h68_p.exists():
+                _c68 = _json.loads(_h68_p.read_text(encoding="utf-8"))
+                if _c68.get("cleared_for_download"):
+                    _r68 = _c68["raster"]
+                    h68_names = {Path(_r68["file"]).name, Path(_r68["zeros_file"]).name, Path(_r68["zip_file"]).name}
+            h68 = rel.split("/")[-1] in h68_names
+            assert rel in allowed or k66 or h68, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
             links_h67 = any("gems66-h67" in h for h in hits)
             links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
+            links_h68 = any("gems66-h68" in h for h in hits)
+            if links_h68:
+                assert "HOLDOUT-DTI" in html, f"{f.name} links H68 without HOLDOUT-DTI label"
+                assert "95% CI" in html, f"{f.name} links H68 without its 95% CI"
+                assert "No ORGANIZER-CONFIRMED score" in html, f"{f.name} links H68 without organizer-score disclaimer"
             if links_h67:
                 assert "IR-67-GATE-02" in html, f"{f.name} links a raster without the raw-rule disclosure"
                 assert "NOT PROMOTED" in html, f"{f.name} links a raster without the not-promoted status"

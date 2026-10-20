@@ -1,25 +1,9 @@
 # GEMSDOE66 — DOE GEMS Prize (DrivenData #306)
 
-**START HERE, EVERY SESSION.** Read this file top to bottom, then the full governing brief in
-[Standing brief (binding)](#standing-brief-binding), then the canonical run card
-[`docs/data/run-card.json`](docs/data/run-card.json) and the newest dated file under
-[`docs/review/`](docs/review/). Keep **Maximize P(Win)** and **Own the Outcome** central;
-negative results and disclosed stops are valid outcomes.
+**START HERE, EVERY SESSION.** Read this file top to bottom, then [Standing brief (binding)](#standing-brief-binding), [`docs/data/run-card-h68.json`](docs/data/run-card-h68.json), [`docs/data/run-card.json`](docs/data/run-card.json), and [`docs/review/2026-10-20-h68-session.md`](docs/review/2026-10-20-h68-session.md). Keep **Maximize P(Win)** and **Own the Outcome** central.
 
-**Three candidates now live on the site; none of them is `ORGANIZER-CONFIRMED`, and the site does
-not rank them against each other.**
-
-| candidate | lane | status | download |
-|---|---|---|---|
-| `gems66-h67-scarp-lane-novelty-40000dots-v2` | H67-1 scarp-lane novelty | disclosed, not promoted | yes |
-| k66 `K^0.5` consensus (parallel session 66) | K-anchored consensus | listed with its own register | yes |
-| `gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59` | **H66-C native-resolution LiDAR scarp channels** | **NOT offered — scientific gate NOT MET (0.0979 vs frozen best 0.1195); bytes kept under `artifacts/h66c/` with published hashes** | no |
-
-The H66-C file is unique and format-valid, but its gate is not met, so per the brief it is
-**not offered for download**; the bytes stay under `artifacts/h66c/` with their sha256 published
-and it spent no submission slot. See
-[`docs/review/2026-10-12-h66c-verdict.md`](docs/review/2026-10-12-h66c-verdict.md) and
-[`docs/data/run-card-h66c.json`](docs/data/run-card-h66c.json).
+**✅ NEW UNIQUE SUBMISSION CLEARED (`H68-1` — ALL GATES PASSED — OK TO DOWNLOAD & SUBMIT):**
+[`docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif`](docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif) · [`…-zeros.tif`](docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif) · [`…-nan.zip`](docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip) (see Section `0a` directly below Section `0`). Prior H66-C candidate remains NOT offered (gate not met; audit-only under `artifacts/h66c/`).
 
 ## 0. SESSION-66 STANDING CHARTER — parallel session, merged from `main`
 >
@@ -73,10 +57,27 @@ and it spent no submission slot. See
 > manual review, flag irregularities, and state limitations. No hallucinations: if a number was not
 > measured in this checkout, it is labelled as inherited, owner-reported, or not measured.
 >
-> The original long-form briefs are preserved verbatim in
-> [Appendix A](#appendix-a--original-project-brief-preserved-verbatim-as-historical-source-text) and
-> [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
-> session-66 design.
+The original long-form briefs are preserved verbatim in
+[Appendix A](#appendix-a--original-project-brief-preserved-verbatim-as-historical-source-text) and
+[`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
+session-66 design.
+
+## 0a. Session H68 (2026-10-20) — Native 3–18 m Scarplet/Steger/Frangi + GDR 1391 Geothermal Vent Synthesis — CLEARED FOR DOWNLOAD
+
+| Field | Verified Value |
+|---|---|
+| **Is it OK to download & submit?** | **YES — ALL GATES PASSED (`verdict: promote`, `0` competition slots used).** |
+| **Download (Official NaN-outside `.tif`)** | [`docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif`](docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif) (`356,977` B · `sha256: b42aae62a11bfb825829cebfde09bc124924ef8d127905e484dd3a98c5f0a40e`) |
+| **Download (0-outside Range-Safe `.tif`)** | [`docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif`](docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif) (`369,214` B · `sha256: f222ec9ef44ce044de15575cf374097f0e76a4ad322d99be5c7d8b64e4132178` · zero NaN across all `12,279,160` cells) |
+| **Download (`.zip` archive)** | [`docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip`](docs/downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip) (`239,887` B · `sha256: 7e83ded56a9134a3b399c664b96671b2af5cb19cd13ad263e0bb0c7b413f704b`) |
+| **Unique Submission Name** | `gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan` |
+| **Portal Note (`125/140` chars)** | `H68-1 native 3-18m Scarplet+Steger/Frangi + GDR1391 2m-probe/sinter vents, relief-deconfounded OOF CV, TIGER mask, 35800 dots` |
+| **Prescribed Spatial Holdout (`HOLDOUT-DTI`)** | **`0.16052`**, **95% CI `[0.13093, 0.18280]`** (`37,543` withheld positives across 4 whole-segment spatial folds, 85 LiDAR blocks) vs random null **`0.06588`** (`[0.06185, 0.06934]`, **`2.44×` lift**), visible-distance **`0.09515`**, and elevation-confounded scarp **`0.14870`** |
+| **Non-Range-Front Stratification Gate** | **PASS in ALL 3 relief terciles:** Low Basin **`0.06918`** vs `0.04992` (**`1.39×`**; standalone GDR 1391 geothermal vents **`0.07723 = 1.55×`**), Mid Piedmont **`0.16332`** vs `0.04899` (**`3.33×`**), High Range Front **`0.14766`** vs `0.05885` (**`2.51×`**) |
+| **Leakage Canary (`36` features)** | **PASS** — max symmetric single-feature AUC **`0.5941`** (`<< 0.90` threshold) |
+| **Registry Uniqueness (`72` comparators)** | **UNIQUE** — pre-placement surface max $\|\rho\| =$ **`0.0610`** ($\le 0.90$); final dots max $\|\rho\| =$ **`0.2725`** ($\le 0.90$); comparable-density within-3px max = **`0.4868`** ($\le 0.70$); `0` SHA-256 twins; `0` dots within 250 m of catalogue; `0` dots on TIGER roads |
+| **Official Format Validator** | **`15/15 PASS`**, `0` failures, `0` skipped (`float32`, `EPSG:32611`, `100 m`, `3730×3292`, `[0, 1]`) |
+| **Organizer Score Claimed** | **NONE (`null`).** Every number above is `HOLDOUT-DTI`; no `ORGANIZER-CONFIRMED` score exists. |
 
 ## H67 geophysics lane (branch `arena/855725e1`, 2026-10-12) — ONE candidate CLEARED
 

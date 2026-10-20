@@ -1,11 +1,12 @@
 # Download folder — what is here and what it is worth
 
-Two sessions have produced candidates in this folder. They are listed separately, each with
-its own verdict, because they were decided on different evidence. **Read the status column
-before you upload anything.**
+Candidates produced across parallel sessions are listed below, each governed by its own machine-readable run card. **Read the status column before you upload anything.**
 
 | file | sha256 | status |
 |---|---|---|
+| [`gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif`](gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif) | `b42aae62a11bfb825829cebfde09bc124924ef8d127905e484dd3a98c5f0a40e` | **PRIMARY RECOMMENDED UPLOAD (Session H68, 2026-10-20).** Verdict `promote` ([`../data/run-card-h68.json`](../data/run-card-h68.json)). 35,800 dots, NaN outside footprint, 15/15 validator PASS, HOLDOUT-DTI 0.16052 [0.13093, 0.18280] with positive lift in ALL 3 relief strata (basin 1.39×, piedmont 3.33×, range front 2.51×), comparable-density overlap 0.4868 ≤ 0.70. |
+| [`gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif`](gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif) | `f222ec9ef44ce044de15575cf374097f0e76a4ad322d99be5c7d8b64e4132178` | **RANGE-SAFE ALL-FINITE SIBLING (Session H68).** Pixel-identical inside footprint, `0.0` outside (0 NaN across all 12,279,160 cells; immune to `Predicted values must be in range [0, 1]`). |
+| [`gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip`](gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip) | `7e83ded56a9134a3b399c664b96671b2af5cb19cd13ad263e0bb0c7b413f704b` | ZIP archive of the Session H68 NaN-outside GeoTIFF. |
 | [`gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif`](gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif) | `0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2` | **RECOMMENDED UPLOAD.** LIDAR-01 session, verdict `promote`. 37,654 dots, NaN outside the footprint, 15/15 validator checks PASS. |
 | [`gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip`](gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip) | `134e3694d76eaee5a26824fbf543d305055fc40f82d75c7de553650c39c2825b` | the same GeoTIFF zipped |
 | [`gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json`](gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json) | — | writer + validator receipt (grid, range, NaN counts, dot count, name, note) |

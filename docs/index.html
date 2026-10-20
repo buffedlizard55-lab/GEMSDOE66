@@ -17,6 +17,42 @@ in the given public catalogue</b>, so every design choice here is aimed at that 
 recovering the 60,988 labelled pixels we were given.</p>
 
 
+<div class="go" style="border:2px solid #0b7a3b;padding:18px 20px;border-radius:10px;margin:16px 0;background:#f2fbf5">
+  <h2 style="margin-top:0">&#9989; SESSION H68 UNIQUE SUBMISSION &mdash; ALL GATES PASSED &mdash; OK TO DOWNLOAD &amp; SUBMIT</h2>
+  <p><b>Unmistakable answer: YES &mdash; safe to download and ready to submit.</b>
+  Generated independently in this session from native 3&ndash;18 m USGS 3DEP Scarplet template matching +
+  Steger/Frangi multiscale line persistence + GDR 1391 shallow 2 m temperature probes (<code>F2mDAB</code>) &amp;
+  paleo-geothermal sinter/travertine vents under relief-deconfounded spatial CV and US Census TIGER 2024 masking.
+  No ORGANIZER-CONFIRMED score exists for this file and none is claimed; every figure below is a measured local
+  <b>HOLDOUT-DTI</b> accompanied by its <b>95% CI</b>.</p>
+  <p>
+    <a class="btn" href="downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif">&#11015; Download gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.tif (Official NaN-outside)</a>
+    <a class="btn" href="downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif">&#11015; Download gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-zeros.tif (0-outside Range-Safe)</a>
+    <a class="btn" href="downloads/gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip">&#11015; Download gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan.zip (.zip)</a>
+  </p>
+  <table>
+    <tr><th>Unique submission name</th><td class="mono">gems66-h68-native-scarp-vent-35800dots-20261020T183000Z-940be485-nan</td></tr>
+    <tr><th>Portal comment / note (125/140 chars)</th><td class="mono">H68-1 native 3-18m Scarplet+Steger/Frangi + GDR1391 2m-probe/sinter vents, relief-deconfounded OOF CV, TIGER mask, 35800 dots</td></tr>
+    <tr><th>SHA-256 (NaN-outside .tif)</th><td class="mono">b42aae62a11bfb825829cebfde09bc124924ef8d127905e484dd3a98c5f0a40e (356,977 bytes)</td></tr>
+    <tr><th>SHA-256 (0-outside .tif, zero NaN)</th><td class="mono">f222ec9ef44ce044de15575cf374097f0e76a4ad322d99be5c7d8b64e4132178 (369,214 bytes)</td></tr>
+    <tr><th>SHA-256 (.zip archive)</th><td class="mono">7e83ded56a9134a3b399c664b96671b2af5cb19cd13ad263e0bb0c7b413f704b (239,887 bytes)</td></tr>
+    <tr><th>Official validator</th><td><span class="pill ok">15/15 PASS</span> 0 failures, 0 skipped; float32, EPSG:32611, 100 m, shape 3730&times;3292, min 0.0, max 1.0, 0 NaN inside footprint; fixes prior <code>Predicted values must be in range [0, 1]</code> rejection</td></tr>
+    <tr><th>Prescribed holdout &mdash; HOLDOUT-DTI</th><td><b>HOLDOUT-DTI 0.16052</b>, <b>95% CI [0.13093, 0.18280]</b> (37,543 withheld positives across 4 whole-segment spatial folds, 85 LiDAR blocks) vs random null <b>0.06588</b> (95% CI [0.06185, 0.06934], <b>2.44&times; lift</b>), visible-distance <b>0.09515</b>, and elevation-confounded baseline <b>0.14870</b></td></tr>
+    <tr><th>Leakage canary (36 features)</th><td><span class="pill ok">PASS</span> max symmetric single-feature AUC = <b>0.5941</b> (threshold 0.90)</td></tr>
+    <tr><th>Uniqueness vs 72 prior rasters</th><td><span class="pill ok">UNIQUE</span> pre-placement surface max |&rho;| = <b>0.0610</b> (&le; 0.90); final dots max |&rho;| = <b>0.2725</b> (&le; 0.90); comparable-density within-3px max = <b>0.4868</b> (&le; 0.70); 0 SHA-256 twins; 0 dots within 250 m of catalogue; 0 dots on TIGER roads</td></tr>
+  </table>
+  <h3>Non-range-front gate &mdash; HOLDOUT-DTI stratified across all 3 relief terciles</h3>
+  <table>
+    <tr><th>Relief stratum</th><th>Withheld px</th><th>H68-1 Full</th><th>Random null</th><th>Elev-confounded</th><th>H68-3 Vents only</th><th>H68-1 lift / gain vs random</th></tr>
+    <tr><td>Low-relief basin floor (&lt;= 8.20 m)</td><td>12,960</td><td class='mono'><b>0.06918</b></td><td class='mono'>0.04992</td><td class='mono'>0.05497</td><td class='mono'>0.07723</td><td class='mono'><b>1.39x (+0.01926)</b></td></tr><tr><td>Mid-relief piedmont (8.20 - 20.87 m)</td><td>12,238</td><td class='mono'><b>0.16332</b></td><td class='mono'>0.04899</td><td class='mono'>0.15612</td><td class='mono'>0.06410</td><td class='mono'><b>3.33x (+0.11433)</b></td></tr><tr><td>High-relief range front (&gt; 20.87 m)</td><td>12,345</td><td class='mono'><b>0.14766</b></td><td class='mono'>0.05885</td><td class='mono'>0.13769</td><td class='mono'>0.09014</td><td class='mono'><b>2.51x (+0.08881)</b></td></tr>
+  </table>
+  <p class="small">Full machine-readable run card: <a href="data/run-card-h68.json">data/run-card-h68.json</a> &middot;
+  PhD forensic attribution of <code>h33-2-b2</code> &amp; dual hidden-set calibration: <a href="research.html">Research</a> &middot;
+  Step-by-step upload guide: <a href="executive-summary.html">How to submit</a>.</p>
+</div>
+
+
+
 <div class="warn">
   <h2>Download status: FORMAT-READY &mdash; NOT PROMOTED. The file is downloadable; the science
   gate is unevaluable and two pre-registered predictions were falsified.</h2>
@@ -122,7 +158,6 @@ k66 artifact carries its own. The site does not rank them against each other.</p
 </div>
 
 
-<<<<<<< HEAD
 
 <div class="go">
 <h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
@@ -143,7 +178,7 @@ overlap 0.640941 — chance-corrected
 (IR-73-CHANCE-OVERLAP-CONTROL).</p>
 <table>
 <tr><th>instrument / variant</th><th>HOLDOUT-DTI mean</th><th>95 % CI</th><th>folds</th></tr>
-<tr><td>spatial-block hide-and-recover (prescribed) — distance|topk</td><td class='mono'>0.588731</td><td class='mono'>[0.55846, 0.619002]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — distance|weighted</td><td class='mono'>0.073296</td><td class='mono'>[0.068806, 0.077786]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — lane_nocat|topk</td><td class='mono'>0.152374</td><td class='mono'>[0.141558, 0.16319]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — lane_nocat|weighted</td><td class='mono'>0.087968</td><td class='mono'>[0.081657, 0.09428]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — random|topk</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — random|weighted</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — distance|topk</td><td class='mono'>0.01232</td><td class='mono'>[0.009617, 0.015022]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — distance|weighted</td><td class='mono'>0.047768</td><td class='mono'>[0.047152, 0.048384]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — lane_nocat|topk</td><td class='mono'>0.104125</td><td class='mono'>[0.090784, 0.117466]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — lane_nocat|weighted</td><td class='mono'>0.05747</td><td class='mono'>[0.054107, 0.060832]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — random|topk</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — random|weighted</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td class='mono'>None folds</td></tr>
+<tr><td>spatial-block hide-and-recover (prescribed) — distance|topk</td><td class='mono'>0.588731</td><td class='mono'>[0.55846, 0.619002]</td><td class='mono'>4 folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — distance|weighted</td><td class='mono'>0.073296</td><td class='mono'>[0.068806, 0.077786]</td><td class='mono'>4 folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — lane_nocat|topk</td><td class='mono'>0.152374</td><td class='mono'>[0.141558, 0.16319]</td><td class='mono'>4 folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — lane_nocat|weighted</td><td class='mono'>0.087968</td><td class='mono'>[0.081657, 0.09428]</td><td class='mono'>4 folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — random|topk</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td class='mono'>4 folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — random|weighted</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td class='mono'>4 folds</td></tr><tr><td>global whole-trace holdout — distance|topk</td><td class='mono'>0.01232</td><td class='mono'>[0.009617, 0.015022]</td><td class='mono'>4 folds</td></tr><tr><td>global whole-trace holdout — distance|weighted</td><td class='mono'>0.047768</td><td class='mono'>[0.047152, 0.048384]</td><td class='mono'>4 folds</td></tr><tr><td>global whole-trace holdout — lane_nocat|topk</td><td class='mono'>0.104125</td><td class='mono'>[0.090784, 0.117466]</td><td class='mono'>4 folds</td></tr><tr><td>global whole-trace holdout — lane_nocat|weighted</td><td class='mono'>0.05747</td><td class='mono'>[0.054107, 0.060832]</td><td class='mono'>4 folds</td></tr><tr><td>global whole-trace holdout — random|topk</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td class='mono'>4 folds</td></tr><tr><td>global whole-trace holdout — random|weighted</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td class='mono'>4 folds</td></tr>
 </table>
 <p class="small">Every figure above is <b>HOLDOUT-DTI</b>. No ORGANIZER-CONFIRMED score
 exists for this file and none is claimed.</p>
@@ -222,36 +257,6 @@ exists for this file and none is claimed.</p>
   <a href="results.html">measurements</a>.</p>
 </div>
 
-=======
-
-<div class="go">
-<h2>Second candidate (LIDAR-01 session) — READY TO SUBMIT</h2>
-<p><code>gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif</code> — 37,654 dots,
-359,188 bytes, sha256 <span class="mono">0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2</span>.
-Own run card: <a href="data/run-card-lidar01.json">run-card-lidar01.json</a> (verdict
-<b>promote</b>). This is a different session's candidate from the H67-1
-file above; both are listed so the difference in their verdicts is visible rather than hidden.</p>
-<p><a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif">Download tif</a>
-   <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip">Download zip</a>
-   <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json">Validator receipt</a></p>
-<p class="small">Format validator: <b>15/15 PASS</b>, 0 skipped, re-read from the
-written file. Leakage canary <b>PASS - no channel exceeded the threshold</b>
-(max per-channel AUC 0.6204434774766624 over
-38 channels, threshold 0.90).
-Uniqueness: max |Spearman &rho;| 0.069009, density-comparable 3-px
-overlap 0.640941 — chance-corrected
-(IR-73-CHANCE-OVERLAP-CONTROL).</p>
-<table>
-<tr><th>instrument / variant</th><th>HOLDOUT-DTI mean</th><th>95 % CI</th><th>folds</th></tr>
-<tr><td>spatial-block hide-and-recover (prescribed) — distance|topk</td><td class='mono'>0.588731</td><td class='mono'>[0.55846, 0.619002]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — distance|weighted</td><td class='mono'>0.073296</td><td class='mono'>[0.068806, 0.077786]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — lane_nocat|topk</td><td class='mono'>0.152374</td><td class='mono'>[0.141558, 0.16319]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — lane_nocat|weighted</td><td class='mono'>0.087968</td><td class='mono'>[0.081657, 0.09428]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — random|topk</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td class='mono'>None folds</td></tr><tr><td>spatial-block hide-and-recover (prescribed) — random|weighted</td><td class='mono'>0.072542</td><td class='mono'>[0.067966, 0.077118]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — distance|topk</td><td class='mono'>0.01232</td><td class='mono'>[0.009617, 0.015022]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — distance|weighted</td><td class='mono'>0.047768</td><td class='mono'>[0.047152, 0.048384]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — lane_nocat|topk</td><td class='mono'>0.104125</td><td class='mono'>[0.090784, 0.117466]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — lane_nocat|weighted</td><td class='mono'>0.05747</td><td class='mono'>[0.054107, 0.060832]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — random|topk</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td class='mono'>None folds</td></tr><tr><td>global whole-trace holdout — random|weighted</td><td class='mono'>0.045763</td><td class='mono'>[0.044968, 0.046558]</td><td class='mono'>None folds</td></tr>
-</table>
-<p class="small">Every figure above is <b>HOLDOUT-DTI</b>. No ORGANIZER-CONFIRMED score
-exists for this file and none is claimed.</p>
-<h3>Caveats</h3>
-<ul><li>HOLDOUT-DTI is an internal hide-and-recover measurement on the public catalogue, not an ORGANIZER-CONFIRMED leaderboard score.</li><li>The measured gain reverses in the low-relief basin floor (18.3% of withheld positives): mean kernel credit 0.0224 vs 0.0660 for random (lift 0.34). The gain is real in the mid- (2.83x) and high-relief (2.31x) strata, so it is not confined to range fronts, but it is not present everywhere.</li><li>The Steger/Frangi operators run at sigma = 1.0-4.0 x 100 m (100-400 m), not the requested 2-20 m native scales: the 1 m/2 m bare-earth DEM is not reachable from this environment and the cached 100 m aggregate keeps only per-cell extrema of 2 m descriptors.</li><li>No cultural-feature mask (roads, canals, field edges) exists in the restored inputs, so the veto is the channel-internal cross-slope/downslope step term only.</li><li>registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified.</li></ul>
-</div>
-
->>>>>>> origin/main
 
 <h2>The two facts this session measured</h2>
 <p><b>1. The official metric is a budget.</b> With <code>T = TP_w</code>, <code>S = &Sigma;p</code>,

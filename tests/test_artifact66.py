@@ -38,7 +38,20 @@ def _h67_geophys_files():
                    Path(card["submission"]["zip"]).name})
 
 
+def _h68_files():
+    """Whatever Session H68 clears in docs/data/run-card-h68.json -- fail closed."""
+    p = ROOT / "docs" / "data" / "run-card-h68.json"
+    if not p.exists():
+        return []
+    card = json.loads(p.read_text(encoding="utf-8"))
+    if not card.get("cleared_for_download"):
+        return []
+    r = card["raster"]
+    return sorted({Path(r["file"]).name, Path(r["zeros_file"]).name, Path(r["zip_file"]).name})
+
+
 H67_GEOPHYS_FILES = _h67_geophys_files()
+H68_FILES = _h68_files()
 
 HISTORICAL_PREFIX = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
 # The LIDAR-01 session's cleared release (see docs/data/run-card-lidar01.json). A second,
@@ -86,7 +99,7 @@ def test_historical_h66_downloads_are_withdrawn_and_hashes_retained():
     historical_names = {item["file"] for item in historical}
     names = {path.name for path in (DOCS / "downloads").iterdir()}
     assert not (names & historical_names)
-    allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES)
+    allowed = set(PUBLISHED + K66_FILES + LIDAR01_FILES + H67_GEOPHYS_FILES + H68_FILES)
     assert names <= allowed, names - allowed
     # and if the H67 geophysics lane is NOT cleared, none of its files may be present
     if not H67_GEOPHYS_FILES:
