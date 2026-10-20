@@ -60,8 +60,8 @@ def compare(cand: np.ndarray, other: np.ndarray, fp: np.ndarray) -> dict:
     pa, pb = a > 0, b > 0
     inter = int((pa & pb).sum())
     union = int((pa | pb).sum())
-    null_w3 = float((ndimage.binary_dilation(pb, structure=_disc(WITHIN_PX),
-                                             border_value=0) & fp).sum() / max(1, fp.sum()))
+    dil_b = ndimage.binary_dilation(pb, structure=_disc(WITHIN_PX), border_value=0)
+    null_w3 = float((dil_b & fp).sum() / max(1, fp.sum()))
 
     # rank correlation over the union of positive supports plus a background sample, so that
     # the statistic is not computed on two sparse identical-by-construction binary masks
@@ -81,8 +81,7 @@ def compare(cand: np.ndarray, other: np.ndarray, fp: np.ndarray) -> dict:
 
     within3 = 0.0
     if pb.any() and pa.any():
-        d = ndimage.distance_transform_edt(~pb)
-        within3 = float((d[pa] <= WITHIN_PX).mean())
+        within3 = float(dil_b[pa].mean())
     return {"jaccard": inter / union if union else 0.0,
             "overlap_frac_of_candidate": inter / max(1, int(pa.sum())),
             "spearman_rho": rho,
