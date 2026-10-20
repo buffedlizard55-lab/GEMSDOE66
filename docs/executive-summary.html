@@ -11,6 +11,35 @@
 
 <h2>Executive summary</h2>
 
+
+<div class="warn" style="border:3px solid #f85149">
+<h2>&#128308; LIDAR-02 (2026-10-20): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
+<p><b>Is it OK to download and submit the new LIDAR-02 file? NO.</b> It is unique and
+format-valid, but it did <b>not</b> pass this project's science gate, so do not spend a
+weekly submission slot on it. This banner changes no other candidate's status:
+the machine-readable pointer is <code>downloads/current_release.json</code> and each
+candidate's own panel below carries its own verdict.</p>
+<table>
+<tr><th>New unique file (audit download only)</th><td>
+<a class="btn" href="downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif">gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif</a>
+<a class="btn" href="downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip">.zip</a>
+<a class="btn" href="downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif">NaN-outside sibling</a><br>
+<span class="small mono">sha256 (zeros) 26b264d7d7b2a3a8d2b477b9e6d914d64e1f7105894724edb4bcfbd078484a0c<br>
+sha256 (nan) 23195d6cd24a378af6b805a2ef27baa860c3a74b6174e99f28cf4c337f2d6858</span></td></tr>
+<tr><th>Submission name (if ever cleared)</th><td class="mono">gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z</td></tr>
+<tr><th>Note (109/140)</th><td class="mono">LIDAR-02 sharpness x persistence x antislope polarity, relief-stratified emission; GEMSDOE66 run card lidar02</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; both siblings 15 PASS + 2 INFO, 0 FAIL/SKIPPED; float32 EPSG:32611 100 m 3730&times;3292; 0 NaN inside footprint; values in [0,1] (the <span class="mono">Predicted values must be in range [0, 1]</span> rejection cannot occur on the -zeros file: every cell finite, no nodata tag)</td></tr>
+<tr><th>Uniqueness gate</th><td><b>PASS (unique)</b> &mdash; max |Spearman &rho;| 0.021 (limit 0.90); density-comparable 3-px dot overlap max 0.430 (limit 0.70) at lift 1.91; not identical to any of the rasters compared; hash differs from every prior raster</td></tr>
+<tr><th>Leakage canary</th><td><b>PASS</b> &mdash; worst feature-alone AUC 0.786 &lt; 0.90 stop (25 channels)</td></tr>
+<tr><th>Science gate</th><td><b>FAIL &mdash; this is why the answer is NO.</b> HOLDOUT-DTI (quadrant hide-and-recover, evaluator src/gems/metric.py, 48,465 withheld positives): candidate 0.1062 [0.0906, 0.1173] vs mass-matched random 0.0919; paired diff +0.0144, 95% CI [&minus;0.0015, +0.0238] <b>crosses zero</b>. SGMC off-catalogue control: 0.09515 vs incumbent h33-2-b2 0.09539 &mdash; ties, does not beat. No ORGANIZER-CONFIRMED score exists or is claimed.</td></tr>
+</table>
+<p class="small">Full record: <a href="data/run-card-lidar02.json">run-card-lidar02.json</a> (verdict <b>negative</b>) and
+<code>docs/review/2026-10-20-lidar02-session.md</code> in the repository. Method: slope-aware scarplet template +
+Steger/Frangi line channels, sharpness&times;persistence&times;antislope-polarity field, relief-stratified emission,
+37,654 dots, &ge;3 px separation, &gt;200 m from catalogue.</p>
+</div>
+
+
 <div class="warn">
 <h2>Status: FORMAT-READY, NOT PROMOTED &mdash; download enabled with disclosures</h2>
 <p><b>Download:</b>
@@ -142,22 +171,11 @@ and no slot is used — the protocol's negative branch. This measurement does no
 status of the H67-1 or K66 artifacts.</div>
 
 
-<h2>Second candidate — LIDAR-01 (gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z)</h2>
-<p>A parallel session's file, cleared on its own evidence. If you prefer it to the H67-1
-candidate above, use these fields instead — the name and note are exact and the note is
-140/140 characters.</p>
-<table>
-<tr><th>File to submit</th><td class="mono">gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif</td></tr>
-<tr><th>Name</th><td class="mono">gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z</td></tr>
-<tr><th>Note (140/140)</th><td class="mono">LIDAR-01: slope-aware antislope scarplet template + Steger/Frangi multiscale line evidence from the 2 m GeoDAWN lidar stack, spacing-cons...</td></tr>
-<tr><th>sha256</th><td class="mono">0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2</td></tr>
-</table>
-<p><a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif">Download the GeoTIFF</a>
-   <a class="btn" href="downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip">Download the .zip</a></p>
-<p class="small"><b>No ORGANIZER-CONFIRMED score exists for this file and none is claimed.</b>
-It is a <b>HOLDOUT-DTI</b> result only:
-0.15237 [95 % CI 0.14156, 0.16319] on the prescribed spatial-block instrument against
-0.07254 [0.06797, 0.07712] for mass-matched random placement.</p>
+<h2>LIDAR-01 submission status — NOT CLEARED</h2>
+<p><b>Do not download or submit the LIDAR-01 audit TIFF.</b> Its literal registry-overlap
+check is over the 0.70 stop threshold (0.921018). This candidate is not eligible for the
+competition slot; see the <a href="review/2026-10-20-review-lidar-release-and-h33.md">review</a>.
+The older HOLDOUT-DTI measurements are not organizer scores and do not override the stop rule.</p>
 
 
 
@@ -186,7 +204,7 @@ keep the slot.</p>
 
 
 <div class="go">
-  <h3>✅ LIDAR-02 (2026-10-20): submittable file</h3>
+  <h3>✅ LIDAR-02-MAXCOV (2026-10-20, parallel session arena/c73a2700): submittable file</h3>
   <ol>
     <li>Download <a href="downloads/gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif"><b>gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif</b></a>
         (sha256 <span class="mono">4dd82c24411ebbc8…</span>).</li>

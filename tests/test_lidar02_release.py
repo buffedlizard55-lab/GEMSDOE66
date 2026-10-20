@@ -16,8 +16,8 @@ import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
-CARD = DOCS / "data" / "run-card-lidar02.json"
-MIRROR = ROOT / "registry" / "run_card_lidar02.json"
+CARD = DOCS / "data" / "run-card-lidar02-maxcov.json"
+MIRROR = ROOT / "registry" / "run_card_lidar02_maxcov.json"
 
 
 @pytest.fixture(scope="module")

@@ -1,18 +1,19 @@
 {
  "schema": "gems-current-release/1",
- "generated_utc": "2026-10-12T02:24:00Z",
- "cleared": true,
- "tif": "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
- "zip": "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
- "manifest": "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json",
+ "generated_utc": "2026-10-20T18:19:29Z",
+ "cleared": false,
+ "tif": "",
+ "zip": "",
+ "manifest": "",
  "uniqueness": "lidar01_uniqueness.json",
- "gate_summary": "HOLDOUT-DTI 0.15237 [95% CI 0.14156, 0.16319] on the prescribed lidar-covered spatial-block hide-and-recover instrument vs 0.07254 [0.06797, 0.07712] for mass-matched random placement (2.10x, disjoint CIs, 4 folds, ~6,715 withheld positives/fold). Second instrument (global whole-trace holdout): 0.10413 [0.09078, 0.11747] vs 0.04576 [0.04497, 0.04656] (2.28x).",
- "canary_summary": "PASS. Every one of the 38 candidate channels was tested alone against withheld whole segments; the maximum per-channel AUC was 0.6204, below the 0.90 leakage threshold.",
+ "gate_summary": "NOT CLEARED \u2014 the literal parallel-run rule is exceeded: 0.921018 of candidate dots fall within 3 px of a registry raster (threshold 0.70). The existing chance-corrected analysis does not waive this stop rule. No download or submission is authorized.",
+ "canary_summary": "Historical evidence only; no new experiment was run in this review.",
  "caveats": [
-  "HOLDOUT-DTI is an internal hide-and-recover measurement on the public catalogue, not an ORGANIZER-CONFIRMED leaderboard score.",
-  "The measured gain reverses in the low-relief basin floor (18.3% of withheld positives): mean kernel credit 0.0224 vs 0.0660 for random (lift 0.34). The gain is real in the mid- (2.83x) and high-relief (2.31x) strata, so it is not confined to range fronts, but it is not present everywhere.",
-  "The Steger/Frangi operators run at sigma = 1.0-4.0 x 100 m (100-400 m), not the requested 2-20 m native scales: the 1 m/2 m bare-earth DEM is not reachable from this environment and the cached 100 m aggregate keeps only per-cell extrema of 2 m descriptors.",
-  "No cultural-feature mask (roads, canals, field edges) exists in the restored inputs, so the veto is the channel-internal cross-slope/downslope step term only.",
-  "registry/rasters is a local mirror of 60 rasters; the complete organizer corpus is not certified."
- ]
+  "NOT CLEARED \u2014 literal dot-overlap stop rule is triggered (0.921018 > 0.70). Do not download or submit this audit artifact.",
+  "The previously reported HOLDOUT-DTI results are historical local evidence, not an ORGANIZER-CONFIRMED score and do not override the uniqueness stop.",
+  "The candidate used 2 m-derived 100 m aggregate descriptors; the requested native 2\u201320 m DEM operators were not run at native scale.",
+  "No complete registry corpus or verified official native DEM coverage is present in this checkout."
+ ],
+ "audit_candidate": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+ "audit_sha256": "0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2"
 }

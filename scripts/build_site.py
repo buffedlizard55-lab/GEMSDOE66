@@ -54,7 +54,7 @@ one; no organiser score exists for any artifact here.
 
 
 from h66c_blocks import submission_block_h66c, h66c_exec_block, pillw  # noqa: E402  (site blocks)
-from lidar02_blocks import lidar02_block, lidar02_exec_block  # noqa: E402  (LIDAR-02 blocks)
+from lidar02_blocks import lidar02_block as lidar02m_block, lidar02_exec_block as lidar02m_exec_block  # noqa: E402  (LIDAR-02-MAXCOV blocks; aliased - the sharpersist session owns lidar02_block below)
 
 
 def load(p: Path, default=None):
@@ -393,8 +393,21 @@ def lidar01_block() -> str:
     overwritten by the other's.
     """
     rel = load(DOCS / "downloads" / "current_release.json", None)
-    if not rel or not rel.get("cleared"):
+    if not rel:
         return ""
+    if not rel.get("cleared"):
+        return f"""
+<div class="warn">
+<h2>LIDAR-01 — NOT CLEARED · DO NOT DOWNLOAD OR SUBMIT</h2>
+<p>The candidate is retained only as an audit artifact. The literal duplicate stop rule is
+triggered: <b>0.921018</b> of its dots are within 3 px of one registry raster, exceeding the
+<b>0.70</b> limit. A chance-corrected diagnostic does not waive the stated stop rule.
+No submission slot was used. See the <a href="review/2026-10-20-review-lidar-release-and-h33.md">dated review</a>
+and <a href="data/run-card-lidar01.json">run card</a>.</p>
+<p>Prior holdout numbers are historical <b>HOLDOUT-DTI</b> evidence only; they do not clear
+this candidate. No ORGANIZER-CONFIRMED result exists.</p>
+</div>
+"""
     man = load(DOCS / "downloads" / rel["manifest"], {})
     card = load(DOCS / "data" / "run-card-lidar01.json", {})
     uni = load(ROOT / "evidence" / rel["uniqueness"], {})
@@ -446,8 +459,16 @@ exists for this file and none is claimed.</p>
 def lidar01_exec_block() -> str:
     """The LIDAR-01 submission recipe, appended to the executive-summary page."""
     rel = load(DOCS / "downloads" / "current_release.json", None)
-    if not rel or not rel.get("cleared"):
+    if not rel:
         return ""
+    if not rel.get("cleared"):
+        return """
+<h2>LIDAR-01 submission status — NOT CLEARED</h2>
+<p><b>Do not download or submit the LIDAR-01 audit TIFF.</b> Its literal registry-overlap
+check is over the 0.70 stop threshold (0.921018). This candidate is not eligible for the
+competition slot; see the <a href="review/2026-10-20-review-lidar-release-and-h33.md">review</a>.
+The older HOLDOUT-DTI measurements are not organizer scores and do not override the stop rule.</p>
+"""
     man = load(DOCS / "downloads" / rel["manifest"], {})
     return f"""
 <h2>Second candidate — LIDAR-01 ({esc(man.get("name", ""))})</h2>
@@ -466,6 +487,49 @@ candidate above, use these fields instead — the name and note are exact and th
 It is a <b>HOLDOUT-DTI</b> result only:
 0.15237 [95 % CI 0.14156, 0.16319] on the prescribed spatial-block instrument against
 0.07254 [0.06797, 0.07712] for mass-matched random placement.</p>
+"""
+
+
+LIDAR02_STEM = "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z"
+
+
+def lidar02_block() -> str:
+    """LIDAR-02 (2026-10-20) banner: new unique file, verdict NEGATIVE — NOT OK TO SUBMIT.
+
+    Reads its own run card (docs/data/run-card-lidar02.json); returns "" if absent so a
+    checkout without the session's card never invents a status.
+    """
+    card = load(DOCS / "data" / "run-card-lidar02.json", None)
+    if not card:
+        return ""
+    stem = LIDAR02_STEM
+    return f"""
+<div class="warn" style="border:3px solid #f85149">
+<h2>&#128308; LIDAR-02 (2026-10-20): NEW UNIQUE FILE GENERATED &mdash; <b>NOT OK TO SUBMIT</b></h2>
+<p><b>Is it OK to download and submit the new LIDAR-02 file? NO.</b> It is unique and
+format-valid, but it did <b>not</b> pass this project's science gate, so do not spend a
+weekly submission slot on it. This banner changes no other candidate's status:
+the machine-readable pointer is <code>downloads/current_release.json</code> and each
+candidate's own panel below carries its own verdict.</p>
+<table>
+<tr><th>New unique file (audit download only)</th><td>
+<a class="btn" href="downloads/{stem}-zeros.tif">{stem}-zeros.tif</a>
+<a class="btn" href="downloads/{stem}-zeros.zip">.zip</a>
+<a class="btn" href="downloads/{stem}-nan.tif">NaN-outside sibling</a><br>
+<span class="small mono">sha256 (zeros) {esc(card.get("rasters", {}).get("zeros", {}).get("sha256", ""))}<br>
+sha256 (nan) {esc(card.get("rasters", {}).get("nan", {}).get("sha256", ""))}</span></td></tr>
+<tr><th>Submission name (if ever cleared)</th><td class="mono">{esc(card.get("submission_name", ""))}</td></tr>
+<tr><th>Note ({card.get("note_chars", 0)}/140)</th><td class="mono">{esc(card.get("submission_note", ""))}</td></tr>
+<tr><th>Format gate</th><td><b>PASS</b> &mdash; both siblings 15 PASS + 2 INFO, 0 FAIL/SKIPPED; float32 EPSG:32611 100 m 3730&times;3292; 0 NaN inside footprint; values in [0,1] (the <span class="mono">Predicted values must be in range [0, 1]</span> rejection cannot occur on the -zeros file: every cell finite, no nodata tag)</td></tr>
+<tr><th>Uniqueness gate</th><td><b>PASS (unique)</b> &mdash; max |Spearman &rho;| 0.021 (limit 0.90); density-comparable 3-px dot overlap max 0.430 (limit 0.70) at lift 1.91; not identical to any of the rasters compared; hash differs from every prior raster</td></tr>
+<tr><th>Leakage canary</th><td><b>PASS</b> &mdash; worst feature-alone AUC 0.786 &lt; 0.90 stop (25 channels)</td></tr>
+<tr><th>Science gate</th><td><b>FAIL &mdash; this is why the answer is NO.</b> HOLDOUT-DTI (quadrant hide-and-recover, evaluator src/gems/metric.py, 48,465 withheld positives): candidate 0.1062 [0.0906, 0.1173] vs mass-matched random 0.0919; paired diff +0.0144, 95% CI [&minus;0.0015, +0.0238] <b>crosses zero</b>. SGMC off-catalogue control: 0.09515 vs incumbent h33-2-b2 0.09539 &mdash; ties, does not beat. No ORGANIZER-CONFIRMED score exists or is claimed.</td></tr>
+</table>
+<p class="small">Full record: <a href="data/run-card-lidar02.json">run-card-lidar02.json</a> (verdict <b>negative</b>) and
+<code>docs/review/2026-10-20-lidar02-session.md</code> in the repository. Method: slope-aware scarplet template +
+Steger/Frangi line channels, sharpness&times;persistence&times;antislope-polarity field, relief-stratified emission,
+37,654 dots, &ge;3 px separation, &gt;200 m from catalogue.</p>
+</div>
 """
 
 
@@ -488,13 +552,15 @@ plus the evidence for why it looks the way it does. The scored truth is <b>fault
 in the given public catalogue</b>, so every design choice here is aimed at that and not at
 recovering the 60,988 labelled pixels we were given.</p>
 
+{lidar02_block()}
+
 {submission_block()}
 
 {lidar01_block()}
 
 {submission_block_h66c()}
 
-{lidar02_block()}
+{lidar02m_block()}
 
 <h2>The two facts this session measured</h2>
 <p><b>1. The official metric is a budget.</b> With <code>T = TP_w</code>, <code>S = &Sigma;p</code>,
@@ -568,6 +634,8 @@ def exec_page() -> str:
             "mapped-fault exclusion; see GEMSDOE66 run card")
     return page("How to submit", f"""
 <h2>Executive summary</h2>
+
+{lidar02_block()}
 
 <div class="warn">
 <h2>Status: FORMAT-READY, NOT PROMOTED &mdash; download enabled with disclosures</h2>
@@ -667,7 +735,7 @@ this session could and could not measure about it.</p>
 
 {h66c_exec_block()}
 
-{lidar02_exec_block()}
+{lidar02m_exec_block()}
 """, "executive-summary.html")
 
 

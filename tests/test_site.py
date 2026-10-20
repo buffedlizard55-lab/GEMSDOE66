@@ -17,14 +17,29 @@ PAGES = ["index.html", "feed.html", "submission-guide.html", "analysis.html", "h
 OFFICIAL_HOME = "https://www.drivendata.org/"
 OFFICIAL_LEADERBOARD = "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
 HISTORICAL_STEM = "gems66-h66-1-scarplet-veto-37654-20261011T203224Z"
-# The LIDAR-01 session's cleared release (see docs/data/run-card-lidar01.json). A second,
-# separately-named candidate from a parallel session; it is allow-listed here for the same
-# reason the H67 and K66 files are.
-LIDAR01_FILES = [
-    "current_release.json",
-    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
-    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
-    "gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json",
+# LIDAR-01 is retained as audit-only evidence and is not allow-listed for download.
+LIDAR01_FILES = ["current_release.json"]
+
+# unique-msc session on main (2026-10-20): cleared pointer target; listed for the same
+# fail-closed publication rule as every other session's files.
+UNIQUE_MSC_FILES = [
+    "gems66-unique-msc-20261020T182024Z.tif",
+    "gems66-unique-msc-20261020T182024Z.zip",
+    "gems66-unique-msc-20261020T182024Z.manifest.json",
+    "uniqueness_gems66-unique-msc-20261020T182024Z.json",
+    "current_release_unique_msc.json",  # msc pointer preserved under its own name at the LIDAR-02-MAXCOV merge (it had overwritten LIDAR-01's current_release.json)
+]
+
+# LIDAR-02 (2026-10-20): unique + format-valid but verdict NEGATIVE (science gate fail).
+# Listed so the audit download is explicit, never silently publishable; the site banner
+# must keep saying NOT OK TO SUBMIT (run-card-lidar02.json).
+LIDAR02_FILES = [
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif.receipt.json",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.zip",
+    "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif.receipt.json",
 ]
 
 
@@ -77,10 +92,11 @@ def _k66_files():
 K66_FILES = _k66_files()
 
 
-def _lidar02_files():
-    """LIDAR-02 release files, read from its own run card (fail closed: a card that
-    does not promote contributes no allow-listed names)."""
-    p = ROOT / "docs" / "data" / "run-card-lidar02.json"
+def _lidar02m_files():
+    """LIDAR-02-MAXCOV release files (parallel session arena/c73a2700; NOT the
+    sharpersist session's LIDAR02_FILES above), read from its own run card
+    (fail closed: a card that does not promote contributes no names)."""
+    p = ROOT / "docs" / "data" / "run-card-lidar02-maxcov.json"
     if not p.exists():
         return []
     card = json.loads(p.read_text())
@@ -92,7 +108,7 @@ def _lidar02_files():
     return sorted(names)
 
 
-LIDAR02_FILES = _lidar02_files()
+LIDAR02M_FILES = _lidar02m_files()
 
 ALLOWED_RASTERS = {
     "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
@@ -119,7 +135,7 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
             path_part = urlsplit(href).path.lower()
             if path_part.endswith((".tif", ".tiff", ".zip")):
                 rel = urlsplit(href).path
-                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + LIDAR02_FILES), f"{name}: {href}"
+                assert rel in ALLOWED_RASTERS or rel.split("/")[-1] in (K66_FILES + LIDAR01_FILES + LIDAR02_FILES + LIDAR02M_FILES + UNIQUE_MSC_FILES), f"{name}: {href}"
     # the H67 geophysics lane may publish exactly what its own run card clears (fail closed)
     import glob as _glob
     _h67 = []
@@ -134,7 +150,7 @@ def test_download_gate_is_explicit_and_no_historical_file_is_linked():
         "gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif.receipt.json",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif.receipt.json",
-    ] + K66_FILES + LIDAR01_FILES + LIDAR02_FILES)
+    ] + K66_FILES + LIDAR01_FILES + LIDAR02_FILES + LIDAR02M_FILES + UNIQUE_MSC_FILES)
 
 
 def test_run_card_labels_every_number_and_claims_no_qualified_score():

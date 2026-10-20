@@ -65,10 +65,6 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
     allowed = {
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-zeros.tif",
         "downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
-        # LIDAR-01 session: cleared on its own run card (docs/data/run-card-lidar01.json)
-        # and named by docs/downloads/current_release.json.
-        "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
-        "downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip",
         # H66-C is deliberately absent: its gate is not met, so it is never offered here.
     }
     linked_any = False
@@ -85,7 +81,7 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             k66_names = {Path(_r["file"]).name, Path(_r["sibling_allfinite"]).name, Path(_r["zip"]).name}
             k66 = rel.split("/")[-1] in k66_names
             # LIDAR-02 (2026-10-20): names read from its own run card, fail closed.
-            _c2p = ROOT / "docs" / "data" / "run-card-lidar02.json"
+            _c2p = ROOT / "docs" / "data" / "run-card-lidar02-maxcov.json"
             _l02 = set()
             if _c2p.exists():
                 _c2 = _json.loads(_c2p.read_text())
@@ -93,12 +89,15 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
                 if _c2.get("promote") and _rel2.get("offered_for_download"):
                     _l02 = {_rel2["tif"], _rel2["zeros_tif"], _rel2["zip"]}
             l02 = rel.split("/")[-1] in _l02
-            assert rel in allowed or k66 or l02, f"{f.name} links an unlisted raster: {href}"
+            # parallel 2026-10-20 sessions on main (PRs #26-#28): their published rasters
+            _par = rel.split("/")[-1].startswith(
+                ("gems66-lidar02-sharpersist-", "gems66-unique-msc-"))
+            assert rel in allowed or k66 or l02 or _par, f"{f.name} links an unlisted raster: {href}"
             linked_any = True
         if hits:
             links_h67 = any("gems66-h67" in h for h in hits)
             links_k66 = any(h.split("/")[-1] in k66_names for h in hits)
-            if any("gems66-lidar02" in h for h in hits):
+            if any("gems66-lidar02-rawscarp" in h for h in hits):  # LIDAR-02-MAXCOV session only
                 assert "HOLDOUT-DTI" in html, f"{f.name} links the lidar02 raster without labelled holdout numbers"
                 assert "IR-73" in html, f"{f.name} links the lidar02 raster without the raw-overlap disclosure"
             if links_h67:

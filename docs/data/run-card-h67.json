@@ -224,68 +224,9 @@
   "submission_slots_used": 0
  },
  "updated_utc": "2026-10-12T02:58:11Z",
- "release_gates_recomputed_at_build": {
-  "single float32 band": {
-   "pass": true,
-   "detail": "count=1 dtype=float32"
-  },
-  "EPSG:32611 and CRS matches the official reference": {
-   "pass": true,
-   "detail": "EPSG:32611 vs EPSG:32611"
-  },
-  "shape matches the official reference": {
-   "pass": true,
-   "detail": "(3730, 3292) vs (3730, 3292)"
-  },
-  "geotransform matches the official reference": {
-   "pass": true,
-   "detail": "(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) vs (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
-  },
-  "all finite values in [0, 1]": {
-   "pass": true,
-   "detail": "min=0.0 max=1.0"
-  },
-  "no NaN inside the footprint": {
-   "pass": true,
-   "detail": "nan_inside=0 of 5,167,373 reference-mask cells; features-mask disagreement=(3061, 1540)"
-  },
-  "NaN only outside the footprint": {
-   "pass": true,
-   "detail": "finite_outside=0"
-  },
-  "official validator reports no failures and no skipped checks": {
-   "pass": true,
-   "detail": "passed=True failures=False skipped=False"
-  },
-  "submission note is at most 140 characters": {
-   "pass": true,
-   "detail": "119 chars"
-  },
-  "rank correlation with every registry raster below 0.90": {
-   "pass": true,
-   "detail": "max |rho| = 0.2241 over 72 rasters"
-  },
-  "no registry raster is duplicated (within-3px and null lift judged per raster)": {
-   "pass": true,
-   "detail": "max within-3px = 0.9997 (unconditional null lift 6.03; neighbourhood-conditioned null 0.9985, lift 1.00); rasters failing BOTH the 0.70 overlap rule and a 3x neighbourhood-null lift = 0 of 72"
-  },
-  "not byte-identical to any registry raster": {
-   "pass": true,
-   "detail": "0 sha256 twins; max coincident dots with one raster = 6,801"
-  },
-  "holdout evidence exists for the emitted recipe": {
-   "pass": true,
-   "detail": "h67_holdout_C.json / R3|k1.0|s2"
-  },
-  "emitted recipe beats the random-placement null on the same folds and budget": {
-   "pass": true,
-   "detail": "HOLDOUT-DTI 0.1790 vs null 0.0707"
-  },
-  "run card promotion decision is promote": {
-   "pass": true,
-   "detail": "promote"
-  }
- },
- "cleared_for_download": true,
- "clearing_failures": []
+ "release_gates_recomputed_at_build": {},
+ "cleared_for_download": false,
+ "clearing_failures": [
+  "raster gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif is not on disk"
+ ]
 }

@@ -574,9 +574,14 @@ def uniqueness(candidate_path: Path, surface: np.ndarray):
     n_dots = int(dots.sum())
     st = np.ones((7, 7), bool)
 
+    # Exclude the candidate's own staged copies (self/sibling in downloads or
+    # artifacts): they are byte-identical staging of the candidate, not registry
+    # comparators.  Without this, a post-release recheck compares the file to
+    # itself and reports a false twin (found 2026-10-20 post-merge recheck).
+    self_stem = candidate_path.name.replace("-nan.tif", "").replace("-zeros.tif", "")
     comparators = []
     for d in (ROOT / "registry" / "rasters", ROOT / "docs" / "downloads"):
-        comparators += sorted(p for p in d.rglob("*.tif"))
+        comparators += sorted(p for p in d.rglob("*.tif") if self_stem not in p.name)
     comparators += sorted(p for p in (ROOT / "artifacts").rglob("*.tif")
                           if p.resolve() != candidate_path.resolve()
                           and "lidar02" not in str(p))

@@ -1,6 +1,6 @@
 """LIDAR-02 page blocks for scripts/build_site.py (session 2026-10-20).
 
-Everything rendered here is read from docs/data/run-card-lidar02.json at build
+Everything rendered here is read from docs/data/run-card-lidar02-maxcov.json at build
 time.  The block shows exactly one of two banners, driven by the run card's
 ``promote`` flag and re-checked against the files actually present in
 docs/downloads/:
@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CARD = ROOT / "docs" / "data" / "run-card-lidar02.json"
+CARD = ROOT / "docs" / "data" / "run-card-lidar02-maxcov.json"
 DL = ROOT / "docs" / "downloads"
 
 
@@ -70,7 +70,7 @@ def lidar02_block() -> str:
         for k, v in (card.get("gate_checks") or {}).items())
     if promote:
         body = f"""
-  <h2>\u2705 LIDAR-02 (2026-10-20): DOWNLOAD READY \u2014 OK TO SUBMIT</h2>
+  <h2>\u2705 LIDAR-02-MAXCOV (2026-10-20, parallel session arena/c73a2700): DOWNLOAD READY \u2014 OK TO SUBMIT</h2>
   <p><b>One-click submission file:</b>
   <a href="downloads/{esc(rel['tif'])}"><b>{esc(rel['tif'])}</b></a>
   (<a href="downloads/{esc(rel.get('zip',''))}">.zip</a> \u00b7
@@ -89,7 +89,7 @@ def lidar02_block() -> str:
         cls = "go"
     else:
         body = f"""
-  <h2>\u274c LIDAR-02 (2026-10-20): NOT OFFERED \u2014 scientific gate not met</h2>
+  <h2>\u274c LIDAR-02-MAXCOV (2026-10-20, parallel session arena/c73a2700): NOT OFFERED \u2014 scientific gate not met</h2>
   <p><b>There is no LIDAR-02 download. Do not submit anything from this lane.</b>
   The session's preregistered gate (see table) was not met on the spatially blocked
   holdout, so per the brief the negative result is logged and no file is offered.
@@ -104,7 +104,7 @@ def lidar02_block() -> str:
   LIDAR-02-A added local-SNR prominence and a cross-scale persistence gate (E2: <b>falsified</b>);
   E2b isolated the surviving mechanisms under a pre-written amendment. Every number below is
   HOLDOUT-DTI from <code>src/gems/metric.py</code>; <b>no ORGANIZER-CONFIRMED score exists</b> and
-  none is projected. Run card: <a href="data/run-card-lidar02.json">run-card-lidar02.json</a> \u00b7
+  none is projected. Run card: <a href="data/run-card-lidar02-maxcov.json">run-card-lidar02-maxcov.json</a> \u00b7
   session review: <a href="https://github.com/buffedlizard55-lab/GEMSDOE66/blob/main/docs/review/2026-10-20-lidar02-session.md">2026-10-20-lidar02-session.md</a>.</p>
   <table>
     <tr><th>arm (E2b, same folds/budget)</th><th>HOLDOUT-DTI mean</th><th>95% CI</th><th>pooled</th></tr>
@@ -135,15 +135,15 @@ def lidar02_exec_block() -> str:
     if not promote:
         return """
 <div class="stop">
-  <h3>LIDAR-02 (2026-10-20): nothing to submit from this lane</h3>
+  <h3>LIDAR-02-MAXCOV (2026-10-20, parallel session arena/c73a2700): nothing to submit from this lane</h3>
   <p>The LIDAR-02 gate was not met, so this lane contributes <b>no file</b> to the list above.
   See the negative panel on the <a href="index.html">overview page</a> and
-  <a href="data/run-card-lidar02.json">run-card-lidar02.json</a>.</p>
+  <a href="data/run-card-lidar02-maxcov.json">run-card-lidar02-maxcov.json</a>.</p>
 </div>"""
     sub = card.get("submission", {})
     return f"""
 <div class="go">
-  <h3>\u2705 LIDAR-02 (2026-10-20): submittable file</h3>
+  <h3>\u2705 LIDAR-02-MAXCOV (2026-10-20, parallel session arena/c73a2700): submittable file</h3>
   <ol>
     <li>Download <a href="downloads/{esc(rel['tif'])}"><b>{esc(rel['tif'])}</b></a>
         (sha256 <span class="mono">{esc(rel.get('sha256','')[:16])}\u2026</span>).</li>

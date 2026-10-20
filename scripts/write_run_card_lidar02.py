@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Assemble the LIDAR-02 run card from evidence/*.json (single source of truth).
 
-Writes docs/data/run-card-lidar02.json and the mirror registry/run_card_lidar02.json.
+Writes docs/data/run-card-lidar02-maxcov.json and the mirror registry/run_card_lidar02_maxcov.json.
 If (and only if) E3 reported all gates met, also stages the release files into
 docs/downloads/ and records the release block the site renders.  Run AFTER
 scripts/run_lidar02b.py emit.  Never hand-edit the outputs.
@@ -164,8 +164,8 @@ def main() -> int:
                            "evidence/lidar02b_emission.json", "evidence/lidar02b_uniqueness.json"],
     }
     DOCS_DATA.mkdir(parents=True, exist_ok=True)
-    (DOCS_DATA / "run-card-lidar02.json").write_text(json.dumps(card, indent=1))
-    (ROOT / "registry" / "run_card_lidar02.json").write_text(json.dumps(card, indent=1))
+    (DOCS_DATA / "run-card-lidar02-maxcov.json").write_text(json.dumps(card, indent=1))
+    (ROOT / "registry" / "run_card_lidar02_maxcov.json").write_text(json.dumps(card, indent=1))
     print(json.dumps({"promote": promote, "verdict": card["verdict"],
                       "release": release}, indent=1))
     return 0

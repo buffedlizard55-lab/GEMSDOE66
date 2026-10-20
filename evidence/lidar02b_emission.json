@@ -268,9 +268,9 @@
   "candidate": "gems66-lidar02-rawscarp-maxcov-38000dots-20261020T190402Z-nan.tif",
   "candidate_sha256": "4dd82c24411ebbc810eaa806a326c57763a06ac156a0d69bc3d8c3200594f0a7",
   "n_dots": 38000,
-  "n_comparators_compared": 73,
+  "n_comparators_compared": 75,
   "identical_to_any": false,
-  "max_abs_spearman_dots": 0.034434,
+  "max_abs_spearman_dots": 0.112225,
   "surface_max_abs_spearman": 0.149297,
   "worst_raw_overlap": {
    "raster": "registry/rasters/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
@@ -1011,18 +1011,6 @@
     "density_ratio_comparator_over_candidate": 1.015
    },
    {
-    "raster": "docs/downloads/gems66-h67-geophys-maxcov-r3-45000dots-20261012T025604Z-f8c91fd09121-nan.tif",
-    "sha256": "512fda025b830209abb013190aa320e58eaa03de2ba212510805fff6e97ad578",
-    "identical_sha256": false,
-    "dots": 45000,
-    "spearman_dots": 0.0016461688325080336,
-    "spearman_surface_preplacement": 0.026473085566881837,
-    "dot_overlap_within_3px": 0.220684,
-    "random_control_overlap": 0.146237,
-    "lift_over_random": 1.509,
-    "density_ratio_comparator_over_candidate": 1.184
-   },
-   {
     "raster": "docs/downloads/gems66-h67-scarp-lane-novelty-40000dots-v2-nan.tif",
     "sha256": "1a72bfeb3fcaede5681e9b944aadd703793bf7cf931b410e4a733aaa2e67237f",
     "identical_sha256": false,
@@ -1067,16 +1055,40 @@
     "density_ratio_comparator_over_candidate": 0.842
    },
    {
-    "raster": "docs/downloads/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
-    "sha256": "0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2",
+    "raster": "docs/downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+    "sha256": "23195d6cd24a378af6b805a2ef27baa860c3a74b6174e99f28cf4c337f2d6858",
     "identical_sha256": false,
     "dots": 37654,
-    "spearman_dots": 0.00029158034401650343,
-    "spearman_surface_preplacement": 0.05979322079154473,
-    "dot_overlap_within_3px": 0.240368,
-    "random_control_overlap": 0.140289,
-    "lift_over_random": 1.713,
+    "spearman_dots": 0.11222503898493517,
+    "spearman_surface_preplacement": 0.09575151146237397,
+    "dot_overlap_within_3px": 0.620526,
+    "random_control_overlap": 0.245474,
+    "lift_over_random": 2.528,
     "density_ratio_comparator_over_candidate": 0.991
+   },
+   {
+    "raster": "docs/downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+    "sha256": "26b264d7d7b2a3a8d2b477b9e6d914d64e1f7105894724edb4bcfbd078484a0c",
+    "identical_sha256": false,
+    "dots": 37654,
+    "spearman_dots": 0.11222503898493517,
+    "spearman_surface_preplacement": 0.10035753095326087,
+    "dot_overlap_within_3px": 0.620526,
+    "random_control_overlap": 0.245474,
+    "lift_over_random": 2.528,
+    "density_ratio_comparator_over_candidate": 0.991
+   },
+   {
+    "raster": "docs/downloads/gems66-unique-msc-20261020T182024Z.tif",
+    "sha256": "fa697ad1dee97008daf6509c1ab862529f8564b1f112f17cc9adf0ac55d9c340",
+    "identical_sha256": false,
+    "dots": 40048,
+    "spearman_dots": -0.002607131816996611,
+    "spearman_surface_preplacement": -0.011213325036210385,
+    "dot_overlap_within_3px": 0.016684,
+    "random_control_overlap": 0.019737,
+    "lift_over_random": 0.845,
+    "density_ratio_comparator_over_candidate": 1.054
    },
    {
     "raster": "artifacts/h66-2/gems66-h66-2-concordance-scarp-37654-20261011T212544Z-allfinite.tif",
@@ -1088,6 +1100,18 @@
     "dot_overlap_within_3px": 0.567605,
     "random_control_overlap": 0.219763,
     "lift_over_random": 2.583,
+    "density_ratio_comparator_over_candidate": 0.991
+   },
+   {
+    "raster": "artifacts/lidar01/gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif",
+    "sha256": "0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2",
+    "identical_sha256": false,
+    "dots": 37654,
+    "spearman_dots": 0.00029158034401650343,
+    "spearman_surface_preplacement": 0.05979322079154473,
+    "dot_overlap_within_3px": 0.240368,
+    "random_control_overlap": 0.140289,
+    "lift_over_random": 1.713,
     "density_ratio_comparator_over_candidate": 0.991
    },
    {
@@ -1158,7 +1182,8 @@
     "lift_over_random": 2.205,
     "density_ratio_comparator_over_candidate": 0.842
    }
-  ]
+  ],
+  "post_merge_addendum": "Re-run 2026-10-20 after merging origin/main (PRs #26-#28 landed during the session: sharpersist LIDAR-02 negative candidate, unique-msc candidate, LIDAR-01 artifacts). Comparator set is the merged tree minus the candidate's own staged copies; candidate bytes unchanged."
  },
  "uniqueness_ok": true,
  "all_gates_met": true
