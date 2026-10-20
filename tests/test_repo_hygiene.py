@@ -69,6 +69,7 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         # Parallel-session audit downloads (IR-L03-04: missing here since their sessions,
         # failing on main).  Each linked page must carry its own negative banner (asserted
         # below), so listing a file never implies clearance.
+        # LIDAR-02: audit-linked only under a NOT OK TO SUBMIT banner (2026-10-20).
         "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
         "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.zip",
         "downloads/gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
@@ -77,6 +78,14 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
         "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-zeros.zip",
         "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-nan.tif",
         "downloads/gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z-nan.zip",
+        # unique-msc session file, cleared on its own local gates (2026-10-20).
+        "downloads/gems66-unique-msc-20261020T182024Z.tif",
+        "downloads/gems66-unique-msc-20261020T182024Z.zip",
+        # LIDAR-03: verdict PROMOTE under its pre-registered gate (run-card-lidar03.json).
+        "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+        "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip",
+        "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+        "downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip",
     }
     # the current_release pointer target (unique-msc session): linkable only while its own
     # pointer says cleared — read dynamically so withdrawal is automatic (fail closed)
@@ -108,7 +117,7 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
             if links_k66:
                 assert "HOLDOUT-DTI" in html, f"{f.name} links the k66 raster without its holdout row"
                 assert "95% CI" in html, f"{f.name} links the k66 raster without its CI"
-            if any(("gems66-lidar02" in h or "gems66-lidar03" in h or "gems66-lidar04" in h) for h in hits):
+            if any(("gems66-lidar02" in h or "localsnr-fracpair" in h) for h in hits):  # LIDAR-04 stem retained (IR-L04-RENAME)
                 # negative-verdict audit downloads: the banner is the whole point
                 assert "NOT OK TO SUBMIT" in html, f"{f.name} links a negative candidate without its banner"
                 assert "HOLDOUT-DTI" in html, f"{f.name} links a negative candidate without its holdout label"
@@ -119,6 +128,15 @@ def test_site_links_only_the_disclosed_allowlisted_raster():
                 assert ("No ORGANIZER-CONFIRMED score" in html
                         or "no ORGANIZER-CONFIRMED score" in html), (
                     f"{f.name} links LIDAR-01 without disclaiming an organizer score")
+            if any("gems66-lidar03" in h for h in hits):
+                # LIDAR-03 links must sit next to its labelled holdout numbers,
+                # its CI and its no-organizer-score disclaimer.
+                flat = " ".join(html.split())
+                assert "HOLDOUT-DTI" in flat, f"{f.name} links LIDAR-03 without its holdout label"
+                assert "95% CI" in flat, f"{f.name} links LIDAR-03 without its CI"
+                assert "ORGANIZER-CONFIRMED" in flat, f"{f.name} links LIDAR-03 without disclaiming an organizer score"
+            if any("gems66-lidar02" in h for h in hits):
+                assert "NOT OK TO SUBMIT" in html, f"{f.name} links LIDAR-02 without its NOT OK banner"
     assert linked_any, "the disclosed candidate should be linked from at least one page"
 
 

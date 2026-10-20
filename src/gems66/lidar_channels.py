@@ -229,7 +229,7 @@ def multiscale_line_fields(field: np.ndarray, scales=(1.0, 1.5, 2.0, 3.0, 4.0),
     Memory-frugal: only the running maxima, the accumulated line count and the
     arg-scale map are kept (one float32 array each), never the whole scale stack.
 
-    Fixed 2026-10-20 (IR-L03-TOOL-01): the Steger response threshold was taken
+    Fixed 2026-10-20 (IR-L04-TOOL-01): the Steger response threshold was taken
     as a percentile of the running *Frangi vesselness* maximum and then applied
     to the Steger Hessian response ``|l2|`` -- a unit mismatch (dimensionless
     vesselness in ~[0, 1] vs curvature units of the input surface) that made

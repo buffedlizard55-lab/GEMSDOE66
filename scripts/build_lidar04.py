@@ -42,7 +42,7 @@ lidar02_e1_canary.json, which is prior-experiment data, not this run's):
     inside the pixel with consistent Hessian sign, at sigma 1 and 2, on
     the detrended SNR surface.  Prior lanes used Steger *response*.
   * Frangi/Steger run on the detrended SNR surface (not detrended raw
-    step), via the shared multiscale_line_fields with the IR-L03-TOOL-01
+    step), via the shared multiscale_line_fields with the IR-L04-TOOL-01
     threshold fix (Steger thresholded on its own response distribution).
 Emission geometry is IDENTICAL to LIDAR-02 (K=37654, >=3 px separation,
 >2 px from catalogue, relief-tercile allocation by eligible-footprint

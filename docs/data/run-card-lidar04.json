@@ -85,7 +85,24 @@
   "max_dot_overlap3px_raw": 0.9914484516917194,
   "raw_note": "Raw 0.9914 is vs the 311,617-dot dense raster whose random-placement overlap gives lift 0.998 \u2014 the documented IR-73 degeneracy. Density-comparable worst is LIDAR-02 itself (0.6442 at lift 2.70): same emission geometry, overlapping field peaks; below the 0.70 stop but disclosed as close.",
   "any_identical": false,
-  "duplicate_under_lift_rule": []
+  "duplicate_under_lift_rule": [],
+  "post_merge_addendum_vs_lidar03_cvretrain": {
+   "addendum": "Post-merge lane check vs the parallel LIDAR-03 cvretrain raster (PR #30), which did not exist in this session's checkout during its E3 scan of 70 rasters.",
+   "candidate": "LIDAR-04 (stem gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z)",
+   "against": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+   "against_sha256": "7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e",
+   "ref_dots": 37654,
+   "my_dots": 37654,
+   "surface_spearman_sample200k_field_vs_their_values": 0.008217026510522927,
+   "my_dot_overlap3px_vs_theirs": 0.24852605300897648,
+   "their_dot_overlap3px_vs_mine": 0.273277739416795,
+   "random_overlap3px_vs_theirs": 0.20900833908748073,
+   "lift": 1.1890724269377384,
+   "identical": false,
+   "lane_rule": "duplicate if |rho|>0.90 or comparable-density overlap>0.70 (raw also reported)",
+   "duplicate": false
+  },
+  "n_compared_incl_addendum": 71
  },
  "gate": {
   "G1_canary_pass": true,
@@ -154,12 +171,12 @@
  },
  "irregularities": [
   "IR-L04-RENAME: a parallel session independently used the label LIDAR-03 for a spatial-CV-retrained classifier and merged first (PR #30, verdict promote, raster gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z). This session was renamed LIDAR-04 at merge to avoid overwriting that record; its own raster stem gems66-lidar03-localsnr-fracpair-... is kept verbatim because it is baked into GeoTIFF tags, receipts and sha256 values. The two rasters are different methods, different bytes, opposite verdicts.",
-  "IR-L03-TOOL-01 FIXED: gems66.lidar_channels.multiscale_line_fields thresholded the Steger Hessian response with a percentile of the Frangi vesselness (unit mismatch). Fixed once in the template to threshold on the Steger response's own distribution; LIDAR-01/02 steger_frac300 values are not reproducible from the fixed code.",
-  "IR-L03-SITE-01 FIXED: scripts/build_site.py contained literal git merge-conflict markers (<<<<<<< HEAD / ======= / >>>>>>> origin/main) that were rendering as text on the live index and executive-summary pages. Resolved keeping both panels.",
-  "IR-L03-02: GitHub REST API rate limit (5000/hr shared token) was exhausted when fetching training_features via scripts/fetch_mirrors.py; the 5 parts were instead retrieved by git sparse partial-clone at the pinned ref and the concatenated file verified against the manifest sha256 (4371c82e\u2026) before use. fetch_mirrors.py verified the other 4 inputs normally.",
-  "IR-L03-03 (pre-existing, not fixed here): docs/downloads/current_release.json points at the unique-msc session's raster with cleared=true, while scripts/build_site.py's lidar01_block() renders that pointer under a 'LIDAR-01 session' heading using run-card-lidar01.json's holdout rows \u2014 two different candidates' evidence conflated in one panel. docs/downloads/README.md still describes the pointer as LIDAR-01. Left untouched to avoid overwriting a parallel session's release semantics; flagged for the owning session.",
-  "IR-L03-04 (pre-existing): tests/test_artifact66.py and tests/test_repo_hygiene.py were failing on main because their download/link allowlists were never updated for the LIDAR-02 and unique-msc files (test_site.py was). Allowlists extended this session with the same fail-closed disclosure conditions.",
-  "IR-L03-05: GEMSDOE32's own site (re-fetched 2026-10-20) labels h33-2-b2 UNSCORED with projected 0.2747 and states no organiser score exists; the brief's 0.2778 / 0.3195 / 0.3774 figures therefore remain owner-reported/unverified, never ORGANIZER-CONFIRMED."
+  "IR-L04-TOOL-01 FIXED: gems66.lidar_channels.multiscale_line_fields thresholded the Steger Hessian response with a percentile of the Frangi vesselness (unit mismatch). Fixed once in the template to threshold on the Steger response's own distribution; LIDAR-01/02 steger_frac300 values are not reproducible from the fixed code.",
+  "IR-L04-SITE-01 FIXED: scripts/build_site.py contained literal git merge-conflict markers (<<<<<<< HEAD / ======= / >>>>>>> origin/main) that were rendering as text on the live index and executive-summary pages. Resolved keeping both panels.",
+  "IR-L04-02: GitHub REST API rate limit (5000/hr shared token) was exhausted when fetching training_features via scripts/fetch_mirrors.py; the 5 parts were instead retrieved by git sparse partial-clone at the pinned ref and the concatenated file verified against the manifest sha256 (4371c82e\u2026) before use. fetch_mirrors.py verified the other 4 inputs normally.",
+  "IR-L04-03 (pre-existing, not fixed here): docs/downloads/current_release.json points at the unique-msc session's raster with cleared=true, while scripts/build_site.py's lidar01_block() renders that pointer under a 'LIDAR-01 session' heading using run-card-lidar01.json's holdout rows \u2014 two different candidates' evidence conflated in one panel. docs/downloads/README.md still describes the pointer as LIDAR-01. Left untouched to avoid overwriting a parallel session's release semantics; flagged for the owning session.",
+  "IR-L04-04 (pre-existing): tests/test_artifact66.py and tests/test_repo_hygiene.py were failing on main because their download/link allowlists were never updated for the LIDAR-02 and unique-msc files (test_site.py was). Allowlists extended this session with the same fail-closed disclosure conditions.",
+  "IR-L04-05: GEMSDOE32's own site (re-fetched 2026-10-20) labels h33-2-b2 UNSCORED with projected 0.2747 and states no organiser score exists; the brief's 0.2778 / 0.3195 / 0.3774 figures therefore remain owner-reported/unverified, never ORGANIZER-CONFIRMED."
  ],
  "caveats": [
   "Operators at 100-400 m on 2 m-descriptor aggregates, not native 2-20 m on 1 m DEM (USGS 3DEP host unreachable from sandbox; egress limited to github.com/pypi.org).",

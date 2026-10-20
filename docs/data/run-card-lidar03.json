@@ -1,0 +1,133 @@
+{
+ "schema": "gems-run-card/3",
+ "session": "LIDAR-03 (branch arena/a04a3451-gemsdoe66, 2026-10-20)",
+ "lane": "Native-resolution lidar scarp channels: slope-aware scarplet template (Sare & Hilley JOSS 2018 doi:10.21105/joss.01066; AGU 2015 T31A-2838 slope-aware extension) + Steger (IEEE TPAMI 20(2):113-125, 1998) + Frangi (MICCAI 1998 LNCS 1496:130-137) on slope-detrended aggregate of 2 m descriptors; sigma 1-4 x 100 m cells (100-400 m) - native 2-20 m execution NOT measured (raw 1 m tiles unreachable here; official source https://www.usgs.gov/3d-elevation-program).",
+ "hypothesis": "The lane's prescribed but never-executed step - RETRAIN UNDER SPATIAL CV - is the missing ingredient: a classifier trained per quadrant fold on visible-catalogue scarps using only lidar scarp channels learns a spatially transferable ranking that hand-weighted fields (LIDAR-01/02) lacked; unsigned template amplitude + relief-decile re-ranking remove the two measured failure modes (polarity-subtraction anti-signal AUC 0.30 in LIDAR-02 E1; range-front relief confounding IR-74).",
+ "mechanism": "HistGradientBoosting (200 iters, lr 0.06, 31 leaves) on 21 rank-normalised lane channels (scarplet template raw+unsigned amplitude, SNR-weighted amplitude, sharpness, curvature asymmetry, damage fraction, 3-scale persistence geomean, Frangi max, Steger frac300, Steger sub-pixel offset density, strike discontinuity x coherence, tensor coherence); per-fold retraining on visible catalogue vs 5x sampled background >200 m from catalogue; probability re-ranked within relief deciles; greedy emission 37,654 dots, >=3 px separation, >200 m from full catalogue. Builder: scripts/build_lidar03.py (shared gems.metric / gems.submission_writer / gems.validate_submission / gems66.lidar_channels; no private forks).",
+ "named_nonfault_mimic": "Fluvial terrace risers / irrigation canal banks (sharp, persistent, single-sided steps). Mitigated only by background sampling over such terrain; NO pinned cultural-feature mask (roads/canals/field edges) exists in this checkout - disclosed lane deviation.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator": "src/gems/metric.py dti (alpha=0.2, beta=0.8, triangular R=300m, eps=1e-9)",
+  "instrument": "Quadrant hide-and-recover on catalogue; classifier retrained per fold on visible catalogue only; eligibility buffer from visible catalogue only; field contains no catalogue-distance feature",
+  "candidate_mean": 0.15218317996387726,
+  "candidate_ci95": [
+   0.12583442664909242,
+   0.18158935785290634
+  ],
+  "random_mean": 0.09186443486839573,
+  "random_ci95": [
+   0.08972625059230255,
+   0.09366691626908488
+  ],
+  "paired_diff_mean": 0.060318745095481546,
+  "paired_diff_ci95": [
+   0.033621619102269226,
+   0.0918631072606038
+  ],
+  "folds_won_vs_random": "4 of 4",
+  "total_withheld_positives": 48465,
+  "oof_proba_auc_vs_catalogue": 0.6436480248779052,
+  "comparison_same_instrument": "LIDAR-02 (hand-weighted) on identical instrument: candidate 0.10624, paired diff +0.01438 CI [-0.00153, +0.02382], 3/4 folds. LIDAR-03 is the first lane candidate whose paired CI excludes zero on this instrument.",
+  "sgmc_offcatalogue_pooled_control": {
+   "candidate": 0.06698954806723138,
+   "h33_2_b2": 0.0953861146048237,
+   "lidar02": 0.09514837679760879,
+   "random_matched": 0.06456987711392141
+  },
+  "instrument_conflict_disclosure": "SGMC off-catalogue proxy DISAGREES: candidate 0.06699 barely above matched random 0.06457 and below h33-2-b2 0.09539 / LIDAR-02 0.09515. The SGMC instrument is documented anti-correlated with owner-reported live scores (IR-67-INSTR-01) and its truth population is relief-biased state-map traces; the pre-registered gate uses the lane's stated instrument (lidar-covered spatial holdout). This conflict is disclosed, not resolved; it is the main scientific risk of this candidate.",
+  "dot_distance_to_catalogue_m": {
+   "candidate_median": 1486.6,
+   "h33_2_b2_median": 1964.7,
+   "lidar02_median": 2377.0,
+   "source": "evidence/lidar03_audit.json (independent re-read)"
+  }
+ },
+ "leakage_canary": {
+  "label": "HOLDOUT-DTI instrument, E1",
+  "worst_auc": 0.7801421937885675,
+  "worst_channel": "persist_geomean",
+  "threshold": 0.9,
+  "pass": true,
+  "n_channels": 24
+ },
+ "uniqueness_vs_registry": {
+  "n_compared": 75,
+  "n_readable": 75,
+  "max_abs_surface_spearman_sample100k": 0.02008438579967244,
+  "max_dot_overlap3px_density_comparable": 0.31582302013066343,
+  "worst_comparable_file": "GEMSDOE27__topo-gap-closure-t-v2-on-d1-5.tif",
+  "max_dot_overlap3px_raw": 0.978700802039624,
+  "raw_note": "Raw overlap vs ultra-dense registry rasters is density-degenerate (documented IR-73/IR-67-GATE-02); gate uses density-comparable overlap + lift rule, stated pre-hoc in the builder docstring.",
+  "any_identical": false,
+  "duplicate_under_lift_rule": []
+ },
+ "gate_preregistered": {
+  "canary_pass": true,
+  "holdout_diff_ci_lower_gt0": true,
+  "folds_won_ge3": true,
+  "low_relief_dot_share": 0.2809263292080523,
+  "low_relief_share_ge_0p20": true,
+  "max_abs_rho_le_0p90": true,
+  "no_identical": true,
+  "no_lift_duplicate": true,
+  "comparable_overlap_le_0p70": true,
+  "all_pass_pre_format": true,
+  "validator_pass_both": true,
+  "all_pass": true,
+  "validator_note": "Initial in-builder validate() call omitted features_path, so footprint checks were SKIPPED and the fail-closed validator returned passed=False (evidence/lidar03_validate_{zeros,nan}.json). After restoring the sha256-pinned training_features.tif (4371c82e...), full validation gives 15 PASS / 0 FAIL / 0 SKIPPED / 2 INFO on BOTH siblings (evidence/lidar03_validate_{zeros,nan}_full.json). No bytes changed."
+ },
+ "raster": {
+  "zeros": {
+   "file": "docs/downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+   "sha256": "7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e",
+   "zip_sha256": "d49c3d5d7984682c6f09387991f06f11c921b9e0aad65d16527ca47192f78c8e",
+   "validator": {
+    "PASS": 15,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "INFO": 2
+   },
+   "validator_passed": true,
+   "outside": "0.0 everywhere outside footprint (all-finite; immune to the observed 'Predicted values must be in range [0, 1]' portal rejection)"
+  },
+  "nan": {
+   "file": "docs/downloads/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+   "sha256": "cbcd9139e0b81b3d86a0b5d1243956ad361b9a14adaecb1e101bc6cdb875cb84",
+   "zip_sha256": "6492ad7dc829cc8158b693af84f3c569e6116cca2ca92a1fccc7b3a0ac57f0c6",
+   "validator": {
+    "PASS": 15,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "INFO": 2
+   },
+   "validator_passed": true,
+   "outside": "NaN only outside footprint (0 NaN inside, independently re-read)"
+  },
+  "dots": 37654,
+  "grid": "3730 x 3292, float32, 1 band, EPSG:32611, 100 m, transform (100,0,243350,0,-100,4508550), nodata tag None"
+ },
+ "submission": {
+  "name": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z",
+  "note": "LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03",
+  "note_chars": 110,
+  "organizer_confirmed_receipt": null,
+  "slots_used": 0
+ },
+ "inputs_sha256": {
+  "data/raw/external/lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+  "data/raw/labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "data/raw/sample_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "data/raw/external/derived_sgmc_faults_100m_u8.tif": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+  "data/raw/training_features.tif": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5"
+ },
+ "inputs_provenance": "Hash-pinned owner mirrors (registry/data_manifest.json), verified 5/5 by sha256 this session; mirrors are NOT organizer-authenticated (DrivenData login-walled). training_features restored via git sparse-fetch of the pinned commit after GitHub REST rate-limit; assembled bytes match the pin exactly.",
+ "limitations": [
+  "No ORGANIZER-CONFIRMED score exists; beating 0.2778 (owner-reported, site-labelled UNSCORED/projected 0.2747) or any leaderboard number is NOT claimed.",
+  "Native 2-20 m Steger/Frangi/scarplet execution on raw 1 m DEM tiles was not performed (unreachable); channels are 2 m-descriptor extrema aggregated to 100 m (706/716 3DEP tiles, owner CI).",
+  "No cultural-feature mask (roads/canals/field edges) exists in this checkout.",
+  "Catalogue-truth holdout cannot certify discovery of unmapped faults; SGMC proxy disagrees (see instrument_conflict_disclosure).",
+  "Registry comparison covers locally accessible rasters only; complete organizer corpus not certified."
+ ],
+ "verdict": "promote",
+ "verdict_wording": "PROMOTE for download under the pre-registered gate (all 9 conditions pass). Slot promotion itself remains the separate selector step per protocol; 0 slots used by this session."
+}

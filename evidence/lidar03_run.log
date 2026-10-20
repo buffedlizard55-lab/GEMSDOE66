@@ -1,0 +1,13 @@
+features=21 footprint=5167373 valid=3894418 catalogue=60988 sgmc_off=62122
+E1 worst AUC 0.7801421937885675 persist_geomean pass True
+fold 0 {'fold': 0, 'withheld_positives': 22989, 'k_fold': 19663, 'candidate_dti': 0.1350466682256454, 'random_dti': 0.09295253171097745, 'train': {'n_pos': 25476, 'n_neg': 127380}}
+fold 1 {'fold': 1, 'withheld_positives': 7135, 'k_fold': 7404, 'candidate_dti': 0.19710358772866, 'random_dti': 0.08865082355274424, 'train': {'n_pos': 41330, 'n_neg': 206650}}
+fold 2 {'fold': 2, 'withheld_positives': 9350, 'k_fold': 5530, 'candidate_dti': 0.1599602788286643, 'random_dti': 0.09438130082719229, 'train': {'n_pos': 39115, 'n_neg': 195575}}
+fold 3 {'fold': 3, 'withheld_positives': 8991, 'k_fold': 7538, 'candidate_dti': 0.11662218507253946, 'random_dti': 0.09147308338266896, 'train': {'n_pos': 39474, 'n_neg': 197370}}
+E2 candidate 0.15218317996387726 [0.12583442664909242, 0.18158935785290634] random 0.09186443486839573 [0.08972625059230255, 0.09366691626908488] diff 0.060318745095481546 [0.033621619102269226, 0.0918631072606038] OOF AUC 0.6436480248779052
+SGMC control {'candidate': 0.06698954806723138, 'h33_2_b2': 0.0953861146048237, 'h33_2_b2_dots': 37654, 'lidar02': 0.09514837679760879, 'lidar02_dots': 37654, 'random_matched': 0.06456987711392141} low_relief_share 0.2809263292080523
+uniq rho 0.02008438579967244 ov_comp 0.31582302013066343 dup 0
+GATE(pre-format) {'canary_pass': True, 'holdout_diff_ci_lower_gt0': True, 'folds_won_ge3': True, 'low_relief_dot_share': 0.2809263292080523, 'low_relief_share_ge_0p20': True, 'max_abs_rho_le_0p90': True, 'no_identical': True, 'no_lift_duplicate': True, 'comparable_overlap_le_0p70': True, 'all_pass_pre_format': True}
+zeros 7c7d30c22c17571e validator_passed False
+nan cbcd9139e0b81b3d validator_passed False
+DONE gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z gate_all_pass False

@@ -1,0 +1,240 @@
+{
+ "generated_utc": "20261020T190152Z",
+ "name": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z",
+ "note": "LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03",
+ "note_chars": 110,
+ "dots": 37654,
+ "train_full": {
+  "n_pos": 48465,
+  "n_neg": 242325
+ },
+ "sgmc_control": {
+  "candidate": 0.06698954806723138,
+  "h33_2_b2": 0.0953861146048237,
+  "h33_2_b2_dots": 37654,
+  "lidar02": 0.09514837679760879,
+  "lidar02_dots": 37654,
+  "random_matched": 0.06456987711392141
+ },
+ "low_relief_dot_share": 0.2809263292080523,
+ "gate": {
+  "canary_pass": true,
+  "holdout_diff_ci_lower_gt0": true,
+  "folds_won_ge3": true,
+  "low_relief_dot_share": 0.2809263292080523,
+  "low_relief_share_ge_0p20": true,
+  "max_abs_rho_le_0p90": true,
+  "no_identical": true,
+  "no_lift_duplicate": true,
+  "comparable_overlap_le_0p70": true,
+  "all_pass_pre_format": true,
+  "validator_pass_both": false,
+  "all_pass": false
+ },
+ "receipts": {
+  "zeros": {
+   "file": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+   "zip": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.zip",
+   "sha256": "7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e",
+   "zip_sha256": "d49c3d5d7984682c6f09387991f06f11c921b9e0aad65d16527ca47192f78c8e",
+   "validator_passed": false,
+   "validator": {
+    "file": "/home/user/GEMSDOE66/artifacts/lidar03/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+    "sha256": "7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e",
+    "passed": false,
+    "has_failures": false,
+    "checks": [
+     {
+      "check": "single band",
+      "status": "PASS",
+      "detail": "count=1"
+     },
+     {
+      "check": "dtype float32",
+      "status": "PASS",
+      "detail": "dtype=float32"
+     },
+     {
+      "check": "CRS EPSG:32611",
+      "status": "PASS",
+      "detail": "crs=EPSG:32611"
+     },
+     {
+      "check": "shape matches",
+      "status": "PASS",
+      "detail": "file=(3730, 3292) expected=(3730, 3292)"
+     },
+     {
+      "check": "resolution 100 m",
+      "status": "PASS",
+      "detail": "res=(100.0, 100.0)"
+     },
+     {
+      "check": "transform matches reference",
+      "status": "PASS",
+      "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+     },
+     {
+      "check": "CRS matches reference",
+      "status": "PASS",
+      "detail": "file=EPSG:32611 ref=EPSG:32611"
+     },
+     {
+      "check": "nodata tag is none or NaN",
+      "status": "PASS",
+      "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+     },
+     {
+      "check": "no infinities",
+      "status": "PASS",
+      "detail": "inf_count=0"
+     },
+     {
+      "check": "values within [0, 1]",
+      "status": "PASS",
+      "detail": "min=0.0 max=1.0 finite_cells=12279160"
+     },
+     {
+      "check": "footprint checks",
+      "status": "SKIPPED",
+      "detail": "SKIPPED: no features raster supplied"
+     },
+     {
+      "check": "info: emitted cells (value > 0)",
+      "status": "INFO",
+      "detail": "emitted=37654"
+     }
+    ],
+    "skipped_checks_mean_unverified": true
+   },
+   "writer_receipt": {
+    "file": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+    "sha256": "7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e",
+    "shape_hw": [
+     3730,
+     3292
+    ],
+    "crs": "EPSG:32611",
+    "footprint_cells": 5167373,
+    "emitted_cells_gt0": 37654,
+    "min_inside": 0.0,
+    "max_inside": 1.0,
+    "nan_inside": 0,
+    "nan_outside_count": 0,
+    "outside_fill": 0.0,
+    "finite_outside_count": 7111787,
+    "all_values_in_0_1": true,
+    "name": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z",
+    "note": "LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03",
+    "note_chars": 110,
+    "reference": "sample_submission.tif",
+    "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+   }
+  },
+  "nan": {
+   "file": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+   "zip": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.zip",
+   "sha256": "cbcd9139e0b81b3d86a0b5d1243956ad361b9a14adaecb1e101bc6cdb875cb84",
+   "zip_sha256": "6492ad7dc829cc8158b693af84f3c569e6116cca2ca92a1fccc7b3a0ac57f0c6",
+   "validator_passed": false,
+   "validator": {
+    "file": "/home/user/GEMSDOE66/artifacts/lidar03/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+    "sha256": "cbcd9139e0b81b3d86a0b5d1243956ad361b9a14adaecb1e101bc6cdb875cb84",
+    "passed": false,
+    "has_failures": false,
+    "checks": [
+     {
+      "check": "single band",
+      "status": "PASS",
+      "detail": "count=1"
+     },
+     {
+      "check": "dtype float32",
+      "status": "PASS",
+      "detail": "dtype=float32"
+     },
+     {
+      "check": "CRS EPSG:32611",
+      "status": "PASS",
+      "detail": "crs=EPSG:32611"
+     },
+     {
+      "check": "shape matches",
+      "status": "PASS",
+      "detail": "file=(3730, 3292) expected=(3730, 3292)"
+     },
+     {
+      "check": "resolution 100 m",
+      "status": "PASS",
+      "detail": "res=(100.0, 100.0)"
+     },
+     {
+      "check": "transform matches reference",
+      "status": "PASS",
+      "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+     },
+     {
+      "check": "CRS matches reference",
+      "status": "PASS",
+      "detail": "file=EPSG:32611 ref=EPSG:32611"
+     },
+     {
+      "check": "nodata tag is none or NaN",
+      "status": "PASS",
+      "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+     },
+     {
+      "check": "no infinities",
+      "status": "PASS",
+      "detail": "inf_count=0"
+     },
+     {
+      "check": "values within [0, 1]",
+      "status": "PASS",
+      "detail": "min=0.0 max=1.0 finite_cells=5167373"
+     },
+     {
+      "check": "footprint checks",
+      "status": "SKIPPED",
+      "detail": "SKIPPED: no features raster supplied"
+     },
+     {
+      "check": "info: emitted cells (value > 0)",
+      "status": "INFO",
+      "detail": "emitted=37654"
+     }
+    ],
+    "skipped_checks_mean_unverified": true
+   },
+   "writer_receipt": {
+    "file": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+    "sha256": "cbcd9139e0b81b3d86a0b5d1243956ad361b9a14adaecb1e101bc6cdb875cb84",
+    "shape_hw": [
+     3730,
+     3292
+    ],
+    "crs": "EPSG:32611",
+    "footprint_cells": 5167373,
+    "emitted_cells_gt0": 37654,
+    "min_inside": 0.0,
+    "max_inside": 1.0,
+    "nan_inside": 0,
+    "nan_outside_count": 7111787,
+    "outside_fill": null,
+    "finite_outside_count": 0,
+    "all_values_in_0_1": false,
+    "name": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z",
+    "note": "LIDAR-03 spatial-CV retrained scarp/Steger/Frangi classifier, relief-decile ranked; GEMSDOE66 run card lidar03",
+    "note_chars": 110,
+    "reference": "sample_submission.tif",
+    "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+   }
+  }
+ },
+ "inputs_sha256": {
+  "data/raw/external/lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+  "data/raw/labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "data/raw/sample_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "data/raw/external/derived_sgmc_faults_100m_u8.tif": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0"
+ }
+}

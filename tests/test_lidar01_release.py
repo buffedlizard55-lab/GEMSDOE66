@@ -58,18 +58,24 @@ def test_candidate_is_audit_only_and_hash_matches_record():
     assert not (DOCS / "downloads" / f"{NAME}.zip").exists()
 
 
-def test_public_release_pointer_never_points_at_lidar01():
-    """IR-L03-03: the shared pointer was reassigned to the unique-msc session's cleared
-    raster (2026-10-20) without updating this file, so the original assertions
-    (cleared is False, tif == "") failed on main for a reason unrelated to LIDAR-01.
-    The invariant this test exists to protect is narrower and still fail-closed:
-    whatever session owns the pointer, it must never point at the withdrawn
-    LIDAR-01 raster, and that raster must never be in the public download path."""
-    release = json.loads((DOCS / "downloads/current_release.json").read_text())
-    assert NAME not in json.dumps(release), "pointer references the withdrawn LIDAR-01 stem"
-    for key in ("tif", "zip"):
-        assert NAME not in str(release.get(key, ""))
-    assert not list((DOCS / "downloads").glob(NAME + "*"))
+def test_public_release_pointer_does_not_offer_lidar01():
+    """Intent preserved from the original pointer test: LIDAR-01 is withdrawn and must
+    never be the downloadable target of a public pointer.  The pointer file has since
+    been reused by later sessions for their own candidates (unique-msc; per-candidate
+    pointers such as current_release_lidar03.json), so this test pins the property that
+    matters - LIDAR-01's bytes are not offered - rather than one session's pointer shape.
+    Updated in the LIDAR-03 session; see docs/review/2026-10-20-lidar03-session.md."""
+    for pointer in (DOCS / "downloads").glob("current_release*.json"):
+        release = json.loads(pointer.read_text())
+        for key in ("tif", "zip", "nan_tif", "nan_zip"):
+            assert NAME not in str(release.get(key, "")), f"{pointer.name} offers withdrawn LIDAR-01"
+    assert not (DOCS / "downloads" / f"{NAME}.tif").exists()
+    assert not (DOCS / "downloads" / f"{NAME}.zip").exists()
+    card = json.loads((DOCS / "data/run-card-lidar01.json").read_text())
+    assert card["verdict"] == "negative"
+    assert card["submission"]["download_status"].startswith("WITHDRAWN")
+    assert card["raster"]["sha256"] == json.loads(
+        (ROOT / "evidence/lidar01_uniqueness.json").read_text())["candidate_sha256"]
 
 
 def test_generated_site_explicitly_says_do_not_download_or_submit():

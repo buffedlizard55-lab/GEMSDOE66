@@ -222,3 +222,18 @@ oppositely, and neither instrument can certify the hidden expert-added set.
 ```
 
 Submission slots used by this session: **0**. Organizer-confirmed scores claimed: **none**.
+
+## 8. Post-merge addendum (lane check vs the parallel LIDAR-03 raster)
+
+The promoted LIDAR-03 cvretrain raster (PR #30) did not exist in this session's checkout
+during E3, so the check was completed after the merge and recorded in
+`evidence/lidar04_uniqueness_addendum_cvretrain.json`: surface Spearman (my field vs
+their values, 200k sample) **0.0082**; my dots within 3 px of theirs **0.2485** (lift
+1.19 vs random placement); reverse 0.2733; not identical. The two candidates are
+distinct lane members under the protocol's duplicate rule, and their opposite verdicts
+(PROMOTE vs negative) stand side by side on the site without either overwriting the
+other. For the record, on the shared quadrant hide-and-recover instrument (same
+evaluator, same 48,465 withheld positives) their spatial-CV classifier scores candidate
+mean **0.15218** vs this hand-weighted field's **0.11600** — consistent with this
+session's pre-registered conclusion that the hand-weighted composite was the weaker
+design, and with the lane paragraph's own prescription to retrain under spatial CV.

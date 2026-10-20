@@ -72,4 +72,4 @@ def test_site_banner_is_negative_wherever_the_file_is_linked():
     assert "index.html" in linked and "executive-summary.html" in linked
     idx = (DOCS / "index.html").read_text()
     assert idx.index("LIDAR-04") < idx.index("LIDAR-02 ("), "this session banner must precede LIDAR-02"
-    assert "<<<<<<<" not in idx and ">>>>>>>" not in idx  # IR-L03-SITE-01 stays fixed
+    assert "<<<<<<<" not in idx and ">>>>>>>" not in idx  # IR-L04-SITE-01 stays fixed

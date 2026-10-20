@@ -10,6 +10,7 @@ negative results and disclosed stops are valid outcomes.
 
 | candidate | lane | status | download |
 |---|---|---|---|
+| `gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z` | **LIDAR-03 spatial-CV-retrained scarp classifier** | **PROMOTE — pre-registered gate passed (see below)** | yes |
 | `gems66-h67-scarp-lane-novelty-40000dots-v2` | H67-1 scarp-lane novelty | disclosed, not promoted | yes |
 | k66 `K^0.5` consensus (parallel session 66) | K-anchored consensus | listed with its own register | yes |
 | `gems66-h66c-scarpgap-42000-20261012T021141Z-4023a1c1ef59` | **H66-C LiDAR scarp channels** | **NOT offered — scientific gate not met; bytes retained under `artifacts/h66c/`** | no |
@@ -78,6 +79,29 @@ and it spent no submission slot. See
 > [`registry66/preregistration-k66.json`](registry66/preregistration-k66.json) records the frozen
 > session-66 design.
 
+## LIDAR-03 session (branch `arena/a04a3451-gemsdoe66`, 2026-10-20) — PROMOTE, download offered, no slot used
+
+New unique in-lane candidate `gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z`
+(first execution of the lane's prescribed **retrain-under-spatial-CV** step: per-quadrant
+HistGradientBoosting on 21 scarplet/Steger/Frangi/tensor channels incl. unsigned template
+amplitude, Steger sub-pixel offset density, strike discontinuity, damage fraction; probability
+re-ranked within relief deciles; builder `scripts/build_lidar03.py`).
+**✅ OK TO DOWNLOAD AND SUBMIT** — first scarp-lane candidate to pass its full pre-registered gate:
+canary PASS (worst AUC 0.780); HOLDOUT-DTI paired diff vs mass-matched random **+0.0603,
+95% CI [+0.0336, +0.0919]**, 4/4 folds (quadrant hide-and-recover, `src/gems/metric.py`,
+48,465 withheld positives; LIDAR-02 on the same instrument: diff CI crossed zero);
+uniqueness PASS (max |ρ| 0.020, comparable 3-px overlap 0.316); format PASS both siblings
+(**15 PASS · 0 FAIL · 0 SKIPPED** vs official grid + pinned features). Upload the `-zeros` file
+(all-finite — the `[0, 1]` portal rejection cannot occur); the `-nan` sibling has NaN only
+outside the footprint. **Disclosed conflict:** SGMC off-catalogue proxy disagrees (0.0670 vs
+h33-2-b2 0.0954) — see run card. **No ORGANIZER-CONFIRMED score; beating 0.2778 not claimed**
+(0.2778 remains owner-reported; GEMSDOE32's site labels that raster UNSCORED, projected 0.2747).
+0 submission slots used. Full record:
+[`docs/review/2026-10-20-lidar03-session.md`](docs/review/2026-10-20-lidar03-session.md),
+[`docs/data/run-card-lidar03.json`](docs/data/run-card-lidar03.json). Arrival breakage also
+fixed: committed merge-conflict markers in the live site/generator (IR-L03-01) and a
+mislabelled cross-session panel (IR-L03-02); suite now **165 passed, 1 skipped** (was 4 failed).
+
 ## LIDAR-04 session (branch `arena/6c75ae04`, 2026-10-20; renamed at merge — see review) — NEGATIVE, no slot used
 
 New unique in-lane candidate `gems66-lidar03-localsnr-fracpair-37654dots-20261020T190450Z`
@@ -91,9 +115,9 @@ random **+0.0241, 95% CI [0.0059, 0.0378]**, 48,465 withheld positives), canary 
 LIDAR-02), format PASS both siblings (15 PASS + 2 INFO) — but G3/G4 FAIL: SGMC control
 **0.0801 vs h33-2-b2 0.0954** and low-relief stratum **0.0035 < random 0.0047** (h33:
 0.0641 — the incumbent's edge is basin-floor placement this lane lacks). Also: fixed a
-shared Steger-threshold unit bug (IR-L03-TOOL-01), removed live merge-conflict markers
-from the site (IR-L03-SITE-01), fixed two pre-existing red tests (IR-L03-04), flagged
-the release-pointer conflation (IR-L03-03). `current_release.json` unchanged; no
+shared Steger-threshold unit bug (IR-L04-TOOL-01), removed live merge-conflict markers
+from the site (IR-L04-SITE-01), fixed two pre-existing red tests (IR-L04-04), flagged
+the release-pointer conflation (IR-L04-03). `current_release.json` unchanged; no
 ORGANIZER-CONFIRMED score claimed. Full record:
 [`docs/review/2026-10-20-lidar04-session.md`](docs/review/2026-10-20-lidar04-session.md),
 [`docs/data/run-card-lidar04.json`](docs/data/run-card-lidar04.json).

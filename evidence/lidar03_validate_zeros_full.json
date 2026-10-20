@@ -1,0 +1,94 @@
+{
+ "file": "artifacts/lidar03/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros.tif",
+ "sha256": "7c7d30c22c17571e24927c8c2c435725e5c8396bd6724446ecc60663d5972b7e",
+ "passed": true,
+ "has_failures": false,
+ "checks": [
+  {
+   "check": "single band",
+   "status": "PASS",
+   "detail": "count=1"
+  },
+  {
+   "check": "dtype float32",
+   "status": "PASS",
+   "detail": "dtype=float32"
+  },
+  {
+   "check": "CRS EPSG:32611",
+   "status": "PASS",
+   "detail": "crs=EPSG:32611"
+  },
+  {
+   "check": "shape matches",
+   "status": "PASS",
+   "detail": "file=(3730, 3292) expected=(3730, 3292)"
+  },
+  {
+   "check": "resolution 100 m",
+   "status": "PASS",
+   "detail": "res=(100.0, 100.0)"
+  },
+  {
+   "check": "transform matches reference",
+   "status": "PASS",
+   "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+  },
+  {
+   "check": "CRS matches reference",
+   "status": "PASS",
+   "detail": "file=EPSG:32611 ref=EPSG:32611"
+  },
+  {
+   "check": "nodata tag is none or NaN",
+   "status": "PASS",
+   "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+  },
+  {
+   "check": "no infinities",
+   "status": "PASS",
+   "detail": "inf_count=0"
+  },
+  {
+   "check": "values within [0, 1]",
+   "status": "PASS",
+   "detail": "min=0.0 max=1.0 finite_cells=12279160"
+  },
+  {
+   "check": "features grid shape matches",
+   "status": "PASS",
+   "detail": "features=(3730, 3292) reference=(3730, 3292)"
+  },
+  {
+   "check": "features transform matches reference grid",
+   "status": "PASS",
+   "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+  },
+  {
+   "check": "features CRS matches reference grid",
+   "status": "PASS",
+   "detail": "features=EPSG:32611 reference=EPSG:32611"
+  },
+  {
+   "check": "no NaN inside footprint",
+   "status": "PASS",
+   "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+  },
+  {
+   "check": "NaN-only outside footprint",
+   "status": "PASS",
+   "detail": "finite_outside=7111787 of 7111787 outside cells; accepted under outside_policy='either' because every written value is finite and inside [0, 1]"
+  },
+  {
+   "check": "info: features band-1 mask disagrees with the authoritative mask",
+   "status": "INFO",
+   "detail": "in_reference_not_features=3061 in_features_not_reference=1540; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+  },
+  {
+   "check": "info: emitted cells (value > 0)",
+   "status": "INFO",
+   "detail": "emitted=37654"
+  }
+ ],
+ "skipped_checks_mean_unverified": false
+}

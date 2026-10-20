@@ -1,0 +1,106 @@
+{
+ "experiment": "LIDAR-03 E1 leakage canary (feature-alone AUC; stop if > 0.90)",
+ "evaluator": "src/gems/metric.py dti (alpha=0.2, beta=0.8, triangular R=300m, eps=1e-9)",
+ "channels": {
+  "step_max": {
+   "auc_vs_catalogue": 0.5722513011302823,
+   "auc_vs_sgmc_offcat": 0.7508841896200102
+  },
+  "ex_max": {
+   "auc_vs_catalogue": 0.5704343928540351,
+   "auc_vs_sgmc_offcat": 0.7310069312397458
+  },
+  "ex_mean": {
+   "auc_vs_catalogue": 0.5575241602007203,
+   "auc_vs_sgmc_offcat": 0.7324730440407214
+  },
+  "lappos_max": {
+   "auc_vs_catalogue": 0.5815493555004321,
+   "auc_vs_sgmc_offcat": 0.7527053534855594
+  },
+  "lapneg_max": {
+   "auc_vs_catalogue": 0.5772033631797635,
+   "auc_vs_sgmc_offcat": 0.7451880650447459
+  },
+  "coh100": {
+   "auc_vs_catalogue": 0.4767443644672213,
+   "auc_vs_sgmc_offcat": 0.48752502700163985
+  },
+  "relief": {
+   "auc_vs_catalogue": 0.5717933199686585,
+   "auc_vs_sgmc_offcat": 0.7739084724486136
+  },
+  "tmpl_amp_unsigned": {
+   "auc_vs_catalogue": 0.5882931191984084,
+   "auc_vs_sgmc_offcat": 0.7610815427933113
+  },
+  "tmpl_upface": {
+   "auc_vs_catalogue": 0.5908183850750143,
+   "auc_vs_sgmc_offcat": 0.7431888238524204
+  },
+  "tmpl_downface": {
+   "auc_vs_catalogue": 0.5837208456958151,
+   "auc_vs_sgmc_offcat": 0.7551832102994189
+  },
+  "tmpl_cross": {
+   "auc_vs_catalogue": 0.5775777652743195,
+   "auc_vs_sgmc_offcat": 0.7653786032910581
+  },
+  "snr_amp": {
+   "auc_vs_catalogue": 0.5654303554342565,
+   "auc_vs_sgmc_offcat": 0.7351484454620515
+  },
+  "sharp_ratio": {
+   "auc_vs_catalogue": 0.5549936748298461,
+   "auc_vs_sgmc_offcat": 0.619298211508329
+  },
+  "curv_asym": {
+   "auc_vs_catalogue": 0.5140593770229255,
+   "auc_vs_sgmc_offcat": 0.5394402798391525
+  },
+  "damage_frac_L02D": {
+   "auc_vs_catalogue": 0.5206619837299582,
+   "auc_vs_sgmc_offcat": 0.6446827579596782
+  },
+  "persist_geomean": {
+   "auc_vs_catalogue": 0.5691085611034712,
+   "auc_vs_sgmc_offcat": 0.7801421937885675
+  },
+  "strike_disc_L02C": {
+   "auc_vs_catalogue": 0.49595220145734503,
+   "auc_vs_sgmc_offcat": 0.5403207763448619
+  },
+  "frangi_max": {
+   "auc_vs_catalogue": 0.5724859887580007,
+   "auc_vs_sgmc_offcat": 0.6142243988000547
+  },
+  "steger_frac300": {
+   "auc_vs_catalogue": 0.5287032082608814,
+   "auc_vs_sgmc_offcat": 0.5370668878413154
+  },
+  "frangi_scale": {
+   "auc_vs_catalogue": 0.5754893432339432,
+   "auc_vs_sgmc_offcat": 0.6045405340768976
+  },
+  "steger_line": {
+   "auc_vs_catalogue": 0.5524835385513137,
+   "auc_vs_sgmc_offcat": 0.5318946327325849
+  },
+  "frangi_nscale": {
+   "auc_vs_catalogue": 0.5590094108924623,
+   "auc_vs_sgmc_offcat": 0.5325362235547048
+  },
+  "steger_offset_density_L02B": {
+   "auc_vs_catalogue": 0.5600232092942755,
+   "auc_vs_sgmc_offcat": 0.5732768651852843
+  },
+  "tensor_coherence": {
+   "auc_vs_catalogue": 0.5167456092286429,
+   "auc_vs_sgmc_offcat": 0.44449990889640995
+  }
+ },
+ "worst_auc": 0.7801421937885675,
+ "worst_channel": "persist_geomean",
+ "pass": true,
+ "n_sgmc_offcat": 62122
+}
