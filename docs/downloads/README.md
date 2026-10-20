@@ -6,6 +6,7 @@ before you upload anything.**
 
 | file | sha256 | status |
 |---|---|---|
+| `gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif` (+ `-nan` sibling, zips) | `26b264d7d7b2a3a8d2b477b9e6d914d64e1f7105894724edb4bcfbd078484a0c` (zeros) / `23195d6cd24a378af6b805a2ef27baa860c3a74b6174e99f28cf4c337f2d6858` (nan) | **🔴 LIDAR-02 (2026-10-20): DO NOT SUBMIT.** Unique + format-valid audit artifact; science gate FAIL (paired HOLDOUT-DTI diff CI crosses zero; ties incumbent on SGMC proxy). Verdict `negative`, [`../data/run-card-lidar02.json`](../data/run-card-lidar02.json). The recommended-upload pointer below (LIDAR-01) is unchanged. |
 | [`gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif`](gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.tif) | `0da74d0f75d7e6a7c86d5298f3b50941523ee88bcba23e4abd294b02186059c2` | **RECOMMENDED UPLOAD.** LIDAR-01 session, verdict `promote`. 37,654 dots, NaN outside the footprint, 15/15 validator checks PASS. |
 | [`gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip`](gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.zip) | `134e3694d76eaee5a26824fbf543d305055fc40f82d75c7de553650c39c2825b` | the same GeoTIFF zipped |
 | [`gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json`](gems66-lidar01-scarplet-steger-frangi-37654dots-20261012T021612Z.manifest.json) | — | writer + validator receipt (grid, range, NaN counts, dot count, name, note) |

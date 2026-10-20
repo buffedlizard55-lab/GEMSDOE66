@@ -1,0 +1,126 @@
+{
+ "session": "LIDAR-02 (branch arena/e21dbf98-gemsdoe66, 2026-10-20)",
+ "lane": "Native-resolution lidar scarp channels: slope-aware scarplet template (Sare & Hilley JOSS 2018 doi:10.21105/joss.01066; AGU 2015 T31A-2838 slope-aware extension) + Steger (IEEE TPAMI 20(2):113-125, 1998) + Frangi (MICCAI 1998 LNCS 1496:130-137) on slope-detrended aggregate of 2 m descriptors; sigma 1-4 x 100 m cells (100-400 m) \u2014 native 2-20 m execution not measured (raw 1 m tiles unreachable here).",
+ "hypothesis": "Young, sharp, antislope scarps that persist along strike at 300/500/900 m are the expert-added faults missing from the catalogue; allocating the dot budget across relief terciles by footprint share removes the range-front confinement that reversed LIDAR-01 on the basin floor (IR-74).",
+ "mechanism": "rank01( (0.25*sharp + 0.25*persist + 0.20*polarity + 0.15*frangi_rank + 0.10*coh_rank + 0.05*steger_rank) * (0.5+0.5*sqrt(step_rank*ex_rank)) ); greedy emission, >=3 px separation, >2 px (200 m) from catalogue, K=37654, relief-tercile allocation by eligible-footprint share (truth-free).",
+ "named_nonfault_mimic": "Fluvial terrace risers / irrigation canal banks (sharp, persistent, single-sided steps); suppressed only by antislope polarity + cross-slope veto \u2014 no pinned cultural-feature mask exists in this checkout.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator": "src/gems/metric.py dti (alpha=0.2, beta=0.8, triangular R=300m, eps=1e-9)",
+  "instrument": "E2 quadrant hide-and-recover on catalogue (visible-only buffer; field is catalogue-free)",
+  "candidate_mean": 0.10624079112161346,
+  "candidate_ci95": [
+   0.09056348345760354,
+   0.11725792632288633
+  ],
+  "random_mean": 0.09186443486839573,
+  "random_ci95": [
+   0.08972625059230255,
+   0.09366691626908488
+  ],
+  "paired_diff_mean": 0.014376356253217714,
+  "paired_diff_ci95": [
+   -0.0015340586666559332,
+   0.023824117309665195
+  ],
+  "total_withheld_positives": 48465,
+  "n_folds": 4,
+  "folds_won_vs_random": "3 of 4 (NW quadrant fold 0 lost: 0.0836 vs 0.0930)",
+  "sgmc_offcatalogue_pooled_control": {
+   "candidate": 0.09514837679760879,
+   "h33_2_b2": 0.0953861146048237,
+   "h33_2_b2_dots": 37654,
+   "lidar01": 0.04993141672807747,
+   "lidar01_dots": 37654,
+   "random_matched": 0.06456987711392141
+  },
+  "sgmc_note": "Candidate 0.09515 ties h33-2-b2 0.09539 on SGMC off-catalogue proxy and beats random 0.06457; it does not beat the incumbent. Catalogue-truth holdout penalises off-catalogue designs by construction (h33 as-is scores ~0.006/fold); reported for falsification, not certification."
+ },
+ "leakage_canary": {
+  "label": "HOLDOUT-DTI instrument, E1",
+  "worst_auc": 0.7856589908721232,
+  "worst_channel": "persist900 vs SGMC off-catalogue (0.7857); relief-confounded proxy, below 0.90 stop",
+  "pass": true,
+  "n_channels": 31
+ },
+ "uniqueness_vs_registry": {
+  "n_compared": 68,
+  "max_abs_surface_spearman_sample200k": 0.020900653380576516,
+  "max_dot_overlap3px_density_comparable": 0.4298348117065916,
+  "worst_comparable_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+  "worst_comparable_lift": 1.9092839447917895,
+  "max_dot_overlap3px_raw": 0.9921655069846497,
+  "raw_note": "Raw 0.9922 is vs the 311,617-dot dense raster whose random-placement overlap is 0.9933 (lift 0.999) \u2014 the documented IR-73 degeneracy; density-comparable max is 0.4298 at lift 1.91 (< 0.70 and < 2.0).",
+  "any_identical": false,
+  "duplicate_under_lift_rule": []
+ },
+ "gate": {
+  "canary_pass": true,
+  "holdout_diff_ci_lower_gt0": false,
+  "low_relief_dot_share": 0.3380251766080629,
+  "low_relief_share_ge_0p25": true,
+  "max_abs_rho_le_0p90": true,
+  "no_identical": true,
+  "no_lift_duplicate": true,
+  "comparable_overlap_le_0p70": true,
+  "all_pass": false
+ },
+ "validator": {
+  "zeros_passed": true,
+  "nan_passed": true,
+  "summary": "Both siblings: 15 PASS + 2 INFO, 0 FAIL, 0 SKIPPED with training_features supplied; float32 EPSG:32611 3730x3292, exact transform, 0 NaN inside 5,167,373-cell footprint, values in [0,1]; -nan has NaN on all 7,111,787 outside cells, -zeros is finite everywhere; siblings pixel-identical inside footprint (independent re-read)."
+ },
+ "rasters": {
+  "zeros": {
+   "file": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+   "sha256": "26b264d7d7b2a3a8d2b477b9e6d914d64e1f7105894724edb4bcfbd078484a0c"
+  },
+  "nan": {
+   "file": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+   "sha256": "23195d6cd24a378af6b805a2ef27baa860c3a74b6174e99f28cf4c337f2d6858"
+  },
+  "dots": 37654,
+  "strata_emission": {
+   "relief_tercile_cuts_m": [
+    4.185008525848389,
+    18.455886840820312
+   ],
+   "strata_eligible_share": [
+    0.33740920507772726,
+    0.33535844970339046,
+    0.3272323452188823
+   ],
+   "strata_k": [
+    12706,
+    12627,
+    12321
+   ],
+   "strata_placed": [
+    12706,
+    12627,
+    12321
+   ]
+  }
+ },
+ "submission_name": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z",
+ "submission_note": "LIDAR-02 sharpness x persistence x antislope polarity, relief-stratified emission; GEMSDOE66 run card lidar02",
+ "note_chars": 109,
+ "organizer_confirmed_score": null,
+ "experiments_used": "3 of 3 (E1 canary, E2 holdout, E3 emission/uniqueness/validation)",
+ "verdict": "negative",
+ "promote": false,
+ "download_status": "NOT CLEARED FOR SUBMISSION. Unique and format-valid audit artifact only: paired holdout diff vs mass-matched random is +0.0144 with 95% CI [-0.0015, +0.0238] (crosses zero) and the candidate does not beat h33-2-b2 on the SGMC proxy (0.09515 vs 0.09539). Do not spend a weekly slot on this file. current_release.json (LIDAR-01) is unchanged.",
+ "inputs_sha256": {
+  "data/raw/external/lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+  "data/raw/labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "data/raw/sample_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "data/raw/external/derived_sgmc_faults_100m_u8.tif": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0"
+ },
+ "caveats": [
+  "Operators at 100-400 m on 2 m-descriptor aggregates, not native 2-20 m on 1 m DEM.",
+  "No pinned roads/canals cultural mask; polarity/veto terms only.",
+  "Registry = 60 local rasters + downloads; complete organizer corpus not certified.",
+  "Owner-reported live scores (incl. h33-2-b2 0.2778) are not ORGANIZER-CONFIRMED; GEMSDOE32 site labels that raster UNSCORED/projected 0.2747.",
+  "Inputs are owner-supplied hash-pinned mirrors, not organizer-authenticated (DrivenData login-walled)."
+ ]
+}
